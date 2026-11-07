@@ -10,9 +10,10 @@
 substitutions:
   ot_project_version: "1.2.1"
   ot_name_prefix: "Immergas OT"
-  # master adapter (towards the boiler): default the AtomS3 Lite's own Grove port (white G1 = in, yellow G2 = out)
-  ot_boiler_in_pin: GPIO1
-  ot_boiler_out_pin: GPIO2
+  # master adapter (towards the boiler): default an ATOMIC ToUnit Base under the AtomS3 Lite, DIP 2 = IO2 = G6 (white,
+  # in), DIP 5 = IO1 = G5 (yellow, out); the shields' 3.3 V comes from G1 of the Grove AtomS3 (ot_3v3_supply)
+  ot_boiler_in_pin: GPIO6
+  ot_boiler_out_pin: GPIO5
   # 0xCA = the "Immergas fix" in the status request (without it some boilers ignore Data-ID 1 / 57); 0x00 = plain
   ot_status_low_byte: "0xCA"
   # true = the max. CH setpoint (57) is written with the CH setpoint (1), same value, as the original Immergas room
