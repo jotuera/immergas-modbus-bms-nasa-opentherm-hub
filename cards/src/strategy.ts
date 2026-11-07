@@ -104,6 +104,8 @@ function otDashboard(config: any, t: (a: string, b: string) => string) {
         { type: "grid", cards: [card("immergas-schedule-card", config.schedule ?? {}), card("immergas-ot-boiler-card", config.ot_boiler ?? {}),
           card("immergas-settings-card", { part: "online", ...(config.settings ?? {}) }),
           card("immergas-settings-card", { part: "offline", ...(config.settings_offline ?? {}) })] },
+        // Dominus 1.6.14: today's analysis (gas, condensing, short cycling, DHW, room / degree days) - hidden tiles without data
+        { type: "grid", column_span: 3, cards: [card("immergas-day-card", config.day ?? {})] },
       ],
     }],
   };

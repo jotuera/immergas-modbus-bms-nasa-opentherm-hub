@@ -203,6 +203,12 @@ const copCol = (v: number) => isNaN(v) || v <= 0 ? "overlay2" : v < 2 ? "red" : 
 
 /** MAGIS M (mt_analytics): today's short cycling, defrosts, heating / DHW split with their COPs, heaters */
 class ImmergasDayCard extends GridCard {
+  protected body() {
+    if (this.rows().some(([k]) => this.eid(k))) return super.body();
+    return html`${this.head("mdi:calendar-today", this.t("Dziś · analiza", "Today · analysis"))}<div class="hint">${this.t(
+      "Brak danych: dodaj pakiety analizy huba (ot_computed / ot_analytics, gb_computed / gb_analytics, mt_computed / mt_analytics) albo zaktualizuj Immergas Dominus do 1.6.14+.",
+      "No data: add the hub analysis packages (ot_computed / ot_analytics, gb_computed / gb_analytics, mt_computed / mt_analytics) or update Immergas Dominus to 1.6.14+.")}</div>`;
+  }
   protected heading(): [string, string, string] {
     return this.mtx ? ["mdi:calendar-today", "Dziś · analiza pracy", "Today · operation analysis"] : ["mdi:calendar-today", "Dziś · analiza kotła", "Today · boiler analysis"];
   }
@@ -210,7 +216,7 @@ class ImmergasDayCard extends GridCard {
   /** OpenTherm hub (ot_computed / ot_analytics): condensing and leak warning as flags */
   protected flags(): [Key, string, string][] {
     if (this.gbx) return [["ga_condensing", "Praca kondensacyjna", "Condensing"], ["ga_leak_warning", "Możliwy wyciek", "Possible leak"], ["ga_ion_low", "Niska jonizacja", "Low ionisation"]];
-    return this.mtx ? [] : [["oa_condensing", "Praca kondensacyjna", "Condensing"], ["oa_leak_warning", "Możliwy wyciek", "Possible leak"]];
+    return this.mtx ? [] : [["oa_condensing", "Praca kondensacyjna", "Condensing"], ["oa_leak_warning", "Możliwy wyciek", "Possible leak"], ["oa_flame_low", "Niski prąd płomienia", "Low flame current"]];
   }
   protected rows(): Row[] {
     // gas boiler BMS (gb_computed / gb_analytics / gb_<model>_calc); the tiles of the missing packages stay hidden
@@ -278,6 +284,17 @@ class ImmergasDayCard extends GridCard {
       ["oa_dhw_litres", "mdi:water", "Ciepła woda", "Hot water", 0],
       ["oa_dhw_heat", "mdi:water-thermometer", "Ciepło CWU", "DHW heat", 2],
       ["oa_pressure_drop", "mdi:gauge-low", "Spadek ciśnienia 24 h", "Pressure drop 24 h", 2],
+      ["oa_control_setpoint", "mdi:thermometer-water", "Nastawa wysyłana (ID 1)", "Control setpoint (ID 1)", 1],
+      ["oa_dhw_cycles", "mdi:water-boiler", "Cykle CWU", "DHW cycles", 0],
+      ["oa_dhw_cycle_last", "mdi:timer-outline", "Ostatni cykl CWU", "Last DHW cycle", 0],
+      ["oa_dhw_cycle_rise", "mdi:thermometer-chevron-up", "Przyrost w zasobniku", "Cylinder rise", 1],
+      ["oa_flame_i_avg", "mdi:fire-circle", "Prąd płomienia (średnia)", "Flame current (average)", 1],
+      ["oa_fan_dev", "mdi:fan-alert", "Wentylator − zadane", "Fan − setpoint", 0],
+      ["oa_room_dev", "mdi:home-thermometer-outline", "Odchyłka pokoju (1 h)", "Room deviation (1 h)", 1],
+      ["oa_reach_last", "mdi:timer-play-outline", "Dojście do zadanej", "Time to the target", 0],
+      ["oa_dd_today", "mdi:thermometer-minus", "Stopniodni dziś", "Degree days today", 1],
+      ["oa_dd_month", "mdi:calendar-month", "Stopniodni w miesiącu", "Degree days this month", 1],
+      ["oa_h_per_dd", "mdi:home-clock", "Godz. grzania / stopniodzień", "Heating h / degree day", 2],
       ["oa_link_quality", "mdi:connection", "Jakość łącza OT", "OT link quality", 1],
       ["oa_burn_per_start", "mdi:timer-fire", "Palenie na start (całość)", "Burn per start (lifetime)", 1],
       ["oa_starts_per_hour_life", "mdi:fire-alert", "Starty / h palnika (całość)", "Starts / burner h (lifetime)", 1],
@@ -333,6 +350,9 @@ class ImmergasDayCard extends GridCard {
     if (k === "oa_pressure_drop") return isNaN(v) ? "overlay2" : v >= 0.2 ? "red" : v >= 0.1 ? "yellow" : "green";
     if (k === "oa_link_quality") return isNaN(v) ? "overlay2" : v < 95 ? "red" : v < 99 ? "yellow" : "green";
     if (k === "oa_setpoint_dev") return isNaN(v) ? "overlay2" : Math.abs(v) > 5 ? "yellow" : "green";
+    if (k === "oa_room_dev") return isNaN(v) ? "overlay2" : Math.abs(v) <= 0.5 ? "green" : v < 0 ? "sky" : "peach";
+    if (k === "oa_flame_i_avg") return isNaN(v) ? "overlay2" : v < 2 ? "red" : v < 4 ? "yellow" : "green";
+    if (/^oa_dd|oa_h_per_dd/.test(k)) return "lavender";
     if (/^oa_gas|oa_power|oa_heat/.test(k)) return "peach";
     if (/^oa_d/.test(k)) return "sky";
     if (/^mt_cop_/.test(k)) return copCol(v);
