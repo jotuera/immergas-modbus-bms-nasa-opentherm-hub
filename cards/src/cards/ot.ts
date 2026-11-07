@@ -122,7 +122,7 @@ class ImmergasOtBoilerCard extends HubCard {
 `;
   }
 
-  /** gas boiler over Modbus BMS: what the model reports, its functions (BOOST, ECO, power limit, MAGIS M TOP), hours */
+  /** gas boiler over Modbus BMS: what the model reports (MAGIS M TOP state), burner hours - its functions are in the mode card */
   private gbBlocks() {
     const v = (k: Key, d = 1, u = " °C") => this.f(this.n(k), d, d ? 1 : 0) + u, has = (k: Key) => !!this.eid(k) && !this.bad(k);
     const temps: [Key, string, string, string, string][] = [
@@ -140,21 +140,10 @@ class ImmergasOtBoilerCard extends HubCard {
     const hours: [Key, string, string][] = [["ot_hours_total", "mdi:timer-outline", this.t("Godziny palnika", "Burner hours")], ["gb_hours_ch", "mdi:radiator", this.t("Godziny palnika CO", "CH burner hours")],
       ["gb_hours_dhw", "mdi:water-boiler", this.t("Godziny palnika CWU", "DHW burner hours")]];
     const h2 = hours.filter(([k]) => has(k));
-    const funcs = this.toggles([
-      ["gb_boost", "mdi:water-plus", "yellow", this.t("CWU BOOST", "DHW BOOST"), this.t("jednorazowe szybkie grzanie CWU", "a one-off quick DHW heat-up")],
-      ["gb_eco", "mdi:leaf", "green", this.t("CWU ECO", "DHW ECO"), this.t("niższa temperatura utrzymania CWU", "lower DHW keep-warm")],
-      ["gb_nodhwprio", "mdi:priority-low", "peach", this.t("Grzanie bez priorytetu CWU", "Heat request without DHW priority")],
-      ["gb_ch_prio", "mdi:priority-high", "peach", this.t("CO przed CWU", "CH before DHW")],
-      ["gb_silent", "mdi:volume-low", "lavender", this.t("Tryb cichy", "Silent mode")],
-      ["gb_cool_en", "mdi:snowflake", "sky", this.t("Zezwól na chłodzenie", "Allow cooling")],
-      ["gb_reqtype", "mdi:sun-snowflake-variant", "sky", this.t("Żądanie: grzanie / chłodzenie", "Request: heating / cooling")],
-    ]);
     return html`
       ${t2.length ? html`<div class="grid" style="margin-top:8px">${t2.map(([k, ic, col, l, val]) => this.chip(k, ic, col, l, val))}</div>` : nothing}
       ${hp2.length ? html`<div class="sec">MAGIS M TOP</div><div class="grid">${hp2.map(([k, ic, col, l]) => this.chip(k, ic, this.on(k) ? col : "overlay1", l, this.on(k) ? this.t("tak", "yes") : this.t("nie", "no"), this.on(k)))}</div>
         ${this.eid("gb_cool_max") ? html`<div class="hint">${this.t("Zakres chłodzenia ", "Cooling range ")}${this.f(this.n("gb_cool_min"), 0)}–${this.f(this.n("gb_cool_max"), 0)} °C</div>` : nothing}` : nothing}
-      ${funcs === nothing && !this.eid("gb_power") ? nothing : html`<div class="sec">${this.t("Funkcje modelu", "Model functions")}</div>${funcs}
-        ${this.eid("gb_power") ? this.numRow("gb_power", "mdi:speedometer-medium", this.t("Górny limit mocy (BMS 513)", "Upper power limit (BMS 513)"), 0) : nothing}`}
       ${h2.length ? html`<div class="sec">${this.t("Palnik", "Burner")}</div><div class="grid">${h2.map(([k, ic, l]) => this.chip(k, ic, "overlay2", l, this.f(this.n(k), 0) + " h"))}</div>` : nothing}`;
   }
 

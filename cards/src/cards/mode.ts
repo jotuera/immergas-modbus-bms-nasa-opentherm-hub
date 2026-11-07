@@ -413,6 +413,7 @@ class ImmergasModeCard extends HubCard {
       ${this.progRow()}
       ${this.dhwProgRow()}
       ${this.mtx ? this.mtForce() : nothing}
+      ${this.gbx ? this.gbFuncs() : nothing}
       ${this.config.show_toggles === false ? nothing : this.toggles([
         ["room_mod", "mdi:home-thermometer-outline", "green", this.t("Modulacja z sondą pokojową", "Room probe modulation"),
           html`${this.t("zasilanie korygowane wg temp. w pokoju", "flow corrected by the room temperature")}
@@ -429,6 +430,20 @@ class ImmergasModeCard extends HubCard {
         ["vent_start", "mdi:pipe-valve", "peach", this.on("vent_start") ? this.t("Odpowietrzanie trwa · ", "Venting running · ") + this.ago("vent_start") : this.t("Odpowietrz instalację teraz", "Vent the system now"),
           this.t("jednorazowy cykl AP99 – piec w tym czasie nie grzeje; wyłącz, aby przerwać", "one-off AP99 cycle – the boiler does not heat meanwhile; switch off to stop"), true],
       ])}`;
+  }
+
+  /** gas boiler over Modbus BMS: the model functions (BOOST, ECO, priorities, silent, cooling) and the power limit */
+  private gbFuncs() {
+    return html`${this.toggles([
+      ["gb_boost", "mdi:water-plus", "yellow", this.t("CWU BOOST", "DHW BOOST"), this.t("jednorazowe szybkie grzanie CWU", "a one-off quick DHW heat-up")],
+      ["gb_eco", "mdi:leaf", "green", this.t("CWU ECO", "DHW ECO"), this.t("niższa temperatura utrzymania CWU", "lower DHW keep-warm")],
+      ["gb_nodhwprio", "mdi:priority-low", "peach", this.t("Grzanie bez priorytetu CWU", "Heat request without DHW priority")],
+      ["gb_ch_prio", "mdi:priority-high", "peach", this.t("CO przed CWU", "CH before DHW")],
+      ["gb_silent", "mdi:volume-low", "lavender", this.t("Tryb cichy", "Silent mode")],
+      ["gb_cool_en", "mdi:snowflake", "sky", this.t("Zezwól na chłodzenie", "Allow cooling")],
+      ["gb_reqtype", "mdi:sun-snowflake-variant", "sky", this.t("Żądanie: grzanie / chłodzenie", "Request: heating / cooling")],
+    ])}
+      ${this.eid("gb_power") ? this.numRow("gb_power", "mdi:speedometer-medium", this.t("Górny limit mocy (BMS 513)", "Upper power limit (BMS 513)"), 0) : nothing}`;
   }
 
   static styles = [HubCard.styles, css`
