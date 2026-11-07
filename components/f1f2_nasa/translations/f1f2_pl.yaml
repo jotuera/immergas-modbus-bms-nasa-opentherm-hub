@@ -67,6 +67,8 @@ sensors:
   raw_8243: NASA PDU zewn. 8243 RAW
   raw_824b: NASA PDU zewn. 824B RAW
   raw_824c: NASA PDU zewn. 824C RAW
+  defrost_since: Czas od ostatniego odszraniania
+  defrost_frost_time: Czas szronienia parownika
   raw_82e1: NASA PDU zewn. 82E1 RAW
   raw_840f: NASA PDU zewn. 840F LONG RAW
   raw_8417: NASA PDU zewn. 8417 LONG RAW
@@ -290,6 +292,8 @@ maps:
     1: Etap 1
     2: Etap 2
     3: Etap 3
+    4: "Etap 4 (zakończenie)"
+    6: "Etap 6 (powrót do grzania)"
     7: Etap końcowy
     255: Brak odszraniania
   dhw_mode:

@@ -19,8 +19,6 @@ sensor:
   - {platform: f1f2_nasa, key: raw_8201, id: f1f2_raw_8201}
   - {platform: f1f2_nasa, key: raw_823f, id: f1f2_raw_823f}
   - {platform: f1f2_nasa, key: raw_8243, id: f1f2_raw_8243}
-  - {platform: f1f2_nasa, key: raw_824b, id: f1f2_raw_824b}
-  - {platform: f1f2_nasa, key: raw_824c, id: f1f2_raw_824c}
   - {platform: f1f2_nasa, key: raw_82e1, id: f1f2_raw_82e1}
   # 0x80B1 decoded as the "night limit" binary_sensor in f1f2_outdoor (was raw here).
   - {platform: f1f2_nasa, key: raw_840f, id: f1f2_raw_840f}

@@ -48,6 +48,8 @@ Columns:
 | Base heater (drain pan heater) | 0x80AF | ODU | actuator (frost protection) |
 | Defrost | 0x402E | ODU | state (the ODU decides) |
 | Defrost stage | 0x8061 | ODU | state |
+| Time since last defrost | 0x824B | ODU | counter s, holds at 2100 (35 min) |
+| Evaporator frosting time | 0x824C | ODU | counter s of run with the evaporator < about −6 °C; defrost at ~8–10 min |
 | Compressor start stage | 0x8248 | ODU | state (start-up logic) |
 | Restart inhibit | 0x8249 | ODU | state (protection) |
 | Compressor running | 0x8010 | ODU | state |
@@ -93,8 +95,8 @@ the Immergas curve. Full list in `components/f1f2_nasa/f1f2_fsv_catalog.yaml` an
 
 ## 6. RAW — not decoded, nature unknown
 
-0x0402, 0x0411–0x0415, 0x4006, 0x440A, 0x4604 (indoor); 0x041B, 0x8201, 0x823F, 0x8243, 0x824B,
-0x824C, 0x82E1, 0x840F, 0x8417 (outdoor). They do not come from Immergas (no counterparts on D+/D- or
+0x0402, 0x0411–0x0415, 0x4006, 0x440A, 0x4604 (indoor); 0x041B, 0x8201, 0x823F, 0x8243,
+0x82E1, 0x840F, 0x8417 (outdoor). 0x824B and 0x824C decoded on 7.11.2026 (defrost counters, table above). They do not come from Immergas (no counterparts on D+/D- or
 T-/T+); to be decoded with the sniffer. Details: `NASA_PDU_crossref.md`, `PDU_MAP.md`.
 
 ---

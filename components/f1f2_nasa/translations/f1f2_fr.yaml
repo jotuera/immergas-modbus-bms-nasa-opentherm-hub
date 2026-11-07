@@ -67,6 +67,8 @@ sensors:
   raw_8243: NASA PDU extérieur 8243 RAW
   raw_824b: NASA PDU extérieur 824B RAW
   raw_824c: NASA PDU extérieur 824C RAW
+  defrost_since: Temps depuis le dernier dégivrage
+  defrost_frost_time: "Temps de givrage de l'évaporateur"
   raw_82e1: NASA PDU extérieur 82E1 RAW
   raw_840f: NASA PDU extérieur 840F LONG RAW
   raw_8417: NASA PDU extérieur 8417 LONG RAW
@@ -292,6 +294,8 @@ maps:
     1: Étape 1
     2: Étape 2
     3: Étape 3
+    4: "Étape 4 (fin)"
+    6: "Étape 6 (retour au chauffage)"
     7: Étape finale
     255: Pas de dégivrage
   dhw_mode:

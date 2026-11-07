@@ -67,6 +67,8 @@ sensors:
   raw_8243: NASA PDU buiten 8243 RAW
   raw_824b: NASA PDU buiten 824B RAW
   raw_824c: NASA PDU buiten 824C RAW
+  defrost_since: Tijd sinds laatste ontdooiing
+  defrost_frost_time: Bevriezingstijd verdamper
   raw_82e1: NASA PDU buiten 82E1 RAW
   raw_840f: NASA PDU buiten 840F LONG RAW
   raw_8417: NASA PDU buiten 8417 LONG RAW
@@ -292,6 +294,8 @@ maps:
     1: Fase 1
     2: Fase 2
     3: Fase 3
+    4: "Fase 4 (afronding)"
+    6: "Fase 6 (terug naar verwarmen)"
     7: Eindfase
     255: Geen ontdooiing
   dhw_mode:

@@ -67,6 +67,8 @@ sensors:
   raw_8243: NASA PDU exterior 8243 RAW
   raw_824b: NASA PDU exterior 824B RAW
   raw_824c: NASA PDU exterior 824C RAW
+  defrost_since: Tempo desde a última descongelação
+  defrost_frost_time: Tempo de formação de gelo no evaporador
   raw_82e1: NASA PDU exterior 82E1 RAW
   raw_840f: NASA PDU exterior 840F LONG RAW
   raw_8417: NASA PDU exterior 8417 LONG RAW
@@ -292,6 +294,8 @@ maps:
     1: Fase 1
     2: Fase 2
     3: Fase 3
+    4: "Fase 4 (conclusão)"
+    6: "Fase 6 (regresso ao aquecimento)"
     7: Fase final
     255: Sem descongelação
   dhw_mode:

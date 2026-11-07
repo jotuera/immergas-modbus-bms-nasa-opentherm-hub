@@ -19,6 +19,7 @@ substitutions:
   t_dd_stage_standby: "Stilstand"
   t_dd_stage_starting: "Opstarten"
   t_dd_stage_running: "In bedrijf"
+  t_dd_stage_defrost: "Ontdooien"
   t_dd_prog_manual: "Handmatig"
   t_dd_prog_comfort: "Auto (comfort)"
   t_dd_prog_eco: "Auto (eco)"

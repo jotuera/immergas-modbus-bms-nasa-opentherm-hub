@@ -591,6 +591,26 @@ Wyniki testów: [docs/ff-control-results.pl.md](ff-control-results.pl.md).
 
 ---
 
+### 7.5 Rytm odszraniania (obserwacja)
+
+O odszranianiu decyduje jednostka zewnętrzna Samsunga; dwa PDU jednostki zewnętrznej pokazują jej dwa warunki (noc
+6–7.11.2026, 10 odszranień przy −1…+1 °C na zewnątrz):
+
+- **0x824B *Czas od ostatniego odszraniania*** – sekundy od końca ostatniego odszraniania; staje na **2100 s
+  (35 min)**, czyli minimalnym odstępie między odszranianiami.
+- **0x824C *Czas szronienia parownika*** – sekundy pracy sprężarki z parownikiem (D74) zimniejszym niż ok. **−6 °C**;
+  liczy tylko, gdy warunek jest spełniony.
+- Odszranianie rusza, gdy 0x824B stoi na 2100, a 0x824C dojdzie do **~8–10 min** (tej nocy 477–621 s, więcej przy
+  większym mrozie); oba spadają do 0 na starcie.
+- Tej nocy: odszranianie co **43–52 min** (37–46 min pracy sprężarki), każde **5,5–6 min**, ~10 % czasu grzania.
+  Przebieg: sprężarka zwalnia, przełącza się zawór 4-drogowy, sprężarka pracuje odwrotnie na ~40 Hz z EEV otwartym na
+  maksimum (1300), wentylator stoi, grzeje grzałka tacy; parownik stoi na **0 °C przez ~2,5 min, gdy topi się lód**,
+  potem rośnie do +16 °C i odszranianie się kończy. Zasilanie wody spada o ~6 K – ciepło pochodzi z instalacji.
+- Etapy (0x8061): 1 ~10 s, 2 ~20 s, **3 ~4–5 min (główny)**, 4 ~10 s (zakończenie), 6 ~30 s (powrót do grzania).
+  D+/D- przez całe odszranianie pokazuje etap pracy PC 0 (*Odszranianie*); T-/T+ 4588 = 1 (czytane co ~5 min, więc
+  z opóźnieniem albo wcale).
+- Karta *Teraz* pokazuje z tych dwóch liczników pasek **Do odszraniania**.
+
 ## 8. Jedna wielkość na trzech magistralach
 
 Te same pomiary pojawiają się na kilku magistralach. Ta tabela pozwala zweryfikować jedną magistralę drugą i wybrać

@@ -67,6 +67,8 @@ sensors:
   raw_8243: NASA PDU vonk. 8243 RAW
   raw_824b: NASA PDU vonk. 824B RAW
   raw_824c: NASA PDU vonk. 824C RAW
+  defrost_since: Čas od posledného odmrazovania
+  defrost_frost_time: Doba namŕzania výparníka
   raw_82e1: NASA PDU vonk. 82E1 RAW
   raw_840f: NASA PDU vonk. 840F LONG RAW
   raw_8417: NASA PDU vonk. 8417 LONG RAW
@@ -292,6 +294,8 @@ maps:
     1: Fáza 1
     2: Fáza 2
     3: Fáza 3
+    4: "Fáza 4 (ukončenie)"
+    6: "Fáza 6 (návrat k vykurovaniu)"
     7: Záverečná fáza
     255: Bez odmrazovania
   dhw_mode:

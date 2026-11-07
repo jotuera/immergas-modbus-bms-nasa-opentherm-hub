@@ -67,6 +67,8 @@ sensors:
   raw_8243: NASA Außen-PDU 8243 RAW
   raw_824b: NASA Außen-PDU 824B RAW
   raw_824c: NASA Außen-PDU 824C RAW
+  defrost_since: Zeit seit letztem Abtauen
+  defrost_frost_time: Vereisungszeit des Verdampfers
   raw_82e1: NASA Außen-PDU 82E1 RAW
   raw_840f: NASA Außen-PDU 840F LONG RAW
   raw_8417: NASA Außen-PDU 8417 LONG RAW
@@ -292,6 +294,8 @@ maps:
     1: Phase 1
     2: Phase 2
     3: Phase 3
+    4: "Phase 4 (Abschluss)"
+    6: "Phase 6 (zurück zum Heizen)"
     7: Endphase
     255: Keine Abtauung
   dhw_mode:

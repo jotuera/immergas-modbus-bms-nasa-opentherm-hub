@@ -48,6 +48,8 @@ Kolumny:
 | Grzałka tacy ociekowej | 0x80AF | ODU | aktuator (ochrona przed mrozem) |
 | Odszranianie | 0x402E | ODU | stan (ODU decyduje) |
 | Etap odszraniania | 0x8061 | ODU | stan |
+| Czas od ostatniego odszraniania | 0x824B | ODU | licznik s, staje na 2100 (35 min) |
+| Czas szronienia parownika | 0x824C | ODU | licznik s pracy z parownikiem < ok. −6 °C; odszranianie przy ~8–10 min |
 | Etap startu sprężarki | 0x8248 | ODU | stan (logika rozruchu) |
 | Blokada ponownego startu | 0x8249 | ODU | stan (ochrona) |
 | Sprężarka pracuje | 0x8010 | ODU | stan |
@@ -93,8 +95,8 @@ krzywa Immergasa. Pełna lista w `components/f1f2_nasa/f1f2_fsv_catalog.yaml` i 
 
 ## 6. RAW — nierozszyfrowane, charakter nieznany
 
-0x0402, 0x0411–0x0415, 0x4006, 0x440A, 0x4604 (wewn.); 0x041B, 0x8201, 0x823F, 0x8243, 0x824B,
-0x824C, 0x82E1, 0x840F, 0x8417 (zewn.). Nie pochodzą od Immergasa (brak odpowiedników na D+/D- i
+0x0402, 0x0411–0x0415, 0x4006, 0x440A, 0x4604 (wewn.); 0x041B, 0x8201, 0x823F, 0x8243,
+0x82E1, 0x840F, 0x8417 (zewn.). 0x824B i 0x824C rozszyfrowane 7.11.2026 (liczniki odszraniania, tabela wyżej). Nie pochodzą od Immergasa (brak odpowiedników na D+/D- i
 T-/T+); do rozszyfrowania snifferem. Szczegóły: `NASA_PDU_crossref.md`, `PDU_MAP.md`.
 
 ---

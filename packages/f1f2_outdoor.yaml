@@ -29,6 +29,8 @@ sensor:
   - {platform: f1f2_nasa, key: start_sequence, id: f1f2_start_sequence}
   - {platform: f1f2_nasa, key: restart_inhibit, id: f1f2_restart_inhibit}
   - {platform: f1f2_nasa, key: error_code, id: f1f2_error_code}
+  - {platform: f1f2_nasa, key: defrost_since, id: f1f2_defrost_since}
+  - {platform: f1f2_nasa, key: defrost_frost_time, id: f1f2_defrost_frost_time}
 
 binary_sensor:
   - {platform: f1f2_nasa, key: compressor, id: f1f2_compressor}

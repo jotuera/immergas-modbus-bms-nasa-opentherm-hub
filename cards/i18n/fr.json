@@ -1452,5 +1452,10 @@
   "Device type": "Type d'appareil",
   "Gas boiler: no cooling, humidity, night function U11 or integration I01–I10. The R / T / A codes are the Magis menu – on boilers with a text menu the same function has a name instead of a code.": "Chaudière gaz : pas de rafraîchissement, d'humidité, de fonction nuit U11 ni d'intégration I01–I10. Les codes R / T / A sont ceux du menu Magis – sur les chaudières à menu texte la même fonction a un nom au lieu d'un code.",
   "burner – not visible over TCP": "brûleur – non visible par TCP",
-  "not needed – weather compensation (outdoor probe / the boiler's curve)": "inutile – régulation climatique (sonde extérieure / courbe de la chaudière)"
+  "not needed – weather compensation (outdoor probe / the boiler's curve)": "inutile – régulation climatique (sonde extérieure / courbe de la chaudière)",
+  "Until defrost": "Jusqu’au dégivrage",
+  "35 min minimum interval since the last one · earliest ~": "intervalle minimal de 35 min depuis le dernier · au plus tôt ~",
+  "evaporator below about −6 °C – a defrost usually after ~8–10 min of frosting": "évaporateur sous environ −6 °C – dégivrage en général après ~8–10 min de givrage",
+  "evaporator warmer than about −6 °C – no defrost coming": "évaporateur plus chaud qu’environ −6 °C – pas de dégivrage en vue",
+  "frost ": "givre "
 }

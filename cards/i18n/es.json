@@ -1452,5 +1452,10 @@
   "Device type": "Tipo de equipo",
   "Gas boiler: no cooling, humidity, night function U11 or integration I01–I10. The R / T / A codes are the Magis menu – on boilers with a text menu the same function has a name instead of a code.": "Caldera de gas: sin refrigeración, humedad, función nocturna U11 ni integración I01–I10. Los códigos R / T / A son del menú Magis – en calderas con menú de texto la misma función tiene un nombre en vez de código.",
   "burner – not visible over TCP": "quemador – no visible por TCP",
-  "not needed – weather compensation (outdoor probe / the boiler's curve)": "no necesario – regulación climática (sonda exterior / curva de la caldera)"
+  "not needed – weather compensation (outdoor probe / the boiler's curve)": "no necesario – regulación climática (sonda exterior / curva de la caldera)",
+  "Until defrost": "Hasta el desescarche",
+  "35 min minimum interval since the last one · earliest ~": "intervalo mínimo de 35 min desde el último · como pronto ~",
+  "evaporator below about −6 °C – a defrost usually after ~8–10 min of frosting": "evaporador por debajo de unos −6 °C – desescarche normalmente tras ~8–10 min de escarcha",
+  "evaporator warmer than about −6 °C – no defrost coming": "evaporador por encima de unos −6 °C – no se acerca un desescarche",
+  "frost ": "escarcha "
 }

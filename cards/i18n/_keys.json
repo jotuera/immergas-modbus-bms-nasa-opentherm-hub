@@ -9555,5 +9555,40 @@
   "files": [
    "base.ts"
   ]
+ },
+ {
+  "en": "Until defrost",
+  "pl": "Do odszraniania",
+  "files": [
+   "now.ts"
+  ]
+ },
+ {
+  "en": "35 min minimum interval since the last one · earliest ~",
+  "pl": "min. odstęp 35 min od ostatniego · najwcześniej ~",
+  "files": [
+   "now.ts"
+  ]
+ },
+ {
+  "en": "evaporator below about −6 °C – a defrost usually after ~8–10 min of frosting",
+  "pl": "parownik poniżej ok. −6 °C – odszranianie zwykle po ~8–10 min szronienia",
+  "files": [
+   "now.ts"
+  ]
+ },
+ {
+  "en": "evaporator warmer than about −6 °C – no defrost coming",
+  "pl": "parownik cieplejszy niż ok. −6 °C – odszranianie się nie zbliża",
+  "files": [
+   "now.ts"
+  ]
+ },
+ {
+  "en": "frost ",
+  "pl": "szron ",
+  "files": [
+   "now.ts"
+  ]
  }
 ]

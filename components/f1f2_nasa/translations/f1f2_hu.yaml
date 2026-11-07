@@ -67,6 +67,8 @@ sensors:
   raw_8243: NASA kültéri PDU 8243 RAW
   raw_824b: NASA kültéri PDU 824B RAW
   raw_824c: NASA kültéri PDU 824C RAW
+  defrost_since: Utolsó leolvasztás óta eltelt idő
+  defrost_frost_time: Elpárologtató jegesedési ideje
   raw_82e1: NASA kültéri PDU 82E1 RAW
   raw_840f: NASA kültéri PDU 840F LONG RAW
   raw_8417: NASA kültéri PDU 8417 LONG RAW
@@ -289,6 +291,8 @@ maps:
     1: 1. szakasz
     2: 2. szakasz
     3: 3. szakasz
+    4: "4. szakasz (befejezés)"
+    6: "6. szakasz (vissza fűtésre)"
     7: Befejező szakasz
     255: Nincs jégtelenítés
   dhw_mode:

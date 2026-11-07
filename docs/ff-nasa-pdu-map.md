@@ -74,8 +74,8 @@ Status: decoded unless marked *candidate* / *unknown*. **Help with the unknown o
 | `0x8239` | outdoor | `raw_8239` | NASA Outdoor PDU 8239 RAW | raw |  | *deprecated* - same value as `frequency_limit`, kept so existing configs keep working. |
 | `0x823F` | outdoor | `raw_823f` | NASA Outdoor PDU 823F RAW | raw |  | *unknown* Constant 200. |
 | `0x8243` | outdoor | `raw_8243` | NASA Outdoor PDU 8243 RAW | raw |  | *unknown*  |
-| `0x824B` | outdoor | `raw_824b` | NASA Outdoor PDU 824B RAW | raw |  | *unknown* Constant 2100. |
-| `0x824C` | outdoor | `raw_824c` | NASA Outdoor PDU 824C RAW | raw |  | *unknown*  |
+| `0x824B` | outdoor | `defrost_since` | Time since last defrost | raw, s |  | Seconds since the end of the last defrost; holds at **2100 (35 min = the minimum interval)**, 0 from the defrost start (observed 6–7.11.2026, 10 defrosts). |
+| `0x824C` | outdoor | `defrost_frost_time` | Evaporator frosting time | raw, s |  | Seconds of compressor run with the evaporator below about **−6 °C** (counts only while that holds); a defrost starts when it reaches **~8–10 min** and 0x824B is at 2100; 0 from the defrost start (observed). |
 | `0x82E1` | outdoor | `raw_82e1` | NASA Outdoor PDU 82E1 RAW | raw |  | *unknown* Constant 0x5A5A. |
 | `0x80B1` | outdoor | `raw_80b1` | NASA Outdoor PDU 80B1 RAW | raw |  | *candidate* 0 -> 1 together with the night frequency limit (0x8239 -> 19 Hz) while the compressor was running; back to 0 when the compressor stopped at the end of the window. Candidate: "capacity limit active". |
 | `0x840F` | outdoor | `raw_840f` | NASA Outdoor PDU 840F LONG RAW | raw |  | *unknown*  |
@@ -106,7 +106,7 @@ Status: decoded unless marked *candidate* / *unknown*. **Help with the unknown o
 | `0x8001` | outdoor | `outdoor_driving_mode` | Outdoor Driving Mode | map (driving_mode) |
 | `0x8003` | outdoor | `outdoor_operation_state` | Outdoor Operation State | map (heat_cool) |
 | `0x800D` | outdoor | `outdoor_fan_state` | Outdoor Fan Operation State | map (fan_state) |
-| `0x8061` | outdoor | `defrost_stage` | Defrost Stage | map (defrost_stage) |
+| `0x8061` | outdoor | `defrost_stage` | Defrost Stage (1 ~10 s, 2 ~20 s, 3 ~4–5 min main, 4 ~10 s ending, 6 ~30 s back to heating, 7 end) | map (defrost_stage) |
 | `0x8235` | outdoor | `system_error` | System Error Status | error |
 | `0x4066` | indoor | `dhw_mode` | Hot Water Mode | map (dhw_mode) |
 | `0x4001` | indoor | `operation_mode_text` | Indoor Operation Mode | map (operation_mode) |

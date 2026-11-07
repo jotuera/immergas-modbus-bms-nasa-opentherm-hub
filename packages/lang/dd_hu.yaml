@@ -19,6 +19,7 @@ substitutions:
   t_dd_stage_standby: "Leállva"
   t_dd_stage_starting: "Indulás"
   t_dd_stage_running: "Üzemel"
+  t_dd_stage_defrost: "Leolvasztás"
   t_dd_prog_manual: "Kézi"
   t_dd_prog_comfort: "Auto (komfort)"
   t_dd_prog_eco: "Auto (takarék)"

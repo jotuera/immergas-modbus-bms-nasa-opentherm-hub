@@ -68,6 +68,8 @@ sensors:
   raw_8243: NASA Outdoor PDU 8243 RAW
   raw_824b: NASA Outdoor PDU 824B RAW
   raw_824c: NASA Outdoor PDU 824C RAW
+  defrost_since: Time since last defrost
+  defrost_frost_time: Evaporator frosting time
   raw_82e1: NASA Outdoor PDU 82E1 RAW
   raw_840f: NASA Outdoor PDU 840F LONG RAW
   raw_8417: NASA Outdoor PDU 8417 LONG RAW
@@ -294,6 +296,8 @@ maps:
     1: Stage 1
     2: Stage 2
     3: Stage 3
+    4: "Stage 4 (ending)"
+    6: "Stage 6 (back to heating)"
     7: End stage
     255: No defrost
   dhw_mode:

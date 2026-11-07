@@ -1811,11 +1811,11 @@ interval:
                   static int last12 = -99999;
                   if (value != last12) { last12 = value; id(dd_sniff_1e_i_12).publish_state(value == 0 ? 100.0f : (float) value); }
                 }
-                if (kind == 'I' && reg == 19) {  // operating stage: 1 standby, 2 starting, 3 running
+                if (kind == 'I' && reg == 19) {  // operating stage: 0 defrost (seen in every defrost), 1 standby, 2 starting, 3 running
                   static int last19 = -99999;
                   if (value != last19) {
                     last19 = value;
-                    const char *st = (value == 1) ? "${t_dd_stage_standby}" : (value == 2) ? "${t_dd_stage_starting}" : (value == 3) ? "${t_dd_stage_running}" : nullptr;
+                    const char *st = (value == 0) ? "${t_dd_stage_defrost}" : (value == 1) ? "${t_dd_stage_standby}" : (value == 2) ? "${t_dd_stage_starting}" : (value == 3) ? "${t_dd_stage_running}" : nullptr;
                     char sb[24];
                     if (st == nullptr) { snprintf(sb, sizeof(sb), "Code %d", value); st = sb; }
                     id(dd_pc_etap_pracy).publish_state(st);

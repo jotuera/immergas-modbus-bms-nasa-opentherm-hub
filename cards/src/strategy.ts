@@ -1,4 +1,5 @@
 import { LANGS, translate } from "./i18n";
+import { define } from "./base";
 // Dashboard strategy: `strategy: { type: custom:immergas-hub }` builds a whole dashboard from the hub cards.
 class ImmergasHubStrategy {
   static async generate(config: any, hass: any) {
@@ -117,14 +118,10 @@ function otDashboard(config: any, t: (a: string, b: string) => string) {
   };
 }
 
-if (!customElements.get("ll-strategy-dashboard-immergas-dominus")) {
-  customElements.define("ll-strategy-dashboard-immergas-dominus", class extends HTMLElement {
-    static generate = ImmergasDominusStrategy.generate;
-  } as any);
-}
+define("ll-strategy-dashboard-immergas-dominus", class extends HTMLElement {
+  static generate = ImmergasDominusStrategy.generate;
+} as any);
 
-if (!customElements.get("ll-strategy-dashboard-immergas-hub")) {
-  customElements.define("ll-strategy-dashboard-immergas-hub", class extends HTMLElement {
-    static generate = ImmergasHubStrategy.generate;
-  } as any);
-}
+define("ll-strategy-dashboard-immergas-hub", class extends HTMLElement {
+  static generate = ImmergasHubStrategy.generate;
+} as any);

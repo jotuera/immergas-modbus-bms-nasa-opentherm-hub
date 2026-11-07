@@ -19,6 +19,7 @@ substitutions:
   t_dd_stage_standby: "Klid"
   t_dd_stage_starting: "Rozběh"
   t_dd_stage_running: "Chod"
+  t_dd_stage_defrost: "Odmrazování"
   t_dd_prog_manual: "Ruční"
   t_dd_prog_comfort: "Auto (komfort)"
   t_dd_prog_eco: "Auto (útlum)"

@@ -600,6 +600,26 @@ Test results: [docs/ff-control-results.md](ff-control-results.md).
 
 ---
 
+### 7.5 Defrost rhythm (observed)
+
+The Samsung outdoor unit decides when to defrost; two outdoor PDUs show its two conditions (night of 6–7.11.2026,
+10 defrosts at −1…+1 °C outdoor):
+
+- **0x824B *Time since last defrost*** – seconds since the last defrost ended; it holds at **2100 s (35 min)**, the
+  minimum interval between defrosts.
+- **0x824C *Evaporator frosting time*** – seconds of compressor run with the evaporator (D74) below about **−6 °C**;
+  it counts only while that holds.
+- A defrost starts when 0x824B is at 2100 and 0x824C reaches **~8–10 min** (477–621 s that night, more as it got
+  colder); both drop to 0 at the start.
+- That night: a defrost every **43–52 min** (37–46 min of compressor run), each **5.5–6 min**, ~10 % of the heating
+  time. Sequence: the compressor ramps down, the 4-way valve switches, the compressor runs reversed at ~40 Hz with the
+  EEV fully open (1300), the fan stops, the drain pan heater runs; the evaporator stays at **0 °C for ~2.5 min while
+  the ice melts**, then rises to +16 °C and the defrost ends. The water flow drops by ~6 K – the heat comes from the
+  installation.
+- Stages (0x8061): 1 ~10 s, 2 ~20 s, **3 ~4–5 min (main)**, 4 ~10 s (ending), 6 ~30 s (back to heating). D+/D- shows
+  the HP operating stage 0 (*Defrost*) for the whole defrost; T-/T+ 4588 = 1 (read every ~5 min, so late or missed).
+- The *Now* card shows a **Until defrost** bar from these two counters.
+
 ## 8. One quantity on three buses
 
 The same measurements appear on several buses. This table lets you check one bus against another and pick the best

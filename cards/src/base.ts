@@ -655,8 +655,38 @@ export abstract class HubCard extends LitElement {
 }
 
 /** registers a card element + card picker entry */
+/** this bundle's version (also in package.json) */
+export const VERSION = "0.85.0";
+
+// The bundle can be loaded twice: the hub cards resource and the copy shipped with the Dominus integration, in any
+// order. A custom element can be defined only once, so every bundle (0.85.0+) queues its elements on a shared window
+// object and, a moment after the last bundle arrived, the newest version defines them (older bundles fill only the
+// tags the newest lacks). Bundles older than 0.85.0 still define at once - keep both copies on the same version.
+type Def = { tag: string; cls: CustomElementConstructor };
+const SHARED: { bundles: { v: string; defs: Def[] }[]; timer: number; done: boolean } =
+  ((window as any).__immergasHubCards ??= { bundles: [], timer: 0, done: false });
+const MINE = { v: VERSION, defs: [] as Def[] };
+SHARED.bundles.push(MINE);
+const newer = (a: string, b: string) => {
+  const x = a.split(".").map(Number), y = b.split(".").map(Number);
+  for (let i = 0; i < 3; i++) if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0);
+  return false;
+};
+function settle() {
+  SHARED.done = true;
+  const order = [...SHARED.bundles].sort((a, b) => (newer(a.v, b.v) ? -1 : newer(b.v, a.v) ? 1 : 0));
+  for (const b of order) for (const d of b.defs) if (!customElements.get(d.tag)) customElements.define(d.tag, d.cls);
+}
+/** define a custom element through the shared queue (newest bundle wins) */
+export function define(tag: string, cls: CustomElementConstructor) {
+  if (SHARED.done) { if (!customElements.get(tag)) customElements.define(tag, cls); return; }
+  MINE.defs.push({ tag, cls });
+  clearTimeout(SHARED.timer);
+  SHARED.timer = window.setTimeout(settle, 800);
+}
+
 export function register(tag: string, cls: CustomElementConstructor, name: string, description: string) {
-  if (!customElements.get(tag)) customElements.define(tag, cls);
+  define(tag, cls);
   (window as any).customCards = (window as any).customCards || [];
   // the bundle can be loaded twice (hub cards resource + the copy shipped with the Dominus integration)
   if (!(window as any).customCards.some((x: any) => x.type === tag)) (window as any).customCards.push({ type: tag, name, description, preview: true });

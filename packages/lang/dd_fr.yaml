@@ -19,6 +19,7 @@ substitutions:
   t_dd_stage_standby: "Veille"
   t_dd_stage_starting: "Démarrage"
   t_dd_stage_running: "En marche"
+  t_dd_stage_defrost: "Dégivrage"
   t_dd_prog_manual: "Manuel"
   t_dd_prog_comfort: "Auto (confort)"
   t_dd_prog_eco: "Auto (économie)"

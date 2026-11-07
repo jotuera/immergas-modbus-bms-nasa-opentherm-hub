@@ -67,6 +67,8 @@ sensors:
   raw_8243: NASA PDU venkovní 8243 RAW
   raw_824b: NASA PDU venkovní 824B RAW
   raw_824c: NASA PDU venkovní 824C RAW
+  defrost_since: Čas od posledního odmrazování
+  defrost_frost_time: Doba namrzání výparníku
   raw_82e1: NASA PDU venkovní 82E1 RAW
   raw_840f: NASA PDU venkovní 840F LONG RAW
   raw_8417: NASA PDU venkovní 8417 LONG RAW
@@ -292,6 +294,8 @@ maps:
     1: Fáze 1
     2: Fáze 2
     3: Fáze 3
+    4: "Fáze 4 (ukončení)"
+    6: "Fáze 6 (návrat k topení)"
     7: Závěrečná fáze
     255: Bez odmrazování
   dhw_mode:

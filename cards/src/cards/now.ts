@@ -84,12 +84,27 @@ class ImmergasNowCard extends HubCard {
 
     // 1) current phase vs. the typical length of the same phase
     const ph = BAD(cur) ? last.s : cur!, start = last.s === ph ? last.t0 : now, el = now - start;
-    const typ = typical(st, (s) => s === ph), col = phaseCol(ph), idle = isIdle(ph);
+    // idle: only real pauses (>= 3 min) - the few seconds of idle around a defrost would make the typical pause ~0
+    const idle = isIdle(ph), typ = typical(st, (s) => s === ph, idle ? 3 * 60e3 : 20e3), col = phaseCol(ph);
     const sub = !(typ > 0) ? this.t("za mało historii, by oszacować długość", "not enough history to estimate the length")
       : el <= typ ? (idle ? this.t("następny start ~", "next start ~") : this.t("koniec ~", "ends ~")) + clock(start + typ, pl) + this.t(" · zostało ~", " · ~") + dur(typ - el) + this.t("", " left")
       : this.t("dłużej niż zwykle o ", "longer than usual by ") + dur(el - typ);
     rows.push(this.bar("state", phaseIcon(ph), col, idle ? this.t("Przerwa (postój)", "Pause (idle)") : ph, el, typ,
       this.t("od ", "since ") + clock(start, pl) + " · " + sub));
+
+    // 1b) until defrost (Samsung outdoor unit): 0x824B = seconds since the last defrost (holds at 2100 s = the 35 min
+    //     minimum interval), 0x824C = seconds of run with the evaporator below about -6 °C; a defrost comes at ~8-10 min
+    if (this.eid("defrost_since") && !isDefrost(ph) && this.n("hz") > 0) {
+      const since = this.n("defrost_since"), frost = this.n("defrost_frost_time"), LOCK = 2100, FROST = 9 * 60;
+      if (!isNaN(since) && since < LOCK)
+        rows.push(this.bar("defrost_since", "mdi:snowflake-melt", "sky", this.t("Do odszraniania", "Until defrost"), since * 1000, LOCK * 1000,
+          this.t("min. odstęp 35 min od ostatniego · najwcześniej ~", "35 min minimum interval since the last one · earliest ~") + clock(now + (LOCK - since) * 1000, pl)));
+      else if (!isNaN(frost))
+        rows.push(this.bar("defrost_frost_time", "mdi:snowflake-melt", "sky", this.t("Do odszraniania", "Until defrost"), frost * 1000, FROST * 1000,
+          frost > 0 ? this.t("parownik poniżej ok. −6 °C – odszranianie zwykle po ~8–10 min szronienia", "evaporator below about −6 °C – a defrost usually after ~8–10 min of frosting")
+            : this.t("parownik cieplejszy niż ok. −6 °C – odszranianie się nie zbliża", "evaporator warmer than about −6 °C – no defrost coming"),
+          frost > 0 ? this.t("szron ", "frost ") + dur(frost * 1000) : "–"));
+    }
 
     // 2) DHW rhythm: time since the last DHW cycle started vs. the typical interval between DHW starts
     if (!isDhw(ph)) {

@@ -1452,5 +1452,10 @@
   "Device type": "Typ zařízení",
   "Gas boiler: no cooling, humidity, night function U11 or integration I01–I10. The R / T / A codes are the Magis menu – on boilers with a text menu the same function has a name instead of a code.": "Plynový kotel: bez chlazení, vlhkosti, noční funkce U11 a integrace I01–I10. Kódy R / T / A jsou z menu Magis – u kotlů s textovým menu má stejná funkce název místo kódu.",
   "burner – not visible over TCP": "hořák – po TCP není vidět",
-  "not needed – weather compensation (outdoor probe / the boiler's curve)": "není potřeba – ekvitermní regulace (venkovní čidlo / křivka kotle)"
+  "not needed – weather compensation (outdoor probe / the boiler's curve)": "není potřeba – ekvitermní regulace (venkovní čidlo / křivka kotle)",
+  "Until defrost": "Do odmrazování",
+  "35 min minimum interval since the last one · earliest ~": "min. odstup 35 min od posledního · nejdříve ~",
+  "evaporator below about −6 °C – a defrost usually after ~8–10 min of frosting": "výparník pod cca −6 °C – odmrazování obvykle po ~8–10 min namrzání",
+  "evaporator warmer than about −6 °C – no defrost coming": "výparník teplejší než cca −6 °C – odmrazování se neblíží",
+  "frost ": "námraza "
 }

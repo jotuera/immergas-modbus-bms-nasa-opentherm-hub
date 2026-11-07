@@ -67,6 +67,8 @@ sensors:
   raw_8243: NASA PDU esterna 8243 RAW
   raw_824b: NASA PDU esterna 824B RAW
   raw_824c: NASA PDU esterna 824C RAW
+  defrost_since: "Tempo dall'ultimo sbrinamento"
+  defrost_frost_time: Tempo di brinamento evaporatore
   raw_82e1: NASA PDU esterna 82E1 RAW
   raw_840f: NASA PDU esterna 840F LONG RAW
   raw_8417: NASA PDU esterna 8417 LONG RAW
@@ -292,6 +294,8 @@ maps:
     1: Fase 1
     2: Fase 2
     3: Fase 3
+    4: "Fase 4 (conclusione)"
+    6: "Fase 6 (ritorno al riscaldamento)"
     7: Fase finale
     255: Nessuno sbrinamento
   dhw_mode:
