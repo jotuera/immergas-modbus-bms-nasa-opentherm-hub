@@ -434,19 +434,32 @@ class ImmergasModeCard extends HubCard {
 
   /** gas boiler over Modbus BMS: the model functions (BOOST, ECO, priorities, silent, cooling) and the power limit */
   private gbFuncs() {
+    const W = true, T = true;
+    const pw = this.so("gb_power"), a = pw?.attributes ?? {}, v = parseFloat(pw?.state ?? ""), step = a.step ?? 1;
+    const setP = (d: number) => { if (isNaN(v)) return; const nv = Math.min(a.max ?? 100, Math.max(a.min ?? 0, v + d * step)); if (nv !== v) this.call("number", "set_value", "gb_power", { value: nv }); };
     return html`${this.toggles([
-      ["gb_boost", "mdi:water-plus", "yellow", this.t("CWU BOOST", "DHW BOOST"), this.t("jednorazowe szybkie grzanie CWU", "a one-off quick DHW heat-up")],
-      ["gb_eco", "mdi:leaf", "green", this.t("CWU ECO", "DHW ECO"), this.t("niższa temperatura utrzymania CWU", "lower DHW keep-warm")],
-      ["gb_nodhwprio", "mdi:priority-low", "peach", this.t("Grzanie bez priorytetu CWU", "Heat request without DHW priority")],
-      ["gb_ch_prio", "mdi:priority-high", "peach", this.t("CO przed CWU", "CH before DHW")],
-      ["gb_silent", "mdi:volume-low", "lavender", this.t("Tryb cichy", "Silent mode")],
-      ["gb_cool_en", "mdi:snowflake", "sky", this.t("Zezwól na chłodzenie", "Allow cooling")],
-      ["gb_reqtype", "mdi:sun-snowflake-variant", "sky", this.t("Żądanie: grzanie / chłodzenie", "Request: heating / cooling")],
+      ["gb_boost", "mdi:water-plus", "yellow", this.t("CWU BOOST", "DHW BOOST"), this.t("jednorazowe szybkie grzanie CWU", "a one-off quick DHW heat-up"), W, T],
+      ["gb_eco", "mdi:leaf", "green", this.t("CWU ECO", "DHW ECO"), this.t("niższa temperatura utrzymania CWU", "lower DHW keep-warm"), W, T],
+      ["gb_nodhwprio", "mdi:priority-low", "peach", this.t("Grzanie bez priorytetu CWU", "Heat request without DHW priority"), this.t("żądanie CO nie czeka na zasobnik", "the CH request does not wait for the cylinder"), W, T],
+      ["gb_ch_prio", "mdi:priority-high", "red", this.t("CO przed CWU", "CH before DHW"), this.t("ogrzewanie ma pierwszeństwo przed CWU", "heating goes before DHW"), W, T],
+      ["gb_silent", "mdi:volume-low", "lavender", this.t("Tryb cichy", "Silent mode"), this.t("niższe obroty wentylatora / pompy ciepła", "lower fan / heat pump speed"), W, T],
+      ["gb_cool_en", "mdi:snowflake", "sky", this.t("Zezwól na chłodzenie", "Allow cooling"), this.t("MAGIS M TOP: chłodzenie z pompy ciepła", "MAGIS M TOP: cooling by the heat pump"), W, T],
+      ["gb_reqtype", "mdi:sun-snowflake-variant", "teal", this.t("Żądanie: grzanie / chłodzenie", "Request: heating / cooling"), this.t("wył. = grzanie, wł. = chłodzenie", "off = heating, on = cooling"), W, T],
     ])}
-      ${this.eid("gb_power") ? this.numRow("gb_power", "mdi:speedometer-medium", this.t("Górny limit mocy (BMS 513)", "Upper power limit (BMS 513)"), 0) : nothing}`;
+      ${pw ? html`<div class="pwr" style="background:${ca("mauve", 0.07)};border:1px solid ${ca("mauve", 0.25)}">
+        <ha-icon icon="mdi:speedometer-medium" style="color:${c("mauve")}" @click=${() => this.moreInfo("gb_power")}></ha-icon>
+        <div class="tgx" @click=${() => this.moreInfo("gb_power")}><div class="tgl2">${this.t("Górny limit mocy", "Upper power limit")}</div>
+          <div class="tgs2">${this.t("BMS 513 · maks. moc palnika", "BMS 513 · max. burner output")}</div></div>
+        <div class="btn ${isNaN(v) || v <= (a.min ?? 0) ? "off" : ""}" @click=${() => setP(-1)}><ha-icon icon="mdi:minus"></ha-icon></div>
+        <div class="pv" style="color:${c("mauve")}">${this.f(v, 0)} %</div>
+        <div class="btn ${isNaN(v) || v >= (a.max ?? 100) ? "off" : ""}" @click=${() => setP(1)}><ha-icon icon="mdi:plus"></ha-icon></div></div>` : nothing}`;
   }
 
   static styles = [HubCard.styles, css`
+    .pwr { display: flex; align-items: center; gap: 10px; margin-top: 8px; padding: 9px 12px; border-radius: 13px; }
+    .pwr > ha-icon { --mdc-icon-size: 20px; cursor: pointer; }
+    .pwr .tgx { flex: 1; min-width: 0; cursor: pointer; }
+    .pv { width: 52px; text-align: center; font-size: 16px; font-weight: 800; }
     .setp .st { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .55; margin: 2px 0 2px; }
     .modes { display: flex; gap: 6px; }
     .mb.lock { opacity: .4; cursor: not-allowed; }

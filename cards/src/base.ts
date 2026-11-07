@@ -518,16 +518,16 @@ export abstract class HubCard extends LitElement {
   /** compact two-column toggles (two-tap confirm); items whose entity is missing are skipped */
   /** two-column grid of switches (two-tap confirm); optional sub line, `wide` spans both columns.
    *  A two-option select works as a switch too: the second option (TAK / Auto) is "on". */
-  protected toggles(items: [Key, string, string, string, (string | TemplateResult)?, boolean?][]) {
+  protected toggles(items: [Key, string, string, string, (string | TemplateResult)?, boolean?, boolean?][]) {
     const its = items.filter(([k]) => this.eid(k));
     if (!its.length) return nothing;
-    return html`<div class="tgs">${its.map(([k, icon, col, label, sub, wide]) => {
+    return html`<div class="tgs">${its.map(([k, icon, col, label, sub, wide, tint]) => {
       const sel = this.eid(k)!.startsWith("select."), opts: string[] = sel ? this.attr(k, "options") ?? [] : [];
       // the read-only switch itself stays usable; everything else is locked while it is on
       const on = sel ? this.s(k) === opts[1] : this.on(k), bad = this.bad(k) || (sel && opts.length !== 2) || (this.otRO && k !== "ot_ro"), tag = "tg_" + k, conf = this.isArmed(tag);
       const flip = () => sel ? this.call("select", "select_option", k, { option: opts[on ? 0 : 1] }) : this.call("switch", on ? "turn_off" : "turn_on", k);
-      return html`<div class="tgi ${wide ? "wide" : ""}" style=${on ? `background:${ca(col, 0.2)};border-color:${ca(col, 0.55)}` : ""}>
-        <ha-icon icon=${icon} style="color:${c(on ? col : "overlay2")}" @click=${() => this.moreInfo(k)}></ha-icon>
+      return html`<div class="tgi ${wide ? "wide" : ""}" style=${on ? `background:${ca(col, 0.2)};border-color:${ca(col, 0.55)}` : tint ? `background:${ca(col, 0.06)};border-color:${ca(col, 0.22)}` : ""}>
+        <ha-icon icon=${icon} style="color:${c(on || tint ? col : "overlay2")}${!on && tint ? ";opacity:.75" : ""}" @click=${() => this.moreInfo(k)}></ha-icon>
         <div class="tgx" @click=${() => this.moreInfo(k)}><div class="tgl2">${conf ? this.t("Potwierdź – dotknij ponownie", "Confirm – tap again") : label}</div>
           ${sub ? html`<div class="tgs2">${sub}</div>` : nothing}</div>
         <div class="tgl ${bad ? "dis" : ""}" style="background:${on ? ca(col, 0.35) : "rgba(255,255,255,.08)"}${conf ? `;outline:2px solid ${c(col)}` : ""}"
