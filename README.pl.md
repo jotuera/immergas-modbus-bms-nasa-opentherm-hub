@@ -23,6 +23,7 @@ dashboard.
 | **OpenTherm** | VICTRIX ZEUS, EXA, TERA, OMNIA, HERCULES Condensing … | **master** zamiast CAR V2 / Dominusa albo **bramka** między pilotem a kotłem | eksperymentalny | [Kotły OpenTherm](docs/opentherm-hub.pl.md) |
 | **BMS generatora** (Modbus RTU) | kotły gazowe VICTRIX ZEUS Superior 25–35, EXTRA, PRO V2; pompa ciepła MAGIS M TOP; kotły IMG-BUS (ZEUS, EXA, TERA, OMNIA, HERCULES …) przez interfejs Immergas IU23 (hipoteza) | master Modbus: żądanie grzania, nastawy zasilania i CWU, temperatury, błędy | eksperymentalny | [Kotły gazowe po Modbus BMS](docs/gas-boiler-bms.pl.md) |
 | **Modbus Midea M-Thermal** (H1 / H2) | MAGIS M (R32) | master Modbus: wł. / wył., tryb, nastawy, krzywe, sprężarka, energia, COP | eksperymentalny | [Pompy ciepła MAGIS M](docs/magis-m-midea.pl.md) |
+| **Samsung NASA F1/F2 + OpenTherm + Modbus strefowy** | TRIO HYDRO ELECTRIC / HYBRID 5 – 12 (jednostka zewnętrzna UE HYDRO HP, kocioł VICTRIX TERA 24 PLUS) | kolejny hub na tych samych pakietach: jednostka zewnętrzna po F1/F2, kocioł przez bramkę OpenTherm | planowany – szukamy testerów | [TRIO HYDRO](docs/trio-hydro.pl.md) |
 
 Każda strona ma sprzęt, schemat podłączenia i bazę wiedzy swojego protokołu. Ponad magistralami hub liczy to, czego
 żadna z nich nie pokazuje osobno – COP teraz i dziś, moc cieplną, stan pracy, starty i czas pracy, ostatni cykl CWU
@@ -36,6 +37,8 @@ i koszt 1 kWh ciepła z każdego źródła.
 - **kocioł gazowy nowej platformy** (ZEUS Superior 25–35, HERCULES 25 / 35, EXTRA) albo **MAGIS M TOP** bez
   Dominusa → [Kotły gazowe po Modbus BMS](docs/gas-boiler-bms.pl.md);
 - **MAGIS M** (na Midea, panel przewodowy z H1 / H2) → [Pompy ciepła MAGIS M](docs/magis-m-midea.pl.md);
+- **TRIO HYDRO** (ELECTRIC albo HYBRID, jednostka zewnętrzna UE HYDRO HP) → [TRIO HYDRO](docs/trio-hydro.pl.md) –
+  planowany, szukamy testerów;
 - tylko **Immergas Dominus** w sieci, bez sprzętu huba → [integracja Immergas Dominus](https://github.com/jotuera/immergas-dominus)
   korzysta z tych samych kart.
 
@@ -87,6 +90,7 @@ portugalski, słowacki.
 | [Kotły OpenTherm](docs/opentherm-hub.pl.md) | master i bramka, adaptery, zaciski kotłów według rodzin |
 | [Kotły gazowe po Modbus BMS](docs/gas-boiler-bms.pl.md) | SUPERIOR / EXTRA / PRO V2, MAGIS M TOP, mapa rejestrów |
 | [Pompy ciepła MAGIS M](docs/magis-m-midea.pl.md) | Midea M-Thermal na H1 / H2, mapa rejestrów |
+| [TRIO HYDRO](docs/trio-hydro.pl.md) | magistrale według instrukcji, planowany sprzęt, co zrobiłby tester |
 | [Kopalnia wiedzy](docs/knowledge-base.pl.md) | jak działają magistrale, wiedza o instalacji, rozwiązywanie problemów |
 | [Zbieranie logów](docs/collecting-logs.pl.md) | inny model albo nieznany sygnał – co nagrać do zgłoszenia |
 | [Karty](cards/README.pl.md) | karty Lovelace, opcje, instalacja |
