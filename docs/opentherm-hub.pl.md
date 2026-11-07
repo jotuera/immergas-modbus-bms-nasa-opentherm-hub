@@ -17,9 +17,9 @@ stanąć pośrodku.
 
 | | Master – hub zastępuje pilota | Bramka – pilot zostaje |
 |---|---|---|
-| **Kup** | M5Stack AtomS3 Lite + **ATOMIC PortABC** + **DIYLess Master OpenTherm Shield** + 1 kabel M5Stack Grove → Dupont | to samo + **DIYLess Slave OpenTherm Shield** + drugi kabel Grove → Dupont |
-| **Podłącz** | port C → płytka Master, płytka Master → zaciski OpenTherm kotła (**41 / 44** w większości kotłów Immergas) | port C → Master, port B → Slave; przewody pilota → płytka Slave, płytka Master → kocioł 41 / 44 |
-| **Wgraj** | [`examples/immergas-opentherm.yaml`](../examples/immergas-opentherm.yaml) bez zmian | ten sam plik, odkomentuj `ot_gateway` i piny pilota |
+| **Kup** | M5Stack AtomS3 Lite + **DIYLess Master OpenTherm Shield** + 1 kabel M5Stack Grove → Dupont – **bez PortABC** | to samo + **ATOMIC PortABC** + **DIYLess Slave OpenTherm Shield** + drugi kabel Grove → Dupont |
+| **Podłącz** | gniazdo Grove AtomS3 → płytka Master, płytka Master → zaciski OpenTherm kotła (**41 / 44** w większości kotłów Immergas) | port A PortABC → Master, port C → Slave (port B wolny na RS485); przewody pilota → płytka Slave, płytka Master → kocioł 41 / 44 |
+| **Wgraj** | [`examples/immergas-opentherm.yaml`](../examples/immergas-opentherm.yaml) bez zmian | ten sam plik, odkomentuj `ot_gateway`, piny pilota i ustaw piny mastera na port A |
 | **Na kotle** | zdejmij CAR V2, zworka X40 z powrotem na 40-41, wyłącz i włącz zasilanie (E31) | nic nie zmieniasz |
 
 Szczegóły: [Sprzęt](#sprzęt), [Podłączenie](#podłączenie) ze schematami, [Instalacja](#instalacja).
@@ -39,29 +39,31 @@ nie robi modułu OpenTherm; hub korzysta z płytek **DIYLess** (albo innego adap
 | Element | Master | Bramka |
 |---|---|---|
 | [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) (ESP32-S3), zasilacz USB-C 5 V | ✔ | ✔ |
-| [M5Stack ATOMIC PortABC](https://shop.m5stack.com/products/atomic-portabc-extension-base) – porty Grove A / B / C | ✔ | ✔ |
 | [DIYLess Master OpenTherm Shield](https://diyless.com/product/master-opentherm-shield) – rozmawia z **kotłem** | ✔ | ✔ |
 | [DIYLess Slave OpenTherm Shield](https://diyless.com/product/slave-opentherm-shield) – rozmawia z **pilotem** | – | ✔ |
+| [M5Stack ATOMIC PortABC](https://shop.m5stack.com/products/atomic-portabc-extension-base) – porty Grove A / B / C | – | ✔ |
 | [kabel M5Stack Grove → Dupont](https://botland.com.pl/przewody-polaczeniowe-grove/21690-grove-zestaw-5-przewodow-4-pin-2mm-przewody-zenskiemeskie-254mm-20cm-6972934173751.html) (zestaw z Botlandu: 5 męskich + 5 żeńskich) – końcówki **męskie** do gniazd płytki (rev 1.0 ma od góry gniazda żeńskie, od spodu brak pinów) | 1 | 2 |
 | przewód 2-żyłowy do kotła, mała obudowa | ✔ | ✔ |
 
-Trzy sposoby budowy:
+Jak to się składa:
 
-- **A – AtomS3 Lite + ATOMIC PortABC + kable Grove → Dupont (zalecany).** Po stronie huba plug and play: wtyczka Grove
-  do portu C (płytka Master) i portu B (płytka Slave), cztery końcówki Dupont w gniazda płytki – bez lutowania. Port A
-  zostaje wolny na magistralę RS485. Domyślne piny konfiguracji to właśnie te porty.
-- **B – AtomS3 Lite bez PortABC, przewody Dupont do pinów złącza** (G5–G8, 3V3, GND). Te same piny, jedna płytka mniej,
-  ale luźne przewody.
-- **C – tylko DIYLess: płytki nałożone na WeMos D1 mini ESP32** – nie zwykły D1 mini z ESP8266, hub wymaga ESP32 (albo zestaw
-  [DIYLess ESP OpenTherm Gateway](https://diyless.com/product/esp8266-opentherm-gateway)). Bez przewodów; w konfiguracji
-  zmieniasz płytkę i piny (zobacz [Instalacja](#instalacja), krok 4).
+- **Master (hub zastępuje pilota) – bez PortABC.** Jeden kabel Grove → Dupont z **własnego gniazda Grove AtomS3 Lite**
+  (G1 / G2) do płytki Master. Po stronie huba plug and play, bez lutowania. To domyślne piny.
+- **Bramka (pilot zostaje) – z ATOMIC PortABC:** **port A** = płytka Master (G39 / G38), **port C** = płytka Slave
+  (G6 / G5), **port B** zostaje wolny na magistralę RS485 (G8 / G7).
+- **Bez kabli Grove:** przewody Dupont do pinów złącza AtomS3 Lite (master G6 / G5, slave G8 / G7, 3V3, GND) – też
+  działa, piny ustawiasz w konfiguracji.
+- **Tylko DIYLess: płytki nałożone na WeMos D1 mini ESP32** – nie zwykły D1 mini z ESP8266, hub wymaga ESP32 (albo
+  zestaw [DIYLess ESP OpenTherm Gateway](https://diyless.com/product/esp8266-opentherm-gateway)). Bez przewodów;
+  w konfiguracji zmieniasz płytkę i piny (zobacz [Instalacja](#instalacja), krok 4).
 
 **Przed pierwszym podłączeniem sprawdź poziom sygnału.** Płytki przyjmują 3,3 V albo 5 V, a DIYLess nie podaje, czy
-przy zasilaniu 5 V ich sygnał do ESP32 zostaje na 3,3 V – piny ESP32-S3 przyjmują tylko 3,3 V. Port Grove daje **5 V**
-(czerwony przewód). Dlatego raz: podłącz tylko czarny (GND) i czerwony (5V) – bez białego i żółtego – płytkę podłącz do
-kotła i zmierz miernikiem **D2** (płytka Slave: **D6**) względem GND.
+przy zasilaniu 5 V ich sygnał do ESP32 zostaje na 3,3 V – piny ESP32-S3 przyjmują tylko 3,3 V. Gniazdo Grove daje
+**5 V** (czerwony przewód). Dlatego raz: podłącz tylko czarny (GND) i czerwony (5V) – bez białego i żółtego – płytkę
+podłącz do kotła i zmierz miernikiem **D2** (płytka Slave: **D6**) względem GND.
 - do ok. 3,3 V → podłącz też biały i żółty, gotowe;
-- ok. 5 V → nie używaj czerwonego przewodu: zasil płytkę z 3V3 (sposób B albo C).
+- ok. 5 V → nie używaj czerwonego przewodu: zasil płytkę z 3V3 (przewód Dupont do pinu 3V3 AtomS3 Lite albo D1 mini
+  ESP32).
 
 Zgłoś, proszę, co wyszło. Napięcie linii OpenTherm płytki robią same, bez dodatkowego zasilacza.
 
@@ -90,21 +92,20 @@ płytka Slave (bramka) na dwa przewody pilota.
 | VICTRIX ZEUS 25, EXA, TERA, OMNIA | 41 / 44 | zworka X40 z powrotem na 40-41, wyłącz i włącz zasilanie (E31); TERA: P7 = 2 dla mastera innej firmy |
 | VICTRIX ZEUS Superior 26 / 32, HERCULES Condensing / Solar 26 | 41 / 44 (IMG BUS) | potwierdzone na ZEUS Superior 26 2 ErP; 42 / 43 to zaciski Super CAR, nie OpenTherm; HERCULES jeszcze niepotwierdzony. X40 z powrotem; M3 P33 = ON utrzymuje CO po E31 |
 
-### Płytka → PortABC (sposób A)
+### Płytka → AtomS3 Lite
 
 Piny płytek nazywają się według miejsca na złączu D1 mini. **Wejście / wyjście** w konfiguracji są widziane od strony
 ESP32: odpowiedź kotła przychodzi **na wejście**, ramki huba idą **wyjściem**.
 
-| Przewód Grove | Port C → płytka Master | Port B → płytka Slave (bramka) |
-|---|---|---|
-| czarny – GND | **GND** | **GND** |
-| czerwony – 5 V | **5V** (po sprawdzeniu poziomu wyżej) | **5V** (po sprawdzeniu poziomu) |
-| biały – sygnał do ESP32 | **D2** · G6 · `ot_boiler_in_pin: GPIO6` | **D6** · G8 · `ot_room_in_pin: GPIO8` |
-| żółty – sygnał z ESP32 | **D1** · G5 · `ot_boiler_out_pin: GPIO5` | **D7** · G7 · `ot_room_out_pin: GPIO7` |
+| Przewód Grove | Sam master: Grove AtomS3 → płytka Master | Bramka: port A → płytka Master | Bramka: port C → płytka Slave |
+|---|---|---|---|
+| czarny – GND | **GND** | **GND** | **GND** |
+| czerwony – 5 V | **5V** (po sprawdzeniu poziomu wyżej) | **5V** (po sprawdzeniu) | **5V** (po sprawdzeniu) |
+| biały – sygnał do ESP32 | **D2** · `ot_boiler_in_pin: GPIO1` | **D2** · `ot_boiler_in_pin: GPIO39` | **D6** · `ot_room_in_pin: GPIO6` |
+| żółty – sygnał z ESP32 | **D1** · `ot_boiler_out_pin: GPIO2` | **D1** · `ot_boiler_out_pin: GPIO38` | **D7** · `ot_room_out_pin: GPIO5` |
 
-Sposób B używa tych samych GPIO na pinach złącza AtomS3 Lite (i jego pinu **3V3** do pinu 3V3 płytki). Pary pinów są
-takie jak w przykładzie bramki biblioteki OpenTherm, pod którą płytki są zrobione (master D2 / D1, slave D6 / D7; na
-D1 mini ESP32 GPIO21 / 22 i GPIO19 / 23).
+Pary pinów są takie jak w przykładzie bramki biblioteki OpenTherm, pod którą płytki są zrobione (master D2 / D1,
+slave D6 / D7; na D1 mini ESP32 GPIO21 / 22 i GPIO19 / 23).
 
 ### Master – hub zastępuje pilota
 
@@ -129,10 +130,10 @@ D1 mini ESP32 GPIO21 / 22 i GPIO19 / 23).
 
 ### Razem z magistralą RS485 na jednym AtomS3 Lite
 
-Płytki OpenTherm zajmują porty C i B, więc **port A** PortABC zostaje wolny na moduł M5Stack Isolated RS485 Unit –
+Z PortABC płytki OpenTherm zajmują porty A i C, więc **port B** zostaje wolny na moduł M5Stack Isolated RS485 Unit –
 np. Samsung NASA F1/F2 (TRIO HYDRO) albo Modbus BMS obok kotła OpenTherm. Ustaw tej magistrali
-`*_uart_rx_pin: GPIO39` / `*_uart_tx_pin: GPIO38` (pakiety `gb_` / `mt_` mają domyślnie G6 / G5 = port C, który zajmuje
-OpenTherm).
+`*_uart_rx_pin: GPIO8` / `*_uart_tx_pin: GPIO7` (pakiety `gb_` / `mt_` mają domyślnie G6 / G5 = port C, płytka
+Slave). Przy samym masterze gniazdo Grove AtomS3 jest zajęte, więc magistrala RS485 też wymaga PortABC (port B).
 
 ![Bramka OpenTherm i magistrala RS485 na jednym AtomS3 Lite z PortABC](images/ot-wiring-abc-gateway-modbus.png)
 
@@ -162,12 +163,13 @@ najpierw ustaw M3 P33 = ON – kocioł grzeje wtedy nawet po utracie OpenTherm.
 
    - **Master** (hub zastępuje pilota): zostaw `ot_regulator` i ustaw `ot_room_entity` na czujnik temperatury pokoju
      z Home Assistant (albo zostaw – regulator pracuje wtedy tylko z krzywej).
-   - **Bramka** (pilot zostaje): odkomentuj `ot_gateway` i podstawienia `ot_room_in_pin` / `ot_room_out_pin`;
-     `ot_regulator` jest opcjonalny (ustawia wartości, których hub używa, gdy pilot milczy).
-4. **Sprawdź piny** (`substitutions:` na górze). Sposób A zostawia domyślne. Sposób B (płytki na WeMos D1 mini
-   ESP32): `ot_boiler_in_pin: GPIO21`, `ot_boiler_out_pin: GPIO22`, bramka `ot_room_in_pin: GPIO19`,
-   `ot_room_out_pin: GPIO23`; w `esp32:` ustaw `board: wemos_d1_mini32` i usuń `hardware_uart: USB_SERIAL_JTAG`
-   z `logger:`.
+   - **Bramka** (pilot zostaje): odkomentuj `ot_gateway` i podstawienia `ot_room_in_pin` / `ot_room_out_pin`
+     (port C) oraz ustaw `ot_boiler_in_pin: GPIO39`, `ot_boiler_out_pin: GPIO38` (port A); `ot_regulator` jest
+     opcjonalny (ustawia wartości, których hub używa, gdy pilot milczy).
+4. **Sprawdź piny** (`substitutions:` na górze). Master na gnieździe Grove AtomS3 zostawia domyślne; bramka z PortABC
+   to krok 3. Płytki nałożone na WeMos D1 mini ESP32: `ot_boiler_in_pin: GPIO21`, `ot_boiler_out_pin: GPIO22`,
+   bramka `ot_room_in_pin: GPIO19`, `ot_room_out_pin: GPIO23`; w `esp32:` ustaw `board: wemos_d1_mini32` i usuń
+   `hardware_uart: USB_SERIAL_JTAG` z `logger:`.
 5. **Wgraj** urządzenie (pierwszy raz przez USB, potem przez sieć) i **dodaj je w Home Assistant** (*Ustawienia →
    Urządzenia i usługi* – znajdzie się samo).
 6. **Sprawdź połączenie:** *Immergas OT - Połączenie z kotłem* włącza się w kilka sekund, a *Temperatura zasilania* / *Płomień* idą za kotłem. *Brak odpowiedzi* rośnie bez *Ramki poprawne* = sprawdź podłączenie adaptera i poziomy `in_active_low` / `out_active_low`; w bramce *Połączenie z pilotem* pokazuje pilota.

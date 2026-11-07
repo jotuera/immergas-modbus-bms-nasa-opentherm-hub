@@ -9,9 +9,10 @@
 # Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
 
 substitutions:
-  # slave adapter (towards the room unit): default AtomS3 + ATOMIC PortABC Port B
-  ot_room_in_pin: GPIO8
-  ot_room_out_pin: GPIO7
+  # slave adapter (towards the room unit): default ATOMIC PortABC port C (white G6 = in, yellow G5 = out); the master
+  # then goes to port A (ot_boiler_in_pin: GPIO39, ot_boiler_out_pin: GPIO38) and port B stays free for an RS485 bus
+  ot_room_in_pin: GPIO6
+  ot_room_out_pin: GPIO5
 
 immergas_ot:
   mode: gateway

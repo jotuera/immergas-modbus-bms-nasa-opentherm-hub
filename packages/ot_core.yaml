@@ -8,11 +8,11 @@
 # Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
 
 substitutions:
-  ot_project_version: "1.2.0"
+  ot_project_version: "1.2.1"
   ot_name_prefix: "Immergas OT"
-  # master adapter (towards the boiler): default AtomS3 + ATOMIC PortABC Port C
-  ot_boiler_in_pin: GPIO6
-  ot_boiler_out_pin: GPIO5
+  # master adapter (towards the boiler): default the AtomS3 Lite's own Grove port (white G1 = in, yellow G2 = out)
+  ot_boiler_in_pin: GPIO1
+  ot_boiler_out_pin: GPIO2
   # 0xCA = the "Immergas fix" in the status request (without it some boilers ignore Data-ID 1 / 57); 0x00 = plain
   ot_status_low_byte: "0xCA"
   # true = the max. CH setpoint (57) is written with the CH setpoint (1), same value, as the original Immergas room
