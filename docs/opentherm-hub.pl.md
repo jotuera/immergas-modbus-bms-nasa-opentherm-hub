@@ -48,7 +48,7 @@ adapter slave (bramka) na dwa przewody pilota.
 | Rodzina kotłów | Zaciski OpenTherm | Bez pilota |
 |---|---|---|
 | VICTRIX ZEUS 25, EXA, TERA, OMNIA | 41 / 44 | zworka X40 z powrotem na 40-41, wyłącz i włącz zasilanie (E31); TERA: P7 = 2 dla mastera innej firmy |
-| VICTRIX ZEUS Superior 26 / 32, HERCULES Condensing / Solar 26 | 42 / 43 | X40 z powrotem; M3 P33 = ON utrzymuje CO po E31 |
+| VICTRIX ZEUS Superior 26 / 32, HERCULES Condensing / Solar 26 | 41 / 44 (IMG BUS) | potwierdzone na ZEUS Superior 26 2 ErP; 42 / 43 to zaciski Super CAR, nie OpenTherm; HERCULES jeszcze niepotwierdzony. X40 z powrotem; M3 P33 = ON utrzymuje CO po E31 |
 
 ## Instalacja
 

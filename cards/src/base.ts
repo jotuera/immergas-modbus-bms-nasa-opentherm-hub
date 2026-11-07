@@ -254,7 +254,7 @@ export abstract class HubCard extends LitElement {
     const gw = this.espRelay;
     type Row = [boolean | null, string, string];
     const rows: Row[] = [
-      [this.eid("ot_link") ? this.on("ot_link") : null, this.t("Kocioł odpowiada na OpenTherm", "The boiler answers OpenTherm"), this.t("adapter master na zaciskach pilota (41 / 44 albo 42 / 43)", "master adapter on the remote terminals (41 / 44 or 42 / 43)")],
+      [this.eid("ot_link") ? this.on("ot_link") : null, this.t("Kocioł odpowiada na OpenTherm", "The boiler answers OpenTherm"), this.t("adapter master na zaciskach pilota 41 / 44 (IMG BUS)", "master adapter on the remote terminals 41 / 44 (IMG BUS)")],
       [code !== "31", this.t("Kocioł nie czeka na pilota (brak E31)", "The boiler does not wait for the remote (no E31)"),
         this.t("po zdjęciu CAR V2: odłącz i włącz zasilanie kotła", "after removing the CAR V2: power-cycle the boiler")],
       [null, this.t("Mostek X40 na zaciskach 40-41 kotła", "Jumper X40 on boiler terminals 40-41"),

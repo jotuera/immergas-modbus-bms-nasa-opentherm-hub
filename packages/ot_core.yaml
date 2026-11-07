@@ -3,8 +3,8 @@
 # boiler's OpenTherm terminals. For the GATEWAY mode (room unit -> hub -> boiler) add ot_gateway.
 # Hardware: an OpenTherm MASTER adapter (e.g. OpenTherm Adapter, DIYLess Master OpenTherm Shield) on two GPIOs. NOT the
 # RS485 unit: OpenTherm is a 2-wire current / voltage loop.
-# Boiler terminals (see the Dominus knowledge base): 41 / 44 (VICTRIX ZEUS 25, EXA, TERA, OMNIA), 42 / 43 (HERCULES
-# Condensing, ZEUS Superior 26 / 32). Without the CAR V2 the jumper X40 goes back on 40-41.
+# Boiler terminals (see the Dominus knowledge base): 41 / 44 = IMG BUS (VICTRIX ZEUS 25, EXA, TERA, OMNIA, ZEUS Superior
+# 26 / 32; 42 / 43 there are the Super CAR terminals). Without the CAR V2 the jumper X40 goes back on 40-41.
 # Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
 
 substitutions:
