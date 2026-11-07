@@ -30,12 +30,30 @@ podają mapy rejestrów ani zacisków dla opcji BMS, więc ta droga zostaje otwa
 
 ## Sprzęt (planowany)
 
-| Element | |
+**HYBRID** – jeden AtomS3 Lite z ATOMIC PortABC: bramka OpenTherm między jednostką wewnętrzną a kotłem oraz magistrala
+Samsung F1/F2.
+
+| Element | Gdzie |
 |---|---|
-| [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) | ESP32-S3 – jedna płytka na wszystkie magistrale, ATOMIC PortABC niepotrzebny |
-| 1× M5Stack Isolated RS485 Unit | F1 / F2, w gnieździe Grove AtomS3 Lite (RX GPIO1, TX GPIO2) |
-| HYBRID: adapter OpenTherm master + slave | bramka – master na G6 / G5 do kotła, slave na G8 / G7 do jednostki wewnętrznej |
-| opcjonalnie: drugi moduł RS485 | magistrala strefowa (Modbus 9600 8E1), dopiero po pierwszych logach |
+| [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) + zasilacz USB-C 5 V | – |
+| [M5Stack ATOMIC PortABC](https://shop.m5stack.com/products/atomic-portabc-extension-base) | pod AtomS3 Lite |
+| [DIYLess Master OpenTherm Shield](https://diyless.com/product/master-opentherm-shield) | **port A** (G39 / G38) → kocioł VICTRIX TERA, zaciski 41 / 44 |
+| [DIYLess Slave OpenTherm Shield](https://diyless.com/product/slave-opentherm-shield) | **port C** (G6 / G5, + 5 V) → wyjście OpenTherm jednostki wewnętrznej (przewody, które szły do kotła) |
+| M5Stack Isolated RS485 Unit | **port B** (RX G8, TX G7) → F1 / F2, nasłuch równolegle |
+| kabel Grove → Dupont w gnieździe **Grove AtomS3** (przy USB-C) | tylko biała żyła **G1 = 3,3 V** → 3V3 obu płytek (pakiet `ot_3v3_supply`) |
+
+![TRIO HYDRO HYBRID: bramka OpenTherm i F1/F2 na jednym AtomS3 Lite z PortABC](images/ot-wiring-abc-gateway-modbus.png)
+
+Na schemacie *pilot* to jednostka wewnętrzna TRIO HYDRO: to ona jest masterem OpenTherm wobec kotła, hub siedzi
+pośrodku. Jednostka wewnętrzna ma własne zasilanie z sieci, więc płytka Slave nie musi jej zasilać. Płytki, piny
+i zasilanie 3,3 V: [Kotły OpenTherm](opentherm-hub.pl.md#sprzęt).
+
+**ELECTRIC** (bez kotła) – tylko F1/F2: AtomS3 Lite z modułem RS485 w gnieździe Grove AtomS3 (RX G1, TX G2), bez
+PortABC i bez OpenTherm.
+
+**Bez lutowania, jako dwa urządzenia:** gotowa bramka [OT-thing](https://www.seegel-systeme.de/produkt/ot-thing/)
+(master + slave OpenTherm w obudowie, ESP32-C3) od strony kotła i AtomS3 Lite z modułem RS485 do F1/F2 – konfiguracji
+dla OT-thing jeszcze nie ma.
 
 ## Co zrobiłby tester
 

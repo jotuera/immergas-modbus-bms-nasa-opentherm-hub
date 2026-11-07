@@ -16,8 +16,8 @@ in the middle.
 
 | | Master – the hub replaces the room unit | Gateway – the room unit stays |
 |---|---|---|
-| **Buy** | M5Stack AtomS3 Lite + **ATOMIC ToUnit Base** + **DIYLess Master OpenTherm Shield** + 3 female Dupont wires on the ToUnit plug (GND, D1, D2) + 1 Grove → Dupont cable (only white G1 = 3.3 V) | AtomS3 Lite + **ATOMIC PortABC** + **DIYLess Master** + **DIYLess Slave OpenTherm Shield** + 3 Grove → Dupont cables |
-| **Connect** | ToUnit Base → GND, D1, D2 of the Master shield (DIP 2 and 5 on); white G1 of the Grove AtomS3 → 3V3; Master shield → boiler OpenTherm terminals (**41 / 44** on most Immergas boilers) | PortABC port A → Master: GND, D1, D2; port C → Slave: GND, 5V, D6, D7 (port B free for RS485); white G1 of the Grove AtomS3 → 3V3 of both; room unit wires → Slave shield, Master shield → boiler 41 / 44 |
+| **Buy** | M5Stack AtomS3 Lite + **ATOMIC ToUnit Base** + **DIYLess Master OpenTherm Shield** + 2 female Dupont wires on the ToUnit plug (D1, D2) + 1 Grove → Dupont cable (black GND, white G1 = 3.3 V) | AtomS3 Lite + **ATOMIC PortABC** + **DIYLess Master** + **DIYLess Slave OpenTherm Shield** + 3 Grove → Dupont cables |
+| **Connect** | ToUnit Base → D1 / D2 of the Master shield (DIP 2 and 5 on); Grove AtomS3 → black GND, white G1 = 3.3 V → 3V3; Master shield → boiler OpenTherm terminals (**41 / 44** on most Immergas boilers) | PortABC port A → Master: GND, D1, D2; port C → Slave: GND, 5V, D6, D7 (port B free for RS485); white G1 of the Grove AtomS3 → 3V3 of both; room unit wires → Slave shield, Master shield → boiler 41 / 44 |
 | **Flash** | [`examples/immergas-opentherm.yaml`](../examples/immergas-opentherm.yaml) as it is | the same file, uncomment `ot_gateway`, the room pins and set the master pins to port A |
 | **On the boiler** | remove the CAR V2, jumper X40 back on 40-41, power-cycle (E31) | nothing to change |
 
@@ -51,10 +51,11 @@ How it goes together:
   DIP switches **2** (IO2 = G6, white) and **5** (IO1 = G5, yellow) on, the rest off. These are the default pins.
 - **Gateway (the room unit stays) – with an ATOMIC PortABC instead:** **port A** = Master shield (G39 / G38),
   **port C** = Slave shield (G6 / G5), **port B** stays free for an RS485 bus (G8 / G7).
-- **In both cases the Grove AtomS3** (the AtomS3 Lite's own socket next to USB-C) **gives only the 3.3 V**: one more
-  Grove → Dupont cable, of which only the white **G1 = 3.3 V** wire goes to the 3V3 pin of every shield (package
-  `ot_3v3_supply`). Everything else comes from the ToUnit Base / PortABC: GND and the signals, and on the Slave shield
-  also 5 V (port C). Everything plugs in – no soldering, no wires on the side pins of the Atom.
+- **The Grove AtomS3** (the AtomS3 Lite's own socket next to USB-C) **gives the 3.3 V**: one more Grove → Dupont
+  cable, its white **G1 = 3.3 V** wire to the 3V3 pin of every shield (package `ot_3v3_supply`). With the master alone
+  its black wire is the shield's **GND** as well, and the ToUnit Base carries only the two signals. In the gateway GND
+  and the signals come from ports A / C, and the Slave's 5 V from port C. Everything plugs in – no soldering, no wires
+  on the side pins of the Atom.
 - **DIYLess only: the shields stacked on a WeMos D1 mini ESP32** – not the ESP8266 D1 mini, the hub needs an ESP32 (or
   the [DIYLess ESP OpenTherm Gateway](https://diyless.com/product/esp8266-opentherm-gateway) kit). No wires at all;
   change the board and the pins in the configuration (see [Installation](#installation), step 4).
@@ -101,7 +102,7 @@ from the ESP32: the boiler's answer comes **in**, the hub's frames go **out**.
 
 | Grove wire | Master alone: ToUnit Base → Master shield | Gateway: port A → Master shield | Gateway: port C → Slave shield |
 |---|---|---|---|
-| black – GND | **GND** (ToUnit Base) | **GND** (port A) | **GND** (port C) |
+| black – GND | **GND** ← black of the Grove AtomS3 (the ToUnit black stays free) | **GND** (port A) | **GND** (port C) |
 | red – 5 V | not connected (the Master shield's 5V pin is free) | not connected | **5V** (port C) |
 | Grove AtomS3 cable: white G1 = 3.3 V (`ot_3v3_supply`) | **3V3** | **3V3** | **3V3** |
 | white – signal to the ESP32 | **D2** · IO2 = G6 · `ot_boiler_in_pin: GPIO6` | **D2** · `ot_boiler_in_pin: GPIO39` | **D6** · `ot_room_in_pin: GPIO6` |
@@ -139,8 +140,7 @@ With the PortABC the OpenTherm shields use ports A and C, so **port B** stays fr
 e.g. Samsung NASA F1/F2 (TRIO HYDRO) or a Modbus BMS next to the OpenTherm boiler. Set that bus's
 `*_uart_rx_pin: GPIO8` / `*_uart_tx_pin: GPIO7` (the `gb_` / `mt_` packages default to G6 / G5 = port C, the Slave
 shield). With the master alone (ToUnit Base) there is no free Grove port left, so an RS485 bus needs the PortABC (port B).
-
-![OpenTherm gateway and an RS485 bus on one AtomS3 Lite with the PortABC](images/en/ot-wiring-abc-gateway-modbus.png)
+The full wiring of this combination (gateway + RS485 on F1/F2) is on the [TRIO HYDRO](trio-hydro.md#hardware-planned) page.
 
 ## Installation
 
