@@ -224,6 +224,7 @@ class ImmergasOtMapCard extends HubCard {
         ${fin ? this.chip("ot_ids", "mdi:clock-check-outline", "overlay2", this.t("Ostatni skan", "Last scan"),
           new Date(fin).toLocaleString(this.loc, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })) : nothing}
       </div>
+      ${this.tcpCells()}
       <div class="row">
         <button class="go" ?disabled=${running || !this.eid("ot_scan")} style=${armed ? box("sky", true) : ""}
           @click=${() => this.confirm(scanTag, () => this.call("button", "press", "ot_scan"))}>
@@ -233,6 +234,37 @@ class ImmergasOtMapCard extends HubCard {
       </div>
       <div class="hint">${this.t("Skan czyta raz każdy standardowy Data-ID i parametry kotła (odczyt w tym czasie pauzuje). Zgłoszenie: link w powiadomieniach HA otwiera GitHub z gotową mapą i modelem – nic nie jest wysyłane, dopóki nie naciśniesz Create.",
         "The scan reads every standard Data-ID once and the boiler parameters (polling pauses meanwhile). Report: a link in the HA notifications opens GitHub with the map and the model filled in – nothing is sent until you press Create.")}</div>`}`;
+  }
+
+  /** Dominus TCP: the last scan as the same 128-cell grid as the ESP map - answers / unknown to the boiler / no reply,
+   *  the lists with the Data-ID names and raw values, the boiler parameters (TSP) and the fault history read by the scan */
+  private tcpCells() {
+    const arr = (k: string) => (Array.isArray(this.attr("ot_ids", k)) ? (this.attr("ot_ids", k) as unknown[]).map(Number).filter((x) => !isNaN(x)) : []);
+    const sup = arr("supported"), unk = arr("unsupported"), nor = arr("no_reply");
+    if (!sup.length && !unk.length && !nor.length) return nothing;
+    const vals = (this.attr("ot_ids", "values") ?? {}) as Record<string, unknown>;
+    const tsp = (this.attr("ot_ids", "boiler_parameters") ?? null) as Record<string, unknown> | null;
+    const fh = (this.attr("ot_ids", "fault_history") ?? null) as Record<string, unknown> | null;
+    const nm = (id: number) => (ID_NAMES[id] ? this.t(ID_NAMES[id][0], ID_NAMES[id][1]) : "");
+    const cell = (id: number) => {
+      const s = sup.includes(id), u = unk.includes(id), r = nor.includes(id), v = vals[String(id)];
+      const col = s ? "green" : u ? "red" : r ? "peach" : "overlay1";
+      return html`<div class="cell" title=${`${id}${nm(id) ? " · " + nm(id) : ""}${s ? this.t(" · kocioł odpowiada", " · the boiler answers") : u ? this.t(" · kocioł nie zna", " · unknown to the boiler") : r ? this.t(" · brak odpowiedzi", " · no reply") : ""}${v != null ? " · " + v : ""}`}
+        style="background:${s || u || r ? ca(col, s ? 0.45 : 0.3) : "rgba(255,255,255,.04)"}">${id}</div>`;
+    };
+    const list = (ids: number[], col: string) => html`<div class="ids">${ids.map((id) => html`<span class="idc" style=${box(col, false)}><b>${id}</b>${nm(id) ? " " + nm(id) : ""}${vals[String(id)] != null ? html` <span class="raw">${String(vals[String(id)])}</span>` : nothing}</span>`)}</div>`;
+    const kv = (o: Record<string, unknown>, col: string, pre: string) => html`<div class="ids">${Object.entries(o).map(([k, v]) => html`<span class="idc" style=${box(typeof v === "number" ? col : "overlay1", false)}><b>${pre}${k}</b> ${typeof v === "number" ? v : "–"}</span>`)}</div>`;
+    return html`
+      <div class="cells">${Array.from({ length: 128 }, (_, i) => cell(i))}</div>
+      <div class="legend"><span><i style="background:${ca("green", 0.45)}"></i>${this.t("kocioł odpowiada", "answers")}</span>
+        <span><i style="background:${ca("red", 0.3)}"></i>${this.t("kocioł nie zna", "unknown")}</span>
+        <span><i style="background:${ca("peach", 0.3)}"></i>${this.t("brak odpowiedzi", "no reply")}</span>
+        <span><i style="background:rgba(255,255,255,.04)"></i>${this.t("nie pytano", "not asked")}</span></div>
+      <div class="sec2">${this.t("Kocioł odpowiada", "The boiler answers")}</div>${list(sup, "green")}
+      ${unk.length ? html`<div class="sec2">${this.t("Kocioł nie zna", "Unknown to the boiler")}</div>${list(unk, "red")}` : nothing}
+      ${nor.length ? html`<div class="sec2">${this.t("Brak odpowiedzi", "No reply")}</div>${list(nor, "peach")}` : nothing}
+      ${tsp && Object.keys(tsp).length ? html`<div class="sec2">${this.t("Parametry kotła (TSP, ID 10/11)", "Boiler parameters (TSP, ID 10/11)")}</div>${kv(tsp, "mauve", "TSP ")}` : nothing}
+      ${fh && Object.keys(fh).length ? html`<div class="sec2">${this.t("Historia błędów (FHB, ID 12/13)", "Fault history (FHB, ID 12/13)")}</div>${kv(fh, "peach", "#")}` : nothing}`;
   }
 
   /** ESP hub: the map comes from every frame - no scan; supported / unknown / asked by the room unit, a 128-cell grid */
@@ -288,6 +320,7 @@ class ImmergasOtMapCard extends HubCard {
     .sec2 { font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; opacity: .55; margin: 10px 0 4px; }
     .ids { display: flex; flex-wrap: wrap; gap: 4px; }
     .idc { font-size: 10.5px; padding: 2px 7px; border-radius: 8px; }
+    .raw { opacity: .6; font-variant-numeric: tabular-nums; }
     .sh { cursor: pointer; display: flex; align-items: center; gap: 8px; }
     .sh > ha-icon { --mdc-icon-size: 17px; opacity: .55; }
     .ttl { font-size: 10.5px; font-weight: 800; opacity: .55; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
