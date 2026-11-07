@@ -1299,6 +1299,295 @@ class ImmergasCalibrationCard extends HubCard {
     return out;
   }
 
+  // ---------------------------------------------------------------------------------------------------------------
+  // OpenTherm (Dominus OT / ESP OpenTherm hub), gas boiler BMS (gb_) and MAGIS M (mt_): recommendations from the
+  // Today analysis (ot_computed / ot_analytics, gb_analytics, mt_analytics) and the device profile
+  // ---------------------------------------------------------------------------------------------------------------
+  /** which row set: the Magis hub, Dominus Modbus, OpenTherm (Dominus or the ESP hub), the gas boiler BMS or MAGIS M */
+  private get calMode(): "hub" | "dom" | "ot" | "gb" | "mt" {
+    if (this.gbx) return "gb";
+    if (this.mtx) return "mt";
+    if (this.ot) return "ot";
+    return this.dominus ? "dom" : "hub";
+  }
+  private fine() { return this.t("✓ w normie", "✓ fine"); }
+  /** the entity takes a value from the card (a number / select / switch), not only a reading or a declared sensor */
+  private canSet(k: Key, dom: "number" | "select" | "switch") {
+    const id = this.eid(k) ?? "";
+    return dom === "number" ? /^(number|input_number)\./.test(id) : dom === "select" ? /^(select|input_select)\./.test(id) : /^(switch|input_boolean)\./.test(id);
+  }
+  /** a measured value judged against the model: shown only when its entity exists */
+  private infoRow(k: Key, group: string, name: [string, string], unit: string, d: number, model: string, why: [string, string],
+    bad: (v: number) => boolean, rec: [string, string], reason: [string, string] = ["", ""]): Row | null {
+    if (!this.eid(k)) return null;
+    const v = this.n(k), b = !isNaN(v) && bad(v);
+    return { code: "", name, unit, d, kind: "info", group, model, why, value: v, ok: !b,
+      rec: isNaN(v) ? this.t("brak danych (jeszcze)", "no data (yet)") : b ? this.t(rec[0], rec[1]) : rec[0] ? this.fine() : this.t("informacyjnie", "informative"), reason };
+  }
+  /** a setting with a recommended number; a read-only one (sensor, declared copy without a number) becomes informative */
+  private setRow(k: Key, code: string, group: string, name: [string, string], unit: string, d: number, model: number | string,
+    why: [string, string], rec: number, reason: [string, string], menu = false): Row | null {
+    if (!this.eid(k)) return null;
+    const v = this.n(k), mn = +(this.attr(k, "min") ?? -1e9), mx = +(this.attr(k, "max") ?? 1e9);
+    const r = isNaN(rec) || isNaN(v) ? v : Math.min(isNaN(mx) ? 1e9 : mx, Math.max(isNaN(mn) ? -1e9 : mn, rec));
+    const changed = !isNaN(r) && !isNaN(v) && Math.abs(r - v) > 0.01;
+    const rs: [string, string] = changed && menu ? [reason[0] + " – zmień w menu urządzenia, encja to tylko kopia", reason[1] + " – change it in the device menu, the entity is only the copy"] : reason;
+    if (this.canSet(k, "number")) return { k, code, name, unit, d, kind: "number", group, model, why, rec: r, reason: rs };
+    return { k, code, name, unit, d, kind: "info", group, model: typeof model === "number" ? this.f(model, d, d) + (unit ? " " + unit : "") : model, why,
+      value: v, ok: !changed, rec: changed ? "→ " + this.f(r, d, d) + (unit ? " " + unit : "") : this.fine(), reason: rs };
+  }
+  /** a switch with a recommended state (informative when it cannot be switched from Home Assistant) */
+  private swRow(k: Key, code: string, group: string, name: [string, string], model: string, why: [string, string], recOn: boolean | null, reason: [string, string]): Row | null {
+    if (!this.eid(k)) return null;
+    const cur = this.on(k) ? "on" : "off", rec = recOn === null ? cur : recOn ? "on" : "off";
+    if (this.canSet(k, "switch")) return { k, code, name, unit: "", kind: "switch", group, model, why, rec, reason };
+    return { k, code, name, unit: "", kind: "info", group, model, why, value: cur === "on" ? this.t("wł.", "on") : this.t("wył.", "off"), ok: rec === cur,
+      rec: rec === cur ? this.fine() : rec === "on" ? this.t("→ włącz", "→ switch on") : this.t("→ wyłącz", "→ switch off"), reason };
+  }
+  /** the device profile the recommendations are based on (first row of "Other") */
+  private profileRow(k: Key | undefined, name: string, hint: [string, string]): Row {
+    return { k, code: "", name: ["Profil urządzenia", "Device profile"], unit: "", kind: "info", group: "other", model: "–",
+      why: ["kody i parametry w wierszach wyżej zależą od profilu", "the codes and parameters in the rows above depend on the profile"],
+      value: name, ok: true, rec: this.t(hint[0], hint[1]), reason: ["", ""] };
+  }
+  private dhwSetRow(group = "dhw", hp = false): Row | null {
+    const ds = this.n("dhw_set"), hi = hp ? 52 : 55, rec = ds > hi ? (hp ? 50 : 50) : ds;
+    return this.setRow("dhw_set", "", group, ["Nastawa CWU", "DHW setpoint"], "°C", 0, hp ? "45–50 °C" : "45–55 °C",
+      hp ? ["pompa ciepła: każdy stopień wyżej obniża COP CWU", "heat pump: every degree higher lowers the DHW COP"]
+        : ["wyższa nastawa = większe straty zasobnika i mniej kondensacji przy CWU", "a higher setpoint = more cylinder loss and less condensing on DHW"],
+      rec, ds > hi ? [`${this.f(ds, 0)} °C to więcej niż potrzeba`, `${this.f(ds, 0)} °C is more than needed`] : ["w porządku", "fine"]);
+  }
+
+  private otRows(): Row[] {
+    const P = this.otProfile, esp = this.esp, f1 = (v: number) => this.f(v, 1, 1);
+    const names: Record<string, string> = { zeus25: "VICTRIX ZEUS 25 / EXA 28 / OMNIA", tera: "VICTRIX TERA V2 / V3", classic: "VICTRIX EXA 24 X / NIKE 24 ECO",
+      superior: "VICTRIX ZEUS Superior", hercules: "HERCULES Condensing", generic: this.t("ogólny (OpenTherm)", "generic (OpenTherm)") };
+    const gt = P === "zeus25" || P === "tera", sup = P === "superior" || P === "hercules";
+    const cMax: Record<string, string> = { zeus25: "t1", tera: "t1", classic: "S6", superior: "P66/B", hercules: "P66/B", generic: "" };
+    const out: (Row | null)[] = [];
+    // --- cycling: starts per hour, short burns, average burn; the anti-cycling parameter of the menu family ---
+    const sh = this.n("ot_burn_h"), st = this.n("ot_burn_today"), avg = this.n("oa_burn_avg"), mm = this.n("oa_minmod_share");
+    const cycRec: [string, string] = gt ? ["za często – wydłuż t5 (blokada zapłonu CO) albo obniż krzywą", "too often – lengthen t5 (CH ignitions timer) or lower the curve"]
+      : sup ? ["za często – obniż krzywą P66 / maks. moc CO (M3) albo nastawę CO", "too often – lower the P66 curve / CH max. output (M3) or the CH setpoint"]
+      : P === "classic" ? ["za często – obniż maks. moc CO (menu P) albo krzywą", "too often – lower the CH max. output (menu P) or the curve"]
+      : esp ? ["za często – obniż maks. modulację huba albo krzywą", "too often – lower the hub max. modulation or the curve"]
+      : ["za często – obniż krzywą albo nastawę CO", "too often – lower the curve or the CH setpoint"];
+    out.push(this.infoRow("ot_burn_h", "cyc", ["Taktowanie: starty palnika na godzinę", "Cycling: burner starts per hour"], "/h", 0, "≤ 3 /h",
+      ["kocioł kondensacyjny: mniej startów = mniej strat i zużycia", "condensing boiler: fewer starts = fewer losses and less wear"], (v) => v > 3, cycRec,
+      [`dziś ${isNaN(st) ? "–" : this.f(st, 0)} startów, średnie palenie ${isNaN(avg) ? "–" : f1(avg)} min`, `${isNaN(st) ? "–" : this.f(st, 0)} starts today, average burn ${isNaN(avg) ? "–" : f1(avg)} min`]));
+    out.push(this.infoRow("oa_burn_avg", "cyc", ["Średnie palenie", "Average burn"], "min", 1, "≥ 10 min",
+      ["krótkie palenia = kocioł za duży na obecne obciążenie", "short burns = the boiler is too big for the current load"], (v) => v < 10,
+      mm > 70 ? ["krótko na min. mocy – kocioł nie zejdzie niżej, wydłuż przerwy (t5 / histereza)", "short at min. output – the boiler cannot go lower, lengthen the pauses (t5 / hysteresis)"]
+        : ["krótko – obniż maks. moc CO", "short – lower the CH max. output"],
+      [`na min. modulacji ${isNaN(mm) ? "–" : this.f(mm, 0)} % palenia`, `${isNaN(mm) ? "–" : this.f(mm, 0)} % of the burn at min. modulation`]));
+    out.push(this.infoRow("oa_short_burns", "cyc", ["Krótkie palenia dziś", "Short burns today"], "×", 0, "≤ 6", ["palenie < 5 min", "a burn < 5 min"], (v) => v > 6, cycRec));
+    if (gt) { const t5 = this.n("ot_t5"); out.push(this.setRow("ot_t5", "t5", "cyc", ["Blokada ponownego zapłonu CO", "CH ignitions timer"], "min", 0, "≥ 3 min",
+      ["minimalna przerwa między zapłonami CO", "the minimum pause between CH ignitions"], sh > 3 && t5 < 6 ? 6 : t5,
+      [`${isNaN(sh) ? "–" : this.f(sh, 0)} startów/h`, `${isNaN(sh) ? "–" : this.f(sh, 0)} starts/h`], !esp)); }
+    if (esp) { const mx = this.n("ot_max_mod"); out.push(this.setRow("ot_max_mod", "", "cyc", ["Maks. modulacja huba", "Hub max. modulation"], "%", 0, "60–100 %",
+      ["niższa = dłuższe, spokojniejsze palenia przy małym obciążeniu", "lower = longer, calmer burns at a low load"], sh > 3 && mm < 50 && mx > 60 ? mx - 10 : mx,
+      [`${isNaN(sh) ? "–" : this.f(sh, 0)} startów/h, na min. modulacji ${isNaN(mm) ? "–" : this.f(mm, 0)} %`, `${isNaN(sh) ? "–" : this.f(sh, 0)} starts/h, ${isNaN(mm) ? "–" : this.f(mm, 0)} % at min. modulation`])); }
+    // --- heating curve: the Dominus OTC (offset) or the hub regulator (curve points, room correction) ---
+    const cond = this.n("oa_condensing_share");
+    if (!esp) {
+      const dev = this.n("oa_room_dev"), off = this.n("ot_offset"), step = +(this.attr("ot_offset", "step") ?? 1) || 1;
+      const wx = this.on("ot_out_sensor") || !this.eid("ot_out_sensor");
+      out.push(this.setRow("ot_offset", "", "ch", ["Offset krzywej (regulator Dominusa)", "Curve offset (Dominus regulator)"], "°C", 1,
+        this.t("pokój ±0,5 K od zadanej", "room within ±0.5 K of the target"),
+        ["przesuwa całą krzywą OTC: +1 = cieplejsza woda", "shifts the whole OTC curve: +1 = warmer water"],
+        !wx || isNaN(dev) ? off : dev > 0.5 ? off - step : dev < -0.5 ? off + step : off,
+        !wx ? ["sonda zewnętrzna wyłączona – regulator nie liczy krzywej", "outdoor sensor off – the regulator computes no curve"]
+          : isNaN(dev) ? ["brak odchyłki pokoju (Dominus 1.6.14)", "no room deviation (Dominus 1.6.14)"]
+          : [`pokój ${dev > 0 ? "+" : ""}${f1(dev)} K od zadanej (1 h)`, `room ${dev > 0 ? "+" : ""}${f1(dev)} K from the target (1 h)`]));
+    } else {
+      const room = this.n("zone1"), tgt = this.n("ot_room_set"), dev = room - tgt, out_ = this.n("outdoor"), oc = this.n("ot_c_oc"), ow = this.n("ot_c_ow");
+      const mild = !isNaN(out_) && !isNaN(oc) && !isNaN(ow) ? out_ > (oc + ow) / 2 : !isNaN(out_) && out_ > 5;
+      const mv = isNaN(dev) ? 0 : dev > 0.5 ? -1 : dev < -0.5 ? 1 : 0, txt: [string, string] = isNaN(dev) ? ["brak temperatury pokoju", "no room temperature"]
+        : [`pokój ${dev > 0 ? "+" : ""}${f1(dev)} K od zadanej, na zewnątrz ${f1(out_)} °C`, `room ${dev > 0 ? "+" : ""}${f1(dev)} K from the target, outdoor ${f1(out_)} °C`];
+      out.push(this.setRow("ot_c_fw", "", "ch", ["Krzywa: zasilanie przy najwyższej temp.", "Curve: flow at the warmest"], "°C", 0, "25–35 °C",
+        ["stopa krzywej – liczy się, gdy na zewnątrz łagodnie", "the curve foot – matters in mild weather"], this.n("ot_c_fw") + (mild ? mv : 0), txt));
+      out.push(this.setRow("ot_c_fc", "", "ch", ["Krzywa: zasilanie przy najniższej temp.", "Curve: flow at the coldest"], "°C", 0, this.t("≤ 60 °C (kondensacja)", "≤ 60 °C (condensing)"),
+        ["szczyt krzywej – liczy się w mrozy", "the curve top – matters in frost"], this.n("ot_c_fc") + (mild ? 0 : mv), txt));
+      const g = this.n("ot_gain");
+      out.push(this.setRow("ot_gain", "", "ch", ["Korekta pokojowa", "Room correction"], "°C/°C", 1, "2–4",
+        ["o ile °C podnieść wodę na 1 °C brakującą w pokoju", "how many °C of water per 1 °C missing in the room"], g > 6 && this.n("ot_burn_h") > 3 ? 4 : g < 1 ? 2 : g,
+        g > 6 ? ["duża korekta rozkołysuje regulację", "a large correction makes the control swing"] : ["w porządku", "fine"]));
+    }
+    out.push(this.infoRow("oa_condensing_share", "ch", ["Praca kondensacyjna dziś", "Condensing today"], "%", 0, "≥ 70 %",
+      ["powrót poniżej ~55 °C = kocioł odzyskuje ciepło spalin", "return below ~55 °C = the boiler recovers the flue heat"], (v) => v < 50,
+      ["mało – obniż krzywą / maks. zasilanie", "low – lower the curve / max. flow"]));
+    { const t1 = this.n("ot_t1"), k: Key = esp ? "ot_max_ch" : "ot_t1", v = esp ? this.n("ot_max_ch") : t1;
+      out.push(this.setRow(k, esp ? "" : cMax[P], "ch", ["Maks. temperatura zasilania CO", "CH max. flow temperature"], "°C", 0, this.t("≤ 60 °C (kondensacja)", "≤ 60 °C (condensing)"),
+        ["górny limit wody: niżej = więcej kondensacji, ale wolniejsze dogrzewanie", "the top water limit: lower = more condensing, but slower reheating"],
+        cond < 50 && v > 60 ? 60 : v, cond < 50 && v > 60 ? [`kondensacja ${this.f(cond, 0)} % doby`, `condensing ${this.f(cond, 0)} % of the day`] : ["w porządku", "fine"], !esp)); }
+    // --- pump: delta T and the pump setting of the menu family ---
+    const dt = this.n("oa_delta_t"), lowDt = dt > 0 && dt < 10;
+    const pumpAuto = (P === "superior" && this.s("ot_sup_pump_speed") === "auto") || (P === "hercules" && this.s("ot_her_pump") === "auto");
+    out.push(this.infoRow("oa_delta_t", "pump", ["Delta T zasilanie − powrót", "Delta T flow − return"], "K", 1, "15–20 K",
+      ["mała różnica = pompa tłoczy za dużo, powrót za ciepły na kondensację", "a small difference = the pump moves too much, the return is too warm for condensing"], (v) => v > 0 && v < 10,
+      gt ? ["za mało – A5 w tryb ΔT (15–20) albo niższe A3", "too low – A5 to ΔT mode (15–20) or a lower A3"]
+        : pumpAuto ? ["za mało mimo pompy w AUTO – sprawdź by-pass, zawory termostatyczne i przepływ instalacji", "too low with the pump in AUTO – check the bypass, the radiator valves and the system flow"]
+        : P === "superior" ? ["za mało – prędkość pompy AUTO (ΔT)", "too low – pump speed AUTO (ΔT)"]
+        : P === "hercules" ? ["za mało – sterowanie pompą AUTO", "too low – pump control AUTO"] : ["za mało – niższy bieg pompy", "too low – a lower pump speed"]));
+    if (gt) { const a5 = this.n("ot_a5"); out.push(this.setRow("ot_a5", "A5", "pump", ["Tryb pompy (0 = proporcjonalny, 5-25 = ΔT)", "Pump mode (0 = proportional head, 5-25 = ΔT)"], "", 0, "15–20",
+      ["tryb ΔT trzyma różnicę zasilanie − powrót", "the ΔT mode holds the flow − return difference"], lowDt && a5 === 0 ? 15 : a5, lowDt ? [`delta T ${f1(dt)} K`, `delta T ${f1(dt)} K`] : ["w porządku", "fine"], true)); }
+    if (P === "superior" && this.eid("ot_sup_pump_speed")) { const v = this.s("ot_sup_pump_speed") ?? "", rec = lowDt ? "auto" : v;
+      out.push({ k: "ot_sup_pump_speed", code: "M3", name: ["Prędkość pompy", "Pump speed"], unit: "", kind: this.canSet("ot_sup_pump_speed", "select") ? "select" : "info", group: "pump",
+        model: "AUTO", why: ["AUTO trzyma ΔT kotła", "AUTO holds the boiler ΔT"], value: v, ok: rec === v, labels: { auto: "AUTO" }, rec: this.canSet("ot_sup_pump_speed", "select") ? rec : rec === v ? this.fine() : "→ AUTO",
+        reason: lowDt && rec !== v ? [`delta T ${f1(dt)} K – zmień w menu M3 kotła`, `delta T ${f1(dt)} K – change it in the boiler menu M3`] : ["w porządku", "fine"] }); }
+    if (P === "hercules" && this.eid("ot_her_pump")) { const v = this.s("ot_her_pump") ?? "", rec = lowDt ? "auto" : v;
+      out.push({ k: "ot_her_pump", code: "M3", name: ["Sterowanie pompą", "Pump control"], unit: "", kind: this.canSet("ot_her_pump", "select") ? "select" : "info", group: "pump",
+        model: "AUTO", why: ["AUTO = prędkość wg ΔT", "AUTO = speed by ΔT"], value: v, ok: rec === v, labels: { auto: "AUTO", fix: "FIX" }, rec: this.canSet("ot_her_pump", "select") ? rec : rec === v ? this.fine() : "→ AUTO",
+        reason: lowDt && rec !== v ? [`delta T ${f1(dt)} K – zmień w menu M3 kotła`, `delta T ${f1(dt)} K – change it in the boiler menu M3`] : ["w porządku", "fine"] }); }
+    // --- DHW ---
+    out.push(this.dhwSetRow());
+    out.push(this.infoRow("oa_dhw_cycles", "dhw", ["Cykle CWU dziś", "DHW cycles today"], "×", 0, "≤ 3", ["każdy cykl CWU przerywa grzanie domu", "every DHW cycle pauses the space heating"], (v) => v > 3,
+      gt ? ["dużo – szersza histereza zasobnika (t2) albo krótszy program CWU", "many – a wider cylinder hysteresis (t2) or a shorter DHW program"] : P === "superior" ? ["dużo – start CWU niżej (5 / 10 °C poniżej nastawy)", "many – start the DHW lower (5 / 10 °C below the setpoint)"]
+        : ["dużo – obniż nastawę albo skróć program CWU", "many – lower the setpoint or shorten the DHW program"]));
+    if (P === "superior" || P === "hercules") { const v = this.s("ot_sup_dhw_restart") ?? "", many = this.n("oa_dhw_cycles") > 3, rec = many && v === "3" ? "5" : v;
+      if (this.eid("ot_sup_dhw_restart")) out.push({ k: "ot_sup_dhw_restart", code: "M1", name: ["Start CWU poniżej nastawy", "DHW restart below the setpoint"], unit: "", kind: this.canSet("ot_sup_dhw_restart", "select") ? "select" : "info", group: "dhw",
+        model: "5 °C", why: ["wcześniejszy restart = więcej krótkich cykli CWU", "an earlier restart = more short DHW cycles"], value: v, ok: rec === v, labels: { "3": "3 °C", "5": "5 °C", "10": "10 °C" },
+        rec: this.canSet("ot_sup_dhw_restart", "select") ? rec : rec === v ? this.fine() : "→ 5 °C", reason: many ? ["dużo cykli CWU – zmień w menu kotła", "many DHW cycles – change it in the boiler menu"] : ["w porządku", "fine"] }); }
+    // --- other: pressure, flame, link, outdoor probe, efficiency, the profile ---
+    out.push(this.infoRow("oa_pressure_drop", "other", ["Spadek ciśnienia 24 h", "Pressure drop 24 h"], "bar", 2, "< 0,1 bar", ["szybki spadek = wyciek albo naczynie wzbiorcze", "a fast drop = a leak or the expansion vessel"], (v) => v >= 0.2,
+      ["sprawdź wyciek i ciśnienie naczynia", "check for a leak and the vessel pressure"]));
+    out.push(this.infoRow("oa_flame_i_avg", "other", ["Prąd płomienia (średnia)", "Flame current (average)"], "µA", 1, "≥ 4 µA", ["niski prąd = zabrudzona elektroda / zła mieszanka", "a low current = a dirty electrode / a wrong mixture"], (v) => v < 2,
+      ["niski – serwis elektrody jonizacyjnej", "low – service the ionisation electrode"]));
+    out.push(this.infoRow("oa_link_quality", "other", ["Jakość łącza OpenTherm", "OpenTherm link quality"], "%", 1, "≥ 99 %", ["błędy ramek = zakłócenia albo zły przewód", "frame errors = interference or a bad wire"], (v) => v < 95,
+      ["słabe – sprawdź przewód i adapter", "poor – check the wire and the adapter"]));
+    if (gt && this.eid("ot_p7")) { const p7 = this.n("ot_p7"); out.push({ k: "ot_p7", code: "P7", name: ["Korekta sondy zewnętrznej", "Outdoor probe correction"], unit: "K", d: 0, kind: "info", group: "other",
+      model: "0 K", why: ["korekta przesuwa całą krzywą – lepiej dobrze umieścić sondę", "a correction shifts the whole curve – better place the probe well"], value: p7, ok: !(p7 !== 0),
+      rec: p7 === 0 || isNaN(p7) ? this.t("✓ bez korekty", "✓ no correction") : this.t("sprawdź umiejscowienie sondy", "check the probe placement"), reason: ["", ""] }); }
+    out.push(this.infoRow("oa_h_per_dd", "other", ["Godziny palnika na stopniodzień", "Burner hours per degree day"], "h/°C·d", 2, this.t("porównuj przed i po zmianie", "compare before and after a change"),
+      ["mniej = dom potrzebuje mniej grzania", "less = the house needs less heating"], () => false, ["", ""]));
+    out.push(this.profileRow(this.eid("ot_menu_profile") ? "ot_menu_profile" : undefined, names[P] ?? P,
+      P === "generic" ? ["wybierz profil menu w Ustawieniach – dostaniesz kody parametrów kotła", "pick the menu profile in the Settings – you get the boiler parameter codes"]
+        : esp ? ["hub OpenTherm: zapisy przez Data-ID, menu kotła ręcznie", "OpenTherm hub: writes over Data-IDs, the boiler menu by hand"]
+        : ["parametry menu to kopie – zmieniasz je na kotle", "the menu parameters are copies – change them on the boiler"]));
+    return out.filter((r): r is Row => !!r);
+  }
+
+  private gbRows(): Row[] {
+    const m = this.s("gb_model") ?? "other", mtop = m === "mtop", pro = m === "pro", combi = m === "superior" || m === "extra", f1 = (v: number) => this.f(v, 1, 1);
+    const names: Record<string, string> = { superior: "VICTRIX ZEUS Superior", extra: "VICTRIX EXTRA / EXTRA PLUS", pro: "VICTRIX PRO V2 EU", mtop: "MAGIS M TOP", iu23: "IMG-BUS + IU23", other: this.t("inny", "other") };
+    const out: (Row | null)[] = [];
+    if (!mtop) {
+      const sh = this.n("ga_starts_hour"), sb = this.n("ga_short_burns"), mod = this.n("ga_mod_avg"), avg = this.n("ga_burn_avg");
+      out.push(this.infoRow("ga_starts_hour", "cyc", ["Taktowanie: starty palnika na godzinę", "Cycling: burner starts per hour"], "/h", 0, "≤ 3 /h",
+        ["mniej startów = mniej strat i zużycia", "fewer starts = fewer losses and less wear"], (v) => v > 3,
+        pro ? ["za często – sprawdź kaskadę / sprzęgło i obniż nastawę CO", "too often – check the cascade / separator and lower the CH setpoint"] : ["za często – obniż nastawę / krzywą albo górny limit mocy", "too often – lower the setpoint / curve or the upper power limit"],
+        [`dziś ${this.f(this.n("ga_starts_today"), 0)} startów, średnie palenie ${isNaN(avg) ? "–" : f1(avg)} min`, `${this.f(this.n("ga_starts_today"), 0)} starts today, average burn ${isNaN(avg) ? "–" : f1(avg)} min`]));
+      out.push(this.infoRow("ga_burn_avg", "cyc", ["Średnie palenie", "Average burn"], "min", 1, "≥ 10 min", ["krótkie palenia = kocioł za duży na obciążenie", "short burns = the boiler is too big for the load"], (v) => v < 10,
+        ["krótko – obniż górny limit mocy", "short – lower the upper power limit"]));
+      out.push(this.infoRow("ga_short_burns", "cyc", ["Krótkie palenia dziś", "Short burns today"], "×", 0, "≤ 6", ["palenie < 5 min", "a burn < 5 min"], (v) => v > 6, ["dużo – patrz górny limit mocy", "many – see the upper power limit"]));
+      const pw = this.n("gb_power");
+      out.push(this.setRow("gb_power", "", "cyc", ["Górny limit mocy", "Upper power limit"], "%", 0, pro ? this.t("≈ obciążenie budynku", "≈ the building load") : "60–100 %",
+        ["kocioł palący krótko na wysokiej mocy pali dłużej po obniżeniu limitu", "a boiler burning briefly at a high output burns longer with a lower limit"],
+        sb > 6 && mod > 50 && pw > 40 ? pw - 10 : pw, sb > 6 && mod > 50 ? [`${this.f(sb, 0)} krótkich palień, średnia modulacja ${this.f(mod, 0)} %`, `${this.f(sb, 0)} short burns, average modulation ${this.f(mod, 0)} %`] : ["w porządku", "fine"]));
+      // heating: condensing, setpoint, the hub weather curve
+      const cond = this.n("ga_condensing_share"), cs = this.n("ot_ch_set"), curve = this.on("gb_curve");
+      out.push(this.infoRow("ga_condensing_share", "ch", ["Praca kondensacyjna dziś", "Condensing today"], "%", 0, "≥ 70 %", ["powrót poniżej ~55 °C", "return below ~55 °C"], (v) => v < 50,
+        ["mało – obniż nastawę CO / krzywą", "low – lower the CH setpoint / curve"]));
+      out.push(this.swRow("gb_curve", "", "ch", ["Krzywa pogodowa w hubie", "Weather curve in the hub"], this.t("wł.", "on"),
+        ["woda wg temperatury zewnętrznej = niższa przez większość sezonu", "water by the outdoor temperature = lower most of the season"], isNaN(this.n("outdoor")) ? null : true,
+        isNaN(this.n("outdoor")) ? ["brak temperatury zewnętrznej", "no outdoor temperature"] : ["sonda zewnętrzna jest", "the outdoor probe is there"]));
+      if (!curve) out.push(this.setRow("ot_ch_set", "", "ch", ["Nastawa zasilania CO", "CH flow setpoint"], "°C", 0, this.t("≤ 60 °C (kondensacja)", "≤ 60 °C (condensing)"),
+        ["bez krzywej stała woda – niżej = więcej kondensacji", "without the curve the water is fixed – lower = more condensing"], cond < 50 && cs > 60 ? 60 : cs,
+        cond < 50 && cs > 60 ? [`kondensacja ${this.f(cond, 0)} %`, `condensing ${this.f(cond, 0)} %`] : ["w porządku", "fine"]));
+      out.push(this.infoRow("ga_setpoint_dev", "ch", ["Odchyłka od nastawy", "Setpoint deviation"], "K", 1, "±5 K", ["kocioł nie dochodzi albo przegrzewa", "the boiler does not reach or overshoots"], (v) => Math.abs(v) > 5,
+        ["sprawdź moc / przepływ", "check the output / flow"]));
+      // hydraulics: delta T, separator (PRO), pressure, ionisation
+      out.push(this.infoRow("ga_delta_t", "pump", ["Delta T zasilanie − powrót", "Delta T flow − return"], "K", 1, "15–20 K", ["mała różnica = za ciepły powrót", "a small difference = a too warm return"], (v) => v > 0 && v < 10,
+        ["za mało – niższy bieg / tryb ΔT pompy", "too low – a lower pump speed / ΔT mode"]));
+      if (pro) out.push(this.infoRow("ga_sep_delta", "pump", ["Zasilanie − za sprzęgłem", "Flow − after the separator"], "K", 1, "≤ 3 K",
+        ["duża różnica = pompa kotła tłoczy mniej niż instalacja (albo odwrotnie)", "a large difference = the boiler pump moves less than the system (or the other way)"], (v) => v > 5,
+        ["zrównoważ pompę kotła z pompami obiegów", "balance the boiler pump with the circuit pumps"]));
+      out.push(this.infoRow("ga_pressure_drop", "other", ["Spadek ciśnienia 24 h", "Pressure drop 24 h"], "bar", 2, "< 0,1 bar", ["szybki spadek = wyciek albo naczynie", "a fast drop = a leak or the vessel"], (v) => v >= 0.2,
+        ["sprawdź wyciek i naczynie", "check for a leak and the vessel"]));
+      out.push(this.infoRow("ga_ion_avg", "other", ["Jonizacja (średnia)", "Ionisation (average)"], "µA", 1, "≥ 4 µA", ["niska = elektroda / mieszanka", "low = the electrode / mixture"], (v) => v < 3,
+        ["niska – serwis elektrody", "low – service the electrode"]));
+    } else {
+      // MAGIS M TOP: the heat pump side of the BMS
+      out.push(this.infoRow("ga_hp_hours_today", "use", ["Pompa ciepła dziś", "Heat pump today"], "h", 2, this.t("większość grzania", "most of the heating"),
+        ["MAGIS M TOP: kocioł tylko dogrzewa", "MAGIS M TOP: the boiler only tops up"], () => false, ["", ""]));
+      const hh = this.n("ga_hp_hours_today");
+      out.push(this.infoRow("ga_defrosts_today", "use", ["Odszraniania dziś", "Defrosts today"], "×", 0, this.t("≤ 1 na godzinę pracy", "≤ 1 per running hour"),
+        ["częste odszranianie = wilgotny mróz albo zabrudzony parownik", "frequent defrosts = humid frost or a dirty evaporator"], (v) => !isNaN(hh) && v > Math.max(3, hh * 1.2),
+        ["dużo – sprawdź parownik i jego otoczenie", "many – check the evaporator and its surroundings"]));
+      const cmin = this.n("gb_cool_min"), cmax = this.n("gb_cool_max");
+      out.push(this.setRow("gb_cool_min", "", "cool", ["Chłodzenie: min. zasilanie", "Cooling: min. flow"], "°C", 0, 18, ["podłoga: nie zimniej niż ~18 °C (rosa)", "floor: not colder than ~18 °C (dew)"],
+        cmin < 18 ? 18 : cmin, [cmin < 18 ? "ryzyko wykroplenia" : "w porządku", cmin < 18 ? "condensation risk" : "fine"]));
+      out.push(this.setRow("gb_cool_max", "", "cool", ["Chłodzenie: maks. zasilanie", "Cooling: max. flow"], "°C", 0, 22, ["min. 2 K nad min. zasilaniem", "at least 2 K above the min. flow"],
+        cmax < Math.max(cmin, 18) + 2 ? Math.max(cmin, 18) + 4 : cmax, ["", ""]));
+    }
+    // DHW: the combi boilers (ZEUS Superior / EXTRA) - ECO = no preheating of the exchanger
+    out.push(this.dhwSetRow());
+    if (combi) { const dr = this.n("ga_draws_today"); out.push(this.swRow("gb_eco", "", "dhw", ["CWU ECO (bez podgrzewania wymiennika)", "DHW ECO (no exchanger preheating)"], this.t("wł. przy ≤ 5 poborach / dzień", "on with ≤ 5 draws / day"),
+      ["podgrzewanie trzyma ciepły wymiennik całą dobę – przy rzadkich poborach to strata", "preheating keeps the exchanger warm all day – a loss with rare draws"],
+      isNaN(dr) ? null : dr <= 5 ? true : dr > 15 ? false : null, [`dziś ${isNaN(dr) ? "–" : this.f(dr, 0)} poborów`, `${isNaN(dr) ? "–" : this.f(dr, 0)} draws today`])); }
+    out.push(this.profileRow(this.eid("gb_model") ? "gb_model" : undefined, names[m] ?? m,
+      m === "other" ? ["wybierz model w Ustawieniach – dostaniesz wiersze dla niego", "pick the model in the Settings – you get its rows"]
+        : mtop ? ["wiersze pompy ciepła i chłodzenia zamiast palnika", "heat pump and cooling rows instead of the burner"]
+        : pro ? ["kocioł systemowy: sprzęgło i kaskada", "system boiler: separator and cascade"] : combi ? ["kocioł dwufunkcyjny: CWU ECO", "combi boiler: DHW ECO"] : ["", ""]));
+    return out.filter((r): r is Row => !!r);
+  }
+
+  private mtRows(): Row[] {
+    const cap = this.n("mt_cap"), small = !isNaN(cap) && cap <= 6.5, big = !isNaN(cap) && cap >= 11.5, f1 = (v: number) => this.f(v, 1, 1);
+    const cycMin = small ? 15 : big ? 20 : 18, startsMax = small ? 24 : big ? 16 : 20;
+    const out: (Row | null)[] = [];
+    // cycling: the smaller the unit, the shorter its minimum useful cycle
+    out.push(this.infoRow("mt_cycle_avg", "cyc", ["Średni cykl sprężarki", "Average compressor cycle"], "min", 0, `≥ ${cycMin} min`,
+      ["sprężarka rozgrzewa się i modulując pracuje wydajnie", "the compressor warms up and runs efficiently when modulating"], (v) => v < cycMin,
+      ["krótko – obniż krzywą o 1 albo dodaj bufor / otwórz pętle", "short – lower the curve by 1 or add a buffer / open loops"]));
+    out.push(this.infoRow("mt_short_cycles", "cyc", ["Krótkie cykle dziś", "Short cycles today"], "×", 0, "≤ 2", ["cykl < 10 min", "a cycle < 10 min"], (v) => v > 2,
+      ["dużo – za mała pojemność wodna albo za wysoka krzywa", "many – too little water volume or a too high curve"]));
+    out.push(this.infoRow("starts", "cyc", ["Starty sprężarki dziś", "Compressor starts today"], "×", 0, `≤ ${startsMax}`, ["łącznie CO i CWU od północy", "CH and DHW since midnight"], (v) => v > startsMax,
+      ["za dużo – patrz cykl i krzywa", "too many – see the cycle and the curve"]));
+    // heating: the weather curve number from the room deviation, water limits, the summer cut-off
+    const room = this.n("zone1"), tgt = this.n("zone1_set"), dev = room - tgt, chh = this.n("mt_ch_hours"), enough = isNaN(chh) || chh >= 2;
+    out.push(this.swRow("mt_curve_on", "", "ch", ["Krzywa pogodowa strefa 1", "Weather curve zone 1"], this.t("wł.", "on"),
+      ["woda wg pogody = najniższa możliwa = najlepszy COP", "water by the weather = the lowest possible = the best COP"], true, ["", ""]));
+    if (this.on("mt_curve_on")) { const n = this.n("mt_curve_n");
+      out.push(this.setRow("mt_curve_n", "", "ch", ["Numer krzywej strefa 1", "Curve number zone 1"], "", 0, this.t("pokój ±0,5 K od zadanej", "room within ±0.5 K of the target"),
+        ["wyższy numer = cieplejsza woda przy tej samej pogodzie", "a higher number = warmer water at the same weather"],
+        !enough || isNaN(dev) ? n : dev > 0.5 ? n - 1 : dev < -0.5 ? n + 1 : n,
+        isNaN(dev) ? ["brak temperatury pokoju", "no room temperature"] : [`pokój ${dev > 0 ? "+" : ""}${f1(dev)} K od zadanej${enough ? "" : " – za mało grzania, by ocenić"}`, `room ${dev > 0 ? "+" : ""}${f1(dev)} K from the target${enough ? "" : " – too little heating to judge"}`])); }
+    out.push(this.infoRow("mt_curve_dev", "ch", ["Zasilanie − krzywa", "Flow − curve"], "K", 1, "±2 K", ["jednostka nie dochodzi do krzywej albo ją przegrzewa", "the unit does not reach the curve or overshoots"], (v) => Math.abs(v) > 3,
+      ["sprawdź moc jednostki / przepływ", "check the unit output / flow"]));
+    out.push(this.infoRow("mt_lhmax", "ch", ["Grzanie – maks. woda", "Heating water max."], "°C", 0, this.t("≤ 45 °C podłoga / ≤ 55 °C grzejniki", "≤ 45 °C floor / ≤ 55 °C radiators"),
+      ["górny limit wody – wyżej COP szybko spada", "the top water limit – above it the COP drops fast"], (v) => v > 55, ["wysoko – obniż w menu jednostki", "high – lower it in the unit menu"]));
+    out.push(this.infoRow("mt_t4hmax", "ch", ["Grzanie – maks. temp. zewn. (T4HMAX)", "Heating outdoor max. (T4HMAX)"], "°C", 0, "≈ 20 °C", ["powyżej tej temperatury zewnętrznej grzanie stoi", "above this outdoor temperature the heating stops"], (v) => v > 24,
+      ["wysoko – grzanie w ciepłe dni, obniż w menu jednostki", "high – heating on warm days, lower it in the unit menu"]));
+    out.push(this.infoRow("mt_cop_ch_today", "ch", ["COP grzania dziś", "Heating COP today"], "", 2, "≥ 3", ["niski COP = za ciepła woda albo dużo odszraniania", "a low COP = too warm water or a lot of defrosting"], (v) => v > 0 && v < 2.5,
+      ["nisko – obniż krzywą o 1", "low – lower the curve by 1"]));
+    // pump: delta T on the heat pump (~5 K)
+    out.push(this.infoRow("mt_delta_t", "pump", ["Delta T pompy ciepła", "Heat pump delta T"], "K", 1, "4–6 K", ["pompa ciepła lubi małą, stałą różnicę", "a heat pump likes a small, steady difference"], (v) => v > 0 && (v < 3 || v > 8),
+      ["poza zakresem – ustaw przepływ pompy obiegowej", "out of range – set the circulation pump flow"]));
+    // DHW: setpoint, COP, disinfection, the tank heater
+    out.push(this.dhwSetRow("dhw", true));
+    out.push(this.infoRow("mt_cop_dhw_today", "dhw", ["COP CWU dziś", "DHW COP today"], "", 2, "≥ 2,5", ["CWU to wysoka woda – COP niższy niż przy grzaniu", "DHW is hot water – a lower COP than heating"], (v) => v > 0 && v < 2,
+      ["nisko – obniż nastawę CWU", "low – lower the DHW setpoint"]));
+    out.push(this.swRow("mt_dis", "", "dhw", ["Dezynfekcja (antylegionella)", "Disinfection (anti-legionella)"], this.t("wł. przy CWU < 55 °C", "on with DHW < 55 °C"),
+      ["raz w tygodniu ~60 °C zabija Legionellę", "~60 °C once a week kills Legionella"], isNaN(this.n("dhw_set")) ? null : this.n("dhw_set") < 55,
+      [`nastawa CWU ${this.f(this.n("dhw_set"), 0)} °C`, `DHW setpoint ${this.f(this.n("dhw_set"), 0)} °C`]));
+    out.push(this.infoRow("mt_tbh_hours", "dhw", ["Grzałka zasobnika (TBH) dziś", "Tank heater (TBH) today"], "h", 2, "0 h", ["grzałka to COP 1", "the heater is COP 1"], (v) => v > 0.5,
+      ["pracowała – sprawdź nastawę CWU i czasy TBH", "it ran – check the DHW setpoint and the TBH timings"]));
+    // heaters / defrost
+    const out_ = this.n("outdoor");
+    out.push(this.infoRow("mt_ibh_hours", "use", ["Grzałka IBH dziś", "Backup heater IBH today"], "h", 2, this.t("0 h powyżej −5 °C", "0 h above −5 °C"), ["grzałka to COP 1", "the heater is COP 1"],
+      (v) => v > 0.5 && !isNaN(out_) && out_ > -2, ["przy łagodnej pogodzie – sprawdź temperaturę włączenia grzałki (T4)", "in mild weather – check the heater start temperature (T4)"]));
+    const hrs = (this.n("mt_ch_hours") || 0) + (this.n("mt_dhw_hours") || 0);
+    out.push(this.infoRow("mt_defrosts_today", "use", ["Odszraniania dziś", "Defrosts today"], "×", 0, this.t("≤ 1 na godzinę pracy", "≤ 1 per running hour"),
+      ["częste odszranianie = wilgotny mróz albo zabrudzony parownik", "frequent defrosts = humid frost or a dirty evaporator"], (v) => hrs > 0 && v > Math.max(3, hrs * 1.2),
+      ["dużo – sprawdź parownik i jego otoczenie", "many – check the evaporator and its surroundings"]));
+    out.push(this.profileRow(this.eid("mt_cap") ? "mt_cap" : undefined, isNaN(cap) ? "MAGIS M" : `MAGIS M · ${this.f(cap, 1, 0)} kW`,
+      isNaN(cap) ? ["brak mocy jednostki – progi dla średniej (8–10 kW)", "no unit capacity – thresholds for a medium unit (8–10 kW)"]
+        : small ? ["mała jednostka: krótsze cykle są normalne", "small unit: shorter cycles are normal"] : big ? ["duża jednostka: dłuższe cykle i mniej startów", "big unit: longer cycles and fewer starts"]
+        : ["średnia jednostka", "medium unit"]));
+    return out.filter((r): r is Row => !!r);
+  }
+
   private cur(r: Row): number | string {
     if (r.kind === "info" || r.kind === "custom") return r.value ?? NaN;
     if (r.entity) return parseFloat(this.hass.states[r.entity]?.state);
@@ -1321,21 +1610,21 @@ class ImmergasCalibrationCard extends HubCard {
   }
 
   protected body() {
-    const dom = this.dominus;
-    if (!dom && (!this.hist || Date.now() - this.hist.at > 10 * 60e3)) this.load();
-    if (!dom && !this.effLoading && (!this.eff || Date.now() - this.eff.at > 30 * 60e3)) this.loadEff();
+    const mode = this.calMode, dom = mode === "dom", hub = mode === "hub";
+    if (hub && (!this.hist || Date.now() - this.hist.at > 10 * 60e3)) this.load();
+    if (hub && !this.effLoading && (!this.eff || Date.now() - this.eff.at > 30 * 60e3)) this.loadEff();
     if (dom && !this.effLoading && (!this.effDom || Date.now() - this.effDom.at > 30 * 60e3)) this.loadEffDom();
-    if (!dom && !this.lossLoading && (!this.loss || Date.now() - this.loss.at > 6 * H)) this.loadLoss();
+    if (hub && !this.lossLoading && (!this.loss || Date.now() - this.loss.at > 6 * H)) this.loadLoss();
     const gOf = (r: Row) => r.group ?? (r.kind === "info" && !r.code && !/harmonogram|schedule/i.test(r.name[0]) ? "cyc"
       : /^(źródło ciepła|harmonogram|nastawa co w pokojach)/i.test(r.name[0]) || ["U11", "FR", "P15"].includes(r.code) ? "use"
       : ["dhw_set", "t02"].includes(r.k as string) ? "dhw" : ["i10"].includes(r.k as string) ? "int" : r.k === "dew_corr" ? "cool" : "ch");
     const order = GROUPS.map((g) => g[0]);
     // Magis Pro has no gas boiler: no boiler integration (I..) and no heat pump vs gas choice
     const gas = this.hasGas, boilerRow = (r: Row) => gOf(r) === "int" || /^I\d\d$/.test(r.code ?? "") || /^(źródło ciepła)/i.test(r.name[0]);
-    const rows = (dom ? this.domRows() : this.rows()).filter((r) => r.kind === "info" || r.kind === "custom" || r.entity || this.eid(r.k!)).filter((r) => gas || !boilerRow(r))
+    const rows = (dom ? this.domRows() : mode === "ot" ? this.otRows() : mode === "gb" ? this.gbRows() : mode === "mt" ? this.mtRows() : this.rows()).filter((r) => r.kind === "info" || r.kind === "custom" || r.entity || this.eid(r.k!)).filter((r) => gas || !boilerRow(r))
       .map((r, i) => ({ r: { ...r, group: gOf(r) }, i })).sort((a, b) => order.indexOf(a.r.group!) - order.indexOf(b.r.group!) || a.i - b.i).map((x) => x.r);
     const diff = (r: Row) => { if (r.kind === "info") return !r.ok; const a = this.cur(r), b = r.rec; return typeof a === "number" && typeof b === "number" ? !isNaN(b) && !isNaN(a) && Math.abs(a - b) > 0.01 : a !== b && b !== "" && b !== undefined; };
-    const nDiff = rows.filter(diff).length, S = dom ? null : this.stats();
+    const nDiff = rows.filter(diff).length, S = hub ? this.stats() : null;
     // the most important finding (first one to change, in group order) for the diagram card
     const top = rows.find(diff);
     hubNote.rec = top ? {
@@ -1363,9 +1652,14 @@ class ImmergasCalibrationCard extends HubCard {
               ${d && (r.kind !== "info" || r.setFn) ? html`<div class="set" style="${conf ? `outline:2px solid ${c("peach")}` : ""}" @click=${() => this.confirm(tag, () => this.apply(r))}>
                 <ha-icon icon="mdi:check-bold"></ha-icon>${conf ? this.t("Potwierdź", "Confirm") : this.t("Ustaw", "Set")}</div>` : nothing}</div>`;
         })}
-        ${dom ? this.effDomView() : this.effView()}
+        ${dom ? this.effDomView() : hub ? this.effView() : nothing}
       </div>
-      ${dom || !S ? html`<div class="note">${this.t("Rekomendacje liczone ze statystyk integracji Immergas Dominus (ostatnia godzina i doba).",
+      ${!hub && !dom ? html`<div class="note">${mode === "ot" ? this.t("Rekomendacje z analizy dnia OpenTherm (ot_computed / ot_analytics albo Immergas Dominus 1.6.14) i profilu menu kotła.",
+        "Recommendations from the OpenTherm Today analysis (ot_computed / ot_analytics or Immergas Dominus 1.6.14) and the boiler menu profile.")
+        : mode === "gb" ? this.t("Rekomendacje z analizy dnia (gb_computed / gb_analytics) i modelu kotła.", "Recommendations from the Today analysis (gb_computed / gb_analytics) and the boiler model.")
+        : this.t("Rekomendacje z analizy dnia (mt_computed / mt_analytics) i mocy jednostki.", "Recommendations from the Today analysis (mt_computed / mt_analytics) and the unit capacity.")}
+        ${this.t("Zmieniaj po jednym parametrze i oceniaj po dobie.", "Change one parameter at a time and judge after a day.")}</div>`
+      : dom || !S ? html`<div class="note">${this.t("Rekomendacje liczone ze statystyk integracji Immergas Dominus (ostatnia godzina i doba).",
         "Recommendations from the Immergas Dominus statistics (last hour and day).")}
         ${this.t("Zmieniaj po jednym parametrze i oceniaj po dobie.", "Change one parameter at a time and judge after a day.")}</div>` : html`<div class="note">${this.t("Rekomendacje liczone z ostatnich 24 h", "Recommendations from the last 24 h")}: ${this.f(S.coPerH, 1, 1)} ${this.t("startu CO/h", "CH starts/h")},
         ${this.t("cykl", "cycle")} ~${this.f(S.coRun, 1, 0)} min${this.rooms().length ? this.t(`, ${this.rooms().length} termostatów pokojowych`, `, ${this.rooms().length} room thermostats`) : ""}.

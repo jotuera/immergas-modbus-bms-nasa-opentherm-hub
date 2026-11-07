@@ -90,7 +90,7 @@ function liveEntity(hass: any, id: string): boolean {
 }
 
 /** OpenTherm: the same Dominus cards in the same style; only what OpenTherm has no data for is left out (heating curve
- *  of the Magis, calibration / statistics, offline settings, automations, connectivity). The schedules are the programs
+ *  of the Magis, offline settings, automations); the calibration works from the Today analysis and the menu profile. The schedules are the programs
  *  the integration keeps in Home Assistant (Dominus 1.6). */
 function otDashboard(config: any, t: (a: string, b: string) => string) {
   const card = (type: string, extra: Record<string, unknown> = {}) => ({ type: "custom:" + type, grid_options: { columns: "full" }, source: "dominus", ...extra });
@@ -109,6 +109,8 @@ function otDashboard(config: any, t: (a: string, b: string) => string) {
           card("immergas-settings-card", { part: "offline", ...(config.settings_offline ?? {}) })] },
         // Dominus 1.6.14: today's analysis (gas, condensing, short cycling, DHW, room / degree days) - hidden tiles without data
         { type: "grid", column_span: 3, cards: [card("immergas-day-card", config.day ?? {})] },
+        // calibration from the Today analysis and the boiler menu profile
+        { type: "grid", column_span: 3, cards: [card("immergas-calibration-card", config.calibration ?? {})] },
       ],
     }],
   };
