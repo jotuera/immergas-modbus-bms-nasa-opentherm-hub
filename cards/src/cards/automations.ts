@@ -3,7 +3,10 @@
 // entity, last_triggered) and a live detail (vacation active, starts this hour, COP threshold −/+).
 // Rows whose switch does not exist are skipped. With Immergas Dominus the card lists the integration's own automations
 // (automatic summer / winter, vacation, DHW Comfort / Eco schedule, alert notifications) and its alerts (frost, module
-// offline, boiler fault) shown as a live state instead of a switch. Option `items` replaces the default list:
+// offline, boiler fault) shown as a live state instead of a switch. The ESP hubs (OpenTherm, gas boiler BMS, MAGIS M)
+// list the automations built into their *_programs packages (automatic summer / winter, vacation, DHW program,
+// anti-legionella, frost protection) and alerts from their own entities, by the device profile (OT menu family, boiler
+// model, MAGIS M unit capacity). Option `items` replaces the default list:
 //   items: [{ toggle, automation, name, icon, desc, group, param, param_label, live, live_label }]
 //   group: control | alert | safety;  param: an input_number shown with −/+;  live: an entity whose state is shown.
 import { HubCard, html, css, nothing, c, ca, register } from "../base";
@@ -11,7 +14,8 @@ import { HubCard, html, css, nothing, c, ca, register } from "../base";
 type Item = { toggle: string; automation?: string; name: [string, string]; icon: string; desc: [string, string]; group: string;
   param?: string; paramLabel?: [string, string]; live?: string; liveLabel?: [string, string]; noLast?: boolean;
   /** more −/+ settings (Dominus) */ params?: [string, [string, string]][];
-  /** an alert without its own switch: `toggle` is the alert entity, shown as ALARM / OK */ status?: boolean; liveText?: string };
+  /** an alert without its own switch: `toggle` is the alert entity, shown as ALARM / OK */ status?: boolean; liveText?: string;
+  /** the alarm state when it is not simply the entity being on (link lost, a counter over its limit) */ alarm?: boolean };
 
 const DEFAULT_ITEMS: Item[] = [
   { toggle: "input_boolean.auto_pompa_lato_zima", automation: "automation.automatyka_lato_zima_automatycznie_t_t", group: "control", icon: "mdi:sun-snowflake-variant",
@@ -87,9 +91,104 @@ class ImmergasAutomationsCard extends HubCard {
     ];
   }
 
+  /** ESP hubs: the automations of the *_programs packages and alerts from the hub entities, by the device profile */
+  private espItems(): Item[] {
+    const id = (k: Parameters<HubCard["eid"]>[0]) => this.eid(k) ?? "";
+    const fam = this.gbx ? "gb" : this.mtx ? "mt" : "ot", gbm = this.s("gb_model") ?? "", mtop = fam === "gb" && gbm === "mtop";
+    const hp = fam === "mt" || mtop, prof = fam === "ot" ? this.otProfile : "";
+    const mean = this.n("ot_out_mean");
+    const until = this.so("dom_vac_until"), u = until && !["unknown", "unavailable", ""].includes(until.state)
+      ? new Date(until.state).toLocaleString(this.loc, { dateStyle: "medium", timeStyle: "short" }) : "";
+    const act = this.s("ot_vac_action"), actTxt = act === "summer" ? this.t("Lato (tylko CWU)", "summer (DHW only)") : act === "standby" ? this.t("Czuwanie", "standby") : "";
+    const leg = this.s("ot_leg"), legTxt: Record<string, [string, string]> = { off: ["wyłączona", "off"], weekly: ["co tydzień", "weekly"], daily: ["codziennie", "daily"] };
+    const items: Item[] = [
+      { toggle: id("dom_auto_season"), group: "control", icon: "mdi:sun-snowflake-variant", name: ["Lato / Zima automatycznie", "Summer / winter automatically"],
+        desc: hp ? ["średnia zewnętrzna z 24 h poniżej progu → grzanie, powyżej → tylko CWU; liczy hub, działa też bez Home Assistanta",
+          "24 h outdoor mean below the threshold → heating, above → DHW only; the hub decides, also without Home Assistant"]
+          : ["średnia zewnętrzna z 24 h poniżej progu → Zima (CO + CWU), powyżej → Lato (CWU); liczy hub, działa też bez Home Assistanta",
+            "24 h outdoor mean below the threshold → winter (CH + DHW), above → summer (DHW); the hub decides, also without Home Assistant"],
+        params: [[id("dom_win_below"), ["Zima poniżej", "Winter below"]], [id("dom_sum_above"), ["Lato powyżej", "Summer above"]]],
+        liveText: isNaN(mean) ? "" : this.t(`średnia 24 h ${this.f(mean, 1, 1)} °C`, `24 h mean ${this.f(mean, 1, 1)} °C`) },
+      { toggle: id("dom_vacation"), group: "control", icon: "mdi:bag-suitcase", name: ["Tryb wyjazdowy", "Vacation mode"],
+        desc: [`na czas wyjazdu ${this.esp || this.gbx || this.mtx ? "hub" : "Dominus"} przełącza tryb (Czuwanie albo Lato) i wraca do poprzedniego po „Wyjazd do” albo wyłączeniu`,
+          `for the vacation ${this.esp || this.gbx || this.mtx ? "the hub" : "Dominus"} switches the mode (standby or summer) and goes back at “Away until” or when switched off`],
+        liveText: [u ? this.t("do ", "until ") + u : "", actTxt].filter(Boolean).join(" · ") },
+      { toggle: id("dhw_sched"), group: "control", icon: "mdi:calendar-clock", name: ["CWU Komfort / Eko wg programu", "DHW Comfort / Eco by program"],
+        desc: hp ? ["w oknach programu CWU nastawa Komfort, poza nimi Eko – pompa grzeje wodę w wybranych godzinach (np. tania taryfa)",
+          "Comfort setpoint inside the DHW program windows, Eco outside – the heat pump heats the water at chosen hours (e.g. the cheap tariff)"]
+          : ["w oknach programu CWU nastawa Komfort, poza nimi Eko", "Comfort setpoint inside the DHW program windows, Eco outside"],
+        liveText: leg && legTxt[leg] ? this.t("anty-legionella: " + legTxt[leg][0], "anti-legionella: " + legTxt[leg][1]) : "" },
+      // OpenTherm: the hub keeps the boiler from freezing (heats below the threshold even in standby)
+      { toggle: id("ot_frost"), group: "safety", icon: "mdi:snowflake-alert", name: ["Ochrona przed zamarzaniem", "Frost protection"],
+        desc: ["pokój albo zasilanie poniżej progu → hub włącza grzanie nawet w Czuwaniu", "room or flow below the threshold → the hub heats even in standby"],
+        params: [[id("ot_frost_t"), ["próg", "threshold"]]] },
+    ];
+    // --- alerts (ALARM / OK) ---
+    const code = this.s("err_code") ?? "", num = parseFloat(code);
+    const fault = !!code && !(isFinite(num) && num === 0) && !["", "unknown", "unavailable", "brak", "none", "–"].includes(code.toLowerCase());
+    const errK = this.eid("err_active") ? "err_active" : "err_code";
+    items.push({ toggle: id(errK), status: true, alarm: errK === "err_active" ? this.on("err_active") : fault, group: "alert", icon: "mdi:alert-octagon",
+      name: [hp ? "Błąd urządzenia" : "Błąd kotła", hp ? "Device fault" : "Boiler fault"],
+      desc: hp ? ["kod błędu zgłoszony przez jednostkę", "a fault code reported by the unit"] : ["kod błędu zgłoszony przez kocioł", "a fault code reported by the boiler"],
+      liveText: fault ? code + (this.s("err_desc") ? " · " + this.s("err_desc") : "") : "" });
+    const linkK = fam === "ot" ? "ot_link" : fam === "gb" ? "gb_conn" : "mt_conn";
+    items.push({ toggle: id(linkK), status: true, alarm: !this.on(linkK), group: "alert", icon: "mdi:lan-disconnect",
+      name: ["Brak łączności z urządzeniem", "No link to the device"],
+      desc: fam === "ot" ? ["kocioł nie odpowiada na OpenTherm", "the boiler does not answer OpenTherm"] : ["urządzenie nie odpowiada na Modbus", "the device does not answer Modbus"] });
+    // short cycling, by the profile: a condensing boiler ≤ 3 starts/h; MAGIS M - the short cycle limit of its size
+    if (!hp) {
+      const k = fam === "ot" ? "ot_burn_h" : "ga_starts_hour", v = this.n(k);
+      items.push({ toggle: id(k), status: true, alarm: v > 3, group: "alert", icon: "mdi:sine-wave", name: ["Taktowanie palnika", "Burner short cycling"],
+        desc: ["więcej niż 3 starty palnika w ostatniej godzinie", "more than 3 burner starts in the last hour"],
+        liveText: isNaN(v) ? "" : this.t(`starty w ostatniej godzinie: ${this.f(v, 0)}`, `starts in the last hour: ${this.f(v, 0)}`) });
+    } else {
+      const k = fam === "mt" ? "mt_short_cycles" : "ga_defrosts_today", v = this.n(k), cap = this.n("mt_cap"), lim = fam === "mt" ? (cap <= 6.5 ? 3 : 2) : 12;
+      items.push({ toggle: id(k), status: true, alarm: v > lim, group: "alert", icon: fam === "mt" ? "mdi:sine-wave" : "mdi:snowflake-melt",
+        name: fam === "mt" ? ["Taktowanie sprężarki", "Compressor short cycling"] : ["Częste odszranianie", "Frequent defrosting"],
+        desc: fam === "mt" ? [`więcej niż ${lim} cykle < 10 min dziś (próg dla jednostki ${isNaN(cap) ? "–" : this.f(cap, 0)} kW)`, `more than ${lim} cycles < 10 min today (limit for a ${isNaN(cap) ? "–" : this.f(cap, 0)} kW unit)`]
+          : [`więcej niż ${lim} odszraniań dziś`, `more than ${lim} defrosts today`],
+        liveText: isNaN(v) ? "" : this.t(`dziś: ${this.f(v, 0)}`, `today: ${this.f(v, 0)}`) });
+    }
+    // burner health: leak (pressure drop), flame current (OT) / ionisation (gas BMS with a burner)
+    if (!hp) {
+      const lk = fam === "ot" ? "oa_leak_warning" : "ga_leak_warning";
+      items.push({ toggle: id(lk), status: true, group: "alert", icon: "mdi:water-alert", name: ["Możliwy wyciek", "Possible leak"],
+        desc: ["ciśnienie instalacji spada szybciej niż zwykle", "the system pressure drops faster than usual"] });
+      const fk = fam === "ot" ? "oa_flame_low" : "ga_ion_low";
+      items.push({ toggle: id(fk), status: true, group: "alert", icon: "mdi:fire-alert",
+        name: fam === "ot" ? ["Niski prąd płomienia", "Low flame current"] : ["Niska jonizacja", "Low ionisation"],
+        desc: ["elektroda albo mieszanka do sprawdzenia przy przeglądzie", "the electrode or the mixture to check at the service"] });
+    }
+    // heat pumps: antifreeze running and the unit alarm
+    if (hp) {
+      const ak = fam === "mt" ? "mt_antifreeze" : "gb_antifreeze";
+      items.push({ toggle: id(ak), status: true, group: "safety", icon: "mdi:snowflake-thermometer", name: ["Ochrona przed zamarzaniem aktywna", "Antifreeze active"],
+        desc: ["jednostka grzeje wodę, żeby obieg nie zamarzł", "the unit heats the water so the circuit does not freeze"] });
+      if (fam === "mt") items.push({ toggle: id("mt_alarm"), status: true, group: "alert", icon: "mdi:alarm-light-outline", name: ["Alarm jednostki", "Unit alarm"],
+        desc: ["wyjście alarmowe sterownika MAGIS M", "the alarm output of the MAGIS M controller"] });
+    }
+    // service reminder: interval set in the boiler parameters
+    const last = this.s("ot_last_srv");
+    items.push({ toggle: id("ot_maint_due"), status: true, group: "alert", icon: "mdi:wrench-clock", name: ["Przegląd serwisowy", "Service due"],
+      desc: prof === "superior" || prof === "hercules" ? ["termin przeglądu wg interwału z parametrów (kocioł ma też własne przypomnienie w menu M1)", "the service date by the interval from the parameters (the boiler has its own reminder in menu M1 too)"]
+        : ["termin przeglądu wg interwału ustawionego w parametrach", "the service date by the interval set in the parameters"],
+      liveText: last && !["unknown", "unavailable"].includes(last) ? this.t("ostatni: ", "last: ") + last.slice(0, 10) : "" });
+    return items;
+  }
+
+  /** Immergas Dominus in the OpenTherm mode: its own automations + the OpenTherm alerts of ot_computed (burner cycling,
+   *  leak, flame current) and the fault code; the vacation switches the mode (standby / summer) like the ESP hub */
+  private domOtItems(): Item[] {
+    const ids = ["ot_burn_h", "oa_leak_warning", "oa_flame_low", "ot_maint_due"].map((k) => this.eid(k as Parameters<HubCard["eid"]>[0]));
+    const esp = this.espItems(), d = this.domItems().map((i) => i.toggle === this.eid("dom_vacation") && this.eid("ot_vac_action")
+      ? { ...i, desc: esp.find((e) => e.toggle === i.toggle)?.desc ?? i.desc, liveText: esp.find((e) => e.toggle === i.toggle)?.liveText || i.liveText } : i);
+    const extra = esp.filter((i) => i.status && (ids.includes(i.toggle) || (!this.eid("err_active") && i.toggle === this.eid("err_code"))));
+    return [...d.filter((i) => !(i.status && i.toggle === this.eid("err_active") && !this.hass.states[i.toggle])), ...extra];
+  }
+
   private items(): Item[] {
     const cfg = this.config.items as any[] | undefined;
-    if (!cfg) return this.dominus ? this.domItems() : DEFAULT_ITEMS;
+    if (!cfg) return this.esp || this.gbx || this.mtx ? this.espItems() : this.dominus && this.ot ? this.domOtItems() : this.dominus ? this.domItems() : DEFAULT_ITEMS;
     return cfg.map((i) => ({ ...i, name: [i.name, i.name], desc: [i.desc ?? "", i.desc ?? ""], group: i.group ?? "alert", icon: i.icon ?? "mdi:robot",
       liveLabel: i.live_label ? [i.live_label, i.live_label] : undefined, noLast: !!i.hide_last, paramLabel: i.param_label ? [i.param_label, i.param_label] : undefined }));
   }
@@ -128,7 +227,7 @@ class ImmergasAutomationsCard extends HubCard {
     const ll = i.liveLabel ? this.t(i.liveLabel[0], i.liveLabel[1]) : "";
     const liveTxt = i.liveText ?? (!live ? "" : live.state === "on" ? ll : live.state === "off" ? "" : `${ll}: ${live.state}`);
     const hot = i.status ? on : !!live && live.state === "on";
-    if (i.status) return this.statusRow(i, on, liveTxt);
+    if (i.status) return this.statusRow(i, i.alarm ?? on, liveTxt);
     const cc = on && !obsolete ? col : "overlay1";
     return html`<div class="ar ${on ? "" : "off"}" style="${on && !obsolete ? `border-color:${ca(col, 0.35)};background:${ca(col, hot ? 0.16 : 0.06)}` : ""}"
       @click=${() => this.info(i.automation && au ? i.automation : i.toggle)}>

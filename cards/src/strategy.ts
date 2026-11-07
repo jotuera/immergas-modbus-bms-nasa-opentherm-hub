@@ -111,6 +111,7 @@ function otDashboard(config: any, t: (a: string, b: string) => string) {
         { type: "grid", column_span: 3, cards: [card("immergas-day-card", config.day ?? {})] },
         // calibration from the Today analysis and the boiler menu profile
         { type: "grid", column_span: 3, cards: [card("immergas-calibration-card", config.calibration ?? {})] },
+        { type: "grid", column_span: 3, cards: [card("immergas-automations-card", config.automations ?? {})] },
       ],
     }],
   };
