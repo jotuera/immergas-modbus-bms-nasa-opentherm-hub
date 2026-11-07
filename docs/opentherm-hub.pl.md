@@ -17,7 +17,7 @@ stanąć pośrodku.
 
 | | Master – hub zastępuje pilota | Bramka – pilot zostaje |
 |---|---|---|
-| **Kup** | M5Stack AtomS3 Lite + **DIYLess Master OpenTherm Shield** + 1 kabel M5Stack Grove → Dupont – **bez PortABC** | to samo + **ATOMIC PortABC** + **DIYLess Slave OpenTherm Shield** + drugi kabel Grove → Dupont |
+| **Kup** | M5Stack AtomS3 Lite + **DIYLess Master OpenTherm Shield** + 1 kabel M5Stack Grove → Dupont + 1 przewód Dupont (3V3) – **bez PortABC** | to samo + **ATOMIC PortABC** + **DIYLess Slave OpenTherm Shield** + drugi kabel Grove → Dupont |
 | **Podłącz** | gniazdo Grove AtomS3 → płytka Master, płytka Master → zaciski OpenTherm kotła (**41 / 44** w większości kotłów Immergas) | port A PortABC → Master, port C → Slave (port B wolny na RS485); przewody pilota → płytka Slave, płytka Master → kocioł 41 / 44 |
 | **Wgraj** | [`examples/immergas-opentherm.yaml`](../examples/immergas-opentherm.yaml) bez zmian | ten sam plik, odkomentuj `ot_gateway`, piny pilota i ustaw piny mastera na port A |
 | **Na kotle** | zdejmij CAR V2, zworka X40 z powrotem na 40-41, wyłącz i włącz zasilanie (E31) | nic nie zmieniasz |
@@ -57,15 +57,17 @@ Jak to się składa:
   zestaw [DIYLess ESP OpenTherm Gateway](https://diyless.com/product/esp8266-opentherm-gateway)). Bez przewodów;
   w konfiguracji zmieniasz płytkę i piny (zobacz [Instalacja](#instalacja), krok 4).
 
-**Przed pierwszym podłączeniem sprawdź poziom sygnału.** Płytki przyjmują 3,3 V albo 5 V, a DIYLess nie podaje, czy
-przy zasilaniu 5 V ich sygnał do ESP32 zostaje na 3,3 V – piny ESP32-S3 przyjmują tylko 3,3 V. Gniazdo Grove daje
-**5 V** (czerwony przewód). Dlatego raz: podłącz tylko czarny (GND) i czerwony (5V) – bez białego i żółtego – płytkę
-podłącz do kotła i zmierz miernikiem **D2** (płytka Slave: **D6**) względem GND.
-- do ok. 3,3 V → podłącz też biały i żółty, gotowe;
-- ok. 5 V → nie używaj czerwonego przewodu: zasil płytkę z 3V3 (przewód Dupont do pinu 3V3 AtomS3 Lite albo D1 mini
-  ESP32).
+**Zasilanie: płytki pracują na 3,3 V (pin 3V3).** Widać to po ścieżkach płytek DIYLess: płytka Master używa tylko
+D1, D2, GND i 3V3 (jej pin 5V jest niepodłączony), płytka Slave D6, D7, GND, 3V3 i 5V. Gniazdo Grove daje GND, **5 V**
+i dwa GPIO – nie ma 3,3 V. Dlatego:
+- **Sam master:** kabel Grove na GND, D2 i D1 (czerwony przewód 5 V nieużywany – zaizoluj go) i **jeden dodatkowy
+  przewód Dupont z pinu 3V3 AtomS3 Lite** na pin 3V3 płytki.
+- **Bramka z PortABC:** podstawka zasłania pin 3V3 Atoma, więc 3,3 V daje **pin G1 własnego gniazda Grove AtomS3**
+  (PORT.A na naklejce) – trzyma go w stanie wysokim pakiet `ot_3v3_supply` – podłączony do pinu 3V3 obu płytek.
+  Czerwony przewód 5 V idzie na pin 5V płytki Slave.
+- **Na WeMos D1 mini ESP32** płytki dostają 3,3 V i 5 V z samej płytki, nic nie podłączasz.
 
-Zgłoś, proszę, co wyszło. Napięcie linii OpenTherm płytki robią same, bez dodatkowego zasilacza.
+Napięcie linii OpenTherm płytki robią same, bez dodatkowego zasilacza.
 
 Logika płytek DIYLess (i większości adapterów zbudowanych pod bibliotekę OpenTherm Ihora Melnyka): wyjście LOW =
 linia aktywna, wejście HIGH = linia aktywna – domyślne `out_active_low: true`, `in_active_low: false`. Zmień je tylko
@@ -100,7 +102,8 @@ ESP32: odpowiedź kotła przychodzi **na wejście**, ramki huba idą **wyjściem
 | Przewód Grove | Sam master: Grove AtomS3 → płytka Master | Bramka: port A → płytka Master | Bramka: port C → płytka Slave |
 |---|---|---|---|
 | czarny – GND | **GND** | **GND** | **GND** |
-| czerwony – 5 V | **5V** (po sprawdzeniu poziomu wyżej) | **5V** (po sprawdzeniu) | **5V** (po sprawdzeniu) |
+| czerwony – 5 V | nie podłączać (pin 5V płytki Master jest wolny) | nie podłączać | **5V** |
+| osobno – 3,3 V | **3V3** ← pin 3V3 AtomS3 Lite | **3V3** ← G1 gniazda Grove Atoma (`ot_3v3_supply`) | **3V3** ← G1 gniazda Grove Atoma |
 | biały – sygnał do ESP32 | **D2** · `ot_boiler_in_pin: GPIO1` | **D2** · `ot_boiler_in_pin: GPIO39` | **D6** · `ot_room_in_pin: GPIO6` |
 | żółty – sygnał z ESP32 | **D1** · `ot_boiler_out_pin: GPIO2` | **D1** · `ot_boiler_out_pin: GPIO38` | **D7** · `ot_room_out_pin: GPIO5` |
 
@@ -164,8 +167,8 @@ najpierw ustaw M3 P33 = ON – kocioł grzeje wtedy nawet po utracie OpenTherm.
    - **Master** (hub zastępuje pilota): zostaw `ot_regulator` i ustaw `ot_room_entity` na czujnik temperatury pokoju
      z Home Assistant (albo zostaw – regulator pracuje wtedy tylko z krzywej).
    - **Bramka** (pilot zostaje): odkomentuj `ot_gateway` i podstawienia `ot_room_in_pin` / `ot_room_out_pin`
-     (port C) oraz ustaw `ot_boiler_in_pin: GPIO39`, `ot_boiler_out_pin: GPIO38` (port A); `ot_regulator` jest
-     opcjonalny (ustawia wartości, których hub używa, gdy pilot milczy).
+     (port C), ustaw `ot_boiler_in_pin: GPIO39`, `ot_boiler_out_pin: GPIO38` (port A) i dodaj
+     `packages/ot_3v3_supply.yaml` (3,3 V dla płytek z G1); `ot_regulator` jest opcjonalny (ustawia wartości, których hub używa, gdy pilot milczy).
 4. **Sprawdź piny** (`substitutions:` na górze). Master na gnieździe Grove AtomS3 zostawia domyślne; bramka z PortABC
    to krok 3. Płytki nałożone na WeMos D1 mini ESP32: `ot_boiler_in_pin: GPIO21`, `ot_boiler_out_pin: GPIO22`,
    bramka `ot_room_in_pin: GPIO19`, `ot_room_out_pin: GPIO23`; w `esp32:` ustaw `board: wemos_d1_mini32` i usuń

@@ -118,6 +118,7 @@ substitutions:
   n_ot_maint_due: "${ot_name_prefix} - Przegląd kotła"
   n_ot_frames: "${ot_name_prefix} - Ramki poprawne"
   n_ot_errors: "${ot_name_prefix} - Błędy ramek"
+  n_ot_3v3_supply: "${ot_name_prefix} - Zasilanie 3,3 V płytek"
   n_ot_timeouts: "${ot_name_prefix} - Brak odpowiedzi"
   n_ot_fault: "${ot_name_prefix} - Usterka"
   n_ot_ch_active: "${ot_name_prefix} - CO aktywne"

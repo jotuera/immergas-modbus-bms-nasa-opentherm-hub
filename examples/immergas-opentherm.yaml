@@ -5,7 +5,9 @@
 #                      the room unit, put jumper X40 back on 40-41, power-cycle the boiler.
 #   GATEWAY: + an ATOMIC PortABC: port A = Master shield (white G39 = in, yellow G38 = out), port C = Slave shield (white
 #            G6 = in, yellow G5 = out) -> the room unit, which stays and is relayed (uncomment ot_gateway and the pins
-#            below). Port B (G8 / G7) stays free for an RS485 bus.
+#            below) and ot_3v3_supply (the PortABC covers the AtomS3 3V3 pin). Port B (G8 / G7) stays free for RS485.
+# The shields run on 3.3 V (their 3V3 pin): master alone = one extra wire from the AtomS3 3V3 pin, the red Grove
+# wire (5 V) is not used on the Master shield.
 # Experimental: written from the OpenTherm specification and the Immergas findings of the Dominus integration, not
 # tested on a boiler yet.
 # Copy to your ESPHome folder, set the secrets and flash. Loaded packages come straight from GitHub (pin `ref`).
@@ -71,3 +73,4 @@ packages:
       - packages/ot_programs.yaml       # optional: CH / DHW programs, anti-legionella, vacation, summer / winter, frost
       - packages/ot_boiler_params.yaml  # optional: the boiler menu copied once (codes, hints) + service reminder
       # - packages/ot_gateway.yaml      # gateway: the room unit stays (needs the slave adapter)
+      # - packages/ot_3v3_supply.yaml   # gateway with an ATOMIC PortABC: G1 of the AtomS3 Grove = 3.3 V for the shields

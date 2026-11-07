@@ -16,7 +16,7 @@ in the middle.
 
 | | Master – the hub replaces the room unit | Gateway – the room unit stays |
 |---|---|---|
-| **Buy** | M5Stack AtomS3 Lite + **DIYLess Master OpenTherm Shield** + 1 M5Stack Grove → Dupont cable – **no PortABC** | the same + **ATOMIC PortABC** + **DIYLess Slave OpenTherm Shield** + a second Grove → Dupont cable |
+| **Buy** | M5Stack AtomS3 Lite + **DIYLess Master OpenTherm Shield** + 1 M5Stack Grove → Dupont cable + 1 jumper wire (3V3) – **no PortABC** | the same + **ATOMIC PortABC** + **DIYLess Slave OpenTherm Shield** + a second Grove → Dupont cable |
 | **Connect** | AtomS3 Grove port → Master shield, Master shield → boiler OpenTherm terminals (**41 / 44** on most Immergas boilers) | PortABC port A → Master, port C → Slave (port B free for RS485); room unit wires → Slave shield, Master shield → boiler 41 / 44 |
 | **Flash** | [`examples/immergas-opentherm.yaml`](../examples/immergas-opentherm.yaml) as it is | the same file, uncomment `ot_gateway`, the room pins and set the master pins to port A |
 | **On the boiler** | remove the CAR V2, jumper X40 back on 40-41, power-cycle (E31) | nothing to change |
@@ -56,15 +56,17 @@ How it goes together:
   the [DIYLess ESP OpenTherm Gateway](https://diyless.com/product/esp8266-opentherm-gateway) kit). No wires at all;
   change the board and the pins in the configuration (see [Installation](#installation), step 4).
 
-**Check the signal level before the first connection.** The shields take 3.3 V or 5 V, and DIYLess does not say
-whether their signal to the ESP32 stays at 3.3 V when they run on 5 V – the ESP32-S3 pins take 3.3 V only. A Grove port
-gives **5 V** (red wire). So once: plug in only black (GND) and red (5V) – not white / yellow – connect the shield to
-the boiler and measure **D2** (Slave shield: **D6**) against GND with a multimeter.
-- up to about 3.3 V → connect white and yellow too, done;
-- about 5 V → do not use the red wire: power the shield from 3V3 (jumper wires to the AtomS3 Lite 3V3 pin, or the
-  D1 mini ESP32).
+**Power: the shields run on 3.3 V (their 3V3 pin).** The traces of the DIYLess shields show it: the Master shield
+uses only D1, D2, GND and 3V3 (its 5V pin is not connected), the Slave shield D6, D7, GND, 3V3 and 5V. A Grove port gives
+GND, **5 V** and two GPIOs – no 3.3 V. So:
+- **Master alone:** the Grove cable for GND, D2 and D1 (the red 5 V wire is not used – insulate it) and **one extra
+  jumper wire from the AtomS3 Lite 3V3 pin** to the shield's 3V3 pin.
+- **Gateway with the PortABC:** the base covers the AtomS3 3V3 pin, so **pin G1 of the AtomS3's own Grove port**
+  (PORT.A on its label) gives the 3.3 V – the `ot_3v3_supply` package keeps it high – wired to the 3V3 pin of both
+  shields. The red 5 V wire goes to the Slave shield's 5V pin.
+- **On a WeMos D1 mini ESP32** the shields get 3.3 V and 5 V from the board itself, nothing to wire.
 
-Please report what you measured. The shields make the OpenTherm line voltage themselves, no extra supply.
+The shields make the OpenTherm line voltage themselves, no extra supply.
 
 The logic of the DIYLess shields (and of most adapters built on the OpenTherm library by Ihor Melnyk): output LOW =
 line active, input HIGH = line active – the defaults `out_active_low: true`, `in_active_low: false`. Change them only
@@ -99,7 +101,8 @@ from the ESP32: the boiler's answer comes **in**, the hub's frames go **out**.
 | Grove wire | Master alone: AtomS3 Grove → Master shield | Gateway: port A → Master shield | Gateway: port C → Slave shield |
 |---|---|---|---|
 | black – GND | **GND** | **GND** | **GND** |
-| red – 5 V | **5V** (after the level check above) | **5V** (after the check) | **5V** (after the check) |
+| red – 5 V | not connected (the Master shield's 5V pin is free) | not connected | **5V** |
+| separate – 3.3 V | **3V3** ← AtomS3 Lite 3V3 pin | **3V3** ← G1 of the AtomS3 Grove (`ot_3v3_supply`) | **3V3** ← G1 of the AtomS3 Grove |
 | white – signal to the ESP32 | **D2** · `ot_boiler_in_pin: GPIO1` | **D2** · `ot_boiler_in_pin: GPIO39` | **D6** · `ot_room_in_pin: GPIO6` |
 | yellow – signal from the ESP32 | **D1** · `ot_boiler_out_pin: GPIO2` | **D1** · `ot_boiler_out_pin: GPIO38` | **D7** · `ot_room_out_pin: GPIO5` |
 
@@ -165,8 +168,8 @@ family set M3 P33 = ON first – the boiler then keeps heating even if OpenTherm
    - **Master** (the hub replaces the room unit): keep `ot_regulator` and set `ot_room_entity` to a room temperature
      sensor of Home Assistant (or leave it – the regulator then runs on the curve only).
    - **Gateway** (the room unit stays): uncomment `ot_gateway` and the `ot_room_in_pin` / `ot_room_out_pin`
-     substitutions (port C) and set `ot_boiler_in_pin: GPIO39`, `ot_boiler_out_pin: GPIO38` (port A); `ot_regulator`
-     is optional (it sets the values the hub uses while the room unit is silent).
+     substitutions (port C), set `ot_boiler_in_pin: GPIO39`, `ot_boiler_out_pin: GPIO38` (port A) and add
+     `packages/ot_3v3_supply.yaml` (3.3 V for the shields from G1); `ot_regulator` is optional (it sets the values the hub uses while the room unit is silent).
 4. **Check the pins** (`substitutions:` at the top). Master on the AtomS3 Grove port keeps the defaults; the gateway
    with the PortABC is step 3. Shields stacked on a WeMos D1 mini ESP32: `ot_boiler_in_pin: GPIO21`,
    `ot_boiler_out_pin: GPIO22`, gateway `ot_room_in_pin: GPIO19`, `ot_room_out_pin: GPIO23`; in `esp32:` set

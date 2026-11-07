@@ -1,0 +1,20 @@
+# Immergas OpenTherm - package "ot_3v3_supply"  -- OPTIONAL
+# A GPIO kept high as the 3.3 V supply of the DIYLess OpenTherm shields. The shields run on their 3V3 pin (the Master
+# shield's 5V pin is not connected); with an ATOMIC PortABC under the AtomS3 Lite its 3V3 pin is covered and the Grove
+# ports give 5 V only, so pin G1 of the AtomS3's own Grove port (PORT.A on its label) feeds the 3V3 pin of the shields.
+# An ESP32-S3 pin gives up to ~40 mA - enough for the logic side of one or two shields (pull-ups, an LED).
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+substitutions:
+  ot_3v3_supply_pin: GPIO1
+
+switch:
+  - platform: gpio
+    id: ot_3v3_supply
+    name: "${n_ot_3v3_supply}"
+    entity_category: diagnostic
+    disabled_by_default: true
+    restore_mode: ALWAYS_ON
+    pin:
+      number: ${ot_3v3_supply_pin}
+      drive_strength: 40mA

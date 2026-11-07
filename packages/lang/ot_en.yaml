@@ -118,6 +118,7 @@ substitutions:
   n_ot_maint_due: "${ot_name_prefix} - Boiler service due"
   n_ot_frames: "${ot_name_prefix} - Frames OK"
   n_ot_errors: "${ot_name_prefix} - Frame errors"
+  n_ot_3v3_supply: "${ot_name_prefix} - 3.3 V supply of the shields"
   n_ot_timeouts: "${ot_name_prefix} - No answer"
   n_ot_fault: "${ot_name_prefix} - Fault"
   n_ot_ch_active: "${ot_name_prefix} - CH active"
