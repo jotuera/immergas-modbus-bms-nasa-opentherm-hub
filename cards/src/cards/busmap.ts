@@ -22,6 +22,7 @@ class ImmergasBusMapCard extends HubCard {
   private report: { bus: Bus; url: string; text: string } | null = null;
   private waiting: Bus | null = null;
   private unsub: (() => void) | null = null;
+  private open: boolean | null = null;   // collapsed by default; option expanded: true opens it
 
   disconnectedCallback() {
     super.disconnectedCallback();
@@ -75,8 +76,15 @@ class ImmergasBusMapCard extends HubCard {
     if (!BUSES.some(([, k]) => this.eid(k)))
       return html`${this.head("mdi:map-search-outline", this.t("Mapa magistral", "Bus map"))}
         <div class="hint">${this.t("Wgraj pakiet hub_busmap.yaml, żeby zbierać mapę magistral.", "Add the hub_busmap.yaml package to collect the bus map.")}</div>`;
+    const open = this.open ?? !!this.config.expanded;
+    const total = BUSES.filter(([, k]) => this.eid(k)).reduce((s, [, k]) => s + (isNaN(this.n(k)) ? 0 : Math.round(this.n(k))), 0);
+    const running = Object.values(SCAN).some((sc) => sc && /%$/.test(this.s(sc[1]) ?? ""));
     return html`
-      ${this.head("mdi:map-search-outline", this.t("Mapa magistral", "Bus map"), this.t("nieopisane PDU", "undescribed PDUs"))}
+      <div class="sh" @click=${() => { this.open = !open; this.requestUpdate(); }}>
+        <ha-icon icon="mdi:map-search-outline"></ha-icon><span class="ttl">${this.t("Mapa magistral", "Bus map")}</span>
+        <span class="sum">${open ? "" : (running ? this.t("skanuję… · ", "scanning… · ") : "") + this.t(`nieopisane: ${total}`, `undescribed: ${total}`)}</span>
+        <ha-icon class="chev" icon=${open ? "mdi:chevron-up" : "mdi:chevron-down"}></ha-icon></div>
+      ${!open ? nothing : html`
       ${this.eid("hub_model") ? html`<div class="model">
         <ha-icon icon="mdi:water-boiler"></ha-icon>
         <input .value=${model} placeholder=${this.t("Model kotła i pompy (z tabliczki)", "Boiler and heat pump model (rating plate)")}
@@ -103,10 +111,16 @@ class ImmergasBusMapCard extends HubCard {
       <div class="hint">${this.gbx || this.mtx ? this.t("Skan czyta po kolei każdy rejestr z typowych zakresów (kilka minut, zwykłe odpytywanie działa dalej) i zostawia te, które odpowiadają, a żaden pakiet ich nie opisuje. Potem Przygotuj zgłoszenie – nic nie jest wysyłane, dopóki nie naciśniesz Create na GitHubie.",
         "The scan reads every register of the usual ranges one by one (a few minutes, the normal polling keeps running) and keeps the ones that answer and that no package describes. Then Prepare report – nothing is sent until you press Create on GitHub.")
         : this.t("Mapa zbiera się od startu huba. TT wypełnia skaner PDU (przyciski Skanuj PDU …). Stałe zera zimą też mogą ożyć – zgłoszenie z innego modelu pomaga najbardziej.",
-        "The map builds up from the hub start. TT is filled by the PDU scanner (Scan PDU … buttons). Constant zeros may come alive in winter – a report from another model helps the most.")}</div>`;
+        "The map builds up from the hub start. TT is filled by the PDU scanner (Scan PDU … buttons). Constant zeros may come alive in winter – a report from another model helps the most.")}</div>`}`;
   }
 
   static styles = [HubCard.styles, css`
+    ha-card { padding: 8px 12px; }
+    .sh { cursor: pointer; display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+    .sh > ha-icon { --mdc-icon-size: 17px; opacity: .55; }
+    .ttl { font-size: 10.5px; font-weight: 800; opacity: .55; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+    .sum { flex: 1; font-size: 10.5px; opacity: .45; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chev { margin-left: auto; }
     .model { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
     .model ha-icon { --mdc-icon-size: 20px; opacity: .7; }
     .model input { flex: 1; min-width: 0; font: inherit; font-size: 12.5px; padding: 7px 9px; border-radius: 10px;
