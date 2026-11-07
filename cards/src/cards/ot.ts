@@ -82,6 +82,7 @@ class ImmergasOtBoilerCard extends HubCard {
         ${this.eid("ot_exhaust") && !this.bad("ot_exhaust") ? this.chip("ot_exhaust", "mdi:smoke", "overlay2", this.t("Spaliny", "Exhaust"), this.f(this.n("ot_exhaust"), 1, 1) + " °C") : nothing}
         ${this.esp && this.eid("ot_press") && !this.bad("ot_press") ? (() => { const p = this.n("ot_press"); return this.chip("ot_press", "mdi:gauge", p < 1 || p > 2.5 ? "red" : "green", this.t("Ciśnienie instalacji", "System pressure"), this.f(p, 1, 1) + " bar", p < 1 || p > 2.5); })() : nothing}
         ${this.eid("ot_fan") && !this.bad("ot_fan") ? this.chip("ot_fan", "mdi:fan", "sky", this.t("Wentylator", "Fan"), this.f(this.n("ot_fan"), 0) + this.t(" obr/min", " rpm")) : nothing}
+        ${this.gbx ? this.gbHours() : nothing}
         ${this.eid("ot_flame_i") && !this.bad("ot_flame_i") ? this.chip("ot_flame_i", "mdi:fire-circle", "peach", this.t("Prąd płomienia", "Flame current"), this.f(this.n("ot_flame_i"), 1, 1) + " µA") : nothing}
       </div>
       ${this.eid("ot_burn_today") && !this.esp ? html`<div class="sec">${this.t("Palnik", "Burner")}</div>
@@ -122,6 +123,13 @@ class ImmergasOtBoilerCard extends HubCard {
 `;
   }
 
+  /** gas boiler over Modbus BMS: burner hours (total / CH / DHW), next to the fan in the first grid */
+  private gbHours() {
+    const hours: [Key, string, string][] = [["ot_hours_total", "mdi:timer-outline", this.t("Godziny palnika", "Burner hours")], ["gb_hours_ch", "mdi:radiator", this.t("Godziny palnika CO", "CH burner hours")],
+      ["gb_hours_dhw", "mdi:water-boiler", this.t("Godziny palnika CWU", "DHW burner hours")]];
+    return hours.filter(([k]) => !!this.eid(k) && !this.bad(k)).map(([k, ic, l]) => this.chip(k, ic, "overlay2", l, this.f(this.n(k), 0) + " h"));
+  }
+
   /** gas boiler over Modbus BMS: what the model reports (MAGIS M TOP state), burner hours - its functions are in the mode card */
   private gbBlocks() {
     const v = (k: Key, d = 1, u = " °C") => this.f(this.n(k), d, d ? 1 : 0) + u, has = (k: Key) => !!this.eid(k) && !this.bad(k);
@@ -137,14 +145,11 @@ class ImmergasOtBoilerCard extends HubCard {
     const hp: [Key, string, string, string][] = [["gb_hp", "mdi:heat-pump", "green", this.t("Pompa ciepła", "Heat pump")], ["gb_defrost", "mdi:snowflake-melt", "sky", this.t("Odszranianie", "Defrost")],
       ["gb_antifreeze", "mdi:snowflake-alert", "sky", this.t("Ochrona przed zamarzaniem", "Antifreeze")], ["gb_cool_ok", "mdi:snowflake", "sky", this.t("Chłodzenie dozwolone", "Cooling allowed")]];
     const hp2 = hp.filter(([k]) => this.eid(k));
-    const hours: [Key, string, string][] = [["ot_hours_total", "mdi:timer-outline", this.t("Godziny palnika", "Burner hours")], ["gb_hours_ch", "mdi:radiator", this.t("Godziny palnika CO", "CH burner hours")],
-      ["gb_hours_dhw", "mdi:water-boiler", this.t("Godziny palnika CWU", "DHW burner hours")]];
-    const h2 = hours.filter(([k]) => has(k));
     return html`
       ${t2.length ? html`<div class="grid" style="margin-top:8px">${t2.map(([k, ic, col, l, val]) => this.chip(k, ic, col, l, val))}</div>` : nothing}
       ${hp2.length ? html`<div class="sec">MAGIS M TOP</div><div class="grid">${hp2.map(([k, ic, col, l]) => this.chip(k, ic, this.on(k) ? col : "overlay1", l, this.on(k) ? this.t("tak", "yes") : this.t("nie", "no"), this.on(k)))}</div>
         ${this.eid("gb_cool_max") ? html`<div class="hint">${this.t("Zakres chłodzenia ", "Cooling range ")}${this.f(this.n("gb_cool_min"), 0)}–${this.f(this.n("gb_cool_max"), 0)} °C</div>` : nothing}` : nothing}
-      ${h2.length ? html`<div class="sec">${this.t("Palnik", "Burner")}</div><div class="grid">${h2.map(([k, ic, l]) => this.chip(k, ic, "overlay2", l, this.f(this.n(k), 0) + " h"))}</div>` : nothing}`;
+`;
   }
 
   /** gas boiler over Modbus BMS: the fault text and code, resettable / locked, the two-tap reset (257 = 0xAA55) */
