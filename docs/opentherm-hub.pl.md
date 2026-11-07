@@ -63,7 +63,7 @@ i dwa GPIO – nie ma 3,3 V. Dlatego:
 - **Sam master:** kabel Grove na GND, D2 i D1 (czerwony przewód 5 V nieużywany – zaizoluj go) i **jeden dodatkowy
   przewód Dupont z pinu 3V3 AtomS3 Lite** na pin 3V3 płytki.
 - **Bramka z PortABC:** podstawka zasłania pin 3V3 Atoma, więc 3,3 V daje **pin G1 własnego gniazda Grove AtomS3**
-  (PORT.A na naklejce) – trzyma go w stanie wysokim pakiet `ot_3v3_supply` – podłączony do pinu 3V3 obu płytek.
+  (przy USB-C) – trzyma go w stanie wysokim pakiet `ot_3v3_supply` – podłączony do pinu 3V3 obu płytek.
   Czerwony przewód 5 V idzie na pin 5V płytki Slave.
 - **Na WeMos D1 mini ESP32** płytki dostają 3,3 V i 5 V z samej płytki, nic nie podłączasz.
 

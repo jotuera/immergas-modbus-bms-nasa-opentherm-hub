@@ -62,7 +62,7 @@ GND, **5 V** and two GPIOs – no 3.3 V. So:
 - **Master alone:** the Grove cable for GND, D2 and D1 (the red 5 V wire is not used – insulate it) and **one extra
   jumper wire from the AtomS3 Lite 3V3 pin** to the shield's 3V3 pin.
 - **Gateway with the PortABC:** the base covers the AtomS3 3V3 pin, so **pin G1 of the AtomS3's own Grove port**
-  (PORT.A on its label) gives the 3.3 V – the `ot_3v3_supply` package keeps it high – wired to the 3V3 pin of both
+  (next to USB-C) gives the 3.3 V – the `ot_3v3_supply` package keeps it high – wired to the 3V3 pin of both
   shields. The red 5 V wire goes to the Slave shield's 5V pin.
 - **On a WeMos D1 mini ESP32** the shields get 3.3 V and 5 V from the board itself, nothing to wire.
 
