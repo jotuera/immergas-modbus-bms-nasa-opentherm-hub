@@ -96,10 +96,10 @@ function otDashboard(config: any, t: (a: string, b: string) => string) {
     views: [{
       title: t("Kocioł", "Boiler"), path: "dominus", icon: "mdi:water-boiler", type: "sections", max_columns: 3,
       sections: [
-        // diagram + charts (2 columns) | now + setpoints; then Data-ID map | operating mode + connectivity | schedule + boiler + settings
+        // diagram + charts (2 columns) | now + setpoints; then weather curve + Data-ID map | operating mode + connectivity | schedule + boiler + settings
         { type: "grid", column_span: 2, cards: [card("immergas-diagram-card", { stats: false, ...(config.diagram ?? {}) }), card("immergas-charts-card", config.charts ?? {})] },
         { type: "grid", cards: [card("immergas-now-card", config.now ?? {}), card("immergas-setpoints-card", config.setpoints ?? {})] },
-        { type: "grid", cards: [card("immergas-ot-map-card", config.ot_map ?? {})] },
+        { type: "grid", cards: [card("immergas-ot-curve-card", config.ot_curve ?? {}), card("immergas-ot-map-card", config.ot_map ?? {})] },
         { type: "grid", cards: [card("immergas-mode-card", config.mode ?? {}), card("immergas-links-card", config.links ?? {})] },
         { type: "grid", cards: [card("immergas-schedule-card", config.schedule ?? {}), card("immergas-ot-boiler-card", config.ot_boiler ?? {}),
           card("immergas-settings-card", { part: "online", ...(config.settings ?? {}) }),
