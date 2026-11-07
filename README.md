@@ -33,7 +33,8 @@ cycle and the cost of 1 kWh of heat from each source.
 - a **MAGIS PRO V2 / COMBO V2** heat pump (Samsung outdoor unit) → [MAGIS PRO / COMBO V2](docs/magis-pro-combo-v2.md)
   – one hub on all three buses, the tested and complete setup;
 - a **boiler with a CAR V2 / Super Amico or an OpenTherm Dominus** → [OpenTherm boilers](docs/opentherm-hub.md) –
-  an AtomS3 Lite with the DIYLess Master OpenTherm Shield (+ the Slave shield to keep the room unit);
+  an AtomS3 Lite + ATOMIC PortABC with the DIYLess Master OpenTherm Shield on a Grove cable (+ the Slave shield to keep
+  the room unit);
 - a **new-platform gas boiler** (ZEUS Superior 25–35, HERCULES 25 / 35, EXTRA) or a **MAGIS M TOP** without a
   Dominus → [Gas boilers over Modbus BMS](docs/gas-boiler-bms.md);
 - a **MAGIS M** (Midea-based, wired controller with H1 / H2) → [MAGIS M heat pumps](docs/magis-m-midea.md);
@@ -87,7 +88,7 @@ Slovak.
 | | |
 |---|---|
 | [MAGIS PRO / COMBO V2](docs/magis-pro-combo-v2.md) | D+/D-, T-/T+, F1/F2: hardware, wiring, installation, first start, calibration, gas, register maps |
-| [OpenTherm boilers](docs/opentherm-hub.md) | master and gateway: what to buy (AtomS3 Lite + DIYLess shields), wiring diagrams, boiler terminals by family, installation |
+| [OpenTherm boilers](docs/opentherm-hub.md) | master and gateway: what to buy (AtomS3 Lite + PortABC + DIYLess shields), wiring diagrams, boiler terminals by family, installation |
 | [Gas boilers over Modbus BMS](docs/gas-boiler-bms.md) | SUPERIOR / EXTRA / PRO V2, MAGIS M TOP, register map |
 | [MAGIS M heat pumps](docs/magis-m-midea.md) | Midea M-Thermal on H1 / H2, register map |
 | [TRIO HYDRO](docs/trio-hydro.md) | buses from the manuals, planned hardware, what a tester would do |
