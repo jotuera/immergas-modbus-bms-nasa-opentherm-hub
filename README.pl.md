@@ -33,7 +33,8 @@ i koszt 1 kWh ciepła z każdego źródła.
 
 - pompa ciepła **MAGIS PRO V2 / COMBO V2** (jednostka zewnętrzna Samsung) → [MAGIS PRO / COMBO V2](docs/magis-pro-combo-v2.pl.md)
   – jeden hub na wszystkich trzech magistralach, przetestowany i kompletny zestaw;
-- **kocioł z CAR V2 / Super Amico albo z Dominusem OpenTherm** → [Kotły OpenTherm](docs/opentherm-hub.pl.md);
+- **kocioł z CAR V2 / Super Amico albo z Dominusem OpenTherm** → [Kotły OpenTherm](docs/opentherm-hub.pl.md) –
+  AtomS3 Lite z płytką DIYLess Master OpenTherm Shield (+ płytka Slave, jeśli pilot ma zostać);
 - **kocioł gazowy nowej platformy** (ZEUS Superior 25–35, HERCULES 25 / 35, EXTRA) albo **MAGIS M TOP** bez
   Dominusa → [Kotły gazowe po Modbus BMS](docs/gas-boiler-bms.pl.md);
 - **MAGIS M** (na Midea, panel przewodowy z H1 / H2) → [Pompy ciepła MAGIS M](docs/magis-m-midea.pl.md);
@@ -87,7 +88,7 @@ portugalski, słowacki.
 | | |
 |---|---|
 | [MAGIS PRO / COMBO V2](docs/magis-pro-combo-v2.pl.md) | D+/D-, T-/T+, F1/F2: sprzęt, podłączenie, instalacja, pierwsze uruchomienie, kalibracja, gaz, mapy rejestrów |
-| [Kotły OpenTherm](docs/opentherm-hub.pl.md) | master i bramka, adaptery, zaciski kotłów według rodzin |
+| [Kotły OpenTherm](docs/opentherm-hub.pl.md) | master i bramka: co kupić (AtomS3 Lite + płytki DIYLess), schematy podłączenia, zaciski kotłów według rodzin, instalacja |
 | [Kotły gazowe po Modbus BMS](docs/gas-boiler-bms.pl.md) | SUPERIOR / EXTRA / PRO V2, MAGIS M TOP, mapa rejestrów |
 | [Pompy ciepła MAGIS M](docs/magis-m-midea.pl.md) | Midea M-Thermal na H1 / H2, mapa rejestrów |
 | [TRIO HYDRO](docs/trio-hydro.pl.md) | magistrale według instrukcji, planowany sprzęt, co zrobiłby tester |
