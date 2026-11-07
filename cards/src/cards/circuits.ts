@@ -206,19 +206,84 @@ class ImmergasDayCard extends GridCard {
   protected body() {
     if (this.rows().some(([k]) => this.eid(k))) return super.body();
     return html`${this.head("mdi:calendar-today", this.t("Dziś · analiza", "Today · analysis"))}<div class="hint">${this.t(
-      "Brak danych: dodaj pakiety analizy huba (ot_computed / ot_analytics, gb_computed / gb_analytics, mt_computed / mt_analytics) albo zaktualizuj Immergas Dominus do 1.6.14+.",
-      "No data: add the hub analysis packages (ot_computed / ot_analytics, gb_computed / gb_analytics, mt_computed / mt_analytics) or update Immergas Dominus to 1.6.14+.")}</div>`;
+      "Brak danych: dodaj pakiety analizy huba (hub_analytics, ot_computed / ot_analytics, gb_computed / gb_analytics, mt_computed / mt_analytics) albo zaktualizuj Immergas Dominus do 1.6.14+.",
+      "No data: add the hub analysis packages (hub_analytics, ot_computed / ot_analytics, gb_computed / gb_analytics, mt_computed / mt_analytics) or update Immergas Dominus to 1.6.14+.")}</div>`;
   }
   protected heading(): [string, string, string] {
-    return this.mtx ? ["mdi:calendar-today", "Dziś · analiza pracy", "Today · operation analysis"] : ["mdi:calendar-today", "Dziś · analiza kotła", "Today · boiler analysis"];
+    return this.mtx || this.combo ? ["mdi:calendar-today", "Dziś · analiza pracy", "Today · operation analysis"] : ["mdi:calendar-today", "Dziś · analiza kotła", "Today · boiler analysis"];
   }
   protected wide = true;
+  /** the Magis Pro / Combo hub (D+/D-, T-/T+, F1/F2; hub_analytics) - not Dominus, MAGIS M, gas BMS or OpenTherm */
+  private get combo() { return !this.dominus && !this.mtx && !this.gbx && !this.esp; }
   /** OpenTherm hub (ot_computed / ot_analytics): condensing and leak warning as flags */
   protected flags(): [Key, string, string][] {
+    if (this.combo) return [["ha_freeze", "Ryzyko zamarznięcia", "Freeze risk"]];
     if (this.gbx) return [["ga_condensing", "Praca kondensacyjna", "Condensing"], ["ga_leak_warning", "Możliwy wyciek", "Possible leak"], ["ga_ion_low", "Niska jonizacja", "Low ionisation"]];
     return this.mtx ? [] : [["oa_condensing", "Praca kondensacyjna", "Condensing"], ["oa_leak_warning", "Możliwy wyciek", "Possible leak"], ["oa_flame_low", "Niski prąd płomienia", "Low flame current"]];
   }
   protected rows(): Row[] {
+    // Magis Pro / Combo hub (hub_analytics + hub_combined): comfort, building, cycling, CH / DHW split, DHW draws,
+    // defrost, the boiler (hybrid), weather and degree days, bus availability
+    if (this.combo) return [
+      ["state", "mdi:state-machine", "Stan pracy", "Operating state"],
+      ["ha_comfort_share", "mdi:sofa-outline", "Czas w komforcie", "Time in comfort", 0],
+      ["ha_too_cold", "mdi:snowflake-thermometer", "Za zimno", "Too cold", 0],
+      ["ha_too_warm", "mdi:sun-thermometer", "Za ciepło", "Too warm", 0],
+      ["ha_room_min", "mdi:thermometer-low", "Pokój min.", "Room min.", 1],
+      ["ha_room_max", "mdi:thermometer-high", "Pokój maks.", "Room max.", 1],
+      ["ha_room_dev_avg", "mdi:delta", "Średnia odchyłka pokoju", "Mean room deviation", 2],
+      ["ha_heat_rate", "mdi:home-thermometer", "Tempo nagrzewania", "Heating rate", 2],
+      ["ha_cool_rate", "mdi:home-thermometer-outline", "Tempo stygnięcia", "Cooling rate", 2],
+      ["ha_loss_coef", "mdi:home-export-outline", "Straty budynku", "Building loss", 3],
+      ["ha_curve_hint", "mdi:tune-vertical", "Sugerowana zmiana U03", "Suggested U03 change", 0],
+      ["ha_curve_hint_dev", "mdi:chart-bell-curve", "Odchyłka do krzywej (3-5 dni)", "Deviation for the curve (3-5 days)", 2],
+      ["starts", "mdi:counter", "Starty sprężarki dziś", "Compressor starts today", 0],
+      ["ha_starts_hour", "mdi:timer-alert-outline", "Starty / ostatnia h", "Starts / last hour", 0],
+      ["ha_starts_ch", "mdi:radiator", "Starty CO", "CH starts", 0],
+      ["ha_starts_dhw", "mdi:water-boiler", "Starty CWU", "DHW starts", 0],
+      ["ha_cycle_avg", "mdi:timer-sync-outline", "Średni cykl sprężarki", "Average compressor cycle", 0],
+      ["ha_cycle_last", "mdi:timer-outline", "Ostatni cykl", "Last cycle", 0],
+      ["ha_pause_last", "mdi:timer-pause-outline", "Ostatnia przerwa", "Last pause", 0],
+      ["ha_short_cycles", "mdi:timer-alert", "Krótkie cykle", "Short cycles", 0],
+      ["ha_elec_ch", "mdi:flash", "Prąd CO", "CH electricity", 2],
+      ["ha_heat_ch", "mdi:radiator", "Ciepło CO", "CH heat", 2],
+      ["ha_cop_ch", "mdi:radiator", "COP CO dziś", "COP CH today", 2],
+      ["ha_elec_dhw", "mdi:flash", "Prąd CWU", "DHW electricity", 2],
+      ["ha_heat_dhw", "mdi:water-boiler", "Ciepło CWU", "DHW heat", 2],
+      ["ha_cop_dhw", "mdi:water-boiler", "COP CWU dziś", "COP DHW today", 2],
+      ["cop_today", "mdi:heat-pump-outline", "COP dziś (razem)", "COP today (total)", 2],
+      ["ha_gas_heat", "mdi:fire", "Ciepło z gazu", "Heat from gas", 1],
+      ["ha_boiler_share", "mdi:chart-pie", "Udział kotła w cieple", "Boiler share of heat", 0],
+      ["ha_cost_today", "mdi:cash", "Koszt energii dziś", "Energy cost today", 2],
+      ["ha_dhw_cycles", "mdi:water-boiler", "Cykle CWU", "DHW cycles", 0],
+      ["ha_dhw_cycle_avg", "mdi:timer-sync-outline", "Średni cykl CWU", "Average DHW cycle", 0],
+      ["ha_dhw_litres", "mdi:water", "Ciepła woda zużyta", "Hot water used", 0],
+      ["ha_dhw_heat", "mdi:water-thermometer", "Ciepło CWU zużyte", "DHW heat used", 2],
+      ["ha_standing_loss", "mdi:thermometer-minus", "Straty postojowe zasobnika", "Cylinder standing loss", 2],
+      ["ha_tank_min", "mdi:water-boiler-alert", "Zasobnik min.", "Cylinder min.", 1],
+      ["ha_defrosts", "mdi:snowflake-melt", "Odszraniania", "Defrosts", 0],
+      ["ha_defrost_avg", "mdi:timer-sync-outline", "Średnie odszranianie", "Average defrost", 1],
+      ["ha_defrost_last", "mdi:timer-snowflake", "Ostatnie odszranianie", "Last defrost", 1],
+      ["ha_defrost_share", "mdi:percent-outline", "Udział odszraniania", "Defrost share", 1],
+      ["ha_joins", "mdi:fire-circle", "Dołączenia kotła do CO", "Boiler CH joins", 0],
+      ["ha_both_hours", "mdi:heat-pump", "Pompa + kocioł razem", "Heat pump + boiler", 2],
+      ["ha_boiler_only", "mdi:fire", "Tylko kocioł", "Boiler only", 2],
+      ["ha_burner_short", "mdi:fire-alert", "Krótkie palenia", "Short burns", 0],
+      ["ha_burn_last", "mdi:timer-outline", "Ostatnie palenie", "Last burn", 1],
+      ["ha_join_out", "mdi:thermometer-alert", "Zewn. przy dołączeniu kotła", "Outdoor at the boiler join", 1],
+      ["ha_bivalent", "mdi:thermometer-check", "Punkt biwalentny (wyuczony)", "Bivalent point (learned)", 1],
+      ["ha_out_min", "mdi:thermometer-chevron-down", "Zewnętrzna min.", "Outdoor min.", 1],
+      ["ha_out_max", "mdi:thermometer-chevron-up", "Zewnętrzna maks.", "Outdoor max.", 1],
+      ["ha_out_mean", "mdi:thermometer-auto", "Średnia zewn. 24 h", "Outdoor mean 24 h", 1],
+      ["ha_dd_today", "mdi:thermometer-minus", "Stopniodni dziś", "Degree days today", 1],
+      ["ha_dd_month", "mdi:calendar-month", "Stopniodni w miesiącu", "Degree days this month", 1],
+      ["ha_h_per_dd", "mdi:home-clock", "Godz. grzania / stopniodzień", "Heating h / degree day", 2],
+      ["ha_kwh_per_dd", "mdi:flash-outline", "Prąd CO / stopniodzień", "CH kWh / degree day", 2],
+      ["ha_avail_dd", "mdi:lan-check", "Dostępność D+/D-", "D+/D- availability", 1],
+      ["ha_avail_tt", "mdi:lan-check", "Dostępność T-/T+", "T-/T+ availability", 1],
+      ["ha_avail_ff", "mdi:lan-check", "Dostępność F1/F2", "F1/F2 availability", 1],
+      ["ha_link_breaks", "mdi:lan-disconnect", "Przerwy w łączności", "Link breaks", 0],
+    ];
     // Immergas Dominus over Modbus (1.4 statistics + 1.6.14 stats_extra): room, building, phases, DHW, weather, link, zones
     if (this.dominus && !this.ot) return [
       ["dx_state", "mdi:state-machine", "Stan pracy", "Operating state"],
@@ -375,6 +440,27 @@ class ImmergasDayCard extends GridCard {
   }
   protected colOf(k: Key): string {
     const v = this.n(k);
+    if (this.combo && (k.startsWith("ha_") || ["state", "starts", "cop_today"].includes(k))) {
+      if (k === "state") return /błąd|fault/i.test(this.s(k) ?? "") ? "red" : /odszr|defrost|cwu|dhw/i.test(this.s(k) ?? "") ? "sky" : /pompa|heat pump|kocioł|boiler/i.test(this.s(k) ?? "") ? "peach" : "overlay2";
+      if (k === "ha_comfort_share") return isNaN(v) ? "overlay2" : v >= 80 ? "green" : v >= 50 ? "yellow" : "red";
+      if (k === "ha_too_cold") return v > 60 ? "sky" : "overlay2";
+      if (k === "ha_too_warm") return v > 60 ? "peach" : "overlay2";
+      if (k === "ha_curve_hint") return isNaN(v) ? "overlay2" : v === 0 ? "green" : "yellow";
+      if (/^ha_avail/.test(k)) return isNaN(v) ? "overlay2" : v < 95 ? "red" : v < 99 ? "yellow" : "green";
+      if (k === "ha_link_breaks") return v > 0 ? "yellow" : "green";
+      if (k === "ha_room_dev_avg" || k === "ha_curve_hint_dev") return isNaN(v) ? "overlay2" : Math.abs(v) <= 0.5 ? "green" : v < 0 ? "sky" : "peach";
+      if (/^ha_cop_|cop_today/.test(k)) return copCol(v);
+      if (k === "ha_short_cycles") return isNaN(v) ? "overlay2" : v > 6 ? "red" : v > 2 ? "yellow" : "green";
+      if (k === "ha_cycle_avg") return isNaN(v) ? "overlay2" : v < 10 ? "red" : v < 20 ? "yellow" : "green";
+      if (k === "ha_starts_hour") return isNaN(v) ? "overlay2" : v > 3 ? "red" : v > 1 ? "yellow" : "green";
+      if (k === "ha_burner_short") return isNaN(v) ? "overlay2" : v > 6 ? "red" : v > 2 ? "yellow" : "green";
+      if (/defrost/.test(k)) return "sky";
+      if (/^ha_(dhw|tank|standing)/.test(k)) return "sky";
+      if (/^ha_(dd|h_per|kwh_per|out_)/.test(k)) return "lavender";
+      if (/^ha_elec/.test(k)) return "yellow";
+      if (/^ha_(heat_ch|heat_dhw|gas|boiler|joins|both|burn|join_out|bivalent|cost)/.test(k)) return "peach";
+      return "teal";
+    }
     if (k.startsWith("dx_") || k.startsWith("dom_")) {
       if (k === "dx_state") return /usterka|fault/i.test(this.s(k) ?? "") ? "red" : /cwu|dhw/i.test(this.s(k) ?? "") ? "sky" : /grzanie|heating/i.test(this.s(k) ?? "") ? "peach" : "overlay2";
       if (k === "dx_comfort") return isNaN(v) ? "overlay2" : v >= 80 ? "green" : v >= 50 ? "yellow" : "red";

@@ -88,8 +88,9 @@ packages:
     ref: v1.5.0
     refresh: 1d
     files:
-      # languages: hub_xx / dd_xx / tt_xx = cs de en es fr hu it nl pl pt sk, f1f2_xx = en pl
+      # languages: hub_xx / dd_xx / tt_xx = cs de en es fr hu it nl pl pt sk, f1f2_xx / hub_analytics_xx = en pl
       - packages/lang/hub_en.yaml
+      - packages/lang/hub_analytics_en.yaml
       - packages/lang/dd_en.yaml
       - packages/lang/tt_en.yaml
       - packages/lang/f1f2_en.yaml
@@ -128,6 +129,9 @@ packages:
       # hub: values from all three buses, boiler menu settings for the cards, hardware profile
       - packages/hub_diagnostics.yaml
       - packages/hub_combined.yaml
+      # statistics for the Today card: comfort, cycling, building, DHW draws, CH / DHW energy split, degree days,
+      # bus availability, defrost, boiler joins (optional, needs hub_combined)
+      - packages/hub_analytics.yaml
       # bus map report (undescribed registers of D+/D-, T-/T+ and F1/F2 as a pre-filled GitHub issue)
       - packages/hub_busmap.yaml
       - packages/hub_boiler_params.yaml

@@ -5,7 +5,7 @@ hub entities by name. This script takes the current key -> (Polish name, English
 substitution in the language files and writes all language variants of the name (without the bus prefix):
   DD  packages/lang/dd_xx.yaml  n_dd_*   "${dd_name_prefix} - X"
   TT  packages/lang/tt_xx.yaml  n_tt_*   "${tt_name_prefix} - X"
-  Hub packages/lang/hub_xx.yaml n_hub_*  "${hub_name_prefix} - X"
+  Hub packages/lang/hub_xx.yaml n_hub_*  "${hub_name_prefix} - X" (+ hub_analytics_xx.yaml n_hub_an_*)
   FF  components/f1f2_nasa/translations/f1f2_xx.yaml (component entities, prefix + X, FSV via fsv_format) and
       packages/lang/f1f2_xx.yaml n_f1f2_* (template entities)
 Usage: python tools/gen_names.py   (run from the cards folder)
@@ -21,6 +21,7 @@ SRC = {
     "DD": os.path.join(HUB, "packages", "lang", "dd_{}.yaml"),
     "TT": os.path.join(HUB, "packages", "lang", "tt_{}.yaml"),
     "Hub": os.path.join(HUB, "packages", "lang", "hub_{}.yaml"),
+    "HubAn": os.path.join(HUB, "packages", "lang", "hub_analytics_{}.yaml"),
     "FFpkg": os.path.join(HUB, "packages", "lang", "f1f2_{}.yaml"),
     "FF": os.path.join(HUB, "components", "f1f2_nasa", "translations", "f1f2_{}.yaml"),
 }
@@ -62,7 +63,9 @@ def ff(lang):
     return out
 
 
-TABLE = {bus: {l: subs(bus, l) for l in LANGS} for bus in ("DD", "TT", "Hub", "FFpkg")}
+TABLE = {bus: {l: subs(bus, l) for l in LANGS} for bus in ("DD", "TT", "Hub", "HubAn", "FFpkg")}
+for l in LANGS:   # the optional hub_analytics package names belong to the Hub device too
+    TABLE["Hub"][l] = {**TABLE["HubAn"][l], **TABLE["Hub"][l]}
 TABLE["FF"] = {l: ff(l) for l in LANGS}
 
 path = os.path.join(CARDS, "src", "names.ts")

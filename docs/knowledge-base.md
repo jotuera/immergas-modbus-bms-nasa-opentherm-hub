@@ -143,7 +143,7 @@ examples/immergas-hub.yaml
 ├── device               esp32-s3, logger (USB), api, ota, wifi, web_server
 ├── external_components  immergas_core, immergas_climate, f1f2_nasa   (components/ of this repo)
 └── packages             (packages/ of this repo)
-    ├── lang             hub_xx, dd_xx, tt_xx, f1f2_xx
+    ├── lang             hub_xx, dd_xx, tt_xx, f1f2_xx, hub_analytics_xx
     ├── D+/D-            dd_core, dd_engine, dd_zone1, dd_zones23, dd_dhw, dd_dominus, dd_schedules,
     │                    dd_heat_pump, dd_boiler_info, dd_diagnostics
     ├── T-/T+            tt_core, tt_status, tt_circuit, tt_heat_pump, tt_dhw, tt_heating, tt_integration,
@@ -151,6 +151,7 @@ examples/immergas-hub.yaml
     ├── F1/F2            f1f2_core, f1f2_indoor, f1f2_outdoor, f1f2_info, f1f2_computed, f1f2_diagnostics,
     │                    f1f2_control, f1f2_outing_targets                        (f1f2_fsv, f1f2_ehs_extra optional)
     └── hub              hub_diagnostics, hub_combined, hub_boiler_params, hw_atoms3_portabc
+                         (hub_analytics, hub_busmap optional)
 ```
 
 - Each bus has its own **prefix** in file names, ids and substitutions (`dd_`, `tt_`, `f1f2_`, `hub_`), so nothing
@@ -265,6 +266,24 @@ time*, *P17 Anti-legionella day*, *P13 Anti-legionella max duration*, *Floor flo
 *Burner starts today*, *Burner runtime today*, *Gas today* (Magis Combo, reset at midnight), next to the compressor
 counters; *Fault active (all buses)* and *Active fault (description)*: the boiler fault code from D+/D- or T-/T+ (both
 read 2100) and the outdoor unit error from F1/F2 in one place.
+
+### Today's analysis (package `hub_analytics`, optional)
+
+Counted in the hub every 10 s from the three buses, reset at midnight (Home Assistant time); the day's values survive a
+restart. Needs `hub_combined`; names in `lang/hub_analytics_xx` (en, pl). Shown in the *Today · operation analysis*
+card (strategy: below the refrigerant circuit).
+
+| Group | Entities | How |
+|---|---|---|
+| Comfort of Zone 1 | *Time in comfort today*, *Too cold / Too warm today*, *Room minimum / maximum today*, *Mean room deviation today* | room temperature of Zone 1 against its target, band `hub_an_comfort_band` (±0.5 K) |
+| Cycling | *Compressor starts in the last hour*, *Mean / Last compressor cycle*, *Last compressor pause*, *Short compressor cycles today* (< `hub_an_short_cycle_min`, 10 min), *Compressor CH / DHW starts today*, *Short boiler burns today* (< 5 min), *Last boiler burn* | compressor = HP D71 > 0 Hz (D+/D-); a run that touches DHW (TT D99 61/62/64, 44/45) counts as a DHW start |
+| Building | *Room heating rate* / *Room cooling rate* (°C/h), *Building heat loss coefficient* (1/h), *Suggested curve offset change U03* (+1 / 0 / −1 K) and the deviation it is based on | room slope over at least 30 min of one Zone 1 heat-request state; loss = cooling rate ÷ (room − outdoor) when the gap is > 5 K; the hint is the mean room deviation of the last 3-5 winter days in the Comfort / Manual phase (Eco ignored) – nothing is written to the boiler |
+| DHW | *DHW cycles today*, *Mean DHW cycle today*, *Hot water used today (est.)*, *DHW heat used today (est.)*, *Cylinder standing loss*, *Cylinder minimum today* | drops of the cylinder (≥ 0.3 K) outside DHW heating minus the standing loss, × *DHW cylinder volume*; litres = volume × drop ÷ (cylinder − 10 °C); standing loss from 01:00-05:00 without heating |
+| Energy split | *Heat pump electricity / heat CH* and *DHW today*, *COP CH today*, *COP DHW today*, *Heat from gas today*, *Boiler share of heat today*, *Energy cost today* | outdoor unit power and heat output split by TT D99 (DHW incl. its run-out); heat on defrost taken off CH; gas from the T-/T+ gas estimate × 10.6 kWh/m³; cost with the hub prices |
+| Weather and links | *Outdoor minimum / maximum today*, *Outdoor mean 24 h*, *Degree days today / this month* (base `hub_an_dd_base`, 18 °C), *Heating hours per degree day*, *CH electricity per degree day*, *DD / TT / FF bus availability today*, *Link breaks today* | availability = share of the time with fresh data: D+/D- any frame < 30 s, T-/T+ D99 answer < 90 s, F1/F2 outdoor power value < 180 s; a bus is counted from its first frame after the start |
+| Defrost | *Defrosts today*, *Mean defrost today*, *Last defrost*, *Defrost share of compressor time today* | F1/F2 defrost flag |
+| Hybrid | *Boiler CH joins today*, *Heat pump and boiler together today*, *Boiler only today*, *Outdoor at the last boiler join*, *Bivalent point (learned)* | a join = the boiler starts for CH (T-/T+ gas mode 1); the bivalent point is the running mean (20 % weight) of the outdoor temperature at the joins – compare it with I10 |
+| Alarm | *Freeze risk* | room below `hub_an_freeze_room` (8 °C) or the cylinder below 5 °C |
 
 ---
 

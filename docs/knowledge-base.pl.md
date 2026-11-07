@@ -141,7 +141,7 @@ examples/immergas-hub.yaml
 ├── urządzenie           esp32-s3, logger (USB), api, ota, wifi, web_server
 ├── external_components  immergas_core, immergas_climate, f1f2_nasa   (components/ tego repo)
 └── packages             (packages/ tego repo)
-    ├── lang             hub_xx, dd_xx, tt_xx, f1f2_xx
+    ├── lang             hub_xx, dd_xx, tt_xx, f1f2_xx, hub_analytics_xx
     ├── D+/D-            dd_core, dd_engine, dd_zone1, dd_zones23, dd_dhw, dd_dominus, dd_schedules,
     │                    dd_heat_pump, dd_boiler_info, dd_diagnostics
     ├── T-/T+            tt_core, tt_status, tt_circuit, tt_heat_pump, tt_dhw, tt_heating, tt_integration,
@@ -149,6 +149,7 @@ examples/immergas-hub.yaml
     ├── F1/F2            f1f2_core, f1f2_indoor, f1f2_outdoor, f1f2_info, f1f2_computed, f1f2_diagnostics,
     │                    f1f2_control, f1f2_outing_targets                        (f1f2_fsv, f1f2_ehs_extra opcjonalnie)
     └── hub              hub_diagnostics, hub_combined, hub_boiler_params, hw_atoms3_portabc
+                         (hub_analytics, hub_busmap opcjonalnie)
 ```
 
 - Każda magistrala ma własny **prefiks** w nazwach plików, id i podstawieniach (`dd_`, `tt_`, `f1f2_`, `hub_`), więc
@@ -260,6 +261,24 @@ Ustawienia, których nie ma na żadnej magistrali; ustaw je raz tak samo jak w m
 *Starty palnika dziś*, *Czas pracy palnika dziś*, *Gaz dziś* (Magis Combo, zerowane o północy), obok liczników
 sprężarki; *Błąd aktywny (wszystkie magistrale)* i *Aktywny błąd (opis)*: kod błędu pieca z D+/D- albo T-/T+ (obie
 czytają 2100) i błąd jednostki zewnętrznej z F1/F2 w jednym miejscu.
+
+### Analiza dnia (pakiet `hub_analytics`, opcjonalny)
+
+Liczona w hubie co 10 s z trzech magistral, zerowana o północy (czas z Home Assistanta); wartości dnia przetrwają
+restart. Wymaga `hub_combined`; nazwy w `lang/hub_analytics_xx` (en, pl). Pokazuje je karta *Dziś · analiza pracy*
+(strategia: pod obiegiem chłodniczym).
+
+| Grupa | Encje | Jak |
+|---|---|---|
+| Komfort Strefy 1 | *Czas w komforcie dziś*, *Za zimno / Za ciepło dziś*, *Pokój minimum / maksimum dziś*, *Średnia odchyłka pokoju dziś* | temperatura Strefy 1 wobec zadanej, pasmo `hub_an_comfort_band` (±0,5 K) |
+| Taktowanie | *Starty sprężarki w ostatniej godzinie*, *Średni / Ostatni cykl sprężarki*, *Ostatnia przerwa sprężarki*, *Krótkie cykle sprężarki dziś* (< `hub_an_short_cycle_min`, 10 min), *Starty sprężarki CO / CWU dziś*, *Krótkie palenia kotła dziś* (< 5 min), *Ostatnie palenie kotła* | sprężarka = PC D71 > 0 Hz (D+/D-); praca, która dotknie CWU (TT D99 61/62/64, 44/45), liczy się jako start CWU |
+| Budynek | *Tempo nagrzewania / stygnięcia pokoju* (°C/h), *Współczynnik strat budynku* (1/h), *Sugerowana zmiana offsetu krzywej U03* (+1 / 0 / −1 K) i odchyłka, z której wynika | nachylenie temperatury pokoju z co najmniej 30 min jednego stanu żądania grzania Strefy 1; straty = tempo stygnięcia ÷ (pokój − zewnątrz) przy różnicy > 5 K; podpowiedź = średnia odchyłka pokoju z ostatnich 3-5 zimowych dni w fazie Komfort / Manual (Eko pomijane) – nic nie jest zapisywane do kotła |
+| CWU | *Cykle CWU dziś*, *Średni cykl CWU dziś*, *Ciepła woda zużyta dziś (szac.)*, *Ciepło CWU zużyte dziś (szac.)*, *Straty postojowe zasobnika*, *Zasobnik minimum dziś* | spadki zasobnika (≥ 0,3 K) poza grzaniem CWU minus straty postojowe, × *Pojemność zasobnika CWU*; litry = pojemność × spadek ÷ (zasobnik − 10 °C); straty postojowe z 01:00-05:00 bez grzania |
+| Podział energii | *Prąd / Ciepło pompy na CO* i *na CWU dziś*, *COP CO dziś*, *COP CWU dziś*, *Ciepło z gazu dziś*, *Udział kotła w cieple dziś*, *Koszt energii dziś* | moc jednostki zewnętrznej i moc cieplna dzielone wg TT D99 (CWU razem z dobiegiem); ciepło na odszranianie odjęte od CO; gaz z szacunku T-/T+ × 10,6 kWh/m³; koszt z cen huba |
+| Pogoda i łączność | *Zewnętrzna minimum / maksimum dziś*, *Średnia zewnętrzna 24 h*, *Stopniodni dziś / w miesiącu* (baza `hub_an_dd_base`, 18 °C), *Godziny grzania na stopniodzień*, *Prąd CO na stopniodzień*, *Dostępność magistrali DD / TT / FF dziś*, *Przerwy w łączności dziś* | dostępność = udział czasu ze świeżymi danymi: D+/D- dowolna ramka < 30 s, T-/T+ odpowiedź D99 < 90 s, F1/F2 wartość poboru mocy < 180 s; magistrala liczy się od pierwszej ramki po starcie |
+| Odszranianie | *Odszraniania dziś*, *Średnie odszranianie dziś*, *Ostatnie odszranianie*, *Udział odszraniania w pracy sprężarki dziś* | flaga odszraniania z F1/F2 |
+| Hybryda | *Dołączenia kotła do CO dziś*, *Pompa i kocioł razem dziś*, *Tylko kocioł dziś*, *Zewnętrzna przy ostatnim dołączeniu kotła*, *Punkt biwalentny (wyuczony)* | dołączenie = start kotła na CO (tryb gazu T-/T+ 1); punkt biwalentny to średnia krocząca (waga 20 %) temperatury zewnętrznej przy dołączeniach – porównaj z I10 |
+| Alarm | *Ryzyko zamarznięcia* | pokój poniżej `hub_an_freeze_room` (8 °C) albo zasobnik poniżej 5 °C |
 
 ---
 
