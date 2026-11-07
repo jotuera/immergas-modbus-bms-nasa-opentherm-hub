@@ -41,7 +41,7 @@ OpenTherm unit; the hub uses the **DIYLess** shields (or another OpenTherm adapt
 | [DIYLess Master OpenTherm Shield](https://diyless.com/product/master-opentherm-shield) – talks to the **boiler** | ✔ | ✔ |
 | [DIYLess Slave OpenTherm Shield](https://diyless.com/product/slave-opentherm-shield) – talks to the **room unit** | – | ✔ |
 | [M5Stack ATOMIC PortABC](https://shop.m5stack.com/products/atomic-portabc-extension-base) – Grove ports A / B / C | – | ✔ |
-| [M5Stack Grove → Dupont cable](https://shop.m5stack.com/products/grove2dupont-conversion-cable-20cm-5pairs) (e.g. [Botland](https://botland.com.pl/przewody-polaczeniowe-grove/21690-grove-zestaw-5-przewodow-4-pin-2mm-przewody-zenskiemeskie-254mm-20cm-6972934173751.html), 5 male + 5 female) – **male** ends into the shield's female header (rev 1.0 has female sockets on top, no pins below) | 1 | 2 |
+| [M5Stack Grove → Dupont cable](https://shop.m5stack.com/products/grove2dupont-conversion-cable-20cm-5pairs) (e.g. [Botland](https://botland.com.pl/przewody-polaczeniowe-grove/21690-grove-zestaw-5-przewodow-4-pin-2mm-przewody-zenskiemeskie-254mm-20cm-6972934173751.html), 5 male + 5 female) – the end depends on the shield: the Master shield ordered **soldered** has female sockets on top → **male** ends; a **bare** shield gets the headers you solder yourself – male pins → **female** ends, female sockets → male ends. The Slave shield has no such option – check which headers yours has | 1 | 2 |
 | 2-wire cable to the boiler, a small plastic box | ✔ | ✔ |
 
 How it goes together:

@@ -42,7 +42,7 @@ nie robi modułu OpenTherm; hub korzysta z płytek **DIYLess** (albo innego adap
 | [DIYLess Master OpenTherm Shield](https://diyless.com/product/master-opentherm-shield) – rozmawia z **kotłem** | ✔ | ✔ |
 | [DIYLess Slave OpenTherm Shield](https://diyless.com/product/slave-opentherm-shield) – rozmawia z **pilotem** | – | ✔ |
 | [M5Stack ATOMIC PortABC](https://shop.m5stack.com/products/atomic-portabc-extension-base) – porty Grove A / B / C | – | ✔ |
-| [kabel M5Stack Grove → Dupont](https://botland.com.pl/przewody-polaczeniowe-grove/21690-grove-zestaw-5-przewodow-4-pin-2mm-przewody-zenskiemeskie-254mm-20cm-6972934173751.html) (zestaw z Botlandu: 5 męskich + 5 żeńskich) – końcówki **męskie** do gniazd płytki (rev 1.0 ma od góry gniazda żeńskie, od spodu brak pinów) | 1 | 2 |
+| [kabel M5Stack Grove → Dupont](https://botland.com.pl/przewody-polaczeniowe-grove/21690-grove-zestaw-5-przewodow-4-pin-2mm-przewody-zenskiemeskie-254mm-20cm-6972934173751.html) (zestaw z Botlandu: 5 męskich + 5 żeńskich) – końcówki zależą od płytki: płytka Master zamówiona jako **soldered** (z przylutowanymi gniazdami) ma od góry gniazda żeńskie → końcówki **męskie**; płytka **goła** dostaje złącza, które lutujesz sam – piny męskie → końcówki **żeńskie**, gniazda żeńskie → końcówki męskie. Płytka Slave nie ma takiej opcji – sprawdź, jakie złącza ma Twoja | 1 | 2 |
 | przewód 2-żyłowy do kotła, mała obudowa | ✔ | ✔ |
 
 Jak to się składa:
