@@ -6,9 +6,9 @@
 #   GATEWAY: an ATOMIC PortABC instead: port A = Master shield (white G39 = in, yellow G38 = out), port C = Slave shield
 #            (white G6 = in, yellow G5 = out) -> the room unit, which stays and is relayed (uncomment ot_gateway and the
 #            pins below). Port B (G8 / G7) stays free for RS485.
-# Power of the shields in both cases from a Grove cable in the Grove AtomS3 socket (next to USB-C): black GND, white
-# G1 = 3.3 V (ot_3v3_supply, the shields run on their 3V3 pin), red 5 V only to the Slave shield. The ToUnit Base /
-# PortABC carry only the white and yellow signal wires.
+# The shields run on 3.3 V (their 3V3 pin): in both cases only the white G1 wire of a Grove cable in the Grove AtomS3
+# socket (next to USB-C) = 3.3 V (ot_3v3_supply). GND and the signals come from the ToUnit Base / PortABC, the Slave's
+# 5 V from port C.
 # Experimental: written from the OpenTherm specification and the Immergas findings of the Dominus integration, not
 # tested on a boiler yet.
 # Copy to your ESPHome folder, set the secrets and flash. Loaded packages come straight from GitHub (pin `ref`).
