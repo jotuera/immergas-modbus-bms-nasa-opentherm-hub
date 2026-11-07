@@ -57,6 +57,8 @@ packages:
       - packages/mt_programs.yaml       # optional: CH / DHW programs, vacation, summer / winter (needs mt_stats)
       - packages/mt_unit_params.yaml    # optional: service reminder (needs mt_stats)
       - packages/mt_costs.yaml          # optional: electricity price, heat pump heat cost, last DHW cycle (cards)
+      - packages/mt_computed.yaml       # optional: delta T, lift, superheat / subcooling, operating state
+      - packages/mt_analytics.yaml      # optional: short cycling, defrost, heating / DHW split, heaters (needs mt_stats)
       - packages/mt_busmap.yaml         # optional: register scanner for the bus map card
       - packages/mt_control.yaml
       - packages/mt_params.yaml         # optional: installer parameters, read only

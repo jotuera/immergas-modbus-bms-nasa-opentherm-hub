@@ -61,7 +61,7 @@ abstract class GridCard extends HubCard {
 
 class ImmergasWaterCard extends GridCard {
   protected extra(): [string, string, string, string, string][] {
-    if (!this.mtx) return [];
+    if (!this.mtx || this.eid("mt_delta_t")) return [];
     const d = this.n("tw2") - this.n("tw1");
     return [["mdi:delta", "Delta T (TW_O − TW_I)", "Delta T (TW_O − TW_I)", isNaN(d) ? "–" : this.f(d, 1, 1) + " K", isNaN(d) ? "overlay2" : d < 0 ? "sky" : d > 8 ? "peach" : "green"]];
   }
@@ -82,6 +82,12 @@ class ImmergasWaterCard extends GridCard {
       ["mt_ct2", "mdi:target-variant", "Z krzywej strefa 2", "Curve target zone 2"],
       ["mt_wset", "mdi:thermometer-water", "Nastawa wody strefa 1", "Water setpoint zone 1"],
       ["tank", "mdi:water-boiler", "Zasobnik CWU (T5)", "DHW tank (T5)"],
+      ["mt_delta_t", "mdi:delta", "Delta T wody", "Water delta T"],
+      ["mt_lift", "mdi:arrow-expand-vertical", "Lift termiczny", "Thermal lift"],
+      ["mt_mean_loop", "mdi:approximately-equal", "Średnia obiegu", "Mean loop"],
+      ["mt_heat_flow_calc", "mdi:calculator-variant-outline", "Moc z przepływu", "Heat from the flow", 2],
+      ["mt_curve_dev", "mdi:chart-bell-curve-cumulative", "Odchyłka od krzywej", "Curve deviation"],
+      ["mt_buffer_strat", "mdi:storage-tank", "Rozwarstwienie bufora", "Buffer stratification"],
     ];
     return [
       ["tw2", "mdi:thermometer-chevron-up", "Zasilanie PC (TW2)", "HP flow (TW2)"],
@@ -124,6 +130,13 @@ class ImmergasRefrigerantCard extends GridCard {
       ["mt_cap", "mdi:flash", "Moc jednostki", "Unit capacity", 1],
       ["elec_power", "mdi:flash-outline", "Pobór mocy", "Electric power", 2],
       ["mt_hours", "mdi:timer-outline", "Godziny sprężarki", "Compressor hours", 0],
+      ["mt_t_cond", "mdi:thermometer-high", "Skraplanie (z ciśnienia)", "Condensing (from pressure)"],
+      ["mt_t_evap", "mdi:thermometer-low", "Parowanie (z ciśnienia)", "Evaporating (from pressure)"],
+      ["mt_superheat", "mdi:thermometer-plus", "Przegrzanie ssania", "Suction superheat"],
+      ["mt_subcool", "mdi:thermometer-minus", "Dochłodzenie", "Subcooling"],
+      ["mt_dsh", "mdi:fire-circle", "Przegrzanie tłoczenia", "Discharge superheat"],
+      ["mt_comp_ratio", "mdi:arrow-collapse-vertical", "Stopień sprężania", "Compression ratio", 2],
+      ["mt_odu_power_ui", "mdi:flash-outline", "Moc z U × I", "Power from U × I", 2],
     ];
     return [
       ["hz", "mdi:sine-wave", "Częstotliwość (D71)", "Frequency (D71)", 0],
@@ -154,6 +167,12 @@ class ImmergasRefrigerantCard extends GridCard {
   }
   protected colOf(k: Key): string {
     if (k === "hz" || k === "ff_hz_target" || k === "ff_hz_order") return this.n(k) > 0 ? "peach" : "overlay2";
+    const v = this.n(k);
+    // typical ranges: suction superheat 2-10 K, subcooling 2-8 K, discharge superheat 15-40 K
+    if (k === "mt_superheat") return isNaN(v) ? "overlay2" : v < 1 || v > 15 ? "red" : v < 2 || v > 10 ? "yellow" : "green";
+    if (k === "mt_subcool") return isNaN(v) ? "overlay2" : v < 1 || v > 12 ? "red" : v < 2 || v > 8 ? "yellow" : "green";
+    if (k === "mt_dsh") return isNaN(v) ? "overlay2" : v < 10 || v > 50 ? "red" : v < 15 || v > 40 ? "yellow" : "green";
+    if (k === "mt_comp_ratio") return isNaN(v) ? "overlay2" : v > 8 ? "red" : v > 6 ? "yellow" : "teal";
     return super.colOf(k);
   }
   protected flags() { return this.mtx ? MT_FLAGS : FLAGS; }
@@ -175,10 +194,55 @@ const FLAGS: [Key, string, string][] = [
 
 class ImmergasStatesCard extends GridCard {
   protected heading(): [string, string, string] { return ["mdi:list-status", "Stan urządzeń", "Device states"]; }
-  protected rows(): Row[] { return []; }
+  protected rows(): Row[] { return this.mtx && this.eid("mt_op_state") ? [["mt_op_state", "mdi:state-machine", "Stan pracy", "Operating state"]] : []; }
+  protected colOf(k: Key): string { return k === "mt_op_state" ? (/błąd|fault|evu/i.test(this.s(k) ?? "") ? "red" : /odszr|defrost/i.test(this.s(k) ?? "") ? "sky" : "teal") : super.colOf(k); }
   protected flags() { return this.mtx ? MT_FLAGS : FLAGS; }
 }
 
+const copCol = (v: number) => isNaN(v) || v <= 0 ? "overlay2" : v < 2 ? "red" : v < 2.7 ? "peach" : v < 3.5 ? "yellow" : "green";
+
+/** MAGIS M (mt_analytics): today's short cycling, defrosts, heating / DHW split with their COPs, heaters */
+class ImmergasDayCard extends GridCard {
+  protected heading(): [string, string, string] { return ["mdi:calendar-today", "Dziś · analiza pracy", "Today · operation analysis"]; }
+  protected wide = true;
+  protected rows(): Row[] {
+    return [
+      ["mt_cop_ch_today", "mdi:radiator", "COP grzanie dziś", "COP heating today", 2],
+      ["mt_cop_dhw_today", "mdi:water-boiler", "COP CWU dziś", "COP DHW today", 2],
+      ["mt_cop_system_today", "mdi:home-lightning-bolt-outline", "COP systemu (z grzałkami)", "System COP (with heaters)", 2],
+      ["mt_cop_total", "mdi:gauge-full", "COP od początku", "COP since installation", 2],
+      ["mt_ch_hours", "mdi:radiator", "Grzanie – sprężarka", "Heating – compressor", 1],
+      ["mt_dhw_hours", "mdi:water-boiler", "CWU – sprężarka", "DHW – compressor", 1],
+      ["mt_ch_elec", "mdi:flash", "Prąd grzanie", "Heating electricity", 2],
+      ["mt_dhw_elec_today", "mdi:flash", "Prąd CWU", "DHW electricity", 2],
+      ["mt_ch_heat", "mdi:fire", "Ciepło grzanie", "Heating heat", 2],
+      ["mt_dhw_heat_today", "mdi:fire", "Ciepło CWU", "DHW heat", 2],
+      ["mt_cycle_avg", "mdi:timer-sync-outline", "Średni cykl sprężarki", "Average compressor cycle", 0],
+      ["mt_short_cycles", "mdi:timer-alert-outline", "Krótkie cykle", "Short cycles", 0],
+      ["mt_cycle_last", "mdi:timer-outline", "Ostatni cykl", "Last cycle", 0],
+      ["mt_defrosts_today", "mdi:snowflake-melt", "Odszraniania", "Defrosts", 0],
+      ["mt_defrost_last", "mdi:timer-snowflake", "Ostatnie odszranianie", "Last defrost", 1],
+      ["mt_since_defrost", "mdi:clock-outline", "Od odszraniania", "Since the defrost", 0],
+      ["mt_ibh_hours", "mdi:heating-coil", "Grzałka IBH", "IBH heater", 2],
+      ["mt_tbh_hours", "mdi:heating-coil", "Grzałka TBH", "TBH heater", 2],
+      ["mt_heater_elec", "mdi:flash-alert", "Prąd grzałek (szac.)", "Heater electricity (est.)", 2],
+    ];
+  }
+  protected colOf(k: Key): string {
+    const v = this.n(k);
+    if (/^mt_cop_/.test(k)) return copCol(v);
+    if (k === "mt_short_cycles") return isNaN(v) ? "overlay2" : v > 6 ? "red" : v > 2 ? "yellow" : "green";
+    if (k === "mt_cycle_avg") return isNaN(v) ? "overlay2" : v < 10 ? "red" : v < 20 ? "yellow" : "green";
+    if (k === "mt_ibh_hours" || k === "mt_tbh_hours" || k === "mt_heater_elec") return v > 0 ? "peach" : "overlay2";
+    if (/defrost/.test(k)) return "sky";
+    if (/_heat/.test(k)) return "peach";
+    if (/_elec/.test(k)) return "yellow";
+    return "teal";
+  }
+}
+
+register("immergas-day-card", ImmergasDayCard, "Immergas – Dziś · analiza pracy / Today · operation analysis",
+  "MAGIS M: COP grzania / CWU / systemu dziś, czasy i energia grzania i CWU, taktowanie, odszraniania, grzałki");
 register("immergas-water-card", ImmergasWaterCard, "Immergas – Obieg wodny / Water circuit",
   "Temperatury zasilania i powrotu pompy i kotła, przepływ, delta T, zawór 3-drożny");
 register("immergas-states-card", ImmergasStatesCard, "Immergas – Stan urządzeń / Device states",

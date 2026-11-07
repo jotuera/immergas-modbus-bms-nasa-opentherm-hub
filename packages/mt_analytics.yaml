@@ -1,0 +1,126 @@
+# Immergas MAGIS M (Midea M-Thermal) Modbus - package "mt_analytics" (optional, with mt_stats and mt_energy)
+# Counted in the hub every 10 s, reset at midnight with mt_stats (the day's values survive a restart):
+#   short cycling - average compressor cycle today, short cycles (< 10 min) today, the last cycle;
+#   defrost - defrosts today, the last defrost duration, minutes since the last defrost;
+#   heating / DHW split - compressor time, electricity and heat today for heating (and cooling) and for DHW by the
+#     running mode, COP heating today and COP DHW today; COP since installation from the unit's counters;
+#   electric heaters - IBH1 / IBH2 / TBH runtime today and their estimated electricity (the rated power below; the unit
+#     does not meter them), the system COP today including the heaters (an estimate).
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+substitutions:
+  # rated power of the electric heaters (rating plate / installer menu), kW
+  mt_ibh1_kw: "3.0"
+  mt_ibh2_kw: "3.0"
+  mt_tbh_kw: "3.0"
+  # a compressor cycle shorter than this counts as a short cycle, minutes
+  mt_short_cycle_min: "10"
+
+globals:
+  - { id: mt_an_doy, type: int, restore_value: true, initial_value: "-1" }
+  - { id: mt_an_short, type: int, restore_value: true, initial_value: "0" }
+  - { id: mt_an_def, type: int, restore_value: true, initial_value: "0" }
+  - { id: mt_an_def_last, type: float, restore_value: true, initial_value: "NAN" }    # minutes
+  - { id: mt_an_cyc_last, type: float, restore_value: true, initial_value: "NAN" }    # minutes
+  - { id: mt_an_t_ch, type: float, restore_value: true, initial_value: "0" }          # compressor seconds
+  - { id: mt_an_t_dhw, type: float, restore_value: true, initial_value: "0" }
+  - { id: mt_an_e_ch, type: float, restore_value: true, initial_value: "0" }          # kWh
+  - { id: mt_an_e_dhw, type: float, restore_value: true, initial_value: "0" }
+  - { id: mt_an_q_ch, type: float, restore_value: true, initial_value: "0" }
+  - { id: mt_an_q_dhw, type: float, restore_value: true, initial_value: "0" }
+  - { id: mt_an_ibh1_s, type: float, restore_value: true, initial_value: "0" }
+  - { id: mt_an_ibh2_s, type: float, restore_value: true, initial_value: "0" }
+  - { id: mt_an_tbh_s, type: float, restore_value: true, initial_value: "0" }
+  - { id: mt_an_comp_was, type: bool, initial_value: "false" }
+  - { id: mt_an_comp_ms, type: uint32_t, initial_value: "0" }
+  - { id: mt_an_def_was, type: bool, initial_value: "false" }
+  - { id: mt_an_def_ms, type: uint32_t, initial_value: "0" }
+  - { id: mt_an_def_end, type: uint32_t, initial_value: "0" }   # 0 = no defrost since the start
+
+interval:
+  - interval: 10s
+    then:
+      - lambda: |-
+          uint32_t now = millis();
+          float hz = id(mt_compressor_freq).state;
+          bool comp = !std::isnan(hz) && hz > 0;
+          // compressor cycles
+          if (comp && !id(mt_an_comp_was)) id(mt_an_comp_ms) = now;
+          if (!comp && id(mt_an_comp_was) && id(mt_an_comp_ms) != 0) {
+            float len = (now - id(mt_an_comp_ms)) / 60000.0f;
+            id(mt_an_cyc_last) = len;
+            if (len < ${mt_short_cycle_min}) id(mt_an_short)++;
+          }
+          id(mt_an_comp_was) = comp;
+          // defrost
+          bool def = id(mt_defrost).state;
+          if (def && !id(mt_an_def_was)) { id(mt_an_def)++; id(mt_an_def_ms) = now; }
+          if (!def && id(mt_an_def_was)) { id(mt_an_def_last) = (now - id(mt_an_def_ms)) / 60000.0f; id(mt_an_def_end) = now; }
+          id(mt_an_def_was) = def;
+          // heating / DHW split by the running mode (5 = DHW, 2 / 3 = cooling / heating)
+          int m = std::isnan(id(mt_run_mode_raw).state) ? -1 : (int) id(mt_run_mode_raw).state;
+          float p = id(mt_electric_power).state, q = id(mt_heat_output).state;
+          float de = std::isnan(p) || p < 0 ? 0 : p * 10.0f / 3600.0f, dq = std::isnan(q) || q < 0 || !comp ? 0 : q * 10.0f / 3600.0f;
+          if (m == 5) { if (comp) id(mt_an_t_dhw) += 10; id(mt_an_e_dhw) += de; id(mt_an_q_dhw) += dq; }
+          else if (m == 2 || m == 3) { if (comp) id(mt_an_t_ch) += 10; id(mt_an_e_ch) += de; id(mt_an_q_ch) += dq; }
+          // electric heaters
+          if (id(mt_ibh1).state) id(mt_an_ibh1_s) += 10;
+          if (id(mt_ibh2).state) id(mt_an_ibh2_s) += 10;
+          if (id(mt_tbh).state) id(mt_an_tbh_s) += 10;
+  - interval: 60s
+    then:
+      - lambda: |-
+          auto now = id(mt_time).now();
+          if (now.is_valid() && id(mt_an_doy) != now.day_of_year) {
+            id(mt_an_doy) = now.day_of_year;
+            id(mt_an_short) = 0; id(mt_an_def) = 0;
+            id(mt_an_t_ch) = 0; id(mt_an_t_dhw) = 0; id(mt_an_e_ch) = 0; id(mt_an_e_dhw) = 0; id(mt_an_q_ch) = 0; id(mt_an_q_dhw) = 0;
+            id(mt_an_ibh1_s) = 0; id(mt_an_ibh2_s) = 0; id(mt_an_tbh_s) = 0;
+          }
+          int starts = id(mt_day_starts);
+          float run_min = id(mt_day_run_s) / 60.0f;
+          id(mt_cycle_avg).publish_state(starts > 0 ? run_min / starts : NAN);
+          id(mt_short_cycles).publish_state(id(mt_an_short));
+          id(mt_cycle_last).publish_state(id(mt_an_cyc_last));
+          id(mt_defrosts_today).publish_state(id(mt_an_def));
+          id(mt_defrost_last).publish_state(id(mt_an_def_last));
+          id(mt_since_defrost).publish_state(id(mt_an_def_end) ? (millis() - id(mt_an_def_end)) / 60000.0f : NAN);
+          id(mt_ch_hours).publish_state(id(mt_an_t_ch) / 3600.0f);
+          id(mt_dhw_hours).publish_state(id(mt_an_t_dhw) / 3600.0f);
+          id(mt_ch_elec).publish_state(id(mt_an_e_ch));
+          id(mt_dhw_elec_today).publish_state(id(mt_an_e_dhw));
+          id(mt_ch_heat).publish_state(id(mt_an_q_ch));
+          id(mt_dhw_heat_today).publish_state(id(mt_an_q_dhw));
+          id(mt_cop_ch_today).publish_state(id(mt_an_e_ch) > 0.05f ? id(mt_an_q_ch) / id(mt_an_e_ch) : NAN);
+          id(mt_cop_dhw_today).publish_state(id(mt_an_e_dhw) > 0.05f ? id(mt_an_q_dhw) / id(mt_an_e_dhw) : NAN);
+          float h = id(mt_energy_heat).state, e = id(mt_energy_electric).state;
+          id(mt_cop_total).publish_state(!std::isnan(h) && !std::isnan(e) && e > 1 ? h / e : NAN);
+          id(mt_ibh_hours).publish_state((id(mt_an_ibh1_s) + id(mt_an_ibh2_s)) / 3600.0f);
+          id(mt_tbh_hours).publish_state(id(mt_an_tbh_s) / 3600.0f);
+          float hk = (id(mt_an_ibh1_s) * ${mt_ibh1_kw} + id(mt_an_ibh2_s) * ${mt_ibh2_kw} + id(mt_an_tbh_s) * ${mt_tbh_kw}) / 3600.0f;
+          id(mt_heater_elec).publish_state(hk);
+          // system COP: the heat the unit counted plus the TBH heat (in the cylinder, not in the unit's heat counter),
+          // over the unit's electricity plus all heaters - an estimate with the rated heater power
+          float ht = id(mt_heat_today).state, et = id(mt_elec_today).state, tk = id(mt_an_tbh_s) * ${mt_tbh_kw} / 3600.0f;
+          id(mt_cop_system_today).publish_state(!std::isnan(ht) && !std::isnan(et) && et + hk > 0.05f ? (ht + tk) / (et + hk) : NAN);
+
+sensor:
+  - { platform: template, name: "${n_mt_cycle_avg}", id: mt_cycle_avg, icon: "mdi:timer-sync-outline", unit_of_measurement: "min", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_mt_short_cycles}", id: mt_short_cycles, icon: "mdi:timer-alert-outline", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_mt_cycle_last}", id: mt_cycle_last, icon: "mdi:timer-outline", unit_of_measurement: "min", accuracy_decimals: 0 }
+  - { platform: template, name: "${n_mt_defrosts_today}", id: mt_defrosts_today, icon: "mdi:snowflake-melt", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_mt_defrost_last}", id: mt_defrost_last, icon: "mdi:timer-snowflake", unit_of_measurement: "min", accuracy_decimals: 1 }
+  - { platform: template, name: "${n_mt_since_defrost}", id: mt_since_defrost, icon: "mdi:clock-outline", unit_of_measurement: "min", accuracy_decimals: 0 }
+  - { platform: template, name: "${n_mt_ch_hours}", id: mt_ch_hours, icon: "mdi:radiator", unit_of_measurement: "h", state_class: measurement, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_dhw_hours}", id: mt_dhw_hours, icon: "mdi:water-boiler", unit_of_measurement: "h", state_class: measurement, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_ch_elec}", id: mt_ch_elec, icon: "mdi:flash", unit_of_measurement: "kWh", device_class: energy, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_dhw_elec_today}", id: mt_dhw_elec_today, icon: "mdi:flash", unit_of_measurement: "kWh", device_class: energy, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_ch_heat}", id: mt_ch_heat, icon: "mdi:fire", unit_of_measurement: "kWh", device_class: energy, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_dhw_heat_today}", id: mt_dhw_heat_today, icon: "mdi:fire", unit_of_measurement: "kWh", device_class: energy, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_cop_ch_today}", id: mt_cop_ch_today, icon: "mdi:gauge", state_class: measurement, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_cop_dhw_today}", id: mt_cop_dhw_today, icon: "mdi:gauge", state_class: measurement, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_cop_total}", id: mt_cop_total, icon: "mdi:gauge-full", state_class: measurement, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_ibh_hours}", id: mt_ibh_hours, icon: "mdi:heating-coil", unit_of_measurement: "h", state_class: measurement, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_tbh_hours}", id: mt_tbh_hours, icon: "mdi:heating-coil", unit_of_measurement: "h", state_class: measurement, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_heater_elec}", id: mt_heater_elec, icon: "mdi:flash-alert", unit_of_measurement: "kWh", device_class: energy, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_cop_system_today}", id: mt_cop_system_today, icon: "mdi:gauge", state_class: measurement, accuracy_decimals: 2 }

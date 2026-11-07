@@ -1,0 +1,220 @@
+# Immergas MAGIS M (Midea M-Thermal) Modbus - package "mt_computed" (optional)
+# Values computed in the hub from the unit's own readings (no extra Modbus reads):
+#   water circuit - delta T (TW_O - TW_I), thermal lift (TW_O - T4), mean loop temperature, heat output from the flow
+#     (flow x 4.186 x delta T, a check of the unit's own heat output), deviation from the curve (T1 - curve target
+#     zone 1), buffer stratification (top - bottom);
+#   refrigerant circuit - condensing / evaporating temperature from the high / low pressure (saturation curve of the
+#     refrigerant, R32 or R290), suction superheat (Th - evaporating), subcooling (condensing - T2), discharge
+#     superheat (Tp - condensing), compression ratio, the outdoor unit's electric power from U x I;
+#   operating state - one text from the running mode and the state bits ("Heating · compressor 48 Hz", "DHW + TBH",
+#     "Defrost", "EVU block" ...).
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+substitutions:
+  # refrigerant of the outdoor unit (rating plate): R32 or R290
+  mt_refrigerant: "R32"
+  # added to the pressure registers to get absolute pressure: 0 when the unit reports absolute kPa, 101 when gauge
+  mt_pressure_offset_kpa: "0"
+
+sensor:
+  # ---------------------------------------------------------------- water circuit
+  - platform: template
+    name: "${n_mt_delta_t}"
+    id: mt_delta_t
+    icon: mdi:delta
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float o = id(mt_water_out).state, i = id(mt_water_in).state;
+      return std::isnan(o) || std::isnan(i) ? NAN : o - i;
+  - platform: template
+    name: "${n_mt_lift}"
+    id: mt_lift
+    icon: mdi:arrow-expand-vertical
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float o = id(mt_water_out).state, t4 = id(mt_outdoor_temp).state;
+      return std::isnan(o) || std::isnan(t4) ? NAN : o - t4;
+  - platform: template
+    name: "${n_mt_mean_loop}"
+    id: mt_mean_loop
+    icon: mdi:approximately-equal
+    unit_of_measurement: "°C"
+    device_class: temperature
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float o = id(mt_water_out).state, i = id(mt_water_in).state;
+      return std::isnan(o) || std::isnan(i) ? NAN : (o + i) / 2.0f;
+  - platform: template
+    name: "${n_mt_heat_flow_calc}"
+    id: mt_heat_flow_calc
+    icon: mdi:radiator
+    unit_of_measurement: "kW"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 2
+    update_interval: 30s
+    lambda: |-
+      float f = id(mt_water_flow).state, o = id(mt_water_out).state, i = id(mt_water_in).state;
+      if (std::isnan(f) || std::isnan(o) || std::isnan(i)) return NAN;
+      return f / 60.0f * 4.186f * (o - i);   // l/min -> kg/s x c_p x delta T
+  - platform: template
+    name: "${n_mt_curve_dev}"
+    id: mt_curve_dev
+    icon: mdi:chart-bell-curve-cumulative
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float t1 = id(mt_t1_total_out).state, c = id(mt_curve_target_z1).state;
+      if (std::isnan(t1) || t1 < -30) t1 = id(mt_water_out).state;
+      return std::isnan(t1) || std::isnan(c) || c <= 0 ? NAN : t1 - c;
+  - platform: template
+    name: "${n_mt_buffer_strat}"
+    id: mt_buffer_strat
+    icon: mdi:storage-tank
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 60s
+    lambda: |-
+      float t = id(mt_buffer_top).state, b = id(mt_buffer_bottom).state;
+      // no buffer sensors: the unit reports a fixed out-of-range value
+      if (std::isnan(t) || std::isnan(b) || t < -30 || b < -30 || t > 99 || b > 99) return NAN;
+      return t - b;
+  # ---------------------------------------------------------------- refrigerant circuit
+  - platform: template
+    name: "${n_mt_t_cond}"
+    id: mt_t_cond
+    icon: mdi:thermometer-high
+    unit_of_measurement: "°C"
+    device_class: temperature
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float p = id(mt_pressure_high).state + ${mt_pressure_offset_kpa};
+      return std::isnan(p) || p < 50 ? NAN : id(mt_tsat)(p);
+  - platform: template
+    name: "${n_mt_t_evap}"
+    id: mt_t_evap
+    icon: mdi:thermometer-low
+    unit_of_measurement: "°C"
+    device_class: temperature
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float p = id(mt_pressure_low).state + ${mt_pressure_offset_kpa};
+      return std::isnan(p) || p < 50 ? NAN : id(mt_tsat)(p);
+  - platform: template
+    name: "${n_mt_superheat}"
+    id: mt_superheat
+    icon: mdi:thermometer-plus
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float th = id(mt_suction_temp).state, te = id(mt_t_evap).state;
+      return !id(mt_comp_on) || std::isnan(th) || std::isnan(te) ? NAN : th - te;
+  - platform: template
+    name: "${n_mt_subcool}"
+    id: mt_subcool
+    icon: mdi:thermometer-minus
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      // heating: the plate heat exchanger condenses, T2 = the liquid leaving it
+      float tc = id(mt_t_cond).state, t2 = id(mt_t2_liquid).state;
+      return !id(mt_comp_on) || std::isnan(tc) || std::isnan(t2) ? NAN : tc - t2;
+  - platform: template
+    name: "${n_mt_dsh}"
+    id: mt_dsh
+    icon: mdi:fire-circle
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float tp = id(mt_discharge_temp).state, tc = id(mt_t_cond).state;
+      return !id(mt_comp_on) || std::isnan(tp) || std::isnan(tc) ? NAN : tp - tc;
+  - platform: template
+    name: "${n_mt_comp_ratio}"
+    id: mt_comp_ratio
+    icon: mdi:arrow-collapse-vertical
+    state_class: measurement
+    accuracy_decimals: 2
+    update_interval: 30s
+    lambda: |-
+      float ph = id(mt_pressure_high).state + ${mt_pressure_offset_kpa}, pl = id(mt_pressure_low).state + ${mt_pressure_offset_kpa};
+      return !id(mt_comp_on) || std::isnan(ph) || std::isnan(pl) || pl < 50 ? NAN : ph / pl;
+  - platform: template
+    name: "${n_mt_odu_power_ui}"
+    id: mt_odu_power_ui
+    icon: mdi:flash-outline
+    unit_of_measurement: "kW"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 2
+    update_interval: 30s
+    lambda: |-
+      float u = id(mt_odu_voltage).state, i = id(mt_odu_current).state;
+      return std::isnan(u) || std::isnan(i) ? NAN : u * i / 1000.0f;
+
+globals:
+  # saturation temperature of the refrigerant from the absolute pressure (kPa), Antoine fit (< 0.2 K, -40...60 °C)
+  - id: mt_tsat
+    type: std::function<float(float)>
+    initial_value: |-
+      [](float p) -> float {
+        const bool r290 = std::string("${mt_refrigerant}") == "R290";
+        const float A = r290 ? 14.13294f : 15.25606f, B = r290 ? 2072.641f : 2268.542f, C = r290 ? 260.0f : 265.0f;
+        return B / (A - logf(p)) - C;
+      }
+  - { id: mt_comp_on, type: bool, initial_value: "false" }
+
+interval:
+  - interval: 10s
+    then:
+      - lambda: 'id(mt_comp_on) = id(mt_compressor_freq).has_state() && id(mt_compressor_freq).state > 0;'
+
+text_sensor:
+  # ---------------------------------------------------------------- operating state
+  - platform: template
+    name: "${n_mt_op_state}"
+    id: mt_op_state
+    icon: mdi:state-machine
+    update_interval: 10s
+    lambda: |-
+      int code = std::isnan(id(mt_fault_code).state) ? 0 : (int) id(mt_fault_code).state;
+      if (code > 0) return std::string("${t_mt_st_fault} ") + to_string(code);
+      if (id(mt_evu_signal).state) return std::string("${t_mt_st_evu}");
+      if (id(mt_defrost).state) return std::string("${t_mt_st_defrost}");
+      if (id(mt_oil_return).state) return std::string("${t_mt_st_oil}");
+      if (id(mt_antifreeze).state) return std::string("${t_mt_st_antifreeze}");
+      int m = std::isnan(id(mt_run_mode_raw).state) ? -1 : (int) id(mt_run_mode_raw).state;
+      float hz = id(mt_compressor_freq).state;
+      bool comp = !std::isnan(hz) && hz > 0, ibh = id(mt_ibh1).state || id(mt_ibh2).state, tbh = id(mt_tbh).state;
+      std::string s;
+      if (m == 5) s = "${t_mt_run_dhw}";
+      else if (m == 3) s = "${t_mt_run_heat}";
+      else if (m == 2) s = "${t_mt_run_cool}";
+      else if (m == 0 && !tbh) return std::string("${t_mt_st_idle}");
+      else s = "${t_mt_run_dhw}";
+      if (comp) { char b[24]; snprintf(b, sizeof(b), " %.0f Hz", hz); s += "${t_mt_st_comp}"; s += b; }
+      else if (!ibh && !tbh) s += " · ${t_mt_st_comp_off}";
+      if (ibh) s += " + IBH";
+      if (tbh) s += " + TBH";
+      if (id(mt_sg_signal).state) s += " · SG";
+      return s;
