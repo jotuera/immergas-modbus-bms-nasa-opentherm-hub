@@ -203,9 +203,45 @@ const copCol = (v: number) => isNaN(v) || v <= 0 ? "overlay2" : v < 2 ? "red" : 
 
 /** MAGIS M (mt_analytics): today's short cycling, defrosts, heating / DHW split with their COPs, heaters */
 class ImmergasDayCard extends GridCard {
-  protected heading(): [string, string, string] { return ["mdi:calendar-today", "Dziś · analiza pracy", "Today · operation analysis"]; }
+  protected heading(): [string, string, string] {
+    return this.mtx ? ["mdi:calendar-today", "Dziś · analiza pracy", "Today · operation analysis"] : ["mdi:calendar-today", "Dziś · analiza kotła", "Today · boiler analysis"];
+  }
   protected wide = true;
+  /** OpenTherm hub (ot_computed / ot_analytics): condensing and leak warning as flags */
+  protected flags(): [Key, string, string][] {
+    return this.mtx ? [] : [["oa_condensing", "Praca kondensacyjna", "Condensing"], ["oa_leak_warning", "Możliwy wyciek", "Possible leak"]];
+  }
   protected rows(): Row[] {
+    if (!this.mtx) return [
+      ["oa_op_state", "mdi:state-machine", "Stan pracy", "Operating state"],
+      ["oa_power", "mdi:fire", "Moc palnika (szac.)", "Burner power (est.)", 1],
+      ["oa_gas_today", "mdi:meter-gas", "Gaz dziś", "Gas today", 2],
+      ["oa_gas_ch_today", "mdi:radiator", "Gaz CO", "Gas heating", 2],
+      ["oa_gas_dhw_today", "mdi:water-boiler", "Gaz CWU", "Gas DHW", 2],
+      ["oa_gas_cost_today", "mdi:cash", "Koszt gazu dziś", "Gas cost today", 2],
+      ["oa_gas_price", "mdi:tag-outline", "Cena gazu", "Gas price", 2],
+      ["oa_heat_today", "mdi:fire", "Ciepło dziś", "Heat today", 1],
+      ["oa_gas_total", "mdi:meter-gas-outline", "Licznik gazu", "Gas counter", 1],
+      ["oa_condensing_share", "mdi:water-percent", "Kondensacja dziś", "Condensing today", 0],
+      ["oa_delta_t", "mdi:delta", "Delta T", "Delta T"],
+      ["oa_mean_loop", "mdi:approximately-equal", "Średnia obiegu", "Mean loop"],
+      ["oa_setpoint_dev", "mdi:target", "Odchyłka od nastawy", "Setpoint deviation"],
+      ["oa_exh_approach", "mdi:smoke", "Spaliny − powrót", "Exhaust − return"],
+      ["oa_burn_avg", "mdi:timer-sync-outline", "Średnie palenie", "Average burn", 1],
+      ["oa_short_burns", "mdi:timer-alert-outline", "Krótkie palenia", "Short burns", 0],
+      ["oa_burn_last", "mdi:timer-outline", "Ostatnie palenie", "Last burn", 1],
+      ["oa_pause_last", "mdi:timer-pause-outline", "Ostatnia przerwa", "Last pause", 1],
+      ["oa_mod_avg", "mdi:fire-circle", "Średnia modulacja", "Average modulation", 0],
+      ["oa_minmod_share", "mdi:percent-outline", "Na min. modulacji", "At min. modulation", 0],
+      ["oa_draws_today", "mdi:water-pump", "Pobory CWU", "DHW draws", 0],
+      ["oa_draw_last", "mdi:timer-outline", "Ostatni pobór", "Last draw", 1],
+      ["oa_dhw_litres", "mdi:water", "Ciepła woda", "Hot water", 0],
+      ["oa_dhw_heat", "mdi:water-thermometer", "Ciepło CWU", "DHW heat", 2],
+      ["oa_pressure_drop", "mdi:gauge-low", "Spadek ciśnienia 24 h", "Pressure drop 24 h", 2],
+      ["oa_link_quality", "mdi:connection", "Jakość łącza OT", "OT link quality", 1],
+      ["oa_burn_per_start", "mdi:timer-fire", "Palenie na start (całość)", "Burn per start (lifetime)", 1],
+      ["oa_starts_per_hour_life", "mdi:fire-alert", "Starty / h palnika (całość)", "Starts / burner h (lifetime)", 1],
+    ];
     return [
       ["mt_cop_ch_today", "mdi:radiator", "COP grzanie dziś", "COP heating today", 2],
       ["mt_cop_dhw_today", "mdi:water-boiler", "COP CWU dziś", "COP DHW today", 2],
@@ -230,6 +266,16 @@ class ImmergasDayCard extends GridCard {
   }
   protected colOf(k: Key): string {
     const v = this.n(k);
+    if (k === "oa_op_state") return /usterka|fault|blokada|lockout/i.test(this.s(k) ?? "") ? "red" : /cwu|dhw/i.test(this.s(k) ?? "") ? "sky" : /co|ch/i.test(this.s(k) ?? "") ? "peach" : "overlay2";
+    if (k === "oa_condensing_share") return isNaN(v) ? "overlay2" : v >= 70 ? "green" : v >= 30 ? "yellow" : "red";
+    if (k === "oa_short_burns") return isNaN(v) ? "overlay2" : v > 15 ? "red" : v > 6 ? "yellow" : "green";
+    if (k === "oa_burn_avg") return isNaN(v) ? "overlay2" : v < 5 ? "red" : v < 10 ? "yellow" : "green";
+    if (k === "oa_minmod_share") return isNaN(v) ? "overlay2" : v > 70 ? "yellow" : "teal";
+    if (k === "oa_pressure_drop") return isNaN(v) ? "overlay2" : v >= 0.2 ? "red" : v >= 0.1 ? "yellow" : "green";
+    if (k === "oa_link_quality") return isNaN(v) ? "overlay2" : v < 95 ? "red" : v < 99 ? "yellow" : "green";
+    if (k === "oa_setpoint_dev") return isNaN(v) ? "overlay2" : Math.abs(v) > 5 ? "yellow" : "green";
+    if (/^oa_gas|oa_power|oa_heat/.test(k)) return "peach";
+    if (/^oa_d/.test(k)) return "sky";
     if (/^mt_cop_/.test(k)) return copCol(v);
     if (k === "mt_short_cycles") return isNaN(v) ? "overlay2" : v > 6 ? "red" : v > 2 ? "yellow" : "green";
     if (k === "mt_cycle_avg") return isNaN(v) ? "overlay2" : v < 10 ? "red" : v < 20 ? "yellow" : "green";
@@ -242,7 +288,7 @@ class ImmergasDayCard extends GridCard {
 }
 
 register("immergas-day-card", ImmergasDayCard, "Immergas – Dziś · analiza pracy / Today · operation analysis",
-  "MAGIS M: COP grzania / CWU / systemu dziś, czasy i energia grzania i CWU, taktowanie, odszraniania, grzałki");
+  "MAGIS M: COP grzania / CWU / systemu, taktowanie, odszraniania, grzałki; OpenTherm: gaz i koszt, kondensacja, taktowanie palnika, pobory CWU, ciśnienie");
 register("immergas-water-card", ImmergasWaterCard, "Immergas – Obieg wodny / Water circuit",
   "Temperatury zasilania i powrotu pompy i kotła, przepływ, delta T, zawór 3-drożny");
 register("immergas-states-card", ImmergasStatesCard, "Immergas – Stan urządzeń / Device states",

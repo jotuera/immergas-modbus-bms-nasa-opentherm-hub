@@ -1,0 +1,149 @@
+# Immergas OpenTherm - package "ot_analytics" (optional, with ot_stats and ot_computed)
+# Counted in the hub every second, reset at midnight (Home Assistant time from ot_core; the day's values survive a
+# restart):
+#   gas - gas used today (heating / DHW) and a gas counter in m³ from the burner power (an estimate: the heat from the
+#     modulation / the useful heat of 1 m³), the gas price kept in the hub and today's gas cost;
+#   condensing - the share of today's burner time with the return below the flue gas dew point;
+#   short cycling - average burn today, short burns (< 5 min), the last burn and the last pause, the average
+#     modulation while burning and the share of the burner time at the minimum modulation;
+#   DHW (combi boilers reporting the DHW flow, Data-ID 19) - draws today, the last draw, litres today and the DHW heat.
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+substitutions:
+  # useful heat from 1 m³ of gas (calorific value ~10.9 kWh/m³ x boiler efficiency ~0.97)
+  ot_gas_kwh_per_m3: "10.6"
+  # currency of the gas price and cost
+  ot_currency: "zł"
+  # a burn shorter than this counts as a short burn, minutes
+  ot_short_burn_min: "5"
+  # cold water temperature for the DHW heat, °C
+  ot_cold_water: "10"
+
+globals:
+  - { id: ot_an_doy, type: int, restore_value: true, initial_value: "-1" }
+  - { id: ot_an_q_ch, type: float, restore_value: true, initial_value: "0" }       # kWh of heat today, heating
+  - { id: ot_an_q_dhw, type: float, restore_value: true, initial_value: "0" }      # kWh of heat today, DHW
+  - { id: ot_an_gas_total, type: float, restore_value: true, initial_value: "0" }  # m³ since the counter start
+  - { id: ot_an_cond_s, type: float, restore_value: true, initial_value: "0" }
+  - { id: ot_an_burn_s, type: float, restore_value: true, initial_value: "0" }
+  - { id: ot_an_minmod_s, type: float, restore_value: true, initial_value: "0" }
+  - { id: ot_an_mod_sum, type: float, restore_value: true, initial_value: "0" }
+  - { id: ot_an_short, type: int, restore_value: true, initial_value: "0" }
+  - { id: ot_an_burn_last, type: float, restore_value: true, initial_value: "NAN" }  # minutes
+  - { id: ot_an_pause_last, type: float, restore_value: true, initial_value: "NAN" }
+  - { id: ot_an_draws, type: int, restore_value: true, initial_value: "0" }
+  - { id: ot_an_draw_last, type: float, restore_value: true, initial_value: "NAN" }  # minutes
+  - { id: ot_an_litres, type: float, restore_value: true, initial_value: "0" }
+  - { id: ot_an_q_draw, type: float, restore_value: true, initial_value: "0" }     # kWh of DHW heat from the flow
+  - { id: ot_an_fl_was, type: bool, initial_value: "false" }
+  - { id: ot_an_fl_on_ms, type: uint32_t, initial_value: "0" }
+  - { id: ot_an_fl_off_ms, type: uint32_t, initial_value: "0" }
+  - { id: ot_an_draw_was, type: bool, initial_value: "false" }
+  - { id: ot_an_draw_ms, type: uint32_t, initial_value: "0" }
+
+interval:
+  - interval: 1s
+    then:
+      - lambda: |-
+          uint32_t now = millis();
+          bool fl = id(ot_flame).state;
+          // burns and pauses
+          if (fl && !id(ot_an_fl_was)) {
+            if (id(ot_an_fl_off_ms)) id(ot_an_pause_last) = (now - id(ot_an_fl_off_ms)) / 60000.0f;
+            id(ot_an_fl_on_ms) = now;
+          }
+          if (!fl && id(ot_an_fl_was) && id(ot_an_fl_on_ms)) {
+            float len = (now - id(ot_an_fl_on_ms)) / 60000.0f;
+            id(ot_an_burn_last) = len;
+            if (len < ${ot_short_burn_min}) id(ot_an_short)++;
+            id(ot_an_fl_off_ms) = now;
+          }
+          id(ot_an_fl_was) = fl;
+          // heat / gas from the burner power, split by DHW / heating
+          float p = id(ot_power).state;
+          if (fl && !std::isnan(p) && p > 0) {
+            float q = p / 3600.0f;
+            if (id(ot_dhw_active).state) id(ot_an_q_dhw) += q; else id(ot_an_q_ch) += q;
+            id(ot_an_gas_total) += q / ${ot_gas_kwh_per_m3};
+          }
+          if (fl) {
+            id(ot_an_burn_s) += 1;
+            float m = id(ot_modulation).state, r = id(ot_return_temp).state;
+            if (!std::isnan(m)) { id(ot_an_mod_sum) += m; if (m <= 2.0f) id(ot_an_minmod_s) += 1; }
+            if (!std::isnan(r) && r < ${ot_dew_point}) id(ot_an_cond_s) += 1;
+          }
+          // DHW draws: the DHW flow above 1 l/min
+          float w = id(ot_dhw_flow).state;
+          bool draw = !std::isnan(w) && w > 1.0f;
+          if (draw && !id(ot_an_draw_was)) { id(ot_an_draws)++; id(ot_an_draw_ms) = now; }
+          if (!draw && id(ot_an_draw_was) && id(ot_an_draw_ms)) id(ot_an_draw_last) = (now - id(ot_an_draw_ms)) / 60000.0f;
+          id(ot_an_draw_was) = draw;
+          if (draw) {
+            id(ot_an_litres) += w / 60.0f;
+            float t = id(ot_dhw_temp).state;
+            if (!std::isnan(t) && t > ${ot_cold_water}) id(ot_an_q_draw) += w / 60.0f * 4.186f * (t - ${ot_cold_water}) / 3600.0f;
+          }
+  - interval: 30s
+    then:
+      - lambda: |-
+          auto now = id(ot_time).now();
+          if (now.is_valid() && id(ot_an_doy) != now.day_of_year) {
+            id(ot_an_doy) = now.day_of_year;
+            id(ot_an_q_ch) = 0; id(ot_an_q_dhw) = 0; id(ot_an_cond_s) = 0; id(ot_an_burn_s) = 0; id(ot_an_minmod_s) = 0; id(ot_an_mod_sum) = 0;
+            id(ot_an_short) = 0; id(ot_an_draws) = 0; id(ot_an_litres) = 0; id(ot_an_q_draw) = 0;
+          }
+          const float k = ${ot_gas_kwh_per_m3};
+          float g_ch = id(ot_an_q_ch) / k, g_dhw = id(ot_an_q_dhw) / k, pr = id(ot_gas_price).state;
+          id(ot_gas_today).publish_state(g_ch + g_dhw);
+          id(ot_gas_ch_today).publish_state(g_ch);
+          id(ot_gas_dhw_today).publish_state(g_dhw);
+          id(ot_gas_total).publish_state(id(ot_an_gas_total));
+          id(ot_gas_cost_today).publish_state(std::isnan(pr) ? NAN : (g_ch + g_dhw) * pr);
+          id(ot_heat_today).publish_state(id(ot_an_q_ch) + id(ot_an_q_dhw));
+          float bs = id(ot_an_burn_s);
+          id(ot_condensing_share).publish_state(bs > 60 ? id(ot_an_cond_s) / bs * 100.0f : NAN);
+          id(ot_minmod_share).publish_state(bs > 60 ? id(ot_an_minmod_s) / bs * 100.0f : NAN);
+          id(ot_mod_avg).publish_state(bs > 60 ? id(ot_an_mod_sum) / bs : NAN);
+          int st = id(ot_starts_day);
+          id(ot_burn_avg).publish_state(st > 0 ? id(ot_burn_s_day) / 60.0f / st : NAN);
+          id(ot_short_burns).publish_state(id(ot_an_short));
+          id(ot_burn_last).publish_state(id(ot_an_burn_last));
+          id(ot_pause_last).publish_state(id(ot_an_pause_last));
+          id(ot_draws_today).publish_state(id(ot_an_draws));
+          id(ot_draw_last).publish_state(id(ot_an_draw_last));
+          id(ot_dhw_litres).publish_state(id(ot_an_litres));
+          id(ot_dhw_heat).publish_state(id(ot_an_q_draw));
+
+number:
+  - platform: template
+    name: "${n_ot_gas_price}"
+    id: ot_gas_price
+    icon: mdi:fire
+    entity_category: config
+    optimistic: true
+    restore_value: true
+    initial_value: 3.86
+    min_value: 0
+    max_value: 20
+    step: 0.01
+    mode: box
+    unit_of_measurement: "${ot_currency}/m³"
+
+sensor:
+  - { platform: template, name: "${n_ot_gas_today}", id: ot_gas_today, icon: "mdi:meter-gas", unit_of_measurement: "m³", device_class: gas, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_ot_gas_ch_today}", id: ot_gas_ch_today, icon: "mdi:radiator", unit_of_measurement: "m³", device_class: gas, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_ot_gas_dhw_today}", id: ot_gas_dhw_today, icon: "mdi:water-boiler", unit_of_measurement: "m³", device_class: gas, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_ot_gas_total}", id: ot_gas_total, icon: "mdi:meter-gas-outline", unit_of_measurement: "m³", device_class: gas, state_class: total_increasing, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_ot_gas_cost_today}", id: ot_gas_cost_today, icon: "mdi:cash", unit_of_measurement: "${ot_currency}", accuracy_decimals: 2 }
+  - { platform: template, name: "${n_ot_heat_today}", id: ot_heat_today, icon: "mdi:fire", unit_of_measurement: "kWh", device_class: energy, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_ot_condensing_share}", id: ot_condensing_share, icon: "mdi:water-percent", unit_of_measurement: "%", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_ot_minmod_share}", id: ot_minmod_share, icon: "mdi:percent-outline", unit_of_measurement: "%", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_ot_mod_avg}", id: ot_mod_avg, icon: "mdi:fire-circle", unit_of_measurement: "%", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_ot_burn_avg}", id: ot_burn_avg, icon: "mdi:timer-sync-outline", unit_of_measurement: "min", state_class: measurement, accuracy_decimals: 1 }
+  - { platform: template, name: "${n_ot_short_burns}", id: ot_short_burns, icon: "mdi:timer-alert-outline", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_ot_burn_last}", id: ot_burn_last, icon: "mdi:timer-outline", unit_of_measurement: "min", accuracy_decimals: 1 }
+  - { platform: template, name: "${n_ot_pause_last}", id: ot_pause_last, icon: "mdi:timer-pause-outline", unit_of_measurement: "min", accuracy_decimals: 1 }
+  - { platform: template, name: "${n_ot_draws_today}", id: ot_draws_today, icon: "mdi:water-pump", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_ot_draw_last}", id: ot_draw_last, icon: "mdi:timer-outline", unit_of_measurement: "min", accuracy_decimals: 1 }
+  - { platform: template, name: "${n_ot_dhw_litres}", id: ot_dhw_litres, icon: "mdi:water", unit_of_measurement: "L", device_class: water, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_ot_dhw_heat}", id: ot_dhw_heat, icon: "mdi:water-thermometer", unit_of_measurement: "kWh", device_class: energy, accuracy_decimals: 2 }

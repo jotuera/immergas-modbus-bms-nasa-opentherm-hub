@@ -1,0 +1,185 @@
+# Immergas OpenTherm - package "ot_computed" (optional, with ot_sensors and ot_control)
+# Values computed in the hub from what the boiler reports (no extra Data-IDs):
+#   hydraulics - delta T (flow - return), mean loop temperature, flow minus the CH setpoint sent (Data-ID 1), exhaust
+#     minus return (heat exchanger), condensing operation (return below the flue gas dew point while burning);
+#   burner power - kW from the modulation (Data-ID 17) between the min. and max. output (Data-ID 15), an estimate;
+#   diagnostics - OpenTherm link quality, the boiler's lifetime average burn per start and starts per burner hour,
+#     the system pressure drop over 24 h with a possible leak warning;
+#   operating state - one text ("CH · flame 45 % · 52 °C", "DHW · 8.5 l/min", "Idle", "Fault 10", "Lockout" ...).
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+substitutions:
+  # boiler output when it does not report Data-ID 15 (rating plate), kW
+  ot_boiler_kw: "24"
+  # flue gas dew point: the return below it makes the boiler condense (natural gas ~55 °C, LPG ~50 °C)
+  ot_dew_point: "55"
+  # pressure drop over 24 h that raises the possible leak warning, bar
+  ot_leak_bar_day: "0.2"
+
+globals:
+  - { id: ot_p_hist, type: "std::vector<float>" }   # system pressure once an hour, the last 25 samples
+  - { id: ot_p_tick, type: int, initial_value: "0" }
+
+sensor:
+  # ---------------------------------------------------------------- hydraulics
+  - platform: template
+    name: "${n_ot_delta_t}"
+    id: ot_delta_t
+    icon: mdi:delta
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float f = id(ot_flow_temp).state, r = id(ot_return_temp).state;
+      return std::isnan(f) || std::isnan(r) ? NAN : f - r;
+  - platform: template
+    name: "${n_ot_mean_loop}"
+    id: ot_mean_loop
+    icon: mdi:approximately-equal
+    unit_of_measurement: "°C"
+    device_class: temperature
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float f = id(ot_flow_temp).state, r = id(ot_return_temp).state;
+      return std::isnan(f) || std::isnan(r) ? NAN : (f + r) / 2.0f;
+  - platform: template
+    name: "${n_ot_setpoint_dev}"
+    id: ot_setpoint_dev
+    icon: mdi:target
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      // only while heating with the flame on: in DHW / idle the flow follows other targets
+      if (!id(ot_flame).state || !id(ot_ch_active).state || id(ot_dhw_active).state) return NAN;
+      float f = id(ot_flow_temp).state, s = id(ot_ch_setpoint).state;
+      return std::isnan(f) || std::isnan(s) ? NAN : f - s;
+  - platform: template
+    name: "${n_ot_exh_approach}"
+    id: ot_exh_approach
+    icon: mdi:smoke
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float e = id(ot_exhaust_temp).state, r = id(ot_return_temp).state;
+      return !id(ot_flame).state || std::isnan(e) || std::isnan(r) || e < -30 ? NAN : e - r;
+  # ---------------------------------------------------------------- burner power
+  - platform: template
+    name: "${n_ot_power}"
+    id: ot_power
+    icon: mdi:fire
+    unit_of_measurement: "kW"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 10s
+    lambda: |-
+      if (!id(ot_flame).state) return 0.0f;
+      float mod = id(ot_modulation).state, cap = id(ot_max_capacity).state, mn = id(ot_min_modulation).state;
+      if (std::isnan(cap) || cap <= 0) cap = ${ot_boiler_kw};
+      if (std::isnan(mn) || mn < 0 || mn > 90) mn = 20;
+      if (std::isnan(mod)) return NAN;
+      mod = std::min(100.0f, std::max(0.0f, mod));
+      return cap * (mn + (100.0f - mn) * mod / 100.0f) / 100.0f;
+  # ---------------------------------------------------------------- diagnostics
+  - platform: template
+    name: "${n_ot_link_quality}"
+    id: ot_link_quality
+    icon: mdi:connection
+    unit_of_measurement: "%"
+    state_class: measurement
+    accuracy_decimals: 1
+    entity_category: diagnostic
+    update_interval: 60s
+    lambda: |-
+      float f = id(ot_frames).state, e = id(ot_errors).state, t = id(ot_timeouts).state;
+      if (std::isnan(f)) return NAN;
+      float all = f + (std::isnan(e) ? 0 : e) + (std::isnan(t) ? 0 : t);
+      return all > 0 ? f / all * 100.0f : NAN;
+  - platform: template
+    name: "${n_ot_burn_per_start}"
+    id: ot_burn_per_start
+    icon: mdi:timer-fire
+    unit_of_measurement: "min"
+    accuracy_decimals: 1
+    entity_category: diagnostic
+    update_interval: 300s
+    lambda: |-
+      float h = id(ot_burner_hours).state, s = id(ot_burner_starts).state;
+      return std::isnan(h) || std::isnan(s) || s < 1 ? NAN : h * 60.0f / s;
+  - platform: template
+    name: "${n_ot_starts_per_hour_life}"
+    id: ot_starts_per_hour_life
+    icon: mdi:fire-alert
+    accuracy_decimals: 1
+    entity_category: diagnostic
+    update_interval: 300s
+    lambda: |-
+      float h = id(ot_burner_hours).state, s = id(ot_burner_starts).state;
+      return std::isnan(h) || std::isnan(s) || h < 1 ? NAN : s / h;
+  - platform: template
+    name: "${n_ot_pressure_drop}"
+    id: ot_pressure_drop
+    icon: mdi:gauge-low
+    unit_of_measurement: "bar"
+    state_class: measurement
+    accuracy_decimals: 2
+    update_interval: 60s
+    lambda: |-
+      // a sample every 60 minutes; the drop = the oldest of the last 24 h minus now
+      float p = id(ot_pressure).state;
+      auto &v = id(ot_p_hist);
+      if (!std::isnan(p) && (v.empty() || ++id(ot_p_tick) >= 60)) { id(ot_p_tick) = 0; v.push_back(p); if (v.size() > 25) v.erase(v.begin()); }
+      if (v.size() < 2 || std::isnan(p)) return NAN;
+      return v.front() - p;
+
+binary_sensor:
+  - platform: template
+    name: "${n_ot_condensing}"
+    id: ot_condensing
+    icon: mdi:water-outline
+    lambda: |-
+      float r = id(ot_return_temp).state;
+      return id(ot_flame).state && !std::isnan(r) && r < ${ot_dew_point};
+  - platform: template
+    name: "${n_ot_leak_warning}"
+    id: ot_leak_warning
+    device_class: problem
+    lambda: |-
+      float d = id(ot_pressure_drop).state;
+      return !std::isnan(d) && d >= ${ot_leak_bar_day};
+
+text_sensor:
+  - platform: template
+    name: "${n_ot_op_state}"
+    id: ot_op_state
+    icon: mdi:state-machine
+    update_interval: 10s
+    lambda: |-
+      char b[48];
+      if (id(ot_lockout_reset).state) return std::string("${t_ot_st_lockout}");
+      int code = std::isnan(id(ot_fault_code).state) ? 0 : (int) id(ot_fault_code).state;
+      if (id(ot_fault).state) { snprintf(b, sizeof(b), "${t_ot_st_fault} %d", code); return std::string(b); }
+      bool fl = id(ot_flame).state;
+      if (id(ot_dhw_active).state) {
+        float q = id(ot_dhw_flow).state;
+        std::string s = "${t_ot_st_dhw}";
+        if (!std::isnan(q) && q > 0.1f) { snprintf(b, sizeof(b), " · %.1f l/min", q); s += b; }
+        if (!fl) s += " · ${t_ot_st_noflame}";
+        return s;
+      }
+      if (id(ot_ch_active).state) {
+        std::string s = id(ot_frost_on) ? "${t_ot_st_frost}" : "${t_ot_st_ch}";
+        float m = id(ot_modulation).state, f = id(ot_flow_temp).state;
+        if (fl) { snprintf(b, sizeof(b), " · ${t_ot_st_flame} %.0f %%", std::isnan(m) ? 0.0f : m); s += b; }
+        else s += " · ${t_ot_st_noflame}";
+        if (!std::isnan(f)) { snprintf(b, sizeof(b), " · %.0f °C", f); s += b; }
+        return s;
+      }
+      return std::string("${t_ot_st_idle}");
