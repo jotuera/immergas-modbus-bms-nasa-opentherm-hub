@@ -61,6 +61,8 @@ class ImmergasDominusStrategy {
             { type: "grid", cards: [card("immergas-schedule-card", config.schedule ?? {}),
               card("immergas-settings-card", { part: "online", ...(config.settings ?? {}) }),
               card("immergas-settings-card", { part: "offline", ...(config.settings ?? {}) })] },
+            // Dominus 1.6.14: today's analysis (room comfort, building, phases, DHW use, weather, link, zones)
+            { type: "grid", column_span: 3, cards: [card("immergas-day-card", config.day ?? {})] },
             { type: "grid", column_span: 3, cards: [card("immergas-calibration-card", config.calibration ?? {})] },
             { type: "grid", column_span: 3, cards: [card("immergas-automations-card", config.automations ?? {})] },
           ],

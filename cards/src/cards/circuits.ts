@@ -219,6 +219,49 @@ class ImmergasDayCard extends GridCard {
     return this.mtx ? [] : [["oa_condensing", "Praca kondensacyjna", "Condensing"], ["oa_leak_warning", "Możliwy wyciek", "Possible leak"], ["oa_flame_low", "Niski prąd płomienia", "Low flame current"]];
   }
   protected rows(): Row[] {
+    // Immergas Dominus over Modbus (1.4 statistics + 1.6.14 stats_extra): room, building, phases, DHW, weather, link, zones
+    if (this.dominus && !this.ot) return [
+      ["dx_state", "mdi:state-machine", "Stan pracy", "Operating state"],
+      ["dx_comfort", "mdi:sofa-outline", "Czas w komforcie", "Time in comfort", 0],
+      ["dx_cold", "mdi:snowflake-thermometer", "Za zimno", "Too cold", 0],
+      ["dx_warm", "mdi:sun-thermometer", "Za ciepło", "Too warm", 0],
+      ["dx_room_min", "mdi:thermometer-low", "Pokój min.", "Room min.", 1],
+      ["dx_room_max", "mdi:thermometer-high", "Pokój maks.", "Room max.", 1],
+      ["dom_room_dev", "mdi:delta", "Odchyłka pokoju (1 h)", "Room deviation (1 h)", 1],
+      ["dom_ttt", "mdi:timer-play-outline", "Dojście do zadanej", "Time to the target", 0],
+      ["dx_heat_rate", "mdi:home-thermometer", "Tempo nagrzewania", "Heating rate", 2],
+      ["dx_cool_rate", "mdi:home-thermometer-outline", "Tempo stygnięcia", "Cooling rate", 2],
+      ["dx_loss", "mdi:home-export-outline", "Straty budynku", "Building loss", 3],
+      ["dx_curve_hint", "mdi:tune-vertical", "Sugerowana zmiana krzywej", "Suggested curve change", 0],
+      ["dom_ch_time_today", "mdi:radiator", "Grzanie CO dziś", "Heating today", 2],
+      ["dom_starts_today", "mdi:fire-circle", "Starty CO dziś", "Heating starts today", 0],
+      ["dx_comfort_h", "mdi:sofa", "Faza Komfort", "Comfort phase", 2],
+      ["dx_eco_h", "mdi:leaf", "Faza Eko", "Eco phase", 2],
+      ["dx_dev_comfort", "mdi:delta", "Odchyłka w Komforcie", "Deviation in Comfort", 1],
+      ["dx_dev_eco", "mdi:delta", "Odchyłka w Eko", "Deviation in Eco", 1],
+      ["dx_phase_changes", "mdi:swap-horizontal", "Zmiany faz", "Phase changes", 0],
+      ["dom_dhw_cycles", "mdi:water-boiler", "Cykle CWU", "DHW cycles", 0],
+      ["dx_dhw_cyc_avg", "mdi:timer-sync-outline", "Średni cykl CWU", "Average DHW cycle", 0],
+      ["dx_dhw_heat", "mdi:water-thermometer", "Ciepło CWU zużyte", "DHW heat used", 2],
+      ["dx_dhw_litres", "mdi:water", "Ciepła woda zużyta", "Hot water used", 0],
+      ["dx_standing", "mdi:thermometer-minus", "Straty postojowe zasobnika", "Cylinder standing loss", 2],
+      ["dx_tank_min", "mdi:water-boiler-alert", "Zasobnik min.", "Cylinder min.", 1],
+      ["dx_tank_vol", "mdi:storage-tank", "Pojemność zasobnika", "Cylinder volume", 0],
+      ["dx_out_min", "mdi:thermometer-chevron-down", "Zewnętrzna min.", "Outdoor min.", 1],
+      ["dx_out_max", "mdi:thermometer-chevron-up", "Zewnętrzna maks.", "Outdoor max.", 1],
+      ["dx_out_mean", "mdi:thermometer-auto", "Średnia zewn. 24 h", "Outdoor mean 24 h", 1],
+      ["dom_dd_today", "mdi:thermometer-minus", "Stopniodni dziś", "Degree days today", 1],
+      ["dom_dd_month", "mdi:calendar-month", "Stopniodni w miesiącu", "Degree days this month", 1],
+      ["dom_h_per_dd", "mdi:home-clock", "Godz. grzania / stopniodzień", "Heating h / degree day", 2],
+      ["dx_avail", "mdi:lan-check", "Dostępność modułu", "Module availability", 1],
+      ["dx_breaks", "mdi:lan-disconnect", "Przerwy w łączności", "Link breaks", 0],
+      ["dx_z2_ch", "mdi:radiator", "Strefa 2 · grzanie", "Zone 2 · heating", 2],
+      ["dx_z2_starts", "mdi:fire-circle", "Strefa 2 · starty", "Zone 2 · starts", 0],
+      ["dx_z2_dev", "mdi:delta", "Strefa 2 · odchyłka", "Zone 2 · deviation", 1],
+      ["dx_z3_ch", "mdi:radiator", "Strefa 3 · grzanie", "Zone 3 · heating", 2],
+      ["dx_z3_starts", "mdi:fire-circle", "Strefa 3 · starty", "Zone 3 · starts", 0],
+      ["dx_z3_dev", "mdi:delta", "Strefa 3 · odchyłka", "Zone 3 · deviation", 1],
+    ];
     // gas boiler BMS (gb_computed / gb_analytics / gb_<model>_calc); the tiles of the missing packages stay hidden
     if (this.gbx) return [
       ["ga_op_state", "mdi:state-machine", "Stan pracy", "Operating state"],
@@ -332,6 +375,18 @@ class ImmergasDayCard extends GridCard {
   }
   protected colOf(k: Key): string {
     const v = this.n(k);
+    if (k.startsWith("dx_") || k.startsWith("dom_")) {
+      if (k === "dx_state") return /usterka|fault/i.test(this.s(k) ?? "") ? "red" : /cwu|dhw/i.test(this.s(k) ?? "") ? "sky" : /grzanie|heating/i.test(this.s(k) ?? "") ? "peach" : "overlay2";
+      if (k === "dx_comfort") return isNaN(v) ? "overlay2" : v >= 80 ? "green" : v >= 50 ? "yellow" : "red";
+      if (k === "dx_cold") return v > 60 ? "sky" : "overlay2";
+      if (k === "dx_warm") return v > 60 ? "peach" : "overlay2";
+      if (k === "dx_curve_hint") return isNaN(v) ? "overlay2" : v === 0 ? "green" : "yellow";
+      if (k === "dx_avail") return isNaN(v) ? "overlay2" : v < 95 ? "red" : v < 99 ? "yellow" : "green";
+      if (/room_dev|dev_|z\d_dev/.test(k)) return isNaN(v) ? "overlay2" : Math.abs(v) <= 0.5 ? "green" : v < 0 ? "sky" : "peach";
+      if (/dhw|tank|standing/.test(k)) return "sky";
+      if (/dd|out_/.test(k)) return "lavender";
+      return "teal";
+    }
     if (k === "ga_op_state") return /usterka|fault/i.test(this.s(k) ?? "") ? "red" : /odszr|defrost/i.test(this.s(k) ?? "") ? "sky" : /cwu|dhw/i.test(this.s(k) ?? "") ? "sky" : /co|ch|pompa|pump/i.test(this.s(k) ?? "") ? "peach" : "overlay2";
     if (k.startsWith("ga_")) {
       const m = ("oa_" + k.slice(3)) as Key;   // the same colour rules as the OpenTherm tiles
