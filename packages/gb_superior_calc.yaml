@@ -1,0 +1,71 @@
+# Immergas gas boiler BMS - package "gb_superior_calc" (optional, with gb_superior and gb_computed): VICTRIX SUPERIOR 2021 / ZEUS Superior 25-35
+# Computed in the hub from this model's extra registers: the heat output measured from the pump flow, flue gas minus return, DHW draws / litres / heat from the DHW flow and the cold water
+# the boiler measures, the average cold water temperature.
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+globals:
+  - { id: gb_dm_doy, type: int, restore_value: true, initial_value: "-1" }
+  - { id: gb_dm_draws, type: int, restore_value: true, initial_value: "0" }
+  - { id: gb_dm_last, type: float, restore_value: true, initial_value: "NAN" }
+  - { id: gb_dm_litres, type: float, restore_value: true, initial_value: "0" }
+  - { id: gb_dm_heat, type: float, restore_value: true, initial_value: "0" }
+  - { id: gb_dm_cold_sum, type: float, restore_value: true, initial_value: "0" }
+  - { id: gb_dm_cold_n, type: float, restore_value: true, initial_value: "0" }
+  - { id: gb_dm_was, type: bool, initial_value: "false" }
+  - { id: gb_dm_ms, type: uint32_t, initial_value: "0" }
+
+interval:
+  - interval: 10s
+    then:
+      - lambda: |-
+          // heat output measured: flow x 4.186 x delta T (kW); gb_power uses it instead of the modulation estimate
+          float q = id(gb_pump_flow).state, f = id(gb_flow_temp).state, r = id(gb_return_temp).state;
+          id(gb_q_meas) = std::isnan(q) || std::isnan(f) || std::isnan(r) ? NAN : q / 60.0f * 4.186f * (f - r);
+          id(gb_heat_meas).publish_state(std::isnan(id(gb_q_meas)) ? NAN : std::max(0.0f, id(gb_q_meas)));
+  - interval: 1s
+    then:
+      - lambda: |-
+          // DHW draws: the DHW flow above 1 l/min; the heat = flow x 4.186 x (DHW - the cold water the boiler measures)
+          uint32_t now = millis();
+          float w = id(gb_dhw_flow).state;
+          bool draw = !std::isnan(w) && w > 1.0f;
+          if (draw && !id(gb_dm_was)) { id(gb_dm_draws)++; id(gb_dm_ms) = now; }
+          if (!draw && id(gb_dm_was) && id(gb_dm_ms)) id(gb_dm_last) = (now - id(gb_dm_ms)) / 60000.0f;
+          id(gb_dm_was) = draw;
+          if (!draw) return;
+          id(gb_dm_litres) += w / 60.0f;
+          float t = id(gb_dhw_temp).state, c = id(gb_dhw_inlet_temp).state;
+          if (!std::isnan(c)) { id(gb_dm_cold_sum) += c; id(gb_dm_cold_n) += 1; }
+          if (!std::isnan(t) && !std::isnan(c) && t > c) id(gb_dm_heat) += w / 60.0f * 4.186f * (t - c) / 3600.0f;
+  - interval: 30s
+    then:
+      - lambda: |-
+          auto now = id(gb_time).now();
+          if (now.is_valid() && id(gb_dm_doy) != now.day_of_year) {
+            id(gb_dm_doy) = now.day_of_year;
+            id(gb_dm_draws) = 0; id(gb_dm_litres) = 0; id(gb_dm_heat) = 0; id(gb_dm_cold_sum) = 0; id(gb_dm_cold_n) = 0;
+          }
+          id(gb_draws_today).publish_state(id(gb_dm_draws));
+          id(gb_draw_last).publish_state(id(gb_dm_last));
+          id(gb_dhw_litres).publish_state(id(gb_dm_litres));
+          id(gb_dhw_heat).publish_state(id(gb_dm_heat));
+          id(gb_cold_avg).publish_state(id(gb_dm_cold_n) > 0 ? id(gb_dm_cold_sum) / id(gb_dm_cold_n) : NAN);
+
+sensor:
+  - { platform: template, name: "${n_gb_heat_meas}", id: gb_heat_meas, icon: "mdi:radiator", unit_of_measurement: "kW", device_class: power, state_class: measurement, accuracy_decimals: 2 }
+  - platform: template
+    name: "${n_gb_flue_return}"
+    id: gb_flue_return
+    icon: mdi:smoke
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float e = id(gb_flue_temp).state, r = id(gb_return_temp).state;
+      return !id(gb_flame).state || std::isnan(e) || std::isnan(r) ? NAN : e - r;
+  - { platform: template, name: "${n_gb_draws_today}", id: gb_draws_today, icon: "mdi:water-pump", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_gb_draw_last}", id: gb_draw_last, icon: "mdi:timer-outline", unit_of_measurement: "min", accuracy_decimals: 1 }
+  - { platform: template, name: "${n_gb_dhw_litres}", id: gb_dhw_litres, icon: "mdi:water", unit_of_measurement: "L", device_class: water, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_gb_dhw_heat}", id: gb_dhw_heat, icon: "mdi:water-thermometer", unit_of_measurement: "kWh", device_class: energy, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_gb_cold_avg}", id: gb_cold_avg, icon: "mdi:water-thermometer-outline", unit_of_measurement: "°C", device_class: temperature, accuracy_decimals: 1 }

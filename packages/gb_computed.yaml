@@ -1,0 +1,131 @@
+# Immergas gas boiler BMS - package "gb_computed" (optional, with gb_status, gb_sensors and gb_control)
+# Values computed in the hub from the common BMS registers (no extra reads):
+#   hydraulics - delta T (flow - return), mean loop temperature, flow minus the CH setpoint written (514), flow minus the
+#     boiler's calculated flow, flow minus the temperature after the separator (HVDT), condensing operation (return below
+#     the flue gas dew point while burning);
+#   burner power - kW from the modulation and the boiler output below (an estimate; the model add-ons gb_superior_calc
+#     / gb_extra_calc / gb_mtop_calc give the heat measured from the flow, used instead when present);
+#   operating state - one text ("CH · flame 45 % · 52 °C", "DHW", "Fault 10 (resettable)", "Fault 37 – locked" ...).
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+substitutions:
+  # boiler output (rating plate), kW, and the minimum modulation of the burner (% of the output)
+  gb_boiler_kw: "25"
+  gb_min_modulation: "15"
+  # flue gas dew point: the return below it makes the boiler condense (natural gas ~55 °C, LPG ~50 °C)
+  gb_dew_point: "55"
+
+globals:
+  - { id: gb_q_meas, type: float, initial_value: "NAN" }   # heat output measured by a model add-on, kW (NAN = none)
+  - { id: gb_mode_txt, type: std::string, initial_value: '""' }   # a model add-on may put its own state here (MAGIS M TOP)
+
+sensor:
+  - platform: template
+    name: "${n_gb_delta_t}"
+    id: gb_delta_t
+    icon: mdi:delta
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float f = id(gb_flow_temp).state, r = id(gb_return_temp).state;
+      return std::isnan(f) || std::isnan(r) ? NAN : f - r;
+  - platform: template
+    name: "${n_gb_mean_loop}"
+    id: gb_mean_loop
+    icon: mdi:approximately-equal
+    unit_of_measurement: "°C"
+    device_class: temperature
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float f = id(gb_flow_temp).state, r = id(gb_return_temp).state;
+      return std::isnan(f) || std::isnan(r) ? NAN : (f + r) / 2.0f;
+  - platform: template
+    name: "${n_gb_setpoint_dev}"
+    id: gb_setpoint_dev
+    icon: mdi:target
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      // only while heating with the flame on (in DHW the flow follows the DHW exchanger)
+      if (!id(gb_flame).state || id(gb_pump_dhw).state) return NAN;
+      float f = id(gb_flow_temp).state, s = id(gb_ch_setpoint).state;
+      return std::isnan(f) || std::isnan(s) ? NAN : f - s;
+  - platform: template
+    name: "${n_gb_calc_dev}"
+    id: gb_calc_dev
+    icon: mdi:calculator-variant-outline
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      if (!id(gb_flame).state || id(gb_pump_dhw).state) return NAN;
+      float f = id(gb_flow_temp).state, c = id(gb_calc_flow).state;
+      return std::isnan(f) || std::isnan(c) || c <= 0 ? NAN : f - c;
+  - platform: template
+    name: "${n_gb_sep_delta}"
+    id: gb_sep_delta
+    icon: mdi:pipe
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      // no separator probe: the boiler reports a fixed out-of-range value
+      float f = id(gb_flow_temp).state, h = id(gb_hvdt_temp).state;
+      return std::isnan(f) || std::isnan(h) || h < -30 || h > 120 ? NAN : f - h;
+  - platform: template
+    name: "${n_gb_power}"
+    id: gb_power
+    icon: mdi:fire
+    unit_of_measurement: "kW"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 10s
+    lambda: |-
+      if (!std::isnan(id(gb_q_meas))) return id(gb_flame).state ? std::max(0.0f, id(gb_q_meas)) : 0.0f;
+      if (!id(gb_flame).state) return 0.0f;
+      float m = id(gb_modulation).state;
+      if (std::isnan(m)) return NAN;
+      m = std::min(100.0f, std::max(0.0f, m));
+      return ${gb_boiler_kw} * (${gb_min_modulation} + (100.0f - ${gb_min_modulation}) * m / 100.0f) / 100.0f;
+
+binary_sensor:
+  - platform: template
+    name: "${n_gb_condensing}"
+    id: gb_condensing
+    icon: mdi:water-outline
+    lambda: |-
+      float r = id(gb_return_temp).state;
+      return id(gb_flame).state && !std::isnan(r) && r < ${gb_dew_point};
+
+text_sensor:
+  - platform: template
+    name: "${n_gb_op_state}"
+    id: gb_op_state
+    icon: mdi:state-machine
+    update_interval: 10s
+    lambda: |-
+      char b[48];
+      int code = std::isnan(id(gb_fault_code).state) ? 0 : (int) id(gb_fault_code).state;
+      if (id(gb_fault_locked).state) { snprintf(b, sizeof(b), "${t_gb_st_fault} %d – ${t_gb_st_locked}", code); return std::string(b); }
+      if (id(gb_fault_resettable).state || code > 0) { snprintf(b, sizeof(b), "${t_gb_st_fault} %d (${t_gb_st_resettable})", code); return std::string(b); }
+      if (!id(gb_mode_txt).empty()) return id(gb_mode_txt);
+      if (id(gb_special_function).state) return std::string("${t_gb_st_special}");
+      bool fl = id(gb_flame).state;
+      float m = id(gb_modulation).state, f = id(gb_flow_temp).state;
+      std::string s;
+      if (id(gb_pump_dhw).state) s = "${t_gb_st_dhw}";
+      else if (id(gb_pump_ch).state || fl) s = "${t_gb_st_ch}";
+      else return std::string("${t_gb_st_idle}");
+      if (fl) { snprintf(b, sizeof(b), " · ${t_gb_st_flame} %.0f %%", std::isnan(m) ? 0.0f : m); s += b; }
+      else s += " · ${t_gb_st_noflame}";
+      if (!std::isnan(f)) { snprintf(b, sizeof(b), " · %.0f °C", f); s += b; }
+      return s;

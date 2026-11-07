@@ -1,0 +1,126 @@
+# Immergas gas boiler BMS - package "gb_analytics" (optional, with gb_computed)
+# Counted in the hub every second from the flame bit, reset at midnight (Home Assistant time from gb_core; the day's
+# values survive a restart):
+#   burner - starts today and in the last hour, burner time today, average / last burn, short burns, the last pause,
+#     average modulation while burning and the share at the minimum, the condensing share of the burner time;
+#   heat and gas - heat today (measured from the flow with a model add-on, else from the modulation), gas today
+#     (heating / DHW by the DHW pump) and a gas counter in m³, the gas price kept in the hub and today's cost.
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+substitutions:
+  # useful heat from 1 m³ of gas (calorific value ~10.9 kWh/m³ x boiler efficiency ~0.97)
+  gb_gas_kwh_per_m3: "10.6"
+  gb_currency: "zł"
+  # a burn shorter than this counts as a short burn, minutes
+  gb_short_burn_min: "5"
+
+globals:
+  - { id: gb_an_doy, type: int, restore_value: true, initial_value: "-1" }
+  - { id: gb_an_starts, type: int, restore_value: true, initial_value: "0" }
+  - { id: gb_an_burn_s, type: float, restore_value: true, initial_value: "0" }
+  - { id: gb_an_q_ch, type: float, restore_value: true, initial_value: "0" }
+  - { id: gb_an_q_dhw, type: float, restore_value: true, initial_value: "0" }
+  - { id: gb_an_gas_total, type: float, restore_value: true, initial_value: "0" }
+  - { id: gb_an_cond_s, type: float, restore_value: true, initial_value: "0" }
+  - { id: gb_an_minmod_s, type: float, restore_value: true, initial_value: "0" }
+  - { id: gb_an_mod_sum, type: float, restore_value: true, initial_value: "0" }
+  - { id: gb_an_short, type: int, restore_value: true, initial_value: "0" }
+  - { id: gb_an_burn_last, type: float, restore_value: true, initial_value: "NAN" }
+  - { id: gb_an_pause_last, type: float, restore_value: true, initial_value: "NAN" }
+  - { id: gb_an_fl_was, type: bool, initial_value: "false" }
+  - { id: gb_an_on_ms, type: uint32_t, initial_value: "0" }
+  - { id: gb_an_off_ms, type: uint32_t, initial_value: "0" }
+  - { id: gb_an_start_ms, type: "std::vector<uint32_t>" }
+
+interval:
+  - interval: 1s
+    then:
+      - lambda: |-
+          uint32_t now = millis();
+          bool fl = id(gb_flame).state;
+          if (fl && !id(gb_an_fl_was)) {
+            id(gb_an_starts)++; id(gb_an_start_ms).push_back(now);
+            if (id(gb_an_off_ms)) id(gb_an_pause_last) = (now - id(gb_an_off_ms)) / 60000.0f;
+            id(gb_an_on_ms) = now;
+          }
+          if (!fl && id(gb_an_fl_was) && id(gb_an_on_ms)) {
+            float len = (now - id(gb_an_on_ms)) / 60000.0f;
+            id(gb_an_burn_last) = len;
+            if (len < ${gb_short_burn_min}) id(gb_an_short)++;
+            id(gb_an_off_ms) = now;
+          }
+          id(gb_an_fl_was) = fl;
+          if (!fl) return;
+          id(gb_an_burn_s) += 1;
+          float p = id(gb_power).state;
+          if (!std::isnan(p) && p > 0) {
+            float q = p / 3600.0f;
+            if (id(gb_pump_dhw).state) id(gb_an_q_dhw) += q; else id(gb_an_q_ch) += q;
+            id(gb_an_gas_total) += q / ${gb_gas_kwh_per_m3};
+          }
+          float m = id(gb_modulation).state, r = id(gb_return_temp).state;
+          if (!std::isnan(m)) { id(gb_an_mod_sum) += m; if (m <= 2.0f) id(gb_an_minmod_s) += 1; }
+          if (!std::isnan(r) && r < ${gb_dew_point}) id(gb_an_cond_s) += 1;
+  - interval: 30s
+    then:
+      - lambda: |-
+          auto now = id(gb_time).now();
+          if (now.is_valid() && id(gb_an_doy) != now.day_of_year) {
+            id(gb_an_doy) = now.day_of_year;
+            id(gb_an_starts) = 0; id(gb_an_burn_s) = 0; id(gb_an_q_ch) = 0; id(gb_an_q_dhw) = 0; id(gb_an_cond_s) = 0;
+            id(gb_an_minmod_s) = 0; id(gb_an_mod_sum) = 0; id(gb_an_short) = 0;
+          }
+          auto &v = id(gb_an_start_ms);
+          uint32_t t = millis();
+          while (!v.empty() && t - v.front() > 3600000UL) v.erase(v.begin());
+          const float k = ${gb_gas_kwh_per_m3};
+          float g_ch = id(gb_an_q_ch) / k, g_dhw = id(gb_an_q_dhw) / k, pr = id(gb_gas_price).state, bs = id(gb_an_burn_s);
+          id(gb_starts_today).publish_state(id(gb_an_starts));
+          id(gb_starts_hour).publish_state(v.size());
+          id(gb_burn_today).publish_state(bs / 3600.0f);
+          id(gb_burn_avg).publish_state(id(gb_an_starts) > 0 ? bs / 60.0f / id(gb_an_starts) : NAN);
+          id(gb_short_burns).publish_state(id(gb_an_short));
+          id(gb_burn_last).publish_state(id(gb_an_burn_last));
+          id(gb_pause_last).publish_state(id(gb_an_pause_last));
+          id(gb_mod_avg).publish_state(bs > 60 ? id(gb_an_mod_sum) / bs : NAN);
+          id(gb_minmod_share).publish_state(bs > 60 ? id(gb_an_minmod_s) / bs * 100.0f : NAN);
+          id(gb_condensing_share).publish_state(bs > 60 ? id(gb_an_cond_s) / bs * 100.0f : NAN);
+          id(gb_heat_today).publish_state(id(gb_an_q_ch) + id(gb_an_q_dhw));
+          id(gb_gas_today).publish_state(g_ch + g_dhw);
+          id(gb_gas_ch_today).publish_state(g_ch);
+          id(gb_gas_dhw_today).publish_state(g_dhw);
+          id(gb_gas_total).publish_state(id(gb_an_gas_total));
+          id(gb_gas_cost_today).publish_state(std::isnan(pr) ? NAN : (g_ch + g_dhw) * pr);
+
+number:
+  - platform: template
+    name: "${n_gb_gas_price}"
+    id: gb_gas_price
+    icon: mdi:fire
+    entity_category: config
+    optimistic: true
+    restore_value: true
+    initial_value: 3.86
+    min_value: 0
+    max_value: 20
+    step: 0.01
+    mode: box
+    unit_of_measurement: "${gb_currency}/m³"
+
+sensor:
+  - { platform: template, name: "${n_gb_starts_today}", id: gb_starts_today, icon: "mdi:fire-circle", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_gb_starts_hour}", id: gb_starts_hour, icon: "mdi:fire-alert", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_gb_burn_today}", id: gb_burn_today, icon: "mdi:timer-fire", unit_of_measurement: "h", state_class: measurement, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_gb_burn_avg}", id: gb_burn_avg, icon: "mdi:timer-sync-outline", unit_of_measurement: "min", state_class: measurement, accuracy_decimals: 1 }
+  - { platform: template, name: "${n_gb_short_burns}", id: gb_short_burns, icon: "mdi:timer-alert-outline", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_gb_burn_last}", id: gb_burn_last, icon: "mdi:timer-outline", unit_of_measurement: "min", accuracy_decimals: 1 }
+  - { platform: template, name: "${n_gb_pause_last}", id: gb_pause_last, icon: "mdi:timer-pause-outline", unit_of_measurement: "min", accuracy_decimals: 1 }
+  - { platform: template, name: "${n_gb_mod_avg}", id: gb_mod_avg, icon: "mdi:fire-circle", unit_of_measurement: "%", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_gb_minmod_share}", id: gb_minmod_share, icon: "mdi:percent-outline", unit_of_measurement: "%", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_gb_condensing_share}", id: gb_condensing_share, icon: "mdi:water-percent", unit_of_measurement: "%", state_class: measurement, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_gb_heat_today}", id: gb_heat_today, icon: "mdi:fire", unit_of_measurement: "kWh", device_class: energy, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_gb_gas_today}", id: gb_gas_today, icon: "mdi:meter-gas", unit_of_measurement: "m³", device_class: gas, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_gb_gas_ch_today}", id: gb_gas_ch_today, icon: "mdi:radiator", unit_of_measurement: "m³", device_class: gas, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_gb_gas_dhw_today}", id: gb_gas_dhw_today, icon: "mdi:water-boiler", unit_of_measurement: "m³", device_class: gas, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_gb_gas_total}", id: gb_gas_total, icon: "mdi:meter-gas-outline", unit_of_measurement: "m³", device_class: gas, state_class: total_increasing, accuracy_decimals: 2 }
+  - { platform: template, name: "${n_gb_gas_cost_today}", id: gb_gas_cost_today, icon: "mdi:cash", unit_of_measurement: "${gb_currency}", accuracy_decimals: 2 }

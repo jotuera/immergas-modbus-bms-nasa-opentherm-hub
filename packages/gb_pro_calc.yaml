@@ -1,0 +1,70 @@
+# Immergas gas boiler BMS - package "gb_pro_calc" (optional, with gb_pro and gb_computed): VICTRIX PRO V2 EU
+# Computed in the hub from this model's extra registers: flue gas minus return, the system pressure drop over 24 h with a possible leak warning, the average ionisation current
+# while burning with a low ionisation warning.
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+substitutions:
+  # pressure drop over 24 h that raises the possible leak warning, bar
+  gb_leak_bar_day: "0.2"
+  # ionisation current below this (average while burning) raises the low ionisation warning, µA
+  gb_ion_low_ua: "2.0"
+
+globals:
+  - { id: gb_p_hist, type: "std::vector<float>" }
+  - { id: gb_p_tick, type: int, initial_value: "0" }
+  - { id: gb_ion_ema, type: float, initial_value: "NAN" }
+
+interval:
+  - interval: 10s
+    then:
+      - lambda: |-
+          // the average while burning (exponential, ~10 min); a falling ionisation is a typical sign of a dirty electrode
+          float i = id(gb_ionisation).state;
+          if (!id(gb_flame).state || std::isnan(i) || i <= 0) return;
+          id(gb_ion_ema) = std::isnan(id(gb_ion_ema)) ? i : id(gb_ion_ema) + (i - id(gb_ion_ema)) / 60.0f;
+          id(gb_ion_avg).publish_state(id(gb_ion_ema));
+
+sensor:
+  - platform: template
+    name: "${n_gb_flue_return}"
+    id: gb_flue_return
+    icon: mdi:smoke
+    unit_of_measurement: "K"
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 30s
+    lambda: |-
+      float e = id(gb_flue_temp).state, r = id(gb_return_temp).state;
+      return !id(gb_flame).state || std::isnan(e) || std::isnan(r) ? NAN : e - r;
+  - platform: template
+    name: "${n_gb_pressure_drop}"
+    id: gb_pressure_drop
+    icon: mdi:gauge-low
+    unit_of_measurement: "bar"
+    state_class: measurement
+    accuracy_decimals: 2
+    update_interval: 60s
+    lambda: |-
+      // a sample every 60 minutes; the drop = the oldest of the last 24 h minus now
+      float p = id(gb_pressure).state;
+      auto &v = id(gb_p_hist);
+      if (!std::isnan(p) && (v.empty() || ++id(gb_p_tick) >= 60)) { id(gb_p_tick) = 0; v.push_back(p); if (v.size() > 25) v.erase(v.begin()); }
+      if (v.size() < 2 || std::isnan(p)) return NAN;
+      return v.front() - p;
+  - { platform: template, name: "${n_gb_ion_avg}", id: gb_ion_avg, icon: "mdi:flash-triangle-outline", unit_of_measurement: "µA", state_class: measurement, accuracy_decimals: 1 }
+
+binary_sensor:
+  - platform: template
+    name: "${n_gb_leak_warning}"
+    id: gb_leak_warning
+    device_class: problem
+    lambda: |-
+      float d = id(gb_pressure_drop).state;
+      return !std::isnan(d) && d >= ${gb_leak_bar_day};
+  - platform: template
+    name: "${n_gb_ion_low}"
+    id: gb_ion_low
+    device_class: problem
+    lambda: |-
+      float a = id(gb_ion_avg).state;
+      return !std::isnan(a) && a < ${gb_ion_low_ua};

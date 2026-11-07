@@ -209,9 +209,49 @@ class ImmergasDayCard extends GridCard {
   protected wide = true;
   /** OpenTherm hub (ot_computed / ot_analytics): condensing and leak warning as flags */
   protected flags(): [Key, string, string][] {
+    if (this.gbx) return [["ga_condensing", "Praca kondensacyjna", "Condensing"], ["ga_leak_warning", "Możliwy wyciek", "Possible leak"], ["ga_ion_low", "Niska jonizacja", "Low ionisation"]];
     return this.mtx ? [] : [["oa_condensing", "Praca kondensacyjna", "Condensing"], ["oa_leak_warning", "Możliwy wyciek", "Possible leak"]];
   }
   protected rows(): Row[] {
+    // gas boiler BMS (gb_computed / gb_analytics / gb_<model>_calc); the tiles of the missing packages stay hidden
+    if (this.gbx) return [
+      ["ga_op_state", "mdi:state-machine", "Stan pracy", "Operating state"],
+      ["ga_power", "mdi:fire", "Moc palnika", "Burner power", 1],
+      ["ga_heat_meas", "mdi:radiator", "Moc cieplna (zmierzona)", "Heat output (measured)", 2],
+      ["ga_heat_today", "mdi:fire", "Ciepło dziś", "Heat today", 1],
+      ["ga_gas_today", "mdi:meter-gas", "Gaz dziś", "Gas today", 2],
+      ["ga_gas_ch_today", "mdi:radiator", "Gaz CO", "Gas heating", 2],
+      ["ga_gas_dhw_today", "mdi:water-boiler", "Gaz CWU", "Gas DHW", 2],
+      ["ga_gas_cost_today", "mdi:cash", "Koszt gazu dziś", "Gas cost today", 2],
+      ["ga_gas_price", "mdi:tag-outline", "Cena gazu", "Gas price", 2],
+      ["ga_gas_total", "mdi:meter-gas-outline", "Licznik gazu", "Gas counter", 1],
+      ["ga_starts_today", "mdi:fire-circle", "Starty palnika dziś", "Burner starts today", 0],
+      ["ga_starts_hour", "mdi:fire-alert", "Starty / ostatnia h", "Starts / last hour", 0],
+      ["ga_burn_today", "mdi:timer-fire", "Czas palnika dziś", "Burner time today", 2],
+      ["ga_burn_avg", "mdi:timer-sync-outline", "Średnie palenie", "Average burn", 1],
+      ["ga_short_burns", "mdi:timer-alert-outline", "Krótkie palenia", "Short burns", 0],
+      ["ga_burn_last", "mdi:timer-outline", "Ostatnie palenie", "Last burn", 1],
+      ["ga_pause_last", "mdi:timer-pause-outline", "Ostatnia przerwa", "Last pause", 1],
+      ["ga_mod_avg", "mdi:fire-circle", "Średnia modulacja", "Average modulation", 0],
+      ["ga_minmod_share", "mdi:percent-outline", "Na min. modulacji", "At min. modulation", 0],
+      ["ga_condensing_share", "mdi:water-percent", "Kondensacja dziś", "Condensing today", 0],
+      ["ga_delta_t", "mdi:delta", "Delta T", "Delta T"],
+      ["ga_mean_loop", "mdi:approximately-equal", "Średnia obiegu", "Mean loop"],
+      ["ga_setpoint_dev", "mdi:target", "Odchyłka od nastawy", "Setpoint deviation"],
+      ["ga_calc_dev", "mdi:calculator-variant-outline", "Odchyłka od obliczonej", "Calculated flow deviation"],
+      ["ga_sep_delta", "mdi:pipe", "Zasilanie − za sprzęgłem", "Flow − after separator"],
+      ["ga_flue_return", "mdi:smoke", "Spaliny − powrót", "Flue − return"],
+      ["ga_draws_today", "mdi:water-pump", "Pobory CWU", "DHW draws", 0],
+      ["ga_draw_last", "mdi:timer-outline", "Ostatni pobór", "Last draw", 1],
+      ["ga_dhw_litres", "mdi:water", "Ciepła woda", "Hot water", 0],
+      ["ga_dhw_heat", "mdi:water-thermometer", "Ciepło CWU", "DHW heat", 2],
+      ["ga_cold_avg", "mdi:water-thermometer-outline", "Woda zimna (średnia)", "Cold water (average)"],
+      ["ga_dhw_hours_share", "mdi:chart-pie", "Udział CWU w godzinach", "DHW share of hours", 0],
+      ["ga_pressure_drop", "mdi:gauge-low", "Spadek ciśnienia 24 h", "Pressure drop 24 h", 2],
+      ["ga_ion_avg", "mdi:flash-triangle-outline", "Jonizacja (średnia)", "Ionisation (average)", 1],
+      ["ga_hp_hours_today", "mdi:heat-pump", "Pompa ciepła dziś", "Heat pump today", 2],
+      ["ga_defrosts_today", "mdi:snowflake-melt", "Odszraniania dziś", "Defrosts today", 0],
+    ];
     if (!this.mtx) return [
       ["oa_op_state", "mdi:state-machine", "Stan pracy", "Operating state"],
       ["oa_power", "mdi:fire", "Moc palnika (szac.)", "Burner power (est.)", 1],
@@ -264,8 +304,27 @@ class ImmergasDayCard extends GridCard {
       ["mt_heater_elec", "mdi:flash-alert", "Prąd grzałek (szac.)", "Heater electricity (est.)", 2],
     ];
   }
+  private colByRule(k: Key, v: number): string {
+    if (k === "oa_condensing_share") return isNaN(v) ? "overlay2" : v >= 70 ? "green" : v >= 30 ? "yellow" : "red";
+    if (k === "oa_short_burns") return isNaN(v) ? "overlay2" : v > 15 ? "red" : v > 6 ? "yellow" : "green";
+    if (k === "oa_burn_avg") return isNaN(v) ? "overlay2" : v < 5 ? "red" : v < 10 ? "yellow" : "green";
+    if (k === "oa_minmod_share") return isNaN(v) ? "overlay2" : v > 70 ? "yellow" : "teal";
+    if (k === "oa_pressure_drop") return isNaN(v) ? "overlay2" : v >= 0.2 ? "red" : v >= 0.1 ? "yellow" : "green";
+    if (k === "oa_setpoint_dev") return isNaN(v) ? "overlay2" : Math.abs(v) > 5 ? "yellow" : "green";
+    return "teal";
+  }
   protected colOf(k: Key): string {
     const v = this.n(k);
+    if (k === "ga_op_state") return /usterka|fault/i.test(this.s(k) ?? "") ? "red" : /odszr|defrost/i.test(this.s(k) ?? "") ? "sky" : /cwu|dhw/i.test(this.s(k) ?? "") ? "sky" : /co|ch|pompa|pump/i.test(this.s(k) ?? "") ? "peach" : "overlay2";
+    if (k.startsWith("ga_")) {
+      const m = ("oa_" + k.slice(3)) as Key;   // the same colour rules as the OpenTherm tiles
+      if (["oa_condensing_share", "oa_short_burns", "oa_burn_avg", "oa_minmod_share", "oa_pressure_drop", "oa_setpoint_dev"].includes(m)) return this.colByRule(m, v);
+      if (k === "ga_ion_avg") return isNaN(v) ? "overlay2" : v < 2 ? "red" : v < 4 ? "yellow" : "green";
+      if (k === "ga_starts_hour") return isNaN(v) ? "overlay2" : v > 6 ? "red" : v > 3 ? "yellow" : "green";
+      if (/^ga_(gas|power|heat)/.test(k)) return "peach";
+      if (/^ga_(draw|dhw|cold)/.test(k)) return "sky";
+      return "teal";
+    }
     if (k === "oa_op_state") return /usterka|fault|blokada|lockout/i.test(this.s(k) ?? "") ? "red" : /cwu|dhw/i.test(this.s(k) ?? "") ? "sky" : /co|ch/i.test(this.s(k) ?? "") ? "peach" : "overlay2";
     if (k === "oa_condensing_share") return isNaN(v) ? "overlay2" : v >= 70 ? "green" : v >= 30 ? "yellow" : "red";
     if (k === "oa_short_burns") return isNaN(v) ? "overlay2" : v > 15 ? "red" : v > 6 ? "yellow" : "green";

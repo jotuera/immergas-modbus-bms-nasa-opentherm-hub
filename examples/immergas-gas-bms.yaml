@@ -61,5 +61,8 @@ packages:
                                         # / gb_iu23.yaml (IMG-BUS boiler + IU23 interface, hypothesis)
       - packages/gb_curve.yaml          # optional: weather curve in the hub
       - packages/gb_programs.yaml       # optional: CH / DHW programs, anti-legionella, vacation, summer / winter (needs gb_curve)
+      - packages/gb_computed.yaml       # optional: delta T, condensing, burner power, operating state
+      - packages/gb_analytics.yaml      # optional: burner starts / short cycling, heat and gas today, gas cost (needs gb_computed)
+      - packages/gb_superior_calc.yaml  # optional, per model: gb_superior_calc / gb_extra_calc / gb_pro_calc (needs gb_computed); MAGIS M TOP: gb_mtop_calc alone
       - packages/gb_boiler_params.yaml  # optional: boiler model / interface (setup hints) + service reminder
       - packages/gb_busmap.yaml         # optional: register scanner for the bus map card
