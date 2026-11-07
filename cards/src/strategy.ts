@@ -53,15 +53,16 @@ class ImmergasDominusStrategy {
         {
           title: t("Kocioł", "Boiler"), path: "dominus", icon: "mdi:water-boiler", type: "sections", max_columns: 3,
           sections: [
-            { type: "grid", column_span: 3, cards: [card("immergas-diagram-card", { stats: false, ...(config.diagram ?? {}) })] },
+            // diagram + charts (2 columns) | now + setpoints; then curve | mode + connectivity | schedule + settings
+            { type: "grid", column_span: 2, cards: [card("immergas-diagram-card", { stats: false, ...(config.diagram ?? {}) }), card("immergas-charts-card", config.charts ?? {})] },
             { type: "grid", cards: [card("immergas-now-card", config.now ?? {}), card("immergas-setpoints-card", config.setpoints ?? {})] },
-            { type: "grid", cards: [card("immergas-mode-card", config.mode ?? {}), card("immergas-links-card"),
+            { type: "grid", cards: [card("immergas-curve-card", config.curve ?? {})] },
+            { type: "grid", cards: [card("immergas-mode-card", config.mode ?? {}), card("immergas-links-card")] },
+            { type: "grid", cards: [card("immergas-schedule-card", config.schedule ?? {}),
               card("immergas-settings-card", { part: "online", ...(config.settings ?? {}) }),
               card("immergas-settings-card", { part: "offline", ...(config.settings ?? {}) })] },
-            { type: "grid", cards: [card("immergas-schedule-card", config.schedule ?? {}), card("immergas-curve-card", config.curve ?? {})] },
             { type: "grid", column_span: 3, cards: [card("immergas-calibration-card", config.calibration ?? {})] },
             { type: "grid", column_span: 3, cards: [card("immergas-automations-card", config.automations ?? {})] },
-            { type: "grid", column_span: 3, cards: [card("immergas-charts-card", config.charts ?? {})] },
           ],
         },
       ],
@@ -95,15 +96,14 @@ function otDashboard(config: any, t: (a: string, b: string) => string) {
     views: [{
       title: t("Kocioł", "Boiler"), path: "dominus", icon: "mdi:water-boiler", type: "sections", max_columns: 3,
       sections: [
-        { type: "grid", column_span: 3, cards: [card("immergas-diagram-card", { stats: false, ...(config.diagram ?? {}) })] },
-        // left: now + setpoints + Data-ID map, middle: operating mode + connectivity, right: schedule + boiler + settings
-        { type: "grid", cards: [card("immergas-now-card", config.now ?? {}), card("immergas-setpoints-card", config.setpoints ?? {}),
-          card("immergas-ot-map-card", config.ot_map ?? {})] },
+        // diagram + charts (2 columns) | now + setpoints; then Data-ID map | operating mode + connectivity | schedule + boiler + settings
+        { type: "grid", column_span: 2, cards: [card("immergas-diagram-card", { stats: false, ...(config.diagram ?? {}) }), card("immergas-charts-card", config.charts ?? {})] },
+        { type: "grid", cards: [card("immergas-now-card", config.now ?? {}), card("immergas-setpoints-card", config.setpoints ?? {})] },
+        { type: "grid", cards: [card("immergas-ot-map-card", config.ot_map ?? {})] },
         { type: "grid", cards: [card("immergas-mode-card", config.mode ?? {}), card("immergas-links-card", config.links ?? {})] },
         { type: "grid", cards: [card("immergas-schedule-card", config.schedule ?? {}), card("immergas-ot-boiler-card", config.ot_boiler ?? {}),
           card("immergas-settings-card", { part: "online", ...(config.settings ?? {}) }),
           card("immergas-settings-card", { part: "offline", ...(config.settings_offline ?? {}) })] },
-        { type: "grid", column_span: 3, cards: [card("immergas-charts-card", config.charts ?? {})] },
       ],
     }],
   };
