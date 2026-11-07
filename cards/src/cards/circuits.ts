@@ -8,6 +8,8 @@ type Row = [Key, string, string, string, number?]; // key, icon, PL label, EN la
 abstract class GridCard extends HubCard {
   protected abstract rows(): Row[];
   protected flags(): [Key, string, string][] { return []; }
+  /** computed tiles after the entity ones: icon, PL / EN label, value, colour */
+  protected extra(): [string, string, string, string, string][] { return []; }
   protected abstract heading(): [string, string, string];
   /** wider tiles: 12 water / 24 refrigerant tiles fill even rows (6 across two dashboard columns, 3 in one) */
   protected wide = false;
@@ -35,7 +37,9 @@ abstract class GridCard extends HubCard {
         return html`<div class="tile" style="background:${ca(col, 0.08)};border:1px solid ${ca(col, 0.18)}" @click=${() => this.moreInfo(k)}>
           <ha-icon icon=${ic} style="color:${c(col)}"></ha-icon>
           <div class="cx"><div class="lbl">${this.t(lp, le)}</div><div class="tv">${this.val(k, d ?? 1)}</div></div></div>`;
-      })}</div>` : nothing}
+      })}${this.extra().map(([ic, lp, le, v, col]) => html`<div class="tile" style="background:${ca(col, 0.08)};border:1px solid ${ca(col, 0.18)}">
+          <ha-icon icon=${ic} style="color:${c(col)}"></ha-icon>
+          <div class="cx"><div class="lbl">${this.t(lp, le)}</div><div class="tv">${v}</div></div></div>`)}</div>` : nothing}
       ${fl.length ? html`<div class="flags ${rows.length ? "" : "cols"}">${fl.filter(([k]) => this.eid(k)).map(([k, lp, le]) => {
         const on = this.on(k), col = on ? "green" : "overlay2";
         return html`<div class="flag" style="background:${ca(col, on ? 0.2 : 0.06)};border:1px solid ${ca(col, on ? 0.5 : 0.15)};color:${on ? c(col) : "inherit"}"
@@ -56,9 +60,29 @@ abstract class GridCard extends HubCard {
 }
 
 class ImmergasWaterCard extends GridCard {
+  protected extra(): [string, string, string, string, string][] {
+    if (!this.mtx) return [];
+    const d = this.n("tw2") - this.n("tw1");
+    return [["mdi:delta", "Delta T (TW_O − TW_I)", "Delta T (TW_O − TW_I)", isNaN(d) ? "–" : this.f(d, 1, 1) + " K", isNaN(d) ? "overlay2" : d < 0 ? "sky" : d > 8 ? "peach" : "green"]];
+  }
   protected heading(): [string, string, string] { return ["mdi:water-sync", "Obieg wodny", "Water circuit"]; }
   protected wide = true;
   protected rows(): Row[] {
+    // MAGIS M (Midea): the unit's water sensors - TW_O / TW_I, T1 / T1B, buffer, flow, curve targets, the DHW tank
+    if (this.mtx) return [
+      ["tw2", "mdi:thermometer-chevron-up", "Woda wylot (TW_O)", "Water outlet (TW_O)"],
+      ["tw1", "mdi:thermometer-chevron-down", "Woda wlot (TW_I)", "Water inlet (TW_I)"],
+      ["mt_t1", "mdi:thermometer-lines", "Woda całkowita (T1)", "Total water (T1)"],
+      ["mt_t1b", "mdi:thermometer-water", "Woda strefy 2 (T1B)", "Zone 2 water (T1B)"],
+      ["mt_buf_top", "mdi:storage-tank", "Bufor – góra", "Buffer – top"],
+      ["mt_buf_bot", "mdi:storage-tank-outline", "Bufor – dół", "Buffer – bottom"],
+      ["mt_flow", "mdi:pump", "Przepływ wody", "Water flow", 1],
+      ["heat_power", "mdi:radiator", "Moc cieplna", "Heat output", 2],
+      ["d04", "mdi:target", "Z krzywej strefa 1", "Curve target zone 1"],
+      ["mt_ct2", "mdi:target-variant", "Z krzywej strefa 2", "Curve target zone 2"],
+      ["mt_wset", "mdi:thermometer-water", "Nastawa wody strefa 1", "Water setpoint zone 1"],
+      ["tank", "mdi:water-boiler", "Zasobnik CWU (T5)", "DHW tank (T5)"],
+    ];
     return [
       ["tw2", "mdi:thermometer-chevron-up", "Zasilanie PC (TW2)", "HP flow (TW2)"],
       ["tw1", "mdi:thermometer-chevron-down", "Powrót PC (TW1)", "HP return (TW1)"],
@@ -80,6 +104,27 @@ class ImmergasRefrigerantCard extends GridCard {
   protected heading(): [string, string, string] { return ["mdi:snowflake-thermometer", "Obieg chłodniczy", "Refrigerant circuit"]; }
   protected wide = true;
   protected rows(): Row[] {
+    // MAGIS M (Midea): compressor, refrigerant temperatures (Tp / Th / T3 / T4 / T2 / T2B), pressures, EEV, fan, inverter
+    if (this.mtx) return [
+      ["hz", "mdi:sine-wave", "Częstotliwość sprężarki", "Compressor frequency", 0],
+      ["ff_hz_target", "mdi:target", "Częstotl. docelowa", "Target frequency", 0],
+      ["d73", "mdi:thermometer-high", "Tłoczenie (Tp)", "Discharge (Tp)"],
+      ["mt_suction", "mdi:thermometer-low", "Ssanie (Th)", "Suction (Th)"],
+      ["d74", "mdi:coolant-temperature", "Wymiennik zewn. (T3)", "Outdoor coil (T3)"],
+      ["outdoor", "mdi:thermometer", "Zewnętrzna (T4)", "Outdoor (T4)"],
+      ["d24", "mdi:water-thermometer", "Czynnik – ciecz (T2)", "Refrigerant liquid (T2)"],
+      ["mt_t2b", "mdi:weather-windy", "Czynnik – gaz (T2B)", "Refrigerant gas (T2B)"],
+      ["mt_ph", "mdi:gauge-full", "Ciśnienie wysokie", "High pressure", 0],
+      ["mt_pl", "mdi:gauge-low", "Ciśnienie niskie", "Low pressure", 0],
+      ["d77", "mdi:valve-open", "Zawór rozprężny (EEV)", "Expansion valve (EEV)", 0],
+      ["fan_real", "mdi:fan", "Wentylator", "Fan", 0],
+      ["mt_cur", "mdi:current-ac", "Prąd jedn. zewn.", "ODU current", 0],
+      ["mt_volt", "mdi:power-plug", "Napięcie jedn. zewn.", "ODU voltage", 0],
+      ["mt_inv", "mdi:chip", "Moduł inwertera", "Inverter module"],
+      ["mt_cap", "mdi:flash", "Moc jednostki", "Unit capacity", 1],
+      ["elec_power", "mdi:flash-outline", "Pobór mocy", "Electric power", 2],
+      ["mt_hours", "mdi:timer-outline", "Godziny sprężarki", "Compressor hours", 0],
+    ];
     return [
       ["hz", "mdi:sine-wave", "Częstotliwość (D71)", "Frequency (D71)", 0],
       ["ff_hz_target", "mdi:target", "Częstotl. docelowa", "Target frequency", 0],
@@ -111,8 +156,15 @@ class ImmergasRefrigerantCard extends GridCard {
     if (k === "hz" || k === "ff_hz_target" || k === "ff_hz_order") return this.n(k) > 0 ? "peach" : "overlay2";
     return super.colOf(k);
   }
-  protected flags() { return FLAGS; }
+  protected flags() { return this.mtx ? MT_FLAGS : FLAGS; }
 }
+
+const MT_FLAGS: [Key, string, string][] = [
+  ["mt_run", "Praca", "Running"], ["defrost", "Odszranianie", "Defrost"], ["f_pump", "Pompa wewn.", "Internal pump"], ["mt_pump_o", "Pompa zewn.", "Outer pump"],
+  ["mt_sv1", "Zawór SV1 (CWU)", "Valve SV1 (DHW)"], ["backup_heater", "Grzałka IBH1", "Heater IBH1"], ["mt_ibh2", "Grzałka IBH2", "Heater IBH2"],
+  ["dhw_heater", "Grzałka TBH", "Heater TBH"], ["mt_antifreeze", "Ochrona przed zamarzaniem", "Antifreeze"], ["mt_oil", "Powrót oleju", "Oil return"],
+  ["mt_th_heat", "Termostat: grzanie", "Thermostat: heat"], ["mt_th_cool", "Termostat: chłodzenie", "Thermostat: cool"], ["mt_alarm", "Alarm", "Alarm"],
+];
 
 const FLAGS: [Key, string, string][] = [
   ["f_comp", "Sprężarka", "Compressor"], ["f_fan", "Wentylator", "Fan"], ["f_order", "Zlecenie pracy", "Run request"],
@@ -124,7 +176,7 @@ const FLAGS: [Key, string, string][] = [
 class ImmergasStatesCard extends GridCard {
   protected heading(): [string, string, string] { return ["mdi:list-status", "Stan urządzeń", "Device states"]; }
   protected rows(): Row[] { return []; }
-  protected flags() { return FLAGS; }
+  protected flags() { return this.mtx ? MT_FLAGS : FLAGS; }
 }
 
 register("immergas-water-card", ImmergasWaterCard, "Immergas – Obieg wodny / Water circuit",
