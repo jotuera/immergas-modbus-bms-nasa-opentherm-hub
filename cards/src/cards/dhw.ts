@@ -10,6 +10,7 @@ class ImmergasDhwCard extends HubCard {
   private variant = "";
 
   private get combo() {
+    if (this.mtx) return false; // MAGIS M: no gas boiler
     const v = this.variant || this.config.variant;
     if (v) return v === "combo";
     const m = (this.s("d61") ?? "").toLowerCase();
@@ -19,14 +20,15 @@ class ImmergasDhwCard extends HubCard {
   protected body() {
     const combo = this.combo;
     const src = this.s("dhw_src") ?? "";
-    const sk = srcKind(src);
-    const sc = this.bad("dhw_src") ? "overlay1" : sk === "hpb" ? "yellow" : sk === "boiler" ? "peach" : sk === "hp" ? "teal" : "overlay2";
-    const si = sk === "hpb" ? "mdi:heat-pump-outline" : sk === "boiler" ? "mdi:fire" : "mdi:heat-pump";
+    // MAGIS M (mt_costs): "Heat pump" / "Heat pump + TBH heater" / "TBH heater"
+    const sk = this.mtx ? (/\+/.test(src) ? "hpb" : /tbh/i.test(src) ? "heater" : src ? "hp" : "") : srcKind(src);
+    const sc = this.bad("dhw_src") ? "overlay1" : sk === "hpb" ? "yellow" : sk === "boiler" ? "peach" : sk === "hp" ? "teal" : sk === "heater" ? "red" : "overlay2";
+    const si = sk === "hpb" ? "mdi:heat-pump-outline" : sk === "boiler" ? "mdi:fire" : sk === "heater" ? "mdi:heating-coil" : "mdi:heat-pump";
     const ct = this.n("dhw_cop_tank"), cf = this.n("dhw_cop_flow"), cost = this.n("dhw_cost");
     // the same heat from the alternative: gas boiler (Combo) or the electric heater, 1 kWh of heat per kWh (Pro)
     const heatTank = this.n("dhw_heat_tank"), pe = this.n("price_elec");
     const cg = combo ? this.n("dhw_cost_gas") : heatTank > 0 && pe > 0 ? heatTank * pe : NaN;
-    const running = isDhw(this.s("state"));
+    const running = this.mtx ? /^(cwu|dhw)$/i.test(this.s("state") ?? "") || this.on("dhw_heater") : isDhw(this.s("state"));
     const tank = this.n("tank"), set = this.n("dhw_active_set");
     const cheaper = !isNaN(cost) && !isNaN(cg) ? (cost <= cg) : null;
     const tab = (id: string, lbl: string) => html`<div class="tab" style=${(id === "combo") === combo ? `background:${ca("teal", 0.24)};border-color:${ca("teal", 0.6)}` : ""}
@@ -36,7 +38,7 @@ class ImmergasDhwCard extends HubCard {
     return html`
       ${this.head("mdi:water-boiler", this.t("Ostatni cykl CWU", "Last DHW cycle"),
         html`<span class="tabs">${running ? html`<span style="color:${c("yellow")};font-weight:800">${this.t("● trwa grzanie", "● heating now")}</span>` : nothing}
-          ${tab("combo", "Combo")}${tab("pro", "Pro")}</span>`)}
+          ${this.mtx ? nothing : html`${tab("combo", "Combo")}${tab("pro", "Pro")}`}</span>`)}
       <div class="top" style=${box(sc, true)} @click=${() => this.moreInfo("dhw_src")}>
         <ha-icon icon=${si} style="color:${c(sc)}"></ha-icon>
         <div class="cx"><div class="st" style="color:${c(sc)}">${this.bad("dhw_src") ? this.t("Brak cyklu", "No cycle yet") : src}</div>
@@ -57,7 +59,10 @@ class ImmergasDhwCard extends HubCard {
           <div class="val">${this.f(cg, 2, 2)} ${this.currency}</div></div>
         ${cheaper === null ? nothing : html`<div class="vd" style="color:${c(cheaper ? "green" : "peach")}">${cheaper ? this.t("pompa taniej", "heat pump cheaper") : (combo ? this.t("gaz taniej", "gas cheaper") : this.t("grzałka taniej", "heater cheaper"))}</div>`}
       </div>
-      <div class="note">${this.t("Zasobnik: pojemność × przyrost temperatury (nie widzi poboru wody w trakcie). Przepływ: D14 × ΔT pompy. Prawda zwykle pomiędzy.",
+      <div class="note">${this.mtx ? html`${this.t("Zasobnik: pojemność", "Cylinder: volume")} <b class="lnk" @click=${() => this.moreInfo("mt_tank_vol")}>${this.f(this.n("mt_tank_vol"), 0)} L</b>
+          ${this.t("× przyrost temperatury (nie widzi poboru wody w trakcie). Przepływ: moc cieplna jednostki w czasie cyklu. Prąd: pobór jednostki – grzałka TBH nie jest w nim liczona.",
+          "× temperature rise (misses hot water drawn during the cycle). Flow: the unit's heat output over the cycle. Electricity: the unit's input – the TBH heater is not metered in it.")}`
+        : this.t("Zasobnik: pojemność × przyrost temperatury (nie widzi poboru wody w trakcie). Przepływ: D14 × ΔT pompy. Prawda zwykle pomiędzy.",
         "Cylinder: capacity × temperature rise (misses hot water drawn during the cycle). Flow: D14 × heat-pump ΔT. The truth is usually in between.")}
         ${combo ? nothing : this.t(" Grzałka: ciepło z zasobnika × cena prądu (1 kWh prądu = 1 kWh ciepła).", " Heater: cylinder heat × electricity price (1 kWh of electricity = 1 kWh of heat).")}</div>`;
   }
@@ -72,6 +77,7 @@ class ImmergasDhwCard extends HubCard {
     .cost { cursor: pointer; display: flex; align-items: center; gap: 12px; margin-top: 8px; padding: 8px 12px; border-radius: 12px; }
     .vd { font-size: 12px; font-weight: 800; white-space: nowrap; }
     .tabs { display: inline-flex; gap: 4px; align-items: center; }
+    .lnk { cursor: pointer; text-decoration: underline dotted; }
     .tab { cursor: pointer; padding: 3px 9px; border-radius: 9px; font-size: 10.5px; font-weight: 800; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
   `];
 }

@@ -1,0 +1,134 @@
+# Immergas MAGIS M (Midea M-Thermal) Modbus - package "mt_costs" (optional, with mt_energy)
+# Heat cost and the last DHW cycle, counted in the hub (for the "Heat pump or heater?" and "Last DHW cycle" cards):
+#   - Electricity price (kept in the hub) and the cost of 1 kWh of heat from the heat pump = price / COP (the COP now
+#     while the compressor runs, else the last one); the electric heater costs the price itself (1 kWh = 1 kWh of heat).
+#   - Last DHW cycle: from the start of the DHW run (running mode DHW or the tank heater TBH) to its end - source,
+#     duration, electricity (the unit's electric power integrated every 10 s; the TBH is not metered by the unit),
+#     heat from the cylinder (volume x temperature rise) and from the flow (the unit's heat output integrated), both
+#     COPs, the cycle cost and the same heat from the electric heater. The last cycle survives a restart.
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+substitutions:
+  mt_currency: "zł"
+
+globals:
+  - { id: mt_dhw_on, type: bool, initial_value: "false" }
+  - { id: mt_dhw_t0, type: float, initial_value: "NAN" }      # cylinder temperature at the start
+  - { id: mt_dhw_tmax, type: float, initial_value: "NAN" }    # highest cylinder temperature in the cycle
+  - { id: mt_dhw_ms0, type: uint32_t, initial_value: "0" }
+  - { id: mt_dhw_e, type: float, initial_value: "0" }         # kWh of electricity in the cycle
+  - { id: mt_dhw_q, type: float, initial_value: "0" }         # kWh of heat (flow) in the cycle
+  - { id: mt_dhw_hp, type: bool, initial_value: "false" }     # the compressor ran in the cycle
+  - { id: mt_dhw_tbh_used, type: bool, initial_value: "false" }
+  - { id: mt_dhw_off_s, type: int, initial_value: "0" }       # seconds since the DHW request ended
+  - { id: mt_last_cop, type: float, restore_value: true, initial_value: "NAN" }
+  # the last cycle: source (0 none, 1 heat pump, 2 heat pump + TBH, 3 TBH), minutes, kWh electricity, heat cylinder / flow
+  - { id: mt_lc_src, type: int, restore_value: true, initial_value: "0" }
+  - { id: mt_lc_min, type: float, restore_value: true, initial_value: "NAN" }
+  - { id: mt_lc_e, type: float, restore_value: true, initial_value: "NAN" }
+  - { id: mt_lc_qt, type: float, restore_value: true, initial_value: "NAN" }
+  - { id: mt_lc_qf, type: float, restore_value: true, initial_value: "NAN" }
+
+script:
+  - id: mt_lc_publish
+    then:
+      - lambda: |-
+          static const char *SRC[] = {"", "${t_mt_src_hp}", "${t_mt_src_hp_tbh}", "${t_mt_src_tbh}"};
+          int s = id(mt_lc_src);
+          if (s >= 1 && s <= 3) id(mt_dhw_src).publish_state(SRC[s]);
+          float e = id(mt_lc_e), qt = id(mt_lc_qt), qf = id(mt_lc_qf), pr = id(mt_price_elec).state;
+          id(mt_dhw_min).publish_state(id(mt_lc_min));
+          id(mt_dhw_elec).publish_state(e);
+          id(mt_dhw_heat_tank).publish_state(qt);
+          id(mt_dhw_heat_flow).publish_state(qf);
+          id(mt_dhw_cop_tank).publish_state(e > 0.05f && qt > 0 ? qt / e : NAN);
+          id(mt_dhw_cop_flow).publish_state(e > 0.05f && qf > 0 ? qf / e : NAN);
+          id(mt_dhw_cost).publish_state(std::isnan(pr) || std::isnan(e) ? NAN : e * pr);
+          id(mt_dhw_cost_heater).publish_state(std::isnan(pr) || std::isnan(qt) ? NAN : qt * pr);
+
+esphome:
+  on_boot:
+    priority: -100
+    then:
+      - script.execute: mt_lc_publish
+
+interval:
+  - interval: 10s
+    then:
+      - lambda: |-
+          bool dhw = (!std::isnan(id(mt_run_mode_raw).state) && (int) id(mt_run_mode_raw).state == 5) || id(mt_tbh).state;
+          bool hp = id(mt_compressor_freq).has_state() && id(mt_compressor_freq).state > 0;
+          float tank = id(mt_dhw_temp).state;
+          // heat pump cost: price / COP (the last COP while the compressor ran)
+          float cop = id(mt_cop_now).state;
+          if (hp && !std::isnan(cop) && cop > 0.5f) id(mt_last_cop) = cop;
+          float pr = id(mt_price_elec).state, lc = id(mt_last_cop);
+          if (!std::isnan(pr) && !std::isnan(lc) && lc > 0) id(mt_hp_cost).publish_state(pr / lc);
+          if (dhw && !id(mt_dhw_on)) {                       // a cycle starts
+            id(mt_dhw_on) = true; id(mt_dhw_t0) = tank; id(mt_dhw_tmax) = tank; id(mt_dhw_ms0) = millis();
+            id(mt_dhw_e) = 0; id(mt_dhw_q) = 0; id(mt_dhw_hp) = false; id(mt_dhw_tbh_used) = false;
+          }
+          if (!id(mt_dhw_on)) return;
+          if (dhw) id(mt_dhw_off_s) = 0; else id(mt_dhw_off_s) += 10;
+          float p = id(mt_electric_power).state, q = id(mt_heat_output).state;
+          if (!std::isnan(p) && p > 0) id(mt_dhw_e) += p * 10.0f / 3600.0f;
+          if (!std::isnan(q) && q > 0 && hp) id(mt_dhw_q) += q * 10.0f / 3600.0f;
+          if (hp) id(mt_dhw_hp) = true;
+          if (id(mt_tbh).state) id(mt_dhw_tbh_used) = true;
+          if (!std::isnan(tank) && (std::isnan(id(mt_dhw_tmax)) || tank > id(mt_dhw_tmax))) id(mt_dhw_tmax) = tank;
+          if (std::isnan(id(mt_dhw_t0)) && !std::isnan(tank)) id(mt_dhw_t0) = tank;
+          if (id(mt_dhw_off_s) < 30) return;                 // the cycle ends 30 s after the DHW request
+          id(mt_dhw_on) = false;
+          float mins = (millis() - id(mt_dhw_ms0)) / 60000.0f - 0.5f;
+          if (mins < 2) return;                              // too short to tell anything
+          float rise = id(mt_dhw_tmax) - id(mt_dhw_t0), vol = id(mt_tank_volume).state;
+          id(mt_lc_src) = id(mt_dhw_hp) ? (id(mt_dhw_tbh_used) ? 2 : 1) : (id(mt_dhw_tbh_used) ? 3 : 1);
+          id(mt_lc_min) = mins;
+          id(mt_lc_e) = id(mt_dhw_e);
+          id(mt_lc_qt) = std::isnan(rise) || std::isnan(vol) || rise <= 0 ? 0 : vol * 4.186f * rise / 3600.0f;
+          id(mt_lc_qf) = id(mt_dhw_q);
+          id(mt_lc_publish)->execute();
+
+number:
+  - platform: template
+    name: "${n_mt_price_elec}"
+    id: mt_price_elec
+    icon: mdi:flash
+    entity_category: config
+    optimistic: true
+    restore_value: true
+    initial_value: 1.0
+    min_value: 0
+    max_value: 5
+    step: 0.001
+    mode: box
+    unit_of_measurement: "${mt_currency}/kWh"
+    on_value:
+      - script.execute: mt_lc_publish
+  - platform: template
+    name: "${n_mt_tank_volume}"
+    id: mt_tank_volume
+    icon: mdi:storage-tank
+    entity_category: config
+    optimistic: true
+    restore_value: true
+    initial_value: 200
+    min_value: 50
+    max_value: 1000
+    step: 1
+    mode: box
+    unit_of_measurement: "L"
+
+sensor:
+  - { platform: template, name: "${n_mt_hp_cost}", id: mt_hp_cost, icon: "mdi:heat-pump-outline", unit_of_measurement: "${mt_currency}/kWh", accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_dhw_min}", id: mt_dhw_min, icon: "mdi:timer-outline", unit_of_measurement: "min", accuracy_decimals: 0 }
+  - { platform: template, name: "${n_mt_dhw_elec}", id: mt_dhw_elec, icon: "mdi:flash", unit_of_measurement: "kWh", accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_dhw_heat_tank}", id: mt_dhw_heat_tank, icon: "mdi:water-thermometer", unit_of_measurement: "kWh", accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_dhw_heat_flow}", id: mt_dhw_heat_flow, icon: "mdi:waves-arrow-right", unit_of_measurement: "kWh", accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_dhw_cop_tank}", id: mt_dhw_cop_tank, icon: "mdi:gauge", accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_dhw_cop_flow}", id: mt_dhw_cop_flow, icon: "mdi:gauge", accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_dhw_cost}", id: mt_dhw_cost, icon: "mdi:cash", unit_of_measurement: "${mt_currency}", accuracy_decimals: 2 }
+  - { platform: template, name: "${n_mt_dhw_cost_heater}", id: mt_dhw_cost_heater, icon: "mdi:heating-coil", unit_of_measurement: "${mt_currency}", accuracy_decimals: 2 }
+
+text_sensor:
+  - { platform: template, name: "${n_mt_dhw_src}", id: mt_dhw_src, icon: "mdi:water-boiler" }

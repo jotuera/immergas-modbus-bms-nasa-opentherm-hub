@@ -10,6 +10,7 @@ class ImmergasGasCard extends HubCard {
   private showSet = false;
 
   private get combo() {
+    if (this.mtx) return false; // MAGIS M: no gas boiler, the backup is the electric heaters
     const v = this.variant || this.config.variant;
     if (v) return v === "combo";
     const m = (this.s("d61") ?? "").toLowerCase();
@@ -45,7 +46,7 @@ class ImmergasGasCard extends HubCard {
     return html`
       <div class="top">
         <div class="tl"><ha-icon icon="mdi:scale-balance"></ha-icon><span class="ttl">${combo ? this.t("Pompa, gaz czy grzałka?", "Heat pump, gas or heater?") : this.t("Pompa czy grzałka?", "Heat pump or heater?")}</span></div>
-        <div class="tabs">${tab("combo", "Combo")}${tab("pro", "Pro")}
+        <div class="tabs">${this.mtx ? nothing : html`${tab("combo", "Combo")}${tab("pro", "Pro")}`}
           <div class="gear ${this.showSet ? "on" : ""}" title=${this.t("Ceny", "Prices")} @click=${() => { this.showSet = !this.showSet; this.requestUpdate(); }}><ha-icon icon="mdi:cog-outline"></ha-icon></div></div></div>
       <div class="verdict" style=${box(vc, !!best)} @click=${() => this.moreInfo(combo ? "hp_cheaper" : "hp_cost")}>
         <ha-icon icon=${best ? icon(best[0]) : "mdi:help-circle-outline"} style="color:${c(vc)}"></ha-icon>
@@ -62,6 +63,8 @@ class ImmergasGasCard extends HubCard {
       <div class="note">ℹ️ ${combo
         ? this.t("Pompa = cena prądu ÷ COP, gaz = cena gazu w przeliczeniu na kWh ciepła z kotła, grzałka = cena prądu (1 kWh prądu = 1 kWh ciepła).",
           "Heat pump = electricity price ÷ COP, gas = gas price per kWh of heat from the boiler, heater = electricity price (1 kWh of electricity = 1 kWh of heat).")
+        : this.mtx ? this.t("MAGIS M nie ma kotła gazowego: rezerwą są grzałki IBH / TBH. Pompa = cena prądu ÷ COP (liczone w hubie, pakiet mt_costs), grzałka = cena prądu.",
+          "MAGIS M has no gas boiler: the backup is the IBH / TBH heaters. Heat pump = electricity price ÷ COP (counted in the hub, package mt_costs), heater = electricity price.")
         : this.t("Magis Pro nie ma kotła gazowego: rezerwą jest grzałka elektryczna. Pompa = cena prądu ÷ COP, grzałka = cena prądu.",
           "Magis Pro has no gas boiler: the backup is the electric heater. Heat pump = electricity price ÷ COP, heater = electricity price.")}</div>`;
   }
