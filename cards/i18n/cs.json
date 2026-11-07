@@ -1451,5 +1451,6 @@
   "Device": "Zařízení",
   "Device type": "Typ zařízení",
   "Gas boiler: no cooling, humidity, night function U11 or integration I01–I10. The R / T / A codes are the Magis menu – on boilers with a text menu the same function has a name instead of a code.": "Plynový kotel: bez chlazení, vlhkosti, noční funkce U11 a integrace I01–I10. Kódy R / T / A jsou z menu Magis – u kotlů s textovým menu má stejná funkce název místo kódu.",
-  "burner – not visible over TCP": "hořák – po TCP není vidět"
+  "burner – not visible over TCP": "hořák – po TCP není vidět",
+  "not needed – weather compensation (outdoor probe / the boiler's curve)": "není potřeba – ekvitermní regulace (venkovní čidlo / křivka kotle)"
 }

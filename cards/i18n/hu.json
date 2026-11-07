@@ -1451,5 +1451,6 @@
   "Device": "Készülék",
   "Device type": "Készülék típusa",
   "Gas boiler: no cooling, humidity, night function U11 or integration I01–I10. The R / T / A codes are the Magis menu – on boilers with a text menu the same function has a name instead of a code.": "Gázkazán: nincs hűtés, páratartalom, U11 éjszakai funkció és I01–I10 integráció. Az R / T / A kódok a Magis menüből valók – szöveges menüs kazánoknál ugyanaz a funkció név szerint szerepel.",
-  "burner – not visible over TCP": "égő – TCP-n nem látható"
+  "burner – not visible over TCP": "égő – TCP-n nem látható",
+  "not needed – weather compensation (outdoor probe / the boiler's curve)": "nem szükséges – időjárásfüggő szabályozás (külső érzékelő / a kazán görbéje)"
 }

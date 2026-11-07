@@ -1451,5 +1451,6 @@
   "Device": "Gerät",
   "Device type": "Gerätetyp",
   "Gas boiler: no cooling, humidity, night function U11 or integration I01–I10. The R / T / A codes are the Magis menu – on boilers with a text menu the same function has a name instead of a code.": "Gaskessel: keine Kühlung, Feuchte, Nachtfunktion U11 oder Integration I01–I10. Die R / T / A-Codes stammen aus dem Magis-Menü – bei Kesseln mit Textmenü hat dieselbe Funktion einen Namen statt eines Codes.",
-  "burner – not visible over TCP": "Brenner – über TCP nicht sichtbar"
+  "burner – not visible over TCP": "Brenner – über TCP nicht sichtbar",
+  "not needed – weather compensation (outdoor probe / the boiler's curve)": "nicht nötig – witterungsgeführte Regelung (Außenfühler / Kesselkurve)"
 }

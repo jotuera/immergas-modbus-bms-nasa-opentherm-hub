@@ -1451,5 +1451,6 @@
   "Device": "Appareil",
   "Device type": "Type d'appareil",
   "Gas boiler: no cooling, humidity, night function U11 or integration I01–I10. The R / T / A codes are the Magis menu – on boilers with a text menu the same function has a name instead of a code.": "Chaudière gaz : pas de rafraîchissement, d'humidité, de fonction nuit U11 ni d'intégration I01–I10. Les codes R / T / A sont ceux du menu Magis – sur les chaudières à menu texte la même fonction a un nom au lieu d'un code.",
-  "burner – not visible over TCP": "brûleur – non visible par TCP"
+  "burner – not visible over TCP": "brûleur – non visible par TCP",
+  "not needed – weather compensation (outdoor probe / the boiler's curve)": "inutile – régulation climatique (sonde extérieure / courbe de la chaudière)"
 }

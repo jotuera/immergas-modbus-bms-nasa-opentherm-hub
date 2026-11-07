@@ -1451,5 +1451,6 @@
   "Device": "Apparecchio",
   "Device type": "Tipo di apparecchio",
   "Gas boiler: no cooling, humidity, night function U11 or integration I01–I10. The R / T / A codes are the Magis menu – on boilers with a text menu the same function has a name instead of a code.": "Caldaia a gas: niente raffrescamento, umidità, funzione notte U11 o integrazione I01–I10. I codici R / T / A sono del menu Magis – nelle caldaie con menu testuale la stessa funzione ha un nome invece del codice.",
-  "burner – not visible over TCP": "bruciatore – non visibile via TCP"
+  "burner – not visible over TCP": "bruciatore – non visibile via TCP",
+  "not needed – weather compensation (outdoor probe / the boiler's curve)": "non necessario – termoregolazione climatica (sonda esterna / curva della caldaia)"
 }

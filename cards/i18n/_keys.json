@@ -9548,5 +9548,12 @@
   "files": [
    "settings.ts"
   ]
+ },
+ {
+  "en": "not needed – weather compensation (outdoor probe / the boiler's curve)",
+  "pl": "niepotrzebne – regulacja pogodowa (sonda zewnętrzna / krzywa kotła)",
+  "files": [
+   "base.ts"
+  ]
  }
 ]

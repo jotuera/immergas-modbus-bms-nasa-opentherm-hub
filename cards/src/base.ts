@@ -217,15 +217,23 @@ export abstract class HubCard extends LitElement {
     if (this.esp) return this.espReady();
     const code = String(this.s("err_code") ?? "").replace(/\D/g, "");
     const room = !this.bad("zone1") && !isNaN(this.n("zone1"));
+    // weather-compensated without a room sensor: the Dominus regulator on the outdoor probe, the boiler's own curve
+    // (ZEUS Superior / HERCULES M5 · P66 declared) or an outdoor temperature and no room one - the room rows are not needed
+    const prof0 = this.otProfile;
+    const weather = this.on("ot_out_sensor") || ((prof0 === "superior" || prof0 === "hercules") && !isNaN(this.n("ot_sup_out_min")))
+      || (!room && !isNaN(this.n("outdoor")));
+    const probeRoom = room && this.s("ot_ntc") === "room", amb = this.eid("ot_room_sensor") ? this.on("ot_room_sensor") : null;
+    const noRoom = this.t("niepotrzebne – regulacja pogodowa (sonda zewnętrzna / krzywa kotła)", "not needed – weather compensation (outdoor probe / the boiler's curve)");
     type Row = [boolean | null, string, string];
     const rows: Row[] = [
       [code !== "31", this.t("Kocioł nie czeka na pilota (brak E31)", "The boiler does not wait for the remote (no E31)"),
         this.t("po zdjęciu CAR V2: odłącz i włącz zasilanie kotła", "after removing the CAR V2: power-cycle the boiler")],
       [null, this.t("Mostek X40 na zaciskach 40-41 kotła", "Jumper X40 on boiler terminals 40-41"),
         this.t("CAR V2 wymaga jego zdjęcia – bez CAR V2 załóż go z powrotem (albo termostat), inaczej kocioł nie włączy CO", "the CAR V2 needs it removed – without the CAR V2 put it back (or a thermostat), else the boiler will not heat")],
-      [room && this.s("ot_ntc") === "room", this.t("Sonda Dominusa mierzy pokój", "The Dominus probe measures the room"),
-        room ? `${this.f(this.n("zone1"), 1, 1)} °C` : this.t("podłącz sondę do zacisków 1-2 i ustaw „Sonda Dominusa mierzy” = pokój", "connect the probe to terminals 1-2 and set “Dominus probe use” = room")],
-      [this.eid("ot_room_sensor") ? this.on("ot_room_sensor") : null, this.t("Regulacja wg pokoju (AMB)", "Room control (AMB)"), this.t("Czujnik pokojowy włączony", "Room sensor on")],
+      [weather && !probeRoom ? null : probeRoom, this.t("Sonda Dominusa mierzy pokój", "The Dominus probe measures the room"),
+        room ? `${this.f(this.n("zone1"), 1, 1)} °C` : weather ? noRoom : this.t("podłącz sondę do zacisków 1-2 i ustaw „Sonda Dominusa mierzy” = pokój", "connect the probe to terminals 1-2 and set “Dominus probe use” = room")],
+      [weather && !amb ? null : amb, this.t("Regulacja wg pokoju (AMB)", "Room control (AMB)"),
+        weather && !amb ? noRoom : this.t("Czujnik pokojowy włączony", "Room sensor on")],
       [this.eid("ot_frost") ? this.on("ot_frost") : null, this.t("Ochrona przed zamarzaniem (ANTIGL)", "Frost protection (ANTIGL)"), ""],
       [this.eid("prog_mode") ? (this.attr("prog_mode", "options") ?? []).length > 0 && this.s("prog_mode") === "auto" : null,
         this.t("Program CO AUTO (PR RIS)", "CH program AUTO (PR RIS)"), this.t("kalendarze Komfort / Eko w karcie Harmonogram", "Comfort / Eco calendars in the Schedule card")],
@@ -233,7 +241,7 @@ export abstract class HubCard extends LitElement {
       [!this.on("ot_ro"), this.t("Blokada zapisu wyłączona", "Write block off"), this.t("HA steruje, nie pilot", "HA in charge, not the remote")],
     ];
     // menu families: the parameter that lets the boiler heat without its own remote
-    const prof = this.otProfile;
+    const prof = prof0;
     if (prof === "hercules")
       rows.splice(1, 0, [this.eid("ot_ch_no_remote") && ["on", "off"].includes(this.s("ot_ch_no_remote") ?? "") ? this.s("ot_ch_no_remote") === "on" : null,
         this.t("M3 · P33 – CO bez działającego pilota", "M3 · P33 – CH without a working remote"),
