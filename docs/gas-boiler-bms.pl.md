@@ -20,7 +20,7 @@ modułów DIM – kocioł zgłosi konflikt mastera albo je pominie.
 
 | Element | |
 |---|---|
-| [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) + ATOMIC PortABC | ESP32-S3; port C (RX GPIO6, TX GPIO5) |
+| [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) | ESP32-S3; moduł RS485 w jego własnym gnieździe Grove (RX GPIO1, TX GPIO2) – przy jednej magistrali **ATOMIC PortABC nie jest potrzebny** (z PortABC: port C, RX GPIO6, TX GPIO5) |
 | 1× M5Stack Isolated RS485 Unit | izolacja galwaniczna, automatyczny kierunek (bez pinu DE) |
 
 Działa każdy ESP32 z transceiverem RS485: ustaw `gb_uart_rx_pin` / `gb_uart_tx_pin` (i `flow_control_pin` w `gb_modbus`
@@ -78,7 +78,7 @@ wymaga potem włączonego przełącznika *Żądanie grzania (CO)* – steruj nim
      przez interfejs IU23).
    - `gb_curve` tylko wtedy, gdy hub ma liczyć nastawę zasilania z sondy zewnętrznej; inaczej *Nastawę zasilania CO*
      ustawia Home Assistant.
-4. **Sprawdź piny** (`substitutions:` na górze), jeśli twoja płytka to nie AtomS3 + ATOMIC PortABC.
+4. **Sprawdź piny** (`substitutions:` na górze), jeśli twoja płytka to nie AtomS3 Lite z modułem w gnieździe Grove.
 5. **Wgraj** urządzenie (pierwszy raz przez USB, potem przez sieć) i **dodaj je w Home Assistant** (*Ustawienia →
    Urządzenia i usługi* – znajdzie się samo).
 6. **Sprawdź połączenie:** *Immergas Gas - Usterka* pokazuje *Brak usterki*, a temperatury idą za kotłem; na wyświetlaczu kotła pojawia się ikona BMS / urządzenia zewnętrznego. E144 (PRO: błąd 100) = brak ramek przez 30 s – sprawdź podłączenie i menu kotła.

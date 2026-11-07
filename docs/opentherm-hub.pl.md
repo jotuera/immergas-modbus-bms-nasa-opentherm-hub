@@ -24,8 +24,9 @@ stanąć pośrodku.
 
 OpenTherm to dwuprzewodowa pętla prądowo-napięciowa – **nie** RS485. Potrzebny jest **adapter master** OpenTherm (np.
 OpenTherm Adapter, DIYLess Master OpenTherm Shield), a dla bramki dodatkowo **adapter slave** (DIYLess Slave Shield /
-OpenTherm Slave Adapter), każdy na dwóch GPIO (wejście / wyjście). Domyślnie: master na porcie C (wejście GPIO6,
-wyjście GPIO5), slave na porcie B (wejście GPIO8, wyjście GPIO7) AtomS3 + ATOMIC PortABC. Logika adapterów: wyjście
+OpenTherm Slave Adapter), każdy na dwóch GPIO (wejście / wyjście). Domyślnie na AtomS3 Lite: master na pinach złącza
+G6 (wejście) / G5 (wyjście), slave na G8 (wejście) / G7 (wyjście) – adaptery łączy się przewodami z pinami, **ATOMIC
+PortABC nie jest potrzebny** (z PortABC te same piny to jego port C i port B). Logika adapterów: wyjście
 LOW = linia aktywna, wejście HIGH = linia aktywna (`out_active_low: true`, `in_active_low: false`); dla adaptera
 działającego odwrotnie zmień je.
 
@@ -78,7 +79,7 @@ najpierw ustaw M3 P33 = ON – kocioł grzeje wtedy nawet po utracie OpenTherm.
      z Home Assistant (albo zostaw – regulator pracuje wtedy tylko z krzywej).
    - **Bramka** (pilot zostaje): odkomentuj `ot_gateway` i podstawienia `ot_room_in_pin` / `ot_room_out_pin`;
      `ot_regulator` jest opcjonalny (ustawia wartości, których hub używa, gdy pilot milczy).
-4. **Sprawdź piny** (`substitutions:` na górze), jeśli twoja płytka to nie AtomS3 + ATOMIC PortABC.
+4. **Sprawdź piny** (`substitutions:` na górze), jeśli twoja płytka to nie AtomS3 Lite.
 5. **Wgraj** urządzenie (pierwszy raz przez USB, potem przez sieć) i **dodaj je w Home Assistant** (*Ustawienia →
    Urządzenia i usługi* – znajdzie się samo).
 6. **Sprawdź połączenie:** *Immergas OT - Połączenie z kotłem* włącza się w kilka sekund, a *Temperatura zasilania* / *Płomień* idą za kotłem. *Brak odpowiedzi* rośnie bez *Ramki poprawne* = sprawdź podłączenie adaptera i poziomy `in_active_low` / `out_active_low`; w bramce *Połączenie z pilotem* pokazuje pilota.

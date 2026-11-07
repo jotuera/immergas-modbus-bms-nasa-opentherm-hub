@@ -1,5 +1,5 @@
 # Immergas MAGIS M (Midea M-Thermal) heat pump - example configuration
-# One AtomS3 (Lite) + ATOMIC PortABC + 1x M5Stack Isolated RS485 Unit on Port C. The hub is the Modbus master, the
+# One AtomS3 Lite + 1x M5Stack Isolated RS485 Unit in its Grove port (no PortABC needed). The hub is the Modbus master, the
 # wired controller (HMI) the slave: RS485 A / B -> controller H1 / H2 (swap them if nothing answers), GND -> E.
 # NEVER connect to A / B (the 13.5 V AC supply of the controller) or X / Y. 9600 8N1, address 1.
 # Experimental: built from the Midea M-Thermal protocol, not tested on a MAGIS M yet.
@@ -9,8 +9,8 @@ substitutions:
   device_name: immergas-magis-m
   friendly_name: Immergas Magis M
   mt_name_prefix: "Immergas M"
-  mt_uart_rx_pin: GPIO6     # Port C (white wire = RX)
-  mt_uart_tx_pin: GPIO5
+  mt_uart_rx_pin: GPIO1     # AtomS3 Lite Grove port (white wire = RX); with an ATOMIC PortABC on Port C: GPIO6
+  mt_uart_tx_pin: GPIO2     # with an ATOMIC PortABC on Port C: GPIO5
 
 esphome:
   name: ${device_name}

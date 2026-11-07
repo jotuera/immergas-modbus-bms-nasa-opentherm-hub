@@ -23,8 +23,9 @@ in the middle.
 
 OpenTherm is a 2-wire current / voltage loop – **not** RS485. You need an OpenTherm **master adapter** (e.g. OpenTherm
 Adapter, DIYLess Master OpenTherm Shield) and, for the gateway, a **slave adapter** (DIYLess Slave Shield / OpenTherm
-Slave Adapter), each on two GPIOs (in / out). Defaults: master on Port C (in GPIO6, out GPIO5), slave on Port B (in GPIO8,
-out GPIO7) of an AtomS3 + ATOMIC PortABC. The adapters' logic: output LOW = line active, input HIGH = line active
+Slave Adapter), each on two GPIOs (in / out). Defaults on an AtomS3 Lite: master on header pins G6 (in) / G5 (out), slave
+on G8 (in) / G7 (out) – the adapters are wired to the pins, **no ATOMIC PortABC needed** (with a PortABC the same pins
+are its Port C and Port B). The adapters' logic: output LOW = line active, input HIGH = line active
 (`out_active_low: true`, `in_active_low: false`); change them for an adapter that works the other way.
 
 ## Wiring
@@ -76,7 +77,7 @@ family set M3 P33 = ON first – the boiler then keeps heating even if OpenTherm
      sensor of Home Assistant (or leave it – the regulator then runs on the curve only).
    - **Gateway** (the room unit stays): uncomment `ot_gateway` and the `ot_room_in_pin` / `ot_room_out_pin`
      substitutions; `ot_regulator` is optional (it sets the values the hub uses while the room unit is silent).
-4. **Check the pins** (`substitutions:` at the top) if your board is not an AtomS3 + ATOMIC PortABC.
+4. **Check the pins** (`substitutions:` at the top) if your board is not an AtomS3 Lite.
 5. **Flash** the device (USB the first time, then over the air) and **add it in Home Assistant** (*Settings → Devices
    & services* – it is found automatically).
 6. **Check the connection:** *Immergas OT - Boiler connection* turns on within a few seconds and *Flow temperature* / *Flame* follow the boiler. *No answer* growing without *Frames OK* = check the adapter wiring and the `in_active_low` / `out_active_low` levels; in the gateway, *Room unit connection* shows the room unit.

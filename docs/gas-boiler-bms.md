@@ -20,7 +20,7 @@ controller or DIM units – the boiler reports a master conflict or ignores them
 
 | Part | |
 |---|---|
-| [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) + ATOMIC PortABC | ESP32-S3; Port C (RX GPIO6, TX GPIO5) |
+| [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) | ESP32-S3; the RS485 unit goes into its own Grove port (RX GPIO1, TX GPIO2) – **no ATOMIC PortABC needed** for one bus (with a PortABC: Port C, RX GPIO6, TX GPIO5) |
 | 1× M5Stack Isolated RS485 Unit | galvanic isolation, automatic direction (no DE pin) |
 
 Any ESP32 with an RS485 transceiver works: set `gb_uart_rx_pin` / `gb_uart_tx_pin` (and a `flow_control_pin` on
@@ -78,7 +78,7 @@ is one. **Heating** then needs the *Heat request (CH)* switch on – drive it fr
      through the IU23 interface).
    - `gb_curve` only when the hub should compute the flow setpoint from the outdoor probe; otherwise Home Assistant
      sets *CH flow setpoint*.
-4. **Check the pins** (`substitutions:` at the top) if your board is not an AtomS3 + ATOMIC PortABC.
+4. **Check the pins** (`substitutions:` at the top) if your board is not an AtomS3 Lite with the unit in its Grove port.
 5. **Flash** the device (USB the first time, then over the air) and **add it in Home Assistant** (*Settings → Devices
    & services* – it is found automatically).
 6. **Check the connection:** *Immergas Gas - Fault* shows *No fault* and the temperatures follow the boiler; the boiler display shows the BMS / external device icon. E144 (PRO: fault 100) = no frames for 30 s – check the wiring and the boiler menu.

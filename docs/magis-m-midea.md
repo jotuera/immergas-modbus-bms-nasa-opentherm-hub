@@ -16,7 +16,7 @@ Immergas generator BMS protocol – the `gb_mtop` package, see [Gas boilers over
 
 | Part | |
 |---|---|
-| [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) + ATOMIC PortABC | ESP32-S3; Port C (RX GPIO6, TX GPIO5) |
+| [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) | ESP32-S3; the RS485 unit goes into its own Grove port (RX GPIO1, TX GPIO2) – **no ATOMIC PortABC needed** for one bus (with a PortABC: Port C, RX GPIO6, TX GPIO5) |
 | 1× M5Stack Isolated RS485 Unit | galvanic isolation, automatic direction (no DE pin) |
 
 Any ESP32 with an RS485 transceiver works (`mt_uart_rx_pin` / `mt_uart_tx_pin`).
@@ -56,7 +56,7 @@ The hub is the master, the controller the slave: **9600 baud, 8N1, address 1** (
 
    - Start with all packages; leave out `mt_control` for a read-only first run.
    - `mt_energy_multiply` (substitution) if the energy counters come out 100× too small.
-4. **Check the pins** (`substitutions:` at the top) if your board is not an AtomS3 + ATOMIC PortABC.
+4. **Check the pins** (`substitutions:` at the top) if your board is not an AtomS3 Lite with the unit in its Grove port.
 5. **Flash** the device (USB the first time, then over the air) and **add it in Home Assistant** (*Settings → Devices
    & services* – it is found automatically).
 6. **Check the connection:** *Immergas M - Protocol version* and *Water outlet temperature* get values within a minute. Nothing = swap H1 / H2, check the 120 Ω resistor and the controller address (menu 17).

@@ -16,7 +16,7 @@ T1S / T4 / T5 / IBH / TBH. Nie ma nic wspólnego z MAGIS PRO / COMBO V2 na Samsu
 
 | Element | |
 |---|---|
-| [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) + ATOMIC PortABC | ESP32-S3; port C (RX GPIO6, TX GPIO5) |
+| [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) | ESP32-S3; moduł RS485 w jego własnym gnieździe Grove (RX GPIO1, TX GPIO2) – przy jednej magistrali **ATOMIC PortABC nie jest potrzebny** (z PortABC: port C, RX GPIO6, TX GPIO5) |
 | 1× M5Stack Isolated RS485 Unit | izolacja galwaniczna, automatyczny kierunek (bez pinu DE) |
 
 Działa każdy ESP32 z transceiverem RS485 (`mt_uart_rx_pin` / `mt_uart_tx_pin`).
@@ -56,7 +56,7 @@ Na H1 / H2 tylko jeden master, a panel musi zostać podłączony – to on podaj
 
    - Zacznij od wszystkich pakietów; na pierwsze uruchomienie tylko z odczytem pomiń `mt_control`.
    - `mt_energy_multiply` (podstawienie), jeśli liczniki energii wychodzą 100× za małe.
-4. **Sprawdź piny** (`substitutions:` na górze), jeśli twoja płytka to nie AtomS3 + ATOMIC PortABC.
+4. **Sprawdź piny** (`substitutions:` na górze), jeśli twoja płytka to nie AtomS3 Lite z modułem w gnieździe Grove.
 5. **Wgraj** urządzenie (pierwszy raz przez USB, potem przez sieć) i **dodaj je w Home Assistant** (*Ustawienia →
    Urządzenia i usługi* – znajdzie się samo).
 6. **Sprawdź połączenie:** *Immergas M - Wersja protokołu* i *Temperatura wody na wylocie* dostają wartości w ciągu minuty. Nic = zamień H1 / H2, sprawdź rezystor 120 Ω i adres panelu (menu 17).
