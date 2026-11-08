@@ -23,8 +23,7 @@ modułów DIM – kocioł zgłosi konflikt mastera albo je pominie.
 | [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) | ESP32-S3; moduł RS485 w jego własnym gnieździe Grove (RX GPIO1, TX GPIO2) – przy jednej magistrali **ATOMIC PortABC nie jest potrzebny** (z PortABC: port C, RX GPIO6, TX GPIO5) |
 | 1× M5Stack Isolated RS485 Unit | izolacja galwaniczna, automatyczny kierunek (bez pinu DE) |
 
-Działa każdy ESP32 z transceiverem RS485: ustaw `gb_uart_rx_pin` / `gb_uart_tx_pin` (i `flow_control_pin` w `gb_modbus`
-przy transceiverze z pinem kierunku). Port: 9600 bodów, 8E1, adres slave 1.
+Port: 9600 bodów, 8E1, adres slave 1.
 
 ## Kotły i podłączenie
 

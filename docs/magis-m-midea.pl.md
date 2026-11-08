@@ -19,8 +19,6 @@ T1S / T4 / T5 / IBH / TBH. Nie ma nic wspólnego z MAGIS PRO / COMBO V2 na Samsu
 | [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) | ESP32-S3; moduł RS485 w jego własnym gnieździe Grove (RX GPIO1, TX GPIO2) – przy jednej magistrali **ATOMIC PortABC nie jest potrzebny** (z PortABC: port C, RX GPIO6, TX GPIO5) |
 | 1× M5Stack Isolated RS485 Unit | izolacja galwaniczna, automatyczny kierunek (bez pinu DE) |
 
-Działa każdy ESP32 z transceiverem RS485 (`mt_uart_rx_pin` / `mt_uart_tx_pin`).
-
 ## Podłączenie
 
 | Hub (RS485) | Panel przewodowy | Uwagi |

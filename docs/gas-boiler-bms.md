@@ -23,8 +23,7 @@ controller or DIM units – the boiler reports a master conflict or ignores them
 | [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) | ESP32-S3; the RS485 unit goes into its own Grove port (RX GPIO1, TX GPIO2) – **no ATOMIC PortABC needed** for one bus (with a PortABC: Port C, RX GPIO6, TX GPIO5) |
 | 1× M5Stack Isolated RS485 Unit | galvanic isolation, automatic direction (no DE pin) |
 
-Any ESP32 with an RS485 transceiver works: set `gb_uart_rx_pin` / `gb_uart_tx_pin` (and a `flow_control_pin` on
-`gb_modbus` for a transceiver with a direction pin). Port: 9600 baud, 8E1, slave address 1.
+Port: 9600 baud, 8E1, slave address 1.
 
 ## Boilers and wiring
 

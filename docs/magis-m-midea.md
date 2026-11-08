@@ -19,8 +19,6 @@ Immergas generator BMS protocol – the `gb_mtop` package, see [Gas boilers over
 | [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) | ESP32-S3; the RS485 unit goes into its own Grove port (RX GPIO1, TX GPIO2) – **no ATOMIC PortABC needed** for one bus (with a PortABC: Port C, RX GPIO6, TX GPIO5) |
 | 1× M5Stack Isolated RS485 Unit | galvanic isolation, automatic direction (no DE pin) |
 
-Any ESP32 with an RS485 transceiver works (`mt_uart_rx_pin` / `mt_uart_tx_pin`).
-
 ## Wiring
 
 | Hub (RS485) | Wired controller | Notes |
