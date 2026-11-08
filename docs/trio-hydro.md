@@ -59,10 +59,6 @@ PortABC.
 
 <img src="images/en/trio-hydro-electric-wiring.svg" alt="TRIO HYDRO ELECTRIC: the hub on F1/F2 and the zone bus" width="100%">
 
-**Without soldering, as two devices:** the ready-made [OT-thing](https://www.seegel-systeme.de/produkt/ot-thing/)
-gateway (OpenTherm master + slave in a box, ESP32-C3) for the boiler side and an AtomS3 Lite with the RS485 units for
-F1/F2 and the zone bus – a configuration for the OT-thing is not prepared yet.
-
 ## Configuration
 
 | Version | Configuration file |

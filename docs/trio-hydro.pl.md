@@ -59,10 +59,6 @@ PortABC.
 
 <img src="images/trio-hydro-electric-wiring.svg" alt="TRIO HYDRO ELECTRIC: hub na F1/F2 i magistrali strefowej" width="100%">
 
-**Bez lutowania, jako dwa urządzenia:** gotowa bramka [OT-thing](https://www.seegel-systeme.de/produkt/ot-thing/)
-(master + slave OpenTherm w obudowie, ESP32-C3) od strony kotła i AtomS3 Lite z modułami RS485 do F1/F2 i magistrali
-strefowej – konfiguracji dla OT-thing jeszcze nie ma.
-
 ## Konfiguracja
 
 | Wersja | Plik konfiguracji |

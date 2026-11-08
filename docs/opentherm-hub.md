@@ -56,17 +56,13 @@ How it goes together:
   its black wire is the shield's **GND** as well, and the ToUnit Base carries only the two signals. In the gateway GND
   and the signals come from ports A / C, and the Slave's 5 V from port C. Everything plugs in – no soldering, no wires
   on the side pins of the Atom.
-- **DIYLess only: the shields stacked on a WeMos D1 mini ESP32** – not the ESP8266 D1 mini, the hub needs an ESP32 (or
-  the [DIYLess ESP OpenTherm Gateway](https://diyless.com/product/esp8266-opentherm-gateway) kit). No wires at all;
-  change the board and the pins in the configuration (see [Installation](#installation), step 4).
 
 **Power: the shields run on 3.3 V (their 3V3 pin).** The traces of the DIYLess shields show it: the Master shield
 uses only D1, D2, GND and 3V3 (its 5V pin is not connected), the Slave shield D6, D7, GND, 3V3 and 5V. The Grove ports
 (ToUnit Base, PortABC, Grove AtomS3) give GND, **5 V** and two GPIOs – no 3.3 V. So pin **G1 of the Grove AtomS3** is
 kept high by the `ot_3v3_supply` package and its white wire feeds the 3V3 pin of the shield(s); an ESP32-S3 pin gives up
 to ~40 mA, enough for the logic side of one or two shields. The red 5 V wires are not used on the Master shield
-(insulate them); the Slave shield's 5V pin gets the red wire of port C. On a WeMos D1 mini ESP32 the shields
-get 3.3 V and 5 V from the board itself.
+(insulate them); the Slave shield's 5V pin gets the red wire of port C.
 
 The shields make the OpenTherm line voltage themselves, no extra supply.
 
@@ -109,7 +105,7 @@ from the ESP32: the boiler's answer comes **in**, the hub's frames go **out**.
 | yellow – signal from the ESP32 | **D1** · IO1 = G5 · `ot_boiler_out_pin: GPIO5` | **D1** · `ot_boiler_out_pin: GPIO38` | **D7** · `ot_room_out_pin: GPIO5` |
 
 The pin pairs are those of the gateway example of the OpenTherm library the shields are made for (master D2 / D1,
-slave D6 / D7; on a D1 mini ESP32 GPIO21 / 22 and GPIO19 / 23).
+slave D6 / D7).
 
 ### Master – the hub replaces the room unit
 
@@ -163,9 +159,7 @@ family set M3 P33 = ON first – the boiler then keeps heating even if OpenTherm
    - **Gateway:** nothing to choose – `ot_gateway` and the room pins (port C) are already set; `ot_control` gives the
      values the hub uses while the room unit is silent.
 4. **Check the pins** (`substitutions:` at the top). Both files have the pins of the diagrams (master: ToUnit Base,
-   gateway: PortABC ports A and C). Shields stacked on a WeMos D1 mini ESP32: `ot_boiler_in_pin: GPIO21`,
-   `ot_boiler_out_pin: GPIO22`, gateway `ot_room_in_pin: GPIO19`, `ot_room_out_pin: GPIO23`; in `esp32:` set
-   `board: wemos_d1_mini32`, remove `hardware_uart: USB_SERIAL_JTAG` from `logger:` and leave out `ot_3v3_supply`.
+   gateway: PortABC ports A and C).
 5. **Flash** the device (USB the first time, then over the air) and **add it in Home Assistant** (*Settings → Devices
    & services* – it is found automatically).
 6. **Check the connection:** *Immergas OT - Boiler connection* turns on within a few seconds and *Flow temperature* / *Flame* follow the boiler. *No answer* growing without *Frames OK* = check the adapter wiring and the `in_active_low` / `out_active_low` levels; in the gateway, *Room unit connection* shows the room unit.
@@ -225,6 +219,4 @@ V2 reacts to the gateway (it may use Immergas-specific IDs), and E31 when the hu
 - The sequence of the original room unit and the 0xCA byte: the arduino.ru thread "Термостат OpenTherm на ESP8266"
   (page 16, EOLO Star 24 E) and the Home Assistant community thread "OpenTherm component with Immergas EOLO Star
   24 boiler".
-- Field reports of the OT-thing gateway (Home Assistant community thread "OT-thing – an OpenTherm WiFi gateway"):
-  the CH off setpoint and the modulation above 100 %.
 - Installer manuals of the boilers on immergas.pl (terminals, menu P / t / A / M, E31, P33, TERA P7).

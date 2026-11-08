@@ -57,17 +57,13 @@ Jak to się składa:
   jego czarna żyła to także **GND** płytki, a ToUnit Base przenosi tylko dwa sygnały. W bramce GND i sygnały dają
   porty A / C, a 5 V płytki Slave port C. Wszystko się wpina – bez lutowania i bez przewodów na bocznych pinach
   Atoma.
-- **Tylko DIYLess: płytki nałożone na WeMos D1 mini ESP32** – nie zwykły D1 mini z ESP8266, hub wymaga ESP32 (albo
-  zestaw [DIYLess ESP OpenTherm Gateway](https://diyless.com/product/esp8266-opentherm-gateway)). Bez przewodów;
-  w konfiguracji zmieniasz płytkę i piny (zobacz [Instalacja](#instalacja), krok 4).
 
 **Zasilanie: płytki pracują na 3,3 V (pin 3V3).** Widać to po ścieżkach płytek DIYLess: płytka Master używa tylko
 D1, D2, GND i 3V3 (jej pin 5V jest niepodłączony), płytka Slave D6, D7, GND, 3V3 i 5V. Gniazda Grove (ToUnit Base,
 PortABC, Grove AtomS3) dają GND, **5 V** i dwa GPIO – nie ma 3,3 V. Dlatego pin **G1 gniazda Grove AtomS3** trzyma
 w stanie wysokim pakiet `ot_3v3_supply`, a jego biała żyła zasila pin 3V3 płytki (płytek); pin ESP32-S3 daje do ok.
 40 mA, wystarczy na stronę logiki jednej lub dwóch płytek. Czerwone przewody 5 V przy płytce Master są nieużywane
-(zaizoluj je); pin 5V płytki Slave dostaje czerwony przewód portu C. Na WeMos D1 mini ESP32 płytki dostają
-3,3 V i 5 V z samej płytki.
+(zaizoluj je); pin 5V płytki Slave dostaje czerwony przewód portu C.
 
 Napięcie linii OpenTherm płytki robią same, bez dodatkowego zasilacza.
 
@@ -110,7 +106,7 @@ ESP32: odpowiedź kotła przychodzi **na wejście**, ramki huba idą **wyjściem
 | żółty – sygnał z ESP32 | **D1** · IO1 = G5 · `ot_boiler_out_pin: GPIO5` | **D1** · `ot_boiler_out_pin: GPIO38` | **D7** · `ot_room_out_pin: GPIO5` |
 
 Pary pinów są takie jak w przykładzie bramki biblioteki OpenTherm, pod którą płytki są zrobione (master D2 / D1,
-slave D6 / D7; na D1 mini ESP32 GPIO21 / 22 i GPIO19 / 23).
+slave D6 / D7).
 
 ### Master – hub zastępuje pilota
 
@@ -162,9 +158,7 @@ najpierw ustaw M3 P33 = ON – kocioł grzeje wtedy nawet po utracie OpenTherm.
    - **Bramka:** nic do wybierania – `ot_gateway` i piny pilota (port C) są już ustawione; `ot_control` daje
      wartości, których hub używa, gdy pilot milczy.
 4. **Sprawdź piny** (`substitutions:` na górze). Oba pliki mają piny ze schematów (master: ToUnit Base,
-   bramka: porty A i C PortABC). Płytki nałożone na WeMos D1 mini ESP32: `ot_boiler_in_pin: GPIO21`, `ot_boiler_out_pin: GPIO22`,
-   bramka `ot_room_in_pin: GPIO19`, `ot_room_out_pin: GPIO23`; w `esp32:` ustaw `board: wemos_d1_mini32` i usuń
-   `hardware_uart: USB_SERIAL_JTAG` z `logger:`; pakiet `ot_3v3_supply` pomiń.
+   bramka: porty A i C PortABC).
 5. **Wgraj** urządzenie (pierwszy raz przez USB, potem przez sieć) i **dodaj je w Home Assistant** (*Ustawienia →
    Urządzenia i usługi* – znajdzie się samo).
 6. **Sprawdź połączenie:** *Immergas OT - Połączenie z kotłem* włącza się w kilka sekund, a *Temperatura zasilania* / *Płomień* idą za kotłem. *Brak odpowiedzi* rośnie bez *Ramki poprawne* = sprawdź podłączenie adaptera i poziomy `in_active_low` / `out_active_low`; w bramce *Połączenie z pilotem* pokazuje pilota.
@@ -224,6 +218,4 @@ Plik konfiguracji i kroki są w sekcji [Instalacja](#instalacja).
 - Specyfikacja OpenTherm 2.2 (warstwa fizyczna, ramka, Data-ID).
 - Sekwencja oryginalnego pilota i bajt 0xCA: wątek arduino.ru „Термостат OpenTherm на ESP8266” (strona 16,
   EOLO Star 24 E) i wątek społeczności Home Assistant „OpenTherm component with Immergas EOLO Star 24 boiler”.
-- Zgłoszenia użytkowników bramki OT-thing (wątek społeczności Home Assistant „OT-thing – an OpenTherm WiFi
-  gateway”): nastawa CO przy wyłączonym CO i modulacja powyżej 100 %.
 - Instrukcje instalatora kotłów na immergas.pl (zaciski, menu P / t / A / M, E31, P33, TERA P7).
