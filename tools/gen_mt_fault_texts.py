@@ -2,14 +2,14 @@
 """Generate components/immergas_core/mt_fault_texts.h from tools/mt_fault_texts.json (MAGIS M / Midea M-Thermal faults).
 
 Usage: python tools/gen_mt_fault_texts.py   (run from the repository root)
-The JSON holds the Modbus fault number (registers 124-127), the display code and the project's own texts (en, pl).
+The JSON holds the Modbus fault number (registers 124-127), the display code and the project's own texts in 11 languages.
 """
 import json, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "tools", "mt_fault_texts.json")
 DST = os.path.join(ROOT, "components", "immergas_core", "mt_fault_texts.h")
-LANGS = ["en", "pl"]
+LANGS = ["en", "it", "pl", "cs", "hu", "de", "fr", "es", "nl", "pt", "sk"]   # the index order of immergas_core/fault_texts.h
 MAX = 250
 
 
@@ -37,8 +37,9 @@ def main():
         out += [f"    {c(r[l])}," for r in rows]
         out.append("};")
     out += ["",
-            f'static const char *const kMtNone[2] = {{{c(d["none"]["en"])}, {c(d["none"]["pl"])}}};',
-            f'static const char *const kMtUnknown[2] = {{{c(d["unknown"]["en"])}, {c(d["unknown"]["pl"])}}};',
+            f"static const char *const *const kMtFaultTables[{len(LANGS)}] = {{" + ", ".join(f"kMtFaults_{l}" for l in LANGS) + "};",
+            f"static const char *const kMtNone[{len(LANGS)}] = {{" + ", ".join(c(d["none"][l]) for l in LANGS) + "};",
+            f"static const char *const kMtUnknown[{len(LANGS)}] = {{" + ", ".join(c(d["unknown"][l]) for l in LANGS) + "};",
             "",
             "// index of the fault number, or -1",
             "inline int mt_fault_index(int num) {",
@@ -54,13 +55,14 @@ def main():
             "  return i < 0 ? \"#\" + std::to_string(num) : std::string(kMtFaultCodes[i]);",
             "}",
             "",
-            "// \"E8: <description>\"; lang = the index of the immergas_core fault languages (2 = Polish, anything else = English)",
+            "// \"E8: <description>\"; lang = the index of the immergas_core fault languages (0 en, 1 it, 2 pl, 3 cs, 4 hu, 5 de,",
+            "// 6 fr, 7 es, 8 nl, 9 pt, 10 sk)",
             "inline std::string mt_fault_description(int num, size_t lang) {",
-            "  size_t l = lang == 2 ? 1 : 0;",
+            f"  size_t l = lang < {len(LANGS)} ? lang : 0;",
             "  if (num == 0) return kMtNone[l];",
             "  int i = mt_fault_index(num);",
             "  if (i < 0) return \"#\" + std::to_string(num) + \": \" + kMtUnknown[l];",
-            "  return std::string(kMtFaultCodes[i]) + \": \" + (l ? kMtFaults_pl[i] : kMtFaults_en[i]);",
+            "  return std::string(kMtFaultCodes[i]) + \": \" + kMtFaultTables[l][i];",
             "}",
             "", "}  // namespace immergas", ""]
     open(DST, "w", encoding="utf-8", newline="\n").write("\n".join(out))

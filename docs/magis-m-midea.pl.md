@@ -133,7 +133,7 @@ Parametrów instalatora od 209 w górę celowo się nie zapisuje.
 Panel pokazuje kod (E8, P0, H0 …); rejestry Modbus **124** (bieżący błąd) i **125–127** (trzy ostatnie) podają jego
 **numer** – kolumnę *supervision system error code* z instrukcji MAGIS M (rozdz. 13.4), tę samą numerację co w Midea
 M-Thermal. Hub pokazuje *Błąd* jako `E8: <opis>`, a *Ostatnie błędy* jako kody (`E8 · P0 · -`). Opisy są własnymi,
-krótkimi sformułowaniami projektu (EN / PL) – pełne czynności naprawcze są w instrukcji.
+krótkimi sformułowaniami projektu (11 języków, język z `lang/mt_xx`) – pełne czynności naprawcze są w instrukcji.
 
 | Numer | Kod | Znaczenie i co sprawdzić |
 |---|---|---|

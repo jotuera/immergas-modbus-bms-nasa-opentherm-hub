@@ -133,7 +133,7 @@ number). The installer parameters from 209 up are not written on purpose.
 The controller shows a code (E8, P0, H0 …); Modbus registers **124** (current fault) and **125–127** (last three) give
 its **number** – the *supervision system error code* column of the MAGIS M manual (chap. 13.4), the same numbering as
 the Midea M-Thermal. The hub shows *Fault* as `E8: <description>` and *Last faults* as codes (`E8 · P0 · -`). The
-descriptions are the project's own short wording (EN / PL) – the manual has the full corrective actions.
+descriptions are the project's own short wording (11 languages, the language of `lang/mt_xx`) – the manual has the full corrective actions.
 
 | Number | Code | Meaning and what to check |
 |---|---|---|
