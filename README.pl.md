@@ -32,7 +32,7 @@ dashboard.
 |---|---|---|
 | **Super CAR** (zaciski 42 / 43) | starsze piloty w VICTRIX ZEUS Superior, HERCULES | własna magistrala Immergasa, nie OpenTherm i nieopisana; podłącz się do zacisków OpenTherm 41 / 44 (IMG BUS) – zobacz [Kotły OpenTherm](docs/opentherm-hub.pl.md) |
 | **Płytka Immergasa ↔ płytka interfejsu Samsunga** (wewnętrzny Modbus RS485, A22) | MAGIS PRO / COMBO V2, TRIO HYDRO | wewnętrzne połączenie urządzenia (błąd A122 / 111 przy zerwaniu); to, co przenosi, hub czyta po D+/D-, T-/T+ i F1/F2 |
-| **Samsung F3/F4** | – | w MAGIS go nie ma (brak przewodowego sterownika Samsunga); do strony Samsunga hub dochodzi po F1/F2 |
+| **Samsung NASA F3/F4** | – | w MAGIS go nie ma (brak przewodowego sterownika Samsunga); do strony Samsunga hub dochodzi po F1/F2 |
 | **Chmura Immergas** (aplikacja Dominus) | – | hub i integracja Dominus działają celowo tylko lokalnie |
 
 Każda strona ma sprzęt, schemat podłączenia i bazę wiedzy swojego protokołu. Ponad magistralami hub liczy to, czego
