@@ -37,7 +37,7 @@ give no register map or terminals for the BMS option, so it stays open.
 | Part | Where |
 |---|---|
 | [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) + USB-C 5 V power supply | – |
-| [M5Stack ATOMIC PortABC](https://shop.m5stack.com/products/atomic-portabc-extension-base) | under the AtomS3 Lite |
+| [M5Stack ATOMIC PortABC](https://botland.com.pl/seria-atom/23346-m5stack-atomic-portabc-extension-base-modul-rozszerzen-unit-do-modulow-deweloperskich-m5atom-m5stack-a130-6972934174567.html) | under the AtomS3 Lite |
 | Grove cable + [Grove → 4-pin screw terminal](https://botland.com.pl/grove-konwertery-i-przetworniki/11348-grove-4-pinowe-zlacze-srubowe-5904422340063.html) | **port A** – the junction: GND and 5 V go both to the Master shield and to the regulator |
 | [DIYLess Master OpenTherm Shield](https://diyless.com/product/master-opentherm-shield) | port A (G39 → D2, G38 → D1, GND) → boiler VICTRIX TERA, terminals 41 / 44 |
 | 3.3 V regulator module: any AMS1117-3.3 module or the ready-made [Pololu D24V5F3, step-down 3.3 V 0.5 A](https://botland.com.pl/przetwornice-step-down/3109-d24v5f3-przetwornica-step-down-33v-05a-pololu-2842-5904422360115.html) (VIN / GND / VOUT) | IN ← 5 V of port A, GND common, **OUT → 3V3 of both shields** |

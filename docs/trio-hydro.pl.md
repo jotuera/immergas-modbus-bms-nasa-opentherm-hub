@@ -37,7 +37,7 @@ sygnały + 2 × RS485 po 2), więc 3,3 V dla płytek daje mały stabilizator, a 
 | Element | Gdzie |
 |---|---|
 | [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) + zasilacz USB-C 5 V | – |
-| [M5Stack ATOMIC PortABC](https://shop.m5stack.com/products/atomic-portabc-extension-base) | pod AtomS3 Lite |
+| [M5Stack ATOMIC PortABC](https://botland.com.pl/seria-atom/23346-m5stack-atomic-portabc-extension-base-modul-rozszerzen-unit-do-modulow-deweloperskich-m5atom-m5stack-a130-6972934174567.html) | pod AtomS3 Lite |
 | kabel Grove + [złącze śrubowe Grove 4-pin](https://botland.com.pl/grove-konwertery-i-przetworniki/11348-grove-4-pinowe-zlacze-srubowe-5904422340063.html) | **port A** – rozgałęźnik: GND i 5 V idą do płytki Master i do stabilizatora |
 | [DIYLess Master OpenTherm Shield](https://diyless.com/product/master-opentherm-shield) | port A (G39 → D2, G38 → D1, GND) → kocioł VICTRIX TERA, zaciski 41 / 44 |
 | moduł stabilizatora 3,3 V: dowolny moduł AMS1117-3.3 albo gotowa [Pololu D24V5F3, przetwornica step-down 3,3 V 0,5 A](https://botland.com.pl/przetwornice-step-down/3109-d24v5f3-przetwornica-step-down-33v-05a-pololu-2842-5904422360115.html) (VIN / GND / VOUT) | IN ← 5 V z portu A, GND wspólna, **OUT → 3V3 obu płytek** |
