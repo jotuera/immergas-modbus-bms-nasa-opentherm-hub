@@ -25,6 +25,15 @@ OpenTherm – and brings them to Home Assistant, with a set of Lovelace cards th
 | **Samsung NASA F1/F2 + OpenTherm + zone Modbus** | TRIO HYDRO ELECTRIC / HYBRID 5 – 12 (UE HYDRO HP outdoor unit, VICTRIX TERA 24 PLUS boiler) | another hub on the same packages: outdoor unit over F1/F2, the boiler through an OpenTherm gateway | configuration ready, untested – testers wanted | [TRIO HYDRO](docs/trio-hydro.md) |
 | **Modbus / OpenTherm over TCP** (Immergas Dominus Wi-Fi module) | units with the Dominus module: MAGIS PRO / COMBO V2 (Modbus), OpenTherm boilers (VICTRIX ZEUS, TERA …) | no ESP: a Home Assistant integration (HACS) talks to the Dominus over local TCP – no cloud, no MQTT | stable | [Immergas Dominus](https://github.com/jotuera/immergas-dominus) |
 
+### Not supported
+
+| Bus | Where | Why |
+|---|---|---|
+| **Super CAR** (terminals 42 / 43) | older room units on VICTRIX ZEUS Superior, HERCULES | a proprietary Immergas bus, not OpenTherm and not documented; connect to the OpenTherm terminals 41 / 44 (IMG BUS) instead – see [OpenTherm boilers](docs/opentherm-hub.md) |
+| **Immergas board ↔ Samsung interface board** (internal Modbus RS485, A22) | MAGIS PRO / COMBO V2, TRIO HYDRO | internal link of the unit (error A122 / 111 when it breaks); everything it carries is read over D+/D-, T-/T+ and F1/F2 |
+| **Samsung F3/F4** | – | not present on the MAGIS (no wired Samsung controller); the Samsung side is reached over F1/F2 |
+| **Immergas cloud** (Dominus app) | – | the hub and the Dominus integration work locally only, on purpose |
+
 Each page has the hardware, the wiring and the knowledge base of its protocol. On top of the buses the hub computes
 what none of them shows alone – COP now and today, heat output, the operating state, starts and runtime, the last DHW
 cycle and the cost of 1 kWh of heat from each source.
