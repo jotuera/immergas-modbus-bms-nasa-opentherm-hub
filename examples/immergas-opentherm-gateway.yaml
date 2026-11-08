@@ -68,6 +68,7 @@ packages:
       - packages/ot_sensors.yaml
       - packages/ot_stats.yaml          # optional: burner starts today / last hour, burner time today
       - packages/ot_computed.yaml       # optional: delta T, condensing, burner power, link quality, operating state
+      - packages/ot_supervision.yaml   # optional: is the CH demand really taken up by the boiler
       - packages/ot_analytics.yaml      # optional: gas and its cost, condensing share, short cycling (needs ot_stats, ot_computed)
       - packages/ot_control.yaml        # the values used while the room unit is silent and by the override switches
       - packages/ot_boiler_params.yaml  # optional: the boiler menu copied once (codes, hints) + service reminder

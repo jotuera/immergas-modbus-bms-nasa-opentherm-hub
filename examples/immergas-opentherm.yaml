@@ -64,6 +64,7 @@ packages:
       - packages/ot_sensors.yaml
       - packages/ot_stats.yaml         # optional: burner starts today / last hour, burner time today
       - packages/ot_computed.yaml      # optional: delta T, condensing, burner power, link quality, pressure drop, operating state
+      - packages/ot_supervision.yaml   # optional: is the CH demand really taken up by the boiler
       - packages/ot_analytics.yaml     # optional: gas and its cost, condensing share, short cycling, DHW draws (needs ot_stats, ot_computed)
       - packages/ot_control.yaml
       - packages/ot_regulator.yaml      # master: weather curve + room correction in the hub

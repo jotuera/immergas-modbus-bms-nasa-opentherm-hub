@@ -363,6 +363,7 @@ class ImmergasSettingsCard extends HubCard {
         ${this.numRow("ot_c_ow", "mdi:sun-thermometer", this.t("Krzywa: punkt ciepła (temp. zewn.)", "Curve: warm point (outdoor)"), 0)}
         ${this.numRow("ot_c_fw", "mdi:thermometer-low", this.t("Krzywa: zasilanie przy cieple", "Curve: flow when warm"), 0)}
         ${this.numRow("ot_gain", "mdi:plus-minus-variant", this.t("Korekta pokojowa (°C zasilania na °C)", "Room correction (°C flow per °C)"), 1)}
+        ${this.numRow("ot_integral", "mdi:sigma", this.t("Korekta całkująca (°C na °C·h)", "Integral room correction (°C per °C·h)"), 1)}
         ${this.numRow("ot_hyst", "mdi:arrow-expand-vertical", this.t("Histereza pokoju", "Room hysteresis"), 1)}` : nothing}
       <div class="grp">${this.t("Limity OpenTherm", "OpenTherm limits")}</div>
       ${this.numRow("ot_max_ch", "mdi:thermometer-high", this.t("Maks. nastawa CO (Data-ID 57)", "Max. CH setpoint (Data-ID 57)"), 0)}

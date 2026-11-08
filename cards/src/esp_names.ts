@@ -1722,6 +1722,72 @@ export const ESP_LANGS: Record<string, Record<string, string[]>> = {
    "Histerese ambiente",
    "Hysterézia miestnosti"
   ],
+  "Korekta całkująca (°C na °C·h)": [
+   "Integrační korekce místnosti (°C na °C·h)",
+   "Integrale Raumkorrektur (°C pro °C·h)",
+   "Corrección ambiente integral (°C por °C·h)",
+   "Correction ambiante intégrale (°C par °C·h)",
+   "Integráló helyiség korrekció (°C per °C·h)",
+   "Correzione ambiente integrale (°C per °C·h)",
+   "Integrerende ruimtecorrectie (°C per °C·h)",
+   "Correção ambiente integral (°C por °C·h)",
+   "Integračná korekcia miestnosti (°C na °C·h)"
+  ],
+  "Korekta całkująca teraz": [
+   "Integrační korekce nyní",
+   "Integrale Raumkorrektur aktuell",
+   "Corrección ambiente integral actual",
+   "Correction ambiante intégrale actuelle",
+   "Integráló helyiség korrekció most",
+   "Correzione ambiente integrale attuale",
+   "Integrerende ruimtecorrectie nu",
+   "Correção ambiente integral atual",
+   "Integračná korekcia teraz"
+  ],
+  "Źródło regulatora": [
+   "Zdroj regulátoru",
+   "Reglerquelle",
+   "Fuente del regulador",
+   "Source du régulateur",
+   "Szabályozó forrása",
+   "Sorgente del regolatore",
+   "Bron van de regelaar",
+   "Fonte do regulador",
+   "Zdroj regulátora"
+  ],
+  "Nadzór CO": [
+   "Dohled ÚT",
+   "Heizungsüberwachung",
+   "Supervisión calefacción",
+   "Surveillance chauffage",
+   "Fűtés felügyelet",
+   "Supervisione riscaldamento",
+   "CV-bewaking",
+   "Supervisão do aquecimento",
+   "Dohľad ÚK"
+  ],
+  "CO: kocioł nie reaguje": [
+   "ÚT: kotel nereaguje",
+   "Heizung: Kessel reagiert nicht",
+   "Calefacción: la caldera no responde",
+   "Chauffage : la chaudière ne répond pas",
+   "Fűtés: a kazán nem reagál",
+   "Riscaldamento: la caldaia non risponde",
+   "CV: ketel reageert niet",
+   "Aquecimento: a caldeira não responde",
+   "ÚK: kotol nereaguje"
+  ],
+  "Nadzór CO - czas bez reakcji": [
+   "Dohled ÚT - doba bez reakce",
+   "Heizungsüberwachung - Zeit ohne Reaktion",
+   "Supervisión calefacción - tiempo sin respuesta",
+   "Surveillance chauffage - durée sans réponse",
+   "Fűtés felügyelet - reakció nélküli idő",
+   "Supervisione riscaldamento - tempo senza risposta",
+   "CV-bewaking - tijd zonder reactie",
+   "Supervisão do aquecimento - tempo sem resposta",
+   "Dohľad ÚK - čas bez reakcie"
+  ],
   "Połączenie z pilotem": [
    "Připojení ovladače",
    "Raumgerät-Verbindung",

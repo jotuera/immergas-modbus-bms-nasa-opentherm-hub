@@ -112,6 +112,9 @@ class OtHub : public esphome::Component {
   bool room_online() const { return this->last_room_ms_ != 0 && esphome::millis() - this->last_room_ms_ < 10000; }
   bool standalone() const { return this->mode_ == MODE_MASTER || (this->standalone_ && !this->relay_only_); }
   Mode mode() const { return this->mode_; }
+  // what the last frames to the boiler really carried, whoever made them (the hub or the room unit, after the overrides)
+  bool ch_enable_sent() const { return this->ch_sent_; }
+  float ch_setpoint_sent() const { return this->sp_sent_known_ ? int16_t(this->sp_sent_raw_) / 256.0f : NAN; }
   uint32_t frames_ok() const { return this->frames_ok_; }
   uint32_t errors() const { return this->errors_; }
   uint32_t timeouts() const { return this->timeouts_; }
@@ -160,6 +163,9 @@ class OtHub : public esphome::Component {
   uint32_t frames_ok_{0};
   uint32_t errors_{0};
   uint32_t timeouts_{0};
+  bool ch_sent_{false};         // CH enable bit of the last status request to the boiler
+  bool sp_sent_known_{false};   // a CH setpoint (Data-ID 1) has gone to the boiler
+  uint16_t sp_sent_raw_{0};
 
   // gateway state
   bool room_pending_{false};   // a request of the room unit waits to go to the boiler

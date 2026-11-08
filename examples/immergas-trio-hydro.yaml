@@ -111,6 +111,7 @@ packages:
       - packages/ot_sensors.yaml
       - packages/ot_stats.yaml
       - packages/ot_computed.yaml
+      - packages/ot_supervision.yaml   # optional: is the CH demand really taken up by the boiler
       - packages/ot_control.yaml        # used only while the indoor unit is silent or with an override switch on
       - packages/ot_boiler_params.yaml  # optional: the VICTRIX TERA menu copied once (codes, hints)
 

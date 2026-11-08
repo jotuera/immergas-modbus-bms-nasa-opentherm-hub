@@ -154,6 +154,12 @@ void OtHub::send_boiler_(uint32_t frame, Origin origin) {
     this->sent57_ = frame_value(frame);
     this->sent57_ms_ = this->sent_ms_ == 0 ? 1 : this->sent_ms_;
   }
+  if (frame_type(frame) == READ_DATA && frame_id(frame) == 0) {
+    this->ch_sent_ = ((frame_value(frame) >> 8) & FLAG_CH) != 0;
+  } else if (frame_type(frame) == WRITE_DATA && frame_id(frame) == 1) {
+    this->sp_sent_raw_ = frame_value(frame);
+    this->sp_sent_known_ = true;
+  }
   ESP_LOGV(TAG, "-> boiler %08X (type %u id %u)", (unsigned) frame, frame_type(frame), frame_id(frame));
 }
 

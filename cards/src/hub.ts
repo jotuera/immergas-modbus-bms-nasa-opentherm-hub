@@ -161,6 +161,7 @@ Object.assign(ESP_OT, {
   ot_c_fw: ["Krzywa: zasilanie przy najwyższej", "Curve: flow at the warmest"],
   ot_gain: ["Korekta pokojowa (°C zasilania na °C)", "Room correction (°C flow per °C)"],
   ot_hyst: ["Histereza pokoju", "Room hysteresis"],
+  ot_integral: ["Korekta całkująca (°C na °C·h)", "Integral room correction (°C per °C·h)"],
   ot_max_mod: ["Maks. modulacja", "Max. modulation"]
 } as Partial<Record<Key, string[]>>);
 const DPL = ["poniedziałek", "wtorek", "środa", "czwartek", "piątek", "sobota", "niedziela"];

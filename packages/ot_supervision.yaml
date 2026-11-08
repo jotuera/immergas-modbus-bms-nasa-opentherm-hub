@@ -1,0 +1,56 @@
+# Immergas OpenTherm - package "ot_supervision" (optional; master and gateway)
+# Is central heating that was asked for really taken up by the boiler? The check looks at the frames that went to the
+# boiler (CH enable of Data-ID 0 and the CH setpoint of Data-ID 1, from the hub or from the room unit) and at the CH
+# active bit in the boiler's answer. Time is counted only while the boiler has no reason of its own to stay idle: not
+# during DHW (priority), not with a fault shown, not with the flow already near the setpoint. The state tells which
+# case it is; the alarm comes on after the set time and clears by itself.
+# Diagnosis only, the package sends nothing: the hub repeats the CH enable bit about once a second anyway, so sending
+# it "again" would change nothing on the bus. Use the alarm in a Home Assistant automation.
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+globals:
+  - { id: ot_sup_idle_s, type: uint32_t, initial_value: "0" }   # how long the boiler has ignored the request
+
+number:
+  # longer than the boiler's own CH anti-cycling timer
+  - { platform: template, name: "${n_ot_sup_limit}", id: ot_sup_limit, icon: "mdi:timer-alert-outline", entity_category: config, unit_of_measurement: "min", min_value: 5, max_value: 120, step: 5, initial_value: 15, restore_value: true, optimistic: true, mode: box }
+
+binary_sensor:
+  - platform: template
+    name: "${n_ot_sup_alarm}"
+    id: ot_sup_alarm
+    device_class: problem
+    lambda: 'return id(ot_sup_idle_s) >= id(ot_sup_limit).state * 60;'
+
+text_sensor:
+  - platform: template
+    name: "${n_ot_sup_state}"
+    id: ot_sup_state
+    icon: mdi:shield-search
+    entity_category: diagnostic
+    update_interval: never
+
+interval:
+  - interval: 30s
+    then:
+      - lambda: |-
+          static const float NEAR_SETPOINT = 3.0f;   // K: above this the boiler has a reason to wait
+          auto &idle = id(ot_sup_idle_s);
+          float setpoint = id(ot_hub).ch_setpoint_sent(), flow = id(ot_flow_temp).state;
+          std::string now;
+          if (!id(ot_boiler_online).state) { idle = 0; now = "${t_ot_sup_no_link}"; }
+          else if (id(ot_fault).state) { idle = 0; now = "${t_ot_sup_fault}"; }
+          else if (!id(ot_hub).ch_enable_sent()) { idle = 0; now = "${t_ot_sup_no_demand}"; }
+          else if (id(ot_ch_active).state) { idle = 0; now = "${t_ot_sup_ok}"; }
+          else if (id(ot_dhw_active).state) { idle = 0; now = "${t_ot_sup_dhw}"; }
+          else if (!std::isnan(setpoint) && !std::isnan(flow) && setpoint - flow < NEAR_SETPOINT) { idle = 0; now = "${t_ot_sup_reached}"; }
+          else {
+            idle += 30;
+            if (idle >= id(ot_sup_limit).state * 60) now = "${t_ot_sup_alarm}";
+            else {
+              char b[64];
+              snprintf(b, sizeof(b), "${t_ot_sup_wait} %u min", (unsigned) (idle / 60));
+              now = b;
+            }
+          }
+          if (!id(ot_sup_state).has_state() || id(ot_sup_state).state != now) id(ot_sup_state).publish_state(now);
