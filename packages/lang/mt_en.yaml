@@ -18,6 +18,7 @@ substitutions:
   t_mt_force_off: "Forced off"
   # entity names
   n_mt_connection: "${mt_name_prefix} - Modbus connection"
+  n_mt_link: "${mt_name_prefix} - Modbus connection"
   n_mt_protocol_version: "${mt_name_prefix} - Protocol version"
   n_mt_status2_raw: "${mt_name_prefix} - Status 2 (raw)"
   n_mt_compressor_freq: "${mt_name_prefix} - Compressor frequency"
@@ -62,6 +63,8 @@ substitutions:
   n_mt_fault_last1: "${mt_name_prefix} - Last fault 1"
   n_mt_fault_last2: "${mt_name_prefix} - Last fault 2"
   n_mt_fault_last3: "${mt_name_prefix} - Last fault 3"
+  n_mt_fault_history: "${mt_name_prefix} - Last faults"
+  mt_fault_lang: "0"   # language of the fault texts (immergas_core: 0 English, 2 Polish)
   n_mt_sw_idu: "${mt_name_prefix} - Indoor unit software"
   n_mt_sw_hmi: "${mt_name_prefix} - Controller software"
   n_mt_defrost: "${mt_name_prefix} - Defrost"

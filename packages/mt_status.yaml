@@ -228,6 +228,15 @@ text_sensor:
     update_interval: 10s
     lambda: |-
       if (isnan(id(mt_fault_code).state)) return {};
-      int code = (int) id(mt_fault_code).state;
-      if (code == 0) return std::string("${t_mt_no_fault}");
-      return std::string("${t_mt_code}") + to_string(code);
+      // register 124 = the fault number of the MAGIS M manual (chap. 13.4) -> "E8: <description>" (immergas_core)
+      return immergas::mt_fault_description((int) id(mt_fault_code).state, ${mt_fault_lang});
+  # the last three faults (125-127) as display codes, e.g. "E8 · P0 · -"
+  - platform: template
+    name: "${n_mt_fault_history}"
+    id: mt_fault_history
+    icon: mdi:history
+    entity_category: diagnostic
+    update_interval: 60s
+    lambda: |-
+      auto code = [](float v) -> std::string { return isnan(v) ? std::string("?") : immergas::mt_fault_code((int) v); };
+      return code(id(mt_fault_last1).state) + " · " + code(id(mt_fault_last2).state) + " · " + code(id(mt_fault_last3).state);

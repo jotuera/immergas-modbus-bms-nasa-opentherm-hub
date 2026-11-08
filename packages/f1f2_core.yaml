@@ -5,7 +5,7 @@
 # repos on one device.
 
 substitutions:
-  f1f2_project_version: "2.9.0"
+  f1f2_project_version: "2.10.0"
   # RS485 pins (M5Stack Atom + Atomic RS485 Base). Override in your main YAML if your wiring differs.
   f1f2_uart_tx_pin: GPIO19
   f1f2_uart_rx_pin: GPIO22
@@ -59,3 +59,17 @@ text_sensor:
     entity_category: diagnostic
     update_interval: 6h
     lambda: 'return std::string("${f1f2_project_version}");'
+
+binary_sensor:
+  # NASA connection status: connected = a valid frame came from the bus within 30 s (the units talk several times a
+  # second); it only listens, so it also works with "NASA connection" (transmit) off
+  - platform: template
+    name: "${f1f2_name_prefix}${n_f1f2_link}"
+    id: f1f2_link
+    device_class: connectivity
+    entity_category: diagnostic
+    lambda: |-
+      static uint32_t last_n = 0, last_ms = 0;
+      uint32_t n = id(f1f2_hub).rx_frames();
+      if (n != last_n) { last_n = n; last_ms = millis(); }
+      return last_ms != 0 && millis() - last_ms < 30000;

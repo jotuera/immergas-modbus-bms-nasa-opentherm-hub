@@ -15,6 +15,7 @@ substitutions:
   t_gb_request_cool: "Cooling"
   # entity names
   n_gb_bms_connection: "${gb_name_prefix} - BMS connection"
+  n_gb_link: "${gb_name_prefix} - BMS connection"
   n_gb_heat_request: "${gb_name_prefix} - Heat request (CH)"
   n_gb_control_raw: "${gb_name_prefix} - Boiler control (raw)"
   n_gb_mode: "${gb_name_prefix} - Operating mode"

@@ -14,6 +14,7 @@ substitutions:
   n_f1f2_cop_total: "COP - Total"
   # control (package f1f2_control, optional - writes to the pump)
   n_f1f2_emulate_nasa: "NASA connection"
+  n_f1f2_link: "NASA connection"
   n_f1f2_emulate_panel: "Emulate EHS panel"
   n_f1f2_arm: "Active ODU control"
   n_f1f2_outing: "Outing mode"

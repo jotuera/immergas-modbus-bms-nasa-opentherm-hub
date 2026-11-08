@@ -14,6 +14,7 @@ substitutions:
   n_f1f2_cop_total: "COP całkowity"
   # sterowanie (pakiet f1f2_control, opcjonalny - zapisuje do pompy)
   n_f1f2_emulate_nasa: "Połączenie NASA"
+  n_f1f2_link: "Połączenie NASA"
   n_f1f2_emulate_panel: "Emuluj panel EHS"
   n_f1f2_arm: "Aktywne sterowanie ODU"
   n_f1f2_outing: "Tryb wyjazdowy"

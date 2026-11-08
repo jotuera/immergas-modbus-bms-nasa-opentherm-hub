@@ -71,7 +71,7 @@ shared registers and use the last value read.
 | Package | What it gives |
 |---|---|
 | `mt_core` | UART / Modbus, *Modbus connection* switch, protocol version (187), the sensor resolution flag (189 bit8: 1 °C or 0.1 °C), the write helper |
-| `mt_status` | running mode, current and last three faults, defrost / antifreeze / oil return / thermostat / SG / EVU, heaters IBH1 / IBH2 / TBH, pumps, 3-way valve, alarm, running, software versions |
+| `mt_status` | running mode, current and last three faults (with the fault code and its description), defrost / antifreeze / oil return / thermostat / SG / EVU, heaters IBH1 / IBH2 / TBH, pumps, 3-way valve, alarm, running, software versions |
 | `mt_sensors` | compressor and target frequency, fan, expansion valve, water in / out / total, outdoor, room, DHW tank, refrigerant temperatures, pressures, outdoor unit current and voltage, buffer tank, compressor hours, curve flow targets, water flow, heat output |
 | `mt_energy` | electric and heat energy counters, heating and electric power, the unit's COP and the hub's own COP now |
 | `mt_stats` (optional) | today's heat and electric energy, COP today, compressor starts and runtime today – counted in the hub, reset at midnight (Home Assistant time) |
@@ -127,6 +127,69 @@ The configuration file and the steps are in [Installation](#installation).
 **Still to confirm on a MAGIS M:** the H1 / H2 polarity, the energy counter unit, the pressure scale of the protocol
 version, whether the setpoints of register 2 follow the resolution flag, and the fault code numbering (shown as a
 number). The installer parameters from 209 up are not written on purpose.
+
+## Fault codes
+
+The controller shows a code (E8, P0, H0 …); Modbus registers **124** (current fault) and **125–127** (last three) give
+its **number** – the *supervision system error code* column of the MAGIS M manual (chap. 13.4), the same numbering as
+the Midea M-Thermal. The hub shows *Fault* as `E8: <description>` and *Last faults* as codes (`E8 · P0 · -`). The
+descriptions are the project's own short wording (EN / PL) – the manual has the full corrective actions.
+
+| Number | Code | Meaning and what to check |
+|---|---|---|
+| 1 | **E0** | Water flow fault (E8 shown three times). Check the flow switch and its wiring, and the water flow. |
+| 2 | **E1** | Phase loss or wrong phase order (three-phase units). Check the supply cables; swap two phases. |
+| 3 | **E2** | No communication between the wired controller and the hydraulic module. Check the controller cable and its wire order; keep it away from interference. |
+| 4 | **E3** | Final water outlet (T1) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 5 | **E4** | DHW tank (T5) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 6 | **E5** | Refrigerant at the condenser outlet (T3) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 7 | **E6** | Ambient air (T4) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 8 | **E7** | Buffer tank (Tbt1) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 9 | **E8** | Water flow too low. Open all valves, clean the filter, vent the air, check the pressure (above 1 bar), the pump speed and the expansion vessel. |
+| 10 | **E9** | Compressor suction (Th) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 11 | **EA** | Compressor discharge (Tp) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 12 | **Eb** | Solar panel (Tsolar) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 13 | **EC** | Low buffer / manifold (Tbt2) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 14 | **Ed** | Plate heat exchanger water inlet (Tw_in) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 15 | **EE** | EEPROM fault on the hydraulic module board. Call a service technician. |
+| 19 | **EP** | Leakage on the tank booster heater (TBH). Check the device on the TBH output. |
+| 20 | **P0** | Low pressure protection: refrigerant shortage, dirty or blocked outdoor coil, low water flow in cooling or a stuck expansion valve. Call a service technician. |
+| 21 | **P1** | High pressure protection: low water flow, air in the system or water pressure too low (keep 1.5-2 bar); in cooling a dirty or covered coil. |
+| 23 | **P3** | Compressor overcurrent protection. The same causes as P1, or the supply voltage is too low. |
+| 24 | **P4** | Compressor discharge temperature too high. The same causes as P1, a refrigerant shortage or a loose Tw_out / T1 / T5 sensor. |
+| 25 | **P5** | Water temperature difference across the plate heat exchanger too big (Tw_out - Tw_in). Check the valves, the filter, the air and the pump. |
+| 26 | **P6** | Inverter module protection: low supply voltage, too little space around the unit, a dirty coil or the fan not running. |
+| 29 | **P9** | Fan protection. Check the fan and its motor. |
+| 31 | **Pb** | Anti-freeze protection active. The unit returns to normal operation by itself. |
+| 33 | **Pd** | Refrigerant temperature at the condenser outlet too high (cooling): a dirty or covered coil, too little space around the unit or a faulty fan. |
+| 38 | **PP** | Inlet water warmer than the outlet in heating (Tw_in > Tw_out). Check both sensors and their position; a stuck 4-way valve can cause it. |
+| 39 | **H0** | No communication between the hydraulic module board and the main board PCB B. Check the cable and its wire order; keep it away from interference. |
+| 40 | **H1** | No communication between the inverter module (PCB A) and the main board (PCB B). Check that both boards are powered and the cable between them. |
+| 41 | **H2** | Refrigerant at the plate exchanger, liquid pipe (T2) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 42 | **H3** | Refrigerant at the plate exchanger, gas pipe (T2B) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 43 | **H4** | P6 (L0 / L1) appeared three times within an hour. See L0 and L1. |
+| 44 | **H5** | Room temperature sensor (Ta) in the wired controller faulty. Replace the sensor or the controller, or connect Ta to the hydraulic module board. |
+| 45 | **H6** | Fan motor fault: strong wind against the fan or a damaged motor. |
+| 46 | **H7** | Main circuit voltage protection. Check the supply; do not switch on and off quickly (wait 3 min). If it persists, the main board is faulty. |
+| 47 | **H8** | Pressure sensor fault. Check its connector; replace the sensor if faulty. |
+| 48 | **H9** | Zone 2 water (Tw2) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 49 | **HA** | Water outlet (Tw_out) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty. |
+| 50 | **Hb** | PP appeared three times with the water outlet below 7 °C. See PP. |
+| 52 | **Hd** | No communication between the units in a cascade (master / slaves), or more than one outdoor unit on the controller. Check the signal wires and restart. |
+| 53 | **HE** | No communication with the thermostat transfer board while RT/Ta PCB is set valid on the controller. Connect the board or set RT/Ta PCB not valid. |
+| 54 | **HF** | EEPROM fault on the inverter module board. Call a service technician. |
+| 55 | **HH** | H6 appeared ten times within two hours. See H6. |
+| 57 | **HP** | Low pressure protection in cooling (below 0.6 MPa) three times within an hour. See P0. |
+| 65 | **C7** | Inverter (transducer) module too hot: low supply voltage, too little space around the unit, a dirty coil or the fan not running. |
+| 116 | **F1** | Low DC bus voltage. Check the supply; if it is fine, the main or inverter board is faulty. Call a service technician. |
+| 134 | **L0** | Compressor inverter module fault. Check the system pressure, the compressor windings and the U / V / W and L1-L3 wiring. Call a service technician. |
+| 135 | **L1** | Low DC bus voltage protection. Check the supply voltage. |
+| 136 | **L2** | High DC bus voltage protection. Check the supply voltage. |
+| 138 | **L4** | Compressor drive (MCE) fault. Call a service technician. |
+| 139 | **L5** | Compressor zero-speed protection. Call a service technician. |
+| 141 | **L7** | Phase order fault (three-phase units). Swap two supply phases. |
+| 142 | **L8** | Compressor speed changed by more than 15 Hz within one second. Call a service technician. |
+| 143 | **L9** | Compressor speed differs from the target by more than 15 Hz. Call a service technician. |
 
 ## Knowledge base
 

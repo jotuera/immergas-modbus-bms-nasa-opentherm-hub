@@ -14,7 +14,7 @@
 # (code 69), PRO nothing to switch on (code 123 only for the port parameters).
 
 substitutions:
-  gb_project_version: "1.3.0"
+  gb_project_version: "1.4.0"
   gb_name_prefix: "Immergas Gas"
   # RS485 pins - default: AtomS3 + ATOMIC PortABC Port C + M5Stack Isolated RS485 Unit (auto direction, no DE pin).
   # A unit that needs a DE pin: add `flow_control_pin:` to the gb_modbus below with !extend in your main YAML.
@@ -57,6 +57,10 @@ time:
     id: gb_time
 
 globals:
+  - id: gb_link_ms   # last answer of the device (millis), for the connection status
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
   - { id: gb_eco_shift, type: float, initial_value: "0" }   # K added to the flow by gb_programs (Eco)
   # word written to 512 while the heat request is on: 0x0055; PRO only: 0x0155 = request without the DHW priority
   - id: gb_request_word
@@ -116,3 +120,24 @@ interval:
           if (!id(gb_bms_connection).state || !id(gb_heat_request).state) return;
           auto cmd = esphome::modbus_controller::ModbusCommandItem::create_write_single_command(id(gb_bms), 512, id(gb_request_word));
           id(gb_bms)->queue_command(cmd);
+
+sensor:
+  # connection status: an internal copy of a register read every cycle anyway (merged into the same Modbus request)
+  - platform: modbus_controller
+    modbus_controller_id: gb_bms
+    id: gb_link_probe
+    internal: true
+    register_type: read
+    address: 1
+    value_type: U_WORD
+    on_value:
+      - lambda: id(gb_link_ms) = millis();
+
+binary_sensor:
+  # Connected = the boiler answered within 35 s (3 cycles of gb_fast_interval); off also while "BMS connection" is off
+  - platform: template
+    name: "${n_gb_link}"
+    id: gb_link
+    device_class: connectivity
+    entity_category: diagnostic
+    lambda: return id(gb_link_ms) != 0 && millis() - id(gb_link_ms) < 35000;

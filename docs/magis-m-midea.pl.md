@@ -71,7 +71,7 @@ bity wspólnych rejestrów i korzystają z ostatniej odczytanej wartości.
 | Pakiet | Co daje |
 |---|---|
 | `mt_core` | UART / Modbus, przełącznik *Połączenie Modbus*, wersja protokołu (187), flaga rozdzielczości czujników (189 bit8: 1 °C albo 0,1 °C), pomocnik zapisu |
-| `mt_status` | bieżący tryb, bieżący i trzy ostatnie błędy, odszranianie / ochrona przed zamarzaniem / powrót oleju / termostat / SG / EVU, grzałki IBH1 / IBH2 / TBH, pompy, zawór 3-drogowy, alarm, praca, wersje oprogramowania |
+| `mt_status` | bieżący tryb, bieżący i trzy ostatnie błędy (z kodem błędu i jego opisem), odszranianie / ochrona przed zamarzaniem / powrót oleju / termostat / SG / EVU, grzałki IBH1 / IBH2 / TBH, pompy, zawór 3-drogowy, alarm, praca, wersje oprogramowania |
 | `mt_sensors` | częstotliwość i docelowa częstotliwość sprężarki, wentylator, zawór rozprężny, woda wlot / wylot / całkowita, temp. zewnętrzna, pokoju, zasobnika CWU, temperatury czynnika, ciśnienia, prąd i napięcie jednostki zewn., bufor, godziny sprężarki, zasilanie z krzywej, przepływ wody, moc cieplna |
 | `mt_energy` | liczniki energii elektrycznej i cieplnej, moc grzewcza i pobór, COP jednostki i własny COP huba |
 | `mt_stats` (opcjonalny) | energia cieplna i elektryczna dziś, COP dziś, starty i czas pracy sprężarki dziś – liczone w hubie, zerowane o północy (czas z Home Assistant) |
@@ -127,6 +127,69 @@ Plik konfiguracji i kroki są w sekcji [Instalacja](#instalacja).
 **Do potwierdzenia na MAGIS M:** polaryzacja H1 / H2, jednostka liczników energii, skala ciśnień w danej wersji
 protokołu, czy nastawy rejestru 2 idą za flagą rozdzielczości i numeracja kodów błędów (pokazywana jako liczba).
 Parametrów instalatora od 209 w górę celowo się nie zapisuje.
+
+## Kody błędów
+
+Panel pokazuje kod (E8, P0, H0 …); rejestry Modbus **124** (bieżący błąd) i **125–127** (trzy ostatnie) podają jego
+**numer** – kolumnę *supervision system error code* z instrukcji MAGIS M (rozdz. 13.4), tę samą numerację co w Midea
+M-Thermal. Hub pokazuje *Błąd* jako `E8: <opis>`, a *Ostatnie błędy* jako kody (`E8 · P0 · -`). Opisy są własnymi,
+krótkimi sformułowaniami projektu (EN / PL) – pełne czynności naprawcze są w instrukcji.
+
+| Numer | Kod | Znaczenie i co sprawdzić |
+|---|---|---|
+| 1 | **E0** | Brak przepływu wody (trzy razy E8). Sprawdź przepływomierz, jego okablowanie i przepływ wody. |
+| 2 | **E1** | Brak fazy lub zła kolejność faz (jednostki 3-fazowe). Sprawdź przewody zasilania; zamień dwie fazy. |
+| 3 | **E2** | Brak komunikacji panelu z modułem hydraulicznym. Sprawdź przewód panelu i kolejność żył; odsuń go od zakłóceń. |
+| 4 | **E3** | Usterka czujnika: końcowa temperatura zasilania (T1). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 5 | **E4** | Usterka czujnika: zasobnik CWU (T5). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 6 | **E5** | Usterka czujnika: czynnik na wyjściu skraplacza (T3). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 7 | **E6** | Usterka czujnika: temperatura otoczenia (T4). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 8 | **E7** | Usterka czujnika: bufor (Tbt1). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 9 | **E8** | Za mały przepływ wody. Otwórz zawory, wyczyść filtr, odpowietrz, sprawdź ciśnienie (powyżej 1 bar), prędkość pompy i naczynie wzbiorcze. |
+| 10 | **E9** | Usterka czujnika: ssanie sprężarki (Th). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 11 | **EA** | Usterka czujnika: tłoczenie sprężarki (Tp). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 12 | **Eb** | Usterka czujnika: kolektor słoneczny (Tsolar). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 13 | **EC** | Usterka czujnika: dół bufora / rozdzielacz (Tbt2). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 14 | **Ed** | Usterka czujnika: woda na wejściu wymiennika płytowego (Tw_in). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 15 | **EE** | Błąd pamięci EEPROM płyty modułu hydraulicznego. Wezwij serwis. |
+| 19 | **EP** | Upływ na grzałce zasobnika (TBH). Sprawdź urządzenie na wyjściu TBH. |
+| 20 | **P0** | Zabezpieczenie niskiego ciśnienia: brak czynnika, brudny lub zasłonięty wymiennik zewnętrzny, mały przepływ przy chłodzeniu albo zablokowany zawór rozprężny. Wezwij serwis. |
+| 21 | **P1** | Zabezpieczenie wysokiego ciśnienia: mały przepływ, powietrze w instalacji albo za niskie ciśnienie wody (trzymaj 1,5-2 bar); przy chłodzeniu brudny lub zasłonięty wymiennik. |
+| 23 | **P3** | Przeciążenie prądowe sprężarki. Przyczyny jak przy P1 albo za niskie napięcie zasilania. |
+| 24 | **P4** | Za wysoka temperatura tłoczenia sprężarki. Przyczyny jak przy P1, brak czynnika albo luźny czujnik Tw_out / T1 / T5. |
+| 25 | **P5** | Za duża różnica temperatur wody na wymienniku płytowym (Tw_out - Tw_in). Sprawdź zawory, filtr, odpowietrzenie i pompę. |
+| 26 | **P6** | Zabezpieczenie modułu inwertera: za niskie napięcie, za mało miejsca wokół jednostki, brudny wymiennik albo stojący wentylator. |
+| 29 | **P9** | Zabezpieczenie wentylatora. Sprawdź wentylator i jego silnik. |
+| 31 | **Pb** | Ochrona przed zamarzaniem. Jednostka sama wraca do normalnej pracy. |
+| 33 | **Pd** | Za wysoka temperatura czynnika na wyjściu skraplacza (chłodzenie): brudny lub zasłonięty wymiennik, za mało miejsca wokół jednostki albo usterka wentylatora. |
+| 38 | **PP** | Woda na wejściu cieplejsza niż na wyjściu przy grzaniu (Tw_in > Tw_out). Sprawdź oba czujniki i ich położenie; przyczyną może być zablokowany zawór 4-drogowy. |
+| 39 | **H0** | Brak komunikacji płyty modułu hydraulicznego z płytą główną PCB B. Sprawdź przewód i kolejność żył; odsuń go od zakłóceń. |
+| 40 | **H1** | Brak komunikacji modułu inwertera (PCB A) z płytą główną (PCB B). Sprawdź zasilanie obu płyt i przewód między nimi. |
+| 41 | **H2** | Usterka czujnika: czynnik na wymienniku płytowym, rura cieczowa (T2). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 42 | **H3** | Usterka czujnika: czynnik na wymienniku płytowym, rura gazowa (T2B). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 43 | **H4** | P6 (L0 / L1) wystąpił trzy razy w ciągu godziny. Zobacz L0 i L1. |
+| 44 | **H5** | Usterka czujnika temperatury pokoju (Ta) w panelu. Wymień czujnik lub panel albo podłącz Ta do płyty modułu hydraulicznego. |
+| 45 | **H6** | Usterka silnika wentylatora: silny wiatr na wentylator albo uszkodzony silnik. |
+| 46 | **H7** | Zabezpieczenie napięcia obwodu głównego. Sprawdź zasilanie; nie włączaj i nie wyłączaj szybko (odczekaj 3 min). Jeśli wraca, płyta główna jest uszkodzona. |
+| 47 | **H8** | Usterka czujnika ciśnienia. Sprawdź jego złącze; wymień uszkodzony czujnik. |
+| 48 | **H9** | Usterka czujnika: woda strefy 2 (Tw2). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 49 | **HA** | Usterka czujnika: woda na wyjściu (Tw_out). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony. |
+| 50 | **Hb** | PP wystąpił trzy razy przy wodzie na wyjściu poniżej 7 °C. Zobacz PP. |
+| 52 | **Hd** | Brak komunikacji jednostek w kaskadzie (master / slave) albo więcej niż jedna jednostka na panelu. Sprawdź przewody sygnałowe i uruchom ponownie. |
+| 53 | **HE** | Brak komunikacji z płytką przekaźnikową termostatu, choć w panelu RT/Ta PCB jest włączone. Podłącz płytkę albo wyłącz RT/Ta PCB. |
+| 54 | **HF** | Błąd pamięci EEPROM płyty modułu inwertera. Wezwij serwis. |
+| 55 | **HH** | H6 wystąpił dziesięć razy w ciągu dwóch godzin. Zobacz H6. |
+| 57 | **HP** | Zabezpieczenie niskiego ciśnienia przy chłodzeniu (poniżej 0,6 MPa) trzy razy w ciągu godziny. Zobacz P0. |
+| 65 | **C7** | Za gorący moduł inwertera: za niskie napięcie, za mało miejsca wokół jednostki, brudny wymiennik albo stojący wentylator. |
+| 116 | **F1** | Za niskie napięcie szyny DC. Sprawdź zasilanie; jeśli jest dobre, uszkodzona jest płyta główna lub inwertera. Wezwij serwis. |
+| 134 | **L0** | Usterka modułu inwertera sprężarki. Sprawdź ciśnienie w układzie, uzwojenia sprężarki i przewody U / V / W oraz L1-L3. Wezwij serwis. |
+| 135 | **L1** | Zabezpieczenie przed zbyt niskim napięciem szyny DC. Sprawdź napięcie zasilania. |
+| 136 | **L2** | Zabezpieczenie przed zbyt wysokim napięciem szyny DC. Sprawdź napięcie zasilania. |
+| 138 | **L4** | Usterka sterowania sprężarki (MCE). Wezwij serwis. |
+| 139 | **L5** | Zabezpieczenie zerowej prędkości sprężarki. Wezwij serwis. |
+| 141 | **L7** | Zła kolejność faz (jednostki 3-fazowe). Zamień dwie fazy zasilania. |
+| 142 | **L8** | Prędkość sprężarki zmieniła się o ponad 15 Hz w ciągu sekundy. Wezwij serwis. |
+| 143 | **L9** | Prędkość sprężarki różni się od zadanej o ponad 15 Hz. Wezwij serwis. |
 
 ## Baza wiedzy
 

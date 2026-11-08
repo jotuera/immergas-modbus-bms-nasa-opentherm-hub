@@ -4,7 +4,7 @@
 # File and id names start with tt_ so this repo can be combined with the D+/D- and F1/F2 repos on one device.
 
 substitutions:
-  tt_project_version: "2.9.0"
+  tt_project_version: "2.10.0"
   # First part of every entity name ("<prefix> - <name>"). Change it when several Immergas buses share one device,
   # e.g. tt_name_prefix: "Immergas TT" -> "Immergas TT - D20 ...". Default keeps the names of v2.1.x.
   tt_name_prefix: "Immergas"
@@ -70,3 +70,30 @@ switch:
           id(tt_bms).stop_poller();
           id(tt_bms_diag).stop_poller();
           ESP_LOGW("tt_bms", "BMS connection OFF - polling paused");
+
+globals:
+  - id: tt_link_ms   # last answer of the device (millis), for the connection status
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
+
+sensor:
+  # connection status: an internal copy of a register read every cycle anyway (merged into the same Modbus request)
+  - platform: modbus_controller
+    modbus_controller_id: tt_bms
+    id: tt_link_probe
+    internal: true
+    register_type: holding
+    address: 6502
+    value_type: U_WORD
+    on_value:
+      - lambda: id(tt_link_ms) = millis();
+
+binary_sensor:
+  # Connected = the boiler answered within 100 s (3 cycles of tt_fast_interval); off also while "BMS connection" is off
+  - platform: template
+    name: "${n_tt_link}"
+    id: tt_link
+    device_class: connectivity
+    entity_category: diagnostic
+    lambda: return id(tt_link_ms) != 0 && millis() - id(tt_link_ms) < 100000;

@@ -18,6 +18,7 @@ substitutions:
   t_mt_force_off: "Wymuszone wył."
   # entity names
   n_mt_connection: "${mt_name_prefix} - Połączenie Modbus"
+  n_mt_link: "${mt_name_prefix} - Połączenie Modbus"
   n_mt_protocol_version: "${mt_name_prefix} - Wersja protokołu"
   n_mt_status2_raw: "${mt_name_prefix} - Status 2 (surowy)"
   n_mt_compressor_freq: "${mt_name_prefix} - Częstotliwość sprężarki"
@@ -62,6 +63,8 @@ substitutions:
   n_mt_fault_last1: "${mt_name_prefix} - Ostatni błąd 1"
   n_mt_fault_last2: "${mt_name_prefix} - Ostatni błąd 2"
   n_mt_fault_last3: "${mt_name_prefix} - Ostatni błąd 3"
+  n_mt_fault_history: "${mt_name_prefix} - Ostatnie błędy"
+  mt_fault_lang: "2"   # language of the fault texts (immergas_core: 0 English, 2 Polish)
   n_mt_sw_idu: "${mt_name_prefix} - Oprogramowanie jednostki wewn."
   n_mt_sw_hmi: "${mt_name_prefix} - Oprogramowanie panelu"
   n_mt_defrost: "${mt_name_prefix} - Odszranianie"

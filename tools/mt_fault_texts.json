@@ -1,0 +1,331 @@
+{
+ "source": "MAGIS M4-30 manual (ST006126a / STD.009523), chap. 13.4: number = supervision system error code = Modbus registers 124-127. Texts: the project own wording.",
+ "none": {
+  "en": "No fault",
+  "pl": "Brak błędu"
+ },
+ "unknown": {
+  "en": "fault code not in the table (see the MAGIS M manual)",
+  "pl": "kod spoza tabeli (zobacz instrukcję MAGIS M)"
+ },
+ "faults": [
+  {
+   "n": 1,
+   "code": "E0",
+   "en": "Water flow fault (E8 shown three times). Check the flow switch and its wiring, and the water flow.",
+   "pl": "Brak przepływu wody (trzy razy E8). Sprawdź przepływomierz, jego okablowanie i przepływ wody."
+  },
+  {
+   "n": 2,
+   "code": "E1",
+   "en": "Phase loss or wrong phase order (three-phase units). Check the supply cables; swap two phases.",
+   "pl": "Brak fazy lub zła kolejność faz (jednostki 3-fazowe). Sprawdź przewody zasilania; zamień dwie fazy."
+  },
+  {
+   "n": 3,
+   "code": "E2",
+   "en": "No communication between the wired controller and the hydraulic module. Check the controller cable and its wire order; keep it away from interference.",
+   "pl": "Brak komunikacji panelu z modułem hydraulicznym. Sprawdź przewód panelu i kolejność żył; odsuń go od zakłóceń."
+  },
+  {
+   "n": 4,
+   "code": "E3",
+   "en": "Final water outlet (T1) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: końcowa temperatura zasilania (T1). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 5,
+   "code": "E4",
+   "en": "DHW tank (T5) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: zasobnik CWU (T5). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 6,
+   "code": "E5",
+   "en": "Refrigerant at the condenser outlet (T3) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: czynnik na wyjściu skraplacza (T3). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 7,
+   "code": "E6",
+   "en": "Ambient air (T4) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: temperatura otoczenia (T4). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 8,
+   "code": "E7",
+   "en": "Buffer tank (Tbt1) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: bufor (Tbt1). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 9,
+   "code": "E8",
+   "en": "Water flow too low. Open all valves, clean the filter, vent the air, check the pressure (above 1 bar), the pump speed and the expansion vessel.",
+   "pl": "Za mały przepływ wody. Otwórz zawory, wyczyść filtr, odpowietrz, sprawdź ciśnienie (powyżej 1 bar), prędkość pompy i naczynie wzbiorcze."
+  },
+  {
+   "n": 10,
+   "code": "E9",
+   "en": "Compressor suction (Th) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: ssanie sprężarki (Th). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 11,
+   "code": "EA",
+   "en": "Compressor discharge (Tp) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: tłoczenie sprężarki (Tp). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 12,
+   "code": "Eb",
+   "en": "Solar panel (Tsolar) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: kolektor słoneczny (Tsolar). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 13,
+   "code": "EC",
+   "en": "Low buffer / manifold (Tbt2) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: dół bufora / rozdzielacz (Tbt2). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 14,
+   "code": "Ed",
+   "en": "Plate heat exchanger water inlet (Tw_in) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: woda na wejściu wymiennika płytowego (Tw_in). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 15,
+   "code": "EE",
+   "en": "EEPROM fault on the hydraulic module board. Call a service technician.",
+   "pl": "Błąd pamięci EEPROM płyty modułu hydraulicznego. Wezwij serwis."
+  },
+  {
+   "n": 19,
+   "code": "EP",
+   "en": "Leakage on the tank booster heater (TBH). Check the device on the TBH output.",
+   "pl": "Upływ na grzałce zasobnika (TBH). Sprawdź urządzenie na wyjściu TBH."
+  },
+  {
+   "n": 20,
+   "code": "P0",
+   "en": "Low pressure protection: refrigerant shortage, dirty or blocked outdoor coil, low water flow in cooling or a stuck expansion valve. Call a service technician.",
+   "pl": "Zabezpieczenie niskiego ciśnienia: brak czynnika, brudny lub zasłonięty wymiennik zewnętrzny, mały przepływ przy chłodzeniu albo zablokowany zawór rozprężny. Wezwij serwis."
+  },
+  {
+   "n": 21,
+   "code": "P1",
+   "en": "High pressure protection: low water flow, air in the system or water pressure too low (keep 1.5-2 bar); in cooling a dirty or covered coil.",
+   "pl": "Zabezpieczenie wysokiego ciśnienia: mały przepływ, powietrze w instalacji albo za niskie ciśnienie wody (trzymaj 1,5-2 bar); przy chłodzeniu brudny lub zasłonięty wymiennik."
+  },
+  {
+   "n": 23,
+   "code": "P3",
+   "en": "Compressor overcurrent protection. The same causes as P1, or the supply voltage is too low.",
+   "pl": "Przeciążenie prądowe sprężarki. Przyczyny jak przy P1 albo za niskie napięcie zasilania."
+  },
+  {
+   "n": 24,
+   "code": "P4",
+   "en": "Compressor discharge temperature too high. The same causes as P1, a refrigerant shortage or a loose Tw_out / T1 / T5 sensor.",
+   "pl": "Za wysoka temperatura tłoczenia sprężarki. Przyczyny jak przy P1, brak czynnika albo luźny czujnik Tw_out / T1 / T5."
+  },
+  {
+   "n": 25,
+   "code": "P5",
+   "en": "Water temperature difference across the plate heat exchanger too big (Tw_out - Tw_in). Check the valves, the filter, the air and the pump.",
+   "pl": "Za duża różnica temperatur wody na wymienniku płytowym (Tw_out - Tw_in). Sprawdź zawory, filtr, odpowietrzenie i pompę."
+  },
+  {
+   "n": 26,
+   "code": "P6",
+   "en": "Inverter module protection: low supply voltage, too little space around the unit, a dirty coil or the fan not running.",
+   "pl": "Zabezpieczenie modułu inwertera: za niskie napięcie, za mało miejsca wokół jednostki, brudny wymiennik albo stojący wentylator."
+  },
+  {
+   "n": 29,
+   "code": "P9",
+   "en": "Fan protection. Check the fan and its motor.",
+   "pl": "Zabezpieczenie wentylatora. Sprawdź wentylator i jego silnik."
+  },
+  {
+   "n": 31,
+   "code": "Pb",
+   "en": "Anti-freeze protection active. The unit returns to normal operation by itself.",
+   "pl": "Ochrona przed zamarzaniem. Jednostka sama wraca do normalnej pracy."
+  },
+  {
+   "n": 33,
+   "code": "Pd",
+   "en": "Refrigerant temperature at the condenser outlet too high (cooling): a dirty or covered coil, too little space around the unit or a faulty fan.",
+   "pl": "Za wysoka temperatura czynnika na wyjściu skraplacza (chłodzenie): brudny lub zasłonięty wymiennik, za mało miejsca wokół jednostki albo usterka wentylatora."
+  },
+  {
+   "n": 38,
+   "code": "PP",
+   "en": "Inlet water warmer than the outlet in heating (Tw_in > Tw_out). Check both sensors and their position; a stuck 4-way valve can cause it.",
+   "pl": "Woda na wejściu cieplejsza niż na wyjściu przy grzaniu (Tw_in > Tw_out). Sprawdź oba czujniki i ich położenie; przyczyną może być zablokowany zawór 4-drogowy."
+  },
+  {
+   "n": 39,
+   "code": "H0",
+   "en": "No communication between the hydraulic module board and the main board PCB B. Check the cable and its wire order; keep it away from interference.",
+   "pl": "Brak komunikacji płyty modułu hydraulicznego z płytą główną PCB B. Sprawdź przewód i kolejność żył; odsuń go od zakłóceń."
+  },
+  {
+   "n": 40,
+   "code": "H1",
+   "en": "No communication between the inverter module (PCB A) and the main board (PCB B). Check that both boards are powered and the cable between them.",
+   "pl": "Brak komunikacji modułu inwertera (PCB A) z płytą główną (PCB B). Sprawdź zasilanie obu płyt i przewód między nimi."
+  },
+  {
+   "n": 41,
+   "code": "H2",
+   "en": "Refrigerant at the plate exchanger, liquid pipe (T2) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: czynnik na wymienniku płytowym, rura cieczowa (T2). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 42,
+   "code": "H3",
+   "en": "Refrigerant at the plate exchanger, gas pipe (T2B) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: czynnik na wymienniku płytowym, rura gazowa (T2B). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 43,
+   "code": "H4",
+   "en": "P6 (L0 / L1) appeared three times within an hour. See L0 and L1.",
+   "pl": "P6 (L0 / L1) wystąpił trzy razy w ciągu godziny. Zobacz L0 i L1."
+  },
+  {
+   "n": 44,
+   "code": "H5",
+   "en": "Room temperature sensor (Ta) in the wired controller faulty. Replace the sensor or the controller, or connect Ta to the hydraulic module board.",
+   "pl": "Usterka czujnika temperatury pokoju (Ta) w panelu. Wymień czujnik lub panel albo podłącz Ta do płyty modułu hydraulicznego."
+  },
+  {
+   "n": 45,
+   "code": "H6",
+   "en": "Fan motor fault: strong wind against the fan or a damaged motor.",
+   "pl": "Usterka silnika wentylatora: silny wiatr na wentylator albo uszkodzony silnik."
+  },
+  {
+   "n": 46,
+   "code": "H7",
+   "en": "Main circuit voltage protection. Check the supply; do not switch on and off quickly (wait 3 min). If it persists, the main board is faulty.",
+   "pl": "Zabezpieczenie napięcia obwodu głównego. Sprawdź zasilanie; nie włączaj i nie wyłączaj szybko (odczekaj 3 min). Jeśli wraca, płyta główna jest uszkodzona."
+  },
+  {
+   "n": 47,
+   "code": "H8",
+   "en": "Pressure sensor fault. Check its connector; replace the sensor if faulty.",
+   "pl": "Usterka czujnika ciśnienia. Sprawdź jego złącze; wymień uszkodzony czujnik."
+  },
+  {
+   "n": 48,
+   "code": "H9",
+   "en": "Zone 2 water (Tw2) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: woda strefy 2 (Tw2). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 49,
+   "code": "HA",
+   "en": "Water outlet (Tw_out) sensor fault. Check the sensor, its resistance and connector (dry it if wet); replace it if faulty.",
+   "pl": "Usterka czujnika: woda na wyjściu (Tw_out). Sprawdź czujnik, jego rezystancję i złącze (osusz, jeśli mokre); wymień uszkodzony."
+  },
+  {
+   "n": 50,
+   "code": "Hb",
+   "en": "PP appeared three times with the water outlet below 7 °C. See PP.",
+   "pl": "PP wystąpił trzy razy przy wodzie na wyjściu poniżej 7 °C. Zobacz PP."
+  },
+  {
+   "n": 52,
+   "code": "Hd",
+   "en": "No communication between the units in a cascade (master / slaves), or more than one outdoor unit on the controller. Check the signal wires and restart.",
+   "pl": "Brak komunikacji jednostek w kaskadzie (master / slave) albo więcej niż jedna jednostka na panelu. Sprawdź przewody sygnałowe i uruchom ponownie."
+  },
+  {
+   "n": 53,
+   "code": "HE",
+   "en": "No communication with the thermostat transfer board while RT/Ta PCB is set valid on the controller. Connect the board or set RT/Ta PCB not valid.",
+   "pl": "Brak komunikacji z płytką przekaźnikową termostatu, choć w panelu RT/Ta PCB jest włączone. Podłącz płytkę albo wyłącz RT/Ta PCB."
+  },
+  {
+   "n": 54,
+   "code": "HF",
+   "en": "EEPROM fault on the inverter module board. Call a service technician.",
+   "pl": "Błąd pamięci EEPROM płyty modułu inwertera. Wezwij serwis."
+  },
+  {
+   "n": 55,
+   "code": "HH",
+   "en": "H6 appeared ten times within two hours. See H6.",
+   "pl": "H6 wystąpił dziesięć razy w ciągu dwóch godzin. Zobacz H6."
+  },
+  {
+   "n": 57,
+   "code": "HP",
+   "en": "Low pressure protection in cooling (below 0.6 MPa) three times within an hour. See P0.",
+   "pl": "Zabezpieczenie niskiego ciśnienia przy chłodzeniu (poniżej 0,6 MPa) trzy razy w ciągu godziny. Zobacz P0."
+  },
+  {
+   "n": 65,
+   "code": "C7",
+   "en": "Inverter (transducer) module too hot: low supply voltage, too little space around the unit, a dirty coil or the fan not running.",
+   "pl": "Za gorący moduł inwertera: za niskie napięcie, za mało miejsca wokół jednostki, brudny wymiennik albo stojący wentylator."
+  },
+  {
+   "n": 116,
+   "code": "F1",
+   "en": "Low DC bus voltage. Check the supply; if it is fine, the main or inverter board is faulty. Call a service technician.",
+   "pl": "Za niskie napięcie szyny DC. Sprawdź zasilanie; jeśli jest dobre, uszkodzona jest płyta główna lub inwertera. Wezwij serwis."
+  },
+  {
+   "n": 134,
+   "code": "L0",
+   "en": "Compressor inverter module fault. Check the system pressure, the compressor windings and the U / V / W and L1-L3 wiring. Call a service technician.",
+   "pl": "Usterka modułu inwertera sprężarki. Sprawdź ciśnienie w układzie, uzwojenia sprężarki i przewody U / V / W oraz L1-L3. Wezwij serwis."
+  },
+  {
+   "n": 135,
+   "code": "L1",
+   "en": "Low DC bus voltage protection. Check the supply voltage.",
+   "pl": "Zabezpieczenie przed zbyt niskim napięciem szyny DC. Sprawdź napięcie zasilania."
+  },
+  {
+   "n": 136,
+   "code": "L2",
+   "en": "High DC bus voltage protection. Check the supply voltage.",
+   "pl": "Zabezpieczenie przed zbyt wysokim napięciem szyny DC. Sprawdź napięcie zasilania."
+  },
+  {
+   "n": 138,
+   "code": "L4",
+   "en": "Compressor drive (MCE) fault. Call a service technician.",
+   "pl": "Usterka sterowania sprężarki (MCE). Wezwij serwis."
+  },
+  {
+   "n": 139,
+   "code": "L5",
+   "en": "Compressor zero-speed protection. Call a service technician.",
+   "pl": "Zabezpieczenie zerowej prędkości sprężarki. Wezwij serwis."
+  },
+  {
+   "n": 141,
+   "code": "L7",
+   "en": "Phase order fault (three-phase units). Swap two supply phases.",
+   "pl": "Zła kolejność faz (jednostki 3-fazowe). Zamień dwie fazy zasilania."
+  },
+  {
+   "n": 142,
+   "code": "L8",
+   "en": "Compressor speed changed by more than 15 Hz within one second. Call a service technician.",
+   "pl": "Prędkość sprężarki zmieniła się o ponad 15 Hz w ciągu sekundy. Wezwij serwis."
+  },
+  {
+   "n": 143,
+   "code": "L9",
+   "en": "Compressor speed differs from the target by more than 15 Hz. Call a service technician.",
+   "pl": "Prędkość sprężarki różni się od zadanej o ponad 15 Hz. Wezwij serwis."
+  }
+ ]
+}

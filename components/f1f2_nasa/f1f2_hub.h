@@ -123,6 +123,8 @@ class NasaHub : public Component, public uart::UARTDevice {
   void set_discovery_enabled(bool on) { this->discovery_ = on; }
   bool is_discovery_enabled() const { return this->discovery_; }
   uint32_t get_republish_interval() const { return this->republish_interval_; }
+  // frames received from the bus (valid CRC) - the connection status counts its changes
+  uint32_t rx_frames() const { return this->rx_frames_; }
 
   // --- bus access gates (layered safety) ---
   // NASA connection (master fuse): when false the hub ignores the bus entirely - RX is drained but not
