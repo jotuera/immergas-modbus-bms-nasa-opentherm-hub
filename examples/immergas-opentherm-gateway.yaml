@@ -1,0 +1,74 @@
+# Immergas OpenTherm boiler - GATEWAY example configuration (the room unit stays)
+# The room unit (CAR V2, Super Amico, a third-party OpenTherm thermostat) keeps working: it talks to the hub, the hub to
+# the boiler. The hub sees every request and answer and may replace selected writes (override switches); when the room
+# unit is silent for 8 s the hub runs the boiler itself with the ot_control values.
+# Hardware: AtomS3 Lite + ATOMIC PortABC + DIYLess Master and Slave OpenTherm Shields on M5Stack Grove -> Dupont cables:
+#   port A -> Master shield -> boiler OpenTherm terminals (41 / 44): black GND, white G39 -> D2, yellow G38 -> D1
+#   port C -> Slave shield  -> the room unit wires:                  black GND, red 5V, white G6 -> D6, yellow G5 -> D7
+#   Grove AtomS3 socket (next to USB-C) -> only the white G1 wire = 3.3 V -> 3V3 of both shields (ot_3v3_supply)
+#   port B (G8 / G7) stays free for an RS485 bus (see immergas-trio-hydro.yaml for OpenTherm + RS485 on one device).
+# Nothing to change on the boiler: jumper X40 stays as it is.
+# Wiring diagram: docs/opentherm-hub.md#wiring. Master mode (the hub replaces the room unit): immergas-opentherm.yaml.
+# Experimental: written from the OpenTherm specification and the Immergas findings of the Dominus integration, not
+# tested on a boiler yet.
+# Copy to your ESPHome folder, set the secrets and flash. Loaded packages come straight from GitHub (pin `ref`).
+
+substitutions:
+  device_name: immergas-opentherm-gw
+  friendly_name: Immergas OpenTherm Gateway
+  ot_name_prefix: "Immergas OT"
+  # Master shield on PortABC port A (towards the boiler)
+  ot_boiler_in_pin: GPIO39    # white wire -> D2
+  ot_boiler_out_pin: GPIO38   # yellow wire -> D1
+  # Slave shield on PortABC port C (towards the room unit)
+  ot_room_in_pin: GPIO6       # white wire -> D6
+  ot_room_out_pin: GPIO5      # yellow wire -> D7
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  name_add_mac_suffix: false
+  min_version: 2026.9.0
+
+esp32:
+  board: m5stack-atoms3
+  framework:
+    type: esp-idf
+
+logger:
+  level: INFO
+  hardware_uart: USB_SERIAL_JTAG
+
+api:
+  encryption:
+    key: !secret immergas_ot_api_key
+  reboot_timeout: 0s   # the boiler must keep getting its OpenTherm frames while Home Assistant is down
+
+ota:
+  - platform: esphome
+    password: !secret immergas_ot_ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  reboot_timeout: 0s
+  ap:
+
+captive_portal:
+
+packages:
+  opentherm:
+    url: https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub
+    ref: main
+    refresh: 1d
+    files:
+      - packages/lang/ot_en.yaml        # or ot_pl.yaml
+      - packages/ot_core.yaml
+      - packages/ot_gateway.yaml        # gateway mode: the Slave shield towards the room unit
+      - packages/ot_sensors.yaml
+      - packages/ot_stats.yaml          # optional: burner starts today / last hour, burner time today
+      - packages/ot_computed.yaml       # optional: delta T, condensing, burner power, link quality, operating state
+      - packages/ot_analytics.yaml      # optional: gas and its cost, condensing share, short cycling (needs ot_stats, ot_computed)
+      - packages/ot_control.yaml        # the values used while the room unit is silent and by the override switches
+      - packages/ot_boiler_params.yaml  # optional: the boiler menu copied once (codes, hints) + service reminder
+      - packages/ot_3v3_supply.yaml     # G1 of the Grove AtomS3 = 3.3 V for the shields (their 3V3 pin)

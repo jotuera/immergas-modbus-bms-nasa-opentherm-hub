@@ -4,10 +4,10 @@
 
 Back to the [protocol overview](../README.md).
 
-> **Planned – looking for testers.** There is no ready configuration for the TRIO HYDRO yet. This page collects what
+> **Planned – looking for testers.** The configuration is ready but not tested on a unit yet. This page collects what
 > the Immergas manuals say about its buses and how the hub would connect. If you have a TRIO HYDRO (ELECTRIC or
-> HYBRID 5 / 8 / 12) and would like to help, open an issue or write to me – the configuration is prepared together
-> with the first installation.
+> HYBRID 5 / 8 / 12) and would like to help, open an issue or write to me – we check and adjust the configuration
+> together at the first installation.
 
 The Immergas **TRIO HYDRO** is a monoblock heat pump system: the indoor unit (built-in or in a technical cabinet, 160 L
 cylinder) with the **UE HYDRO HP 5 / 8 / 12** outdoor unit. The **HYBRID** version adds a **VICTRIX TERA 24 PLUS**
@@ -59,6 +59,23 @@ same pins as HYBRID. F1/F2 alone needs only the Grove AtomS3 socket, no PortABC.
 **Without soldering, as two devices:** the ready-made [OT-thing](https://www.seegel-systeme.de/produkt/ot-thing/)
 gateway (OpenTherm master + slave in a box, ESP32-C3) for the boiler side and an AtomS3 Lite with the RS485 units for
 F1/F2 and the zone bus – a configuration for the OT-thing is not prepared yet.
+
+## Configuration
+
+| Version | Configuration file |
+|---|---|
+| **HYBRID** – OpenTherm gateway + F1/F2 + zone bus | [`examples/immergas-trio-hydro.yaml`](../examples/immergas-trio-hydro.yaml) ([open on GitHub](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro.yaml) · [download (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro.yaml)) |
+| **ELECTRIC** – F1/F2 + zone bus | [`examples/immergas-trio-hydro-electric.yaml`](../examples/immergas-trio-hydro-electric.yaml) ([open on GitHub](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro-electric.yaml) · [download (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro-electric.yaml)) |
+
+The pins match the diagram above. Everything starts **passive** except the OpenTherm gateway (it relays the indoor
+unit's frames to the boiler): F1/F2 with `f1f2_transmit: "false"` (listen only) and the zone bus emulation switches
+off – the hub only listens. The `ot_3v3_supply` package is not used (the regulator gives the 3.3 V).
+
+1. Copy the file into your ESPHome folder and add the secrets it uses to `secrets.yaml`: `wifi_ssid`, `wifi_password`,
+   `immergas_trio_api_key`, `immergas_trio_ota_password`.
+2. Flash (USB the first time) and add the device in Home Assistant.
+3. Check the OpenTherm boiler and room unit connection (HYBRID) and the F1/F2 and zone bus sniffers in the
+   diagnostics – then record the logs ([Collecting logs](collecting-logs.md)).
 
 ## What a tester would do
 

@@ -4,10 +4,10 @@
 
 Powrót do [przeglądu protokołów](../README.pl.md).
 
-> **Planowany – szukamy testerów.** Gotowej konfiguracji dla TRIO HYDRO jeszcze nie ma. Ta strona zbiera to, co
+> **Planowany – szukamy testerów.** Konfiguracja jest gotowa, ale jeszcze niesprawdzona na urządzeniu. Ta strona zbiera to, co
 > instrukcje Immergasa mówią o jego magistralach, i to, jak podłączyłby się hub. Jeśli masz TRIO HYDRO (ELECTRIC albo
-> HYBRID 5 / 8 / 12) i chcesz pomóc, załóż zgłoszenie albo napisz do mnie – konfigurację przygotujemy razem przy
-> pierwszej instalacji.
+> HYBRID 5 / 8 / 12) i chcesz pomóc, załóż zgłoszenie albo napisz do mnie – konfigurację sprawdzimy i dopasujemy razem
+> przy pierwszej instalacji.
 
 Immergas **TRIO HYDRO** to system z pompą ciepła monoblok: jednostka wewnętrzna (do zabudowy albo w szafce
 technicznej, zasobnik 160 L) z jednostką zewnętrzną **UE HYDRO HP 5 / 8 / 12**. Wersja **HYBRID** dokłada kocioł
@@ -59,6 +59,23 @@ co w HYBRID. Samo F1/F2 potrzebuje tylko gniazda Grove AtomS3, bez PortABC.
 **Bez lutowania, jako dwa urządzenia:** gotowa bramka [OT-thing](https://www.seegel-systeme.de/produkt/ot-thing/)
 (master + slave OpenTherm w obudowie, ESP32-C3) od strony kotła i AtomS3 Lite z modułami RS485 do F1/F2 i magistrali
 strefowej – konfiguracji dla OT-thing jeszcze nie ma.
+
+## Konfiguracja
+
+| Wersja | Plik konfiguracji |
+|---|---|
+| **HYBRID** – bramka OpenTherm + F1/F2 + magistrala strefowa | [`examples/immergas-trio-hydro.yaml`](../examples/immergas-trio-hydro.yaml) ([otwórz na GitHubie](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro.yaml) · [pobierz (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro.yaml)) |
+| **ELECTRIC** – F1/F2 + magistrala strefowa | [`examples/immergas-trio-hydro-electric.yaml`](../examples/immergas-trio-hydro-electric.yaml) ([otwórz na GitHubie](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro-electric.yaml) · [pobierz (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro-electric.yaml)) |
+
+Piny zgadzają się ze schematem wyżej. Wszystko startuje **biernie** poza bramką OpenTherm (przekazuje ramki jednostki
+wewnętrznej do kotła): F1/F2 z `f1f2_transmit: "false"` (tylko nasłuch), a przełączniki emulacji magistrali
+strefowej wyłączone – hub tylko słucha. Pakietu `ot_3v3_supply` nie ma (3,3 V daje stabilizator).
+
+1. Skopiuj plik do folderu ESPHome i dodaj sekrety, których używa, do `secrets.yaml`: `wifi_ssid`, `wifi_password`,
+   `immergas_trio_api_key`, `immergas_trio_ota_password`.
+2. Wgraj (pierwszy raz przez USB) i dodaj urządzenie w Home Assistant.
+3. Sprawdź połączenie OpenTherm z kotłem i z jednostką wewnętrzną (HYBRID) oraz sniffery F1/F2 i magistrali
+   strefowej w diagnostyce – potem nagraj logi ([Zbieranie logów](collecting-logs.pl.md)).
 
 ## Co zrobiłby tester
 

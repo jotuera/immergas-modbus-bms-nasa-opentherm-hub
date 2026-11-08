@@ -3,6 +3,18 @@
 # Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
 # File and id names start with dd_ so this repo can be combined with the T-/T+ and F1/F2 repos on one device.
 
+# Home Assistant entities offered as the extra temperature / humidity sources ("... source" selects). Set them in
+# your main YAML; an unset one points to a placeholder entity that does not exist and stays unused.
+substitutions:
+  dd_temp_src_2: sensor.dd_temp_src_2_not_set
+  dd_temp_src_3: sensor.dd_temp_src_3_not_set
+  dd_temp_src_4: sensor.dd_temp_src_4_not_set
+  dd_temp_src_5: sensor.dd_temp_src_5_not_set
+  dd_hum_src_2: sensor.dd_hum_src_2_not_set
+  dd_hum_src_3: sensor.dd_hum_src_3_not_set
+  dd_hum_src_4: sensor.dd_hum_src_4_not_set
+  dd_hum_src_5: sensor.dd_hum_src_5_not_set
+
 number:
   # 1.2.1: "CH min. set" of the zone 1 panel (PDU 2707) - served by the emulated panel, taken from a physical one
   - platform: template

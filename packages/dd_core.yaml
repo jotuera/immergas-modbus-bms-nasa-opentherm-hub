@@ -7,7 +7,7 @@
 substitutions:
   dd_author: "JoTu"
   dd_github_url: "https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub"
-  dd_project_version: "2.4.0"
+  dd_project_version: "2.4.1"
   # RS485 pins (M5Stack Atom + RS485 unit). Override in your main YAML if your wiring differs.
   dd_uart_tx_pin: GPIO26
   dd_uart_rx_pin: GPIO32

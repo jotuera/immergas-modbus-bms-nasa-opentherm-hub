@@ -22,7 +22,7 @@ OpenTherm – and brings them to Home Assistant, with a set of Lovelace cards th
 | **OpenTherm** | VICTRIX ZEUS, EXA, TERA, OMNIA, HERCULES Condensing … | **master** instead of the CAR V2 / Dominus, or **gateway** between the room unit and the boiler | experimental | [OpenTherm boilers](docs/opentherm-hub.md) |
 | **Generator BMS** (Modbus RTU) | gas boilers VICTRIX ZEUS Superior 25–35, EXTRA, PRO V2; MAGIS M TOP heat pump; IMG-BUS boilers (ZEUS, EXA, TERA, OMNIA, HERCULES …) through the Immergas IU23 interface (hypothesis) | Modbus master: heat request, flow and DHW setpoints, temperatures, faults | experimental | [Gas boilers over Modbus BMS](docs/gas-boiler-bms.md) |
 | **Midea M-Thermal Modbus** (H1 / H2) | MAGIS M (R32) | Modbus master: on / off, mode, setpoints, curves, compressor, energy, COP | experimental | [MAGIS M heat pumps](docs/magis-m-midea.md) |
-| **Samsung NASA F1/F2 + OpenTherm + zone Modbus** | TRIO HYDRO ELECTRIC / HYBRID 5 – 12 (UE HYDRO HP outdoor unit, VICTRIX TERA 24 PLUS boiler) | another hub on the same packages: outdoor unit over F1/F2, the boiler through an OpenTherm gateway | planned – testers wanted | [TRIO HYDRO](docs/trio-hydro.md) |
+| **Samsung NASA F1/F2 + OpenTherm + zone Modbus** | TRIO HYDRO ELECTRIC / HYBRID 5 – 12 (UE HYDRO HP outdoor unit, VICTRIX TERA 24 PLUS boiler) | another hub on the same packages: outdoor unit over F1/F2, the boiler through an OpenTherm gateway | configuration ready, untested – testers wanted | [TRIO HYDRO](docs/trio-hydro.md) |
 
 Each page has the hardware, the wiring and the knowledge base of its protocol. On top of the buses the hub computes
 what none of them shows alone – COP now and today, heat output, the operating state, starts and runtime, the last DHW
@@ -91,7 +91,7 @@ Slovak.
 | [OpenTherm boilers](docs/opentherm-hub.md) | master and gateway: what to buy (AtomS3 Lite + ToUnit Base or PortABC + DIYLess shields), wiring diagrams, boiler terminals by family, installation |
 | [Gas boilers over Modbus BMS](docs/gas-boiler-bms.md) | SUPERIOR / EXTRA / PRO V2, MAGIS M TOP, register map |
 | [MAGIS M heat pumps](docs/magis-m-midea.md) | Midea M-Thermal on H1 / H2, register map |
-| [TRIO HYDRO](docs/trio-hydro.md) | buses from the manuals, planned hardware, what a tester would do |
+| [TRIO HYDRO](docs/trio-hydro.md) | buses from the manuals, hardware, configuration, what a tester would do |
 | [Knowledge base](docs/knowledge-base.md) | how the buses work, installation know-how, troubleshooting |
 | [Collecting logs](docs/collecting-logs.md) | a different model or an unknown signal – what to record for an issue |
 | [Cards](cards/README.md) | the Lovelace cards, options, install |

@@ -18,7 +18,7 @@ in the middle.
 |---|---|---|
 | **Buy** | M5Stack AtomS3 Lite + **ATOMIC ToUnit Base** + **DIYLess Master OpenTherm Shield** + 2 female Dupont wires on the ToUnit plug (D1, D2) + 1 Grove → Dupont cable (black GND, white G1 = 3.3 V) | AtomS3 Lite + **ATOMIC PortABC** + **DIYLess Master** + **DIYLess Slave OpenTherm Shield** + 3 Grove → Dupont cables |
 | **Connect** | ToUnit Base → D1 / D2 of the Master shield (DIP 2 and 5 on); Grove AtomS3 → black GND, white G1 = 3.3 V → 3V3; Master shield → boiler OpenTherm terminals (**41 / 44** on most Immergas boilers) | PortABC port A → Master: GND, D1, D2; port C → Slave: GND, 5V, D6, D7 (port B free for RS485); white G1 of the Grove AtomS3 → 3V3 of both; room unit wires → Slave shield, Master shield → boiler 41 / 44 |
-| **Flash** | [`examples/immergas-opentherm.yaml`](../examples/immergas-opentherm.yaml) as it is | the same file, uncomment `ot_gateway`, the room pins and set the master pins to port A |
+| **Flash** | [`examples/immergas-opentherm.yaml`](../examples/immergas-opentherm.yaml) as it is | [`examples/immergas-opentherm-gateway.yaml`](../examples/immergas-opentherm-gateway.yaml) as it is |
 | **On the boiler** | remove the CAR V2, jumper X40 back on 40-41, power-cycle (E31) | nothing to change |
 
 Details: [Hardware](#hardware), [Wiring](#wiring) with diagrams, [Installation](#installation).
@@ -144,36 +144,26 @@ The full wiring of this combination (gateway + RS485 on F1/F2) is on the [TRIO H
 
 ## Installation
 
-> 📄 **Configuration file: [`examples/immergas-opentherm.yaml`](../examples/immergas-opentherm.yaml)**
-> ([open on GitHub](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-opentherm.yaml) · [download (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-opentherm.yaml))
+| Mode | Configuration file |
+|---|---|
+| **Master** – the hub replaces the room unit (ToUnit Base) | [`examples/immergas-opentherm.yaml`](../examples/immergas-opentherm.yaml) ([open on GitHub](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-opentherm.yaml) · [download (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-opentherm.yaml)) |
+| **Gateway** – the room unit stays (PortABC) | [`examples/immergas-opentherm-gateway.yaml`](../examples/immergas-opentherm-gateway.yaml) ([open on GitHub](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-opentherm-gateway.yaml) · [download (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-opentherm-gateway.yaml)) |
+| Gateway + Samsung F1/F2 + zone bus (TRIO HYDRO HYBRID) | [`examples/immergas-trio-hydro.yaml`](../examples/immergas-trio-hydro.yaml) – see [TRIO HYDRO](trio-hydro.md#configuration) |
 
 **Before switching to master** remove the room unit (CAR V2 / Super Amico) or disconnect the Dominus from the OpenTherm
 terminals, put jumper X40 back on 40-41 and power-cycle the boiler (E31). On the HERCULES / ZEUS Superior 26 / 32
 family set M3 P33 = ON first – the boiler then keeps heating even if OpenTherm is lost.
 
-1. **Copy the configuration.** Save [`immergas-opentherm.yaml`](../examples/immergas-opentherm.yaml) into your ESPHome folder (in Home Assistant:
+1. **Copy the configuration** of your mode (table above) into your ESPHome folder (in Home Assistant:
    *ESPHome → New device → Continue → Skip*, then paste its content into the new file).
 2. **Add the secrets** it uses to `secrets.yaml`: `wifi_ssid`, `wifi_password`, `immergas_ot_api_key`, `immergas_ot_ota_password`.
-3. **Pick what you need** in the `packages:` block at the end of the file:
-
-   ```yaml
-   files:
-     - packages/lang/ot_en.yaml        # or ot_pl.yaml
-     - packages/ot_core.yaml
-     - packages/ot_sensors.yaml
-     - packages/ot_control.yaml
-     - packages/ot_regulator.yaml      # master: weather curve + room correction
-     - packages/ot_3v3_supply.yaml     # G1 of the Grove AtomS3 = 3.3 V for the shields
-     # - packages/ot_gateway.yaml      # gateway: the room unit stays
-   ```
-
-   - **Master** (the hub replaces the room unit): keep `ot_regulator` and set `ot_room_entity` to a room temperature
-     sensor of Home Assistant (or leave it – the regulator then runs on the curve only).
-   - **Gateway** (the room unit stays): uncomment `ot_gateway` and the `ot_room_in_pin` / `ot_room_out_pin`
-     substitutions (port C) and set `ot_boiler_in_pin: GPIO39`, `ot_boiler_out_pin: GPIO38` (port A); `ot_regulator`
-     is optional (it sets the values the hub uses while the room unit is silent).
-4. **Check the pins** (`substitutions:` at the top). Master on the ToUnit Base keeps the defaults; the gateway
-   with the PortABC is step 3. Shields stacked on a WeMos D1 mini ESP32: `ot_boiler_in_pin: GPIO21`,
+3. **Pick what you need** in the `packages:` block at the end of the file – the optional packages are marked.
+   - **Master:** set `ot_room_entity` to a room temperature sensor of Home Assistant (or leave it – the regulator
+     then runs on the curve only).
+   - **Gateway:** nothing to choose – `ot_gateway` and the room pins (port C) are already set; `ot_control` gives the
+     values the hub uses while the room unit is silent.
+4. **Check the pins** (`substitutions:` at the top). Both files have the pins of the diagrams (master: ToUnit Base,
+   gateway: PortABC ports A and C). Shields stacked on a WeMos D1 mini ESP32: `ot_boiler_in_pin: GPIO21`,
    `ot_boiler_out_pin: GPIO22`, gateway `ot_room_in_pin: GPIO19`, `ot_room_out_pin: GPIO23`; in `esp32:` set
    `board: wemos_d1_mini32`, remove `hardware_uart: USB_SERIAL_JTAG` from `logger:` and leave out `ot_3v3_supply`.
 5. **Flash** the device (USB the first time, then over the air) and **add it in Home Assistant** (*Settings → Devices
