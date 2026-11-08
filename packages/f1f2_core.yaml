@@ -5,7 +5,7 @@
 # repos on one device.
 
 substitutions:
-  f1f2_project_version: "2.7.4"
+  f1f2_project_version: "2.8.0"
   # RS485 pins (M5Stack Atom + Atomic RS485 Base). Override in your main YAML if your wiring differs.
   f1f2_uart_tx_pin: GPIO19
   f1f2_uart_rx_pin: GPIO22
