@@ -44,7 +44,7 @@ sygnały + 2 × RS485 po 2), więc 3,3 V dla płytek daje mały stabilizator, a 
 | [DIYLess Slave OpenTherm Shield](https://diyless.com/product/slave-opentherm-shield) | **port C** (G6 → D6, G5 → D7, GND, 5 V) → wyjście OpenTherm jednostki wewnętrznej (przewody, które szły do kotła) |
 | [przewody Grove → Dupont, 4-pin, żeńskie / męskie 2,54 mm](https://botland.com.pl/przewody-polaczeniowe-grove/21690-grove-zestaw-5-przewodow-4-pin-2mm-przewody-zenskiemeskie-254mm-20cm-6972934173751.html) | port C → płytka Slave; luźne przewody ze złącza śrubowego do płytki Master i stabilizatora |
 | [M5Stack Isolated RS485 Unit](https://botland.com.pl/moduly-unit-moduly-komunikacyjne/19118-izolowany-modul-nadawczo-odbiorczy-rs485-modul-rozszerzen-unit-do-modulow-deweloperskich-m5stack-5904422363673.html) nr 1 | **port B** (RX G8, TX G7) → F1 / F2, nasłuch równolegle |
-| [M5Stack Isolated RS485 Unit](https://botland.com.pl/moduly-unit-moduly-komunikacyjne/19118-izolowany-modul-nadawczo-odbiorczy-rs485-modul-rozszerzen-unit-do-modulow-deweloperskich-m5stack-5904422363673.html) nr 2 | gniazdo **Grove AtomS3** przy USB-C (RX G1, TX G2) → magistrala strefowa (Modbus 9600 8E1) |
+| [M5Stack Isolated RS485 Unit](https://botland.com.pl/moduly-unit-moduly-komunikacyjne/19118-izolowany-modul-nadawczo-odbiorczy-rs485-modul-rozszerzen-unit-do-modulow-deweloperskich-m5stack-5904422363673.html) nr 2 | gniazdo **Grove AtomS3** przy USB-C (RX G1, TX G2) → magistrala strefowa (Modbus 9600 8E1), **rezystor 120 Ω między A i B** (jak na D+/D- w MAGIS) |
 
 ![TRIO HYDRO HYBRID: bramka OpenTherm, F1/F2 i magistrala strefowa na jednym AtomS3 Lite z PortABC](images/trio-hydro-hybrid-wiring.png)
 
@@ -54,7 +54,7 @@ strefowa, a 3,3 V daje stabilizator. Płytki i piny: [Kotły OpenTherm](openther
 
 **ELECTRIC** (bez kotła) – bez OpenTherm, więc bez płytek i stabilizatora: AtomS3 Lite z PortABC i dwa moduły
 M5Stack Isolated RS485 Unit na kablach Grove, porty jak w hubie MAGIS PRO / COMBO V2 – **port A** magistrala strefowa
-(RX G39, TX G38), **port B** F1/F2 (RX G8, TX G7), port C wolny. Samo F1/F2 potrzebuje tylko gniazda Grove AtomS3, bez
+(RX G39, TX G38, 120 Ω między A i B), **port B** F1/F2 (RX G8, TX G7), port C wolny. Samo F1/F2 potrzebuje tylko gniazda Grove AtomS3, bez
 PortABC.
 
 <img src="images/trio-hydro-electric-wiring.svg" alt="TRIO HYDRO ELECTRIC: hub na F1/F2 i magistrali strefowej" width="100%">

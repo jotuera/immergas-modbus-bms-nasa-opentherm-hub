@@ -9,7 +9,7 @@
 #   3.3 V regulator (AMS1117-3.3 module or Pololu D24V5F3): OUT -> 3V3 of both shields (common 3.3 V, common GND)
 #   port C -> DIYLess Slave shield: GND, 5V, white G6 -> D6, yellow G5 -> D7 -> the indoor unit's OpenTherm wires
 #   port B -> M5Stack Isolated RS485 Unit -> F1 / F2 (RX G8, TX G7)
-#   Grove AtomS3 socket (next to USB-C) -> M5Stack Isolated RS485 Unit -> zone bus (RX G1, TX G2)
+#   Grove AtomS3 socket (next to USB-C) -> M5Stack Isolated RS485 Unit -> zone bus (RX G1, TX G2), 120 ohm across A-B
 # All 8 GPIOs are used, so no ot_3v3_supply here: the regulator gives the shields their 3.3 V.
 # Everything starts passive except the OpenTherm gateway (it relays the indoor unit's frames to the boiler):
 #   F1 / F2 with f1f2_transmit: "false" (listen only), the zone bus emulation switches OFF (the hub only listens).

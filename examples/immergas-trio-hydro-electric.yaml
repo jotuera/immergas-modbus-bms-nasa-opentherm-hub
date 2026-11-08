@@ -3,7 +3,7 @@
 #   Samsung NASA F1 / F2 (outdoor unit UE HYDRO HP <-> interface board A22) - listening first
 #   zone bus (Modbus RTU 9600 8E1, the indoor unit is master, zone panel 41 = 0x29 / 42) - listening first
 # Wiring (diagram: docs/trio-hydro.md#hardware-planned; the ports as in the MAGIS PRO / COMBO V2 hub):
-#   port A -> M5Stack Isolated RS485 Unit -> zone bus (RX G39, TX G38); 120 ohm only if the bus shows CRC errors
+#   port A -> M5Stack Isolated RS485 Unit -> zone bus (RX G39, TX G38), 120 ohm across A-B
 #   port B -> M5Stack Isolated RS485 Unit -> F1 / F2 (RX G8, TX G7), no resistor
 #   port C free
 # F1 / F2 only: leave out the dd_ packages, the uart / switch blocks at the end and the PortABC, and put the RS485

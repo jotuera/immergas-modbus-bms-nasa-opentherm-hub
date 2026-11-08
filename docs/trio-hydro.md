@@ -44,7 +44,7 @@ give no register map or terminals for the BMS option, so it stays open.
 | [DIYLess Slave OpenTherm Shield](https://diyless.com/product/slave-opentherm-shield) | **port C** (G6 → D6, G5 → D7, GND, 5 V) → the indoor unit's OpenTherm output (the wires that went to the boiler) |
 | [Grove → Dupont cables, 4-pin, female / male 2.54 mm](https://botland.com.pl/przewody-polaczeniowe-grove/21690-grove-zestaw-5-przewodow-4-pin-2mm-przewody-zenskiemeskie-254mm-20cm-6972934173751.html) | port C → Slave shield; the loose wires from the screw terminal to the Master shield and the regulator |
 | [M5Stack Isolated RS485 Unit](https://botland.com.pl/moduly-unit-moduly-komunikacyjne/19118-izolowany-modul-nadawczo-odbiorczy-rs485-modul-rozszerzen-unit-do-modulow-deweloperskich-m5stack-5904422363673.html) no. 1 | **port B** (RX G8, TX G7) → F1 / F2, listening in parallel |
-| [M5Stack Isolated RS485 Unit](https://botland.com.pl/moduly-unit-moduly-komunikacyjne/19118-izolowany-modul-nadawczo-odbiorczy-rs485-modul-rozszerzen-unit-do-modulow-deweloperskich-m5stack-5904422363673.html) no. 2 | **Grove AtomS3** socket next to USB-C (RX G1, TX G2) → zone bus (Modbus 9600 8E1) |
+| [M5Stack Isolated RS485 Unit](https://botland.com.pl/moduly-unit-moduly-komunikacyjne/19118-izolowany-modul-nadawczo-odbiorczy-rs485-modul-rozszerzen-unit-do-modulow-deweloperskich-m5stack-5904422363673.html) no. 2 | **Grove AtomS3** socket next to USB-C (RX G1, TX G2) → zone bus (Modbus 9600 8E1), **120 Ω resistor across A-B** (as on the MAGIS D+/D- bus) |
 
 ![TRIO HYDRO HYBRID: OpenTherm gateway, F1/F2 and the zone bus on one AtomS3 Lite with the PortABC](images/en/trio-hydro-hybrid-wiring.png)
 
@@ -54,7 +54,7 @@ G1 is taken by the zone bus and the regulator gives the 3.3 V. Shields and pins:
 
 **ELECTRIC** (no boiler) – no OpenTherm, so no shields and no regulator: the AtomS3 Lite with the PortABC and two
 M5Stack Isolated RS485 Units on Grove cables, the ports as in the MAGIS PRO / COMBO V2 hub – **port A** zone bus
-(RX G39, TX G38), **port B** F1/F2 (RX G8, TX G7), port C free. F1/F2 alone needs only the Grove AtomS3 socket, no
+(RX G39, TX G38, 120 Ω across A-B), **port B** F1/F2 (RX G8, TX G7), port C free. F1/F2 alone needs only the Grove AtomS3 socket, no
 PortABC.
 
 <img src="images/en/trio-hydro-electric-wiring.svg" alt="TRIO HYDRO ELECTRIC: the hub on F1/F2 and the zone bus" width="100%">
