@@ -64,7 +64,7 @@ wymaga potem włączonego przełącznika *Żądanie grzania (CO)* – steruj nim
 
    ```yaml
    files:
-     - packages/lang/gb_en.yaml        # albo gb_pl.yaml
+     - packages/lang/gb_en.yaml        # albo gb_pl / _cs / _de / _es / _fr / _hu / _it / _nl / _pt / _sk
      - packages/gb_core.yaml
      - packages/gb_control.yaml
      - packages/gb_status.yaml

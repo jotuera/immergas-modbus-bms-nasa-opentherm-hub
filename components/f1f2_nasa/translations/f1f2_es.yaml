@@ -53,6 +53,7 @@ sensors:
   discharge_temp: Temperatura de descarga 1 exterior (820A)
   target_discharge_temp: Consigna de temperatura de descarga exterior
   comp_top_temp: Temperatura superior del compresor (8280)
+  comp_running_hours: Tiempo de funcionamiento del compresor (0x8405)
   cond_out_temp: Temperatura de salida del condensador (8218)
   ipm_temp: Temperatura IPM1 exterior (8254)
   main_eev: Posición de la EEV principal exterior

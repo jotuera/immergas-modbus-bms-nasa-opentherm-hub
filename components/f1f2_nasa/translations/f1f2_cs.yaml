@@ -53,6 +53,7 @@ sensors:
   discharge_temp: Teplota výtlaku 1 (820A)
   target_discharge_temp: Požadovaná teplota výtlaku
   comp_top_temp: Teplota hlavy kompresoru (8280)
+  comp_running_hours: Doba chodu kompresoru (0x8405)
   cond_out_temp: Teplota na výstupu kondenzátoru (8218)
   ipm_temp: Teplota modulu IPM1 (8254)
   main_eev: Poloha hlavního ventilu EEV

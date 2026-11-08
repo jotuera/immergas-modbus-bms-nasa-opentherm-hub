@@ -180,6 +180,6 @@ zmianie naciśnij w hubie *Porównanie od teraz*, a karta zmierzy efekt.
 | Magistrala | Strony |
 |---|---|
 | wszystkie trzy | [Kopalnia wiedzy](knowledge-base.pl.md) – jak działa każda magistrala, jedna wielkość na trzech magistralach, wiedza o instalacji, rozwiązywanie problemów, co jeszcze nie rozszyfrowane; [Zbieranie logów](collecting-logs.pl.md) |
-| D+/D- | [Mapa rejestrów](dd-register-map.md), [pełna mapa rejestrów](dd-register-map-full.md) (EN) |
+| D+/D- | [Mapa rejestrów](dd-register-map.pl.md), [pełna mapa rejestrów](dd-register-map-full.pl.md) |
 | T-/T+ | [Kopalnia wiedzy – BMS](knowledge-base.pl.md), skaner PDU `tt_scanner.yaml` |
-| F1/F2 | [Mapa PDU NASA](ff-nasa-pdu-map.md) (EN), [mapa FSV](ff-fsv-map.pl.md), [kody błędów Samsung](ff-samsung-error-codes.pl.md), [co steruje Immergas](ff-what-immergas-controls.pl.md), [wyniki testów sterowania](ff-control-results.pl.md), [rejestry poza Modbusem](ff-registers-outside-modbus.pl.md) |
+| F1/F2 | [Mapa PDU NASA](ff-nasa-pdu-map.pl.md), [mapa FSV](ff-fsv-map.pl.md), [kody błędów Samsung](ff-samsung-error-codes.pl.md), [co steruje Immergas](ff-what-immergas-controls.pl.md), [wyniki testów sterowania](ff-control-results.pl.md), [rejestry poza Modbusem](ff-registers-outside-modbus.pl.md) |

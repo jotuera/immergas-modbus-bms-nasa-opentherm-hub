@@ -2,6 +2,8 @@
 
 # Rejestry F1/F2 NIE sterowane przez magistrale Modbus Immergasa
 
+Powrót do [przeglądu protokołów](../README.pl.md) · [MAGIS PRO / COMBO V2](magis-pro-combo-v2.pl.md).
+
 
 Lista rejestrów magistrali F1/F2 (katalog `f1f2_nasa`), których **magistrale Modbus Immergasa
 (D+/D- i T-/T+) NIE sterują** — to domena jednostki zewnętrznej Samsunga i płytki MIM. Immergas

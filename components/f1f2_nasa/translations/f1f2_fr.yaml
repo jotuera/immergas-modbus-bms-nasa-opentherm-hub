@@ -53,6 +53,7 @@ sensors:
   discharge_temp: Température de refoulement 1 extérieur (820A)
   target_discharge_temp: Consigne de température de refoulement
   comp_top_temp: Température haut du compresseur (8280)
+  comp_running_hours: Temps de fonctionnement du compresseur (0x8405)
   cond_out_temp: Température sortie condenseur (8218)
   ipm_temp: Température IPM1 extérieur (8254)
   main_eev: Position du détendeur EEV principal

@@ -2,6 +2,8 @@
 
 # Rejestry F1/F2 — co steruje Immergas, a co jednostka zewnętrzna Samsunga
 
+Powrót do [przeglądu protokołów](../README.pl.md) · [MAGIS PRO / COMBO V2](magis-pro-combo-v2.pl.md).
+
 
 Klasyfikacja wszystkich odczytywanych rejestrów magistrali F1/F2 (katalog komponentu `f1f2_nasa`)
 na podstawie naszego configu i logów: audyt krzyżowy trzech magistral (2026-10-01), test funkcji

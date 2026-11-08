@@ -53,6 +53,7 @@ sensors:
   discharge_temp: Persgastemperatuur (820A)
   target_discharge_temp: Gewenste persgastemperatuur
   comp_top_temp: Temperatuur bovenzijde compressor (8280)
+  comp_running_hours: Draaitijd compressor (0x8405)
   cond_out_temp: Temperatuur uitgang condensor (8218)
   ipm_temp: Temperatuur IPM-module (8254)
   main_eev: Positie expansieventiel EEV

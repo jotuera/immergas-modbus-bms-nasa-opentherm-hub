@@ -6,6 +6,7 @@
 // entities are matched by their key (the unique_id after the config entry id), so a reduced dashboard works with it too.
 import { NAMES, Key } from "./names";
 import { findPkg } from "./hubpkg";
+import { ESP_LANGS } from "./esp_names";
 
 export interface HubIndex {
   deviceId: string;
@@ -104,7 +105,7 @@ const ESP_OT: Partial<Record<Key, string[]>> = {
   ot_ids_sup: ["Data-ID obsługiwane", "Data-IDs supported"], ot_ids_unk: ["Data-ID nieznane kotłowi", "Data-IDs unknown to the boiler"],
   ot_ids_room: ["Data-ID pilota", "Data-IDs of the room unit"], ot_cap: ["Moc maks. kotła", "Boiler max. capacity"],
   ot_minmod: ["Min. modulacja kotła", "Boiler min. modulation"], ot_burn_today: ["Starty palnika dziś", "Burner starts today"],
-  ot_burn_h: ["Starty palnika / ostatnia godzina", "Burner starts / last hour"], ot_burn_hours: ["Czas palnika dziś", "Burner time today"],
+  ot_burn_h: ["Starty palnika w ostatniej godzinie", "Burner starts in the last hour", "Starty palnika / ostatnia godzina", "Burner starts / last hour", "Starty palnika ⁄ ostatnia godzina", "Burner starts ⁄ last hour"], ot_burn_hours: ["Czas palnika dziś", "Burner time today"],
 };
 
 // ot_programs / ot_control: mode, CH / DHW programs (calendars as in the Dominus app), anti-legionella, vacation, season, frost
@@ -115,7 +116,7 @@ Object.assign(ESP_OT, {
   ot_leg: ["Anty-legionella", "Anti-legionella"], ot_leg_t: ["Anty-legionella: temperatura", "Anti-legionella: temperature"],
   ot_leg_run: ["Anty-legionella trwa", "Anti-legionella running"], dom_vacation: ["Tryb wyjazdowy", "Vacation"],
   dom_vac_until: ["Wyjazd do", "Vacation until"], ot_vac_action: ["Na czas wyjazdu", "During the vacation"],
-  dom_auto_season: ["Automatyczne Lato / Zima", "Automatic summer / winter"], dom_win_below: ["Zima poniżej", "Winter below"],
+  dom_auto_season: ["Automatyczne Lato-Zima", "Automatic summer-winter", "Automatyczne Lato / Zima", "Automatic summer / winter", "Automatyczne Lato ⁄ Zima", "Automatic summer ⁄ winter"], dom_win_below: ["Zima poniżej", "Winter below"],
   dom_sum_above: ["Lato powyżej", "Summer above"], ot_out_mean: ["Średnia zewnętrzna 24 h", "Outdoor mean 24 h"],
   ot_frost: ["Ochrona przed zamarzaniem", "Frost protection"], ot_frost_t: ["Próg zamarzania", "Frost threshold"],
 } as Partial<Record<Key, string[]>>);
@@ -134,8 +135,8 @@ Object.assign(ESP_OT, {
   ot_a3: ["A3 · Maks. prędkość pompy", "A3 · Pump max. speed"],
   ot_a4: ["A4 · Min. prędkość pompy", "A4 · Pump min. speed"],
   ot_a5: ["A5 · Tryb pompy (0 = proporcjonalny, 5-25 = ΔT)", "A5 · Pump mode (0 = proportional head, 5-25 = ΔT)"],
-  ot_sup_out_min: ["P66/C · Temp. zewnętrzna przy maks. zasilaniu", "P66/C · Outdoor temperature at max. flow"],
-  ot_sup_out_max: ["P66/D · Temp. zewnętrzna przy min. zasilaniu", "P66/D · Outdoor temperature at min. flow"],
+  ot_sup_out_min: ["P66 C · Temp. zewnętrzna przy maks. zasilaniu", "P66 C · Outdoor temperature at max. flow", "P66/C · Temp. zewnętrzna przy maks. zasilaniu", "P66/C · Outdoor temperature at max. flow", "P66⁄C · Temp. zewnętrzna przy maks. zasilaniu", "P66⁄C · Outdoor temperature at max. flow"],
+  ot_sup_out_max: ["P66 D · Temp. zewnętrzna przy min. zasilaniu", "P66 D · Outdoor temperature at min. flow", "P66/D · Temp. zewnętrzna przy min. zasilaniu", "P66/D · Outdoor temperature at min. flow", "P66⁄D · Temp. zewnętrzna przy min. zasilaniu", "P66⁄D · Outdoor temperature at min. flow"],
   ot_sup_dhw_max_rpm: ["Maks. moc CWU (obroty wentylatora)", "DHW max. output (fan speed)"],
   ot_sup_dhw_min_rpm: ["Min. moc CWU (obroty wentylatora)", "DHW min. output (fan speed)"],
   ot_sup_ch_max_rpm: ["Maks. moc CO (obroty wentylatora)", "CH max. output (fan speed)"],
@@ -178,7 +179,7 @@ function buildEspOt(hass: any): HubIndex | null {
   const r = findPkg<Key>(hass.states ?? {}, ESP_OT.ot_link!, /^binary_sensor\./, ESP_OT);
   if (!r) return null;
   const ids: Partial<Record<Key, string>> = { ...r.ids, ot_link: r.anchorId };
-  const lang = hass.states[r.anchorId]?.attributes?.friendly_name?.endsWith("Boiler connection") ? "en" : "pl";
+  const lang = hass.states[r.anchorId]?.attributes?.friendly_name?.endsWith("Połączenie z kotłem") ? "pl" : "en";
   const deviceId = hass.entities?.[r.anchorId]?.device_id ?? "";
   return { deviceId, lang, ids, source: "dominus", ot: true, esp: true };
 }
@@ -235,7 +236,7 @@ ESP_GB.ot_eco_action = ["W fazie Eko", "In the Eco phase"];
 ESP_GB.ot_eco_red = ["Obniżenie zasilania w Eko", "Eco flow reduction"];
 // the hub curve (same names as ot_regulator), gb_boiler_params: model / interface and the service reminder
 for (const k of ["ot_c_oc", "ot_c_fc", "ot_c_ow", "ot_c_fw", "ot_maint", "ot_last_srv", "ot_srv_done", "ot_maint_due"] as Key[]) ESP_GB[k] = ESP_OT[k];
-ESP_GB.gb_model = ["Model kotła / interfejs", "Boiler model / interface"];
+ESP_GB.gb_model = ["Model kotła i interfejs", "Boiler model and interface", "Model kotła / interfejs", "Boiler model / interface", "Model kotła ⁄ interfejs", "Boiler model ⁄ interface"];
 
 // gb_busmap / mt_busmap: the register scanner and the bus map report
 ESP_GB.map_gb = ["Mapa magistrali: nieopisane rejestry", "Bus map: undescribed registers"];
@@ -248,7 +249,7 @@ function buildEspGb(hass: any): HubIndex | null {
   const r = findPkg<Key>(hass.states ?? {}, ESP_GB.gb_conn!, /^(switch|input_boolean)\./, ESP_GB);
   if (!r || Object.keys(r.ids).length < 5) return null;
   const ids: Partial<Record<Key, string>> = { ...r.ids, gb_conn: r.anchorId };
-  const lang = hass.states[r.anchorId]?.attributes?.friendly_name?.endsWith("BMS connection") ? "en" : "pl";
+  const lang = hass.states[r.anchorId]?.attributes?.friendly_name?.endsWith("Połączenie BMS") ? "pl" : "en";
   const deviceId = hass.entities?.[r.anchorId]?.device_id ?? "";
   return { deviceId, lang, ids, source: "dominus", ot: true, esp: true, gb: true };
 }
@@ -259,7 +260,7 @@ function buildEspGb(hass: any): HubIndex | null {
 Object.assign(ESP_OT, {"oa_delta_t": ["Delta T (zasilanie − powrót)", "Delta T (flow − return)"], "oa_mean_loop": ["Średnia obiegu", "Mean loop temperature"], "oa_setpoint_dev": ["Odchyłka zasilania od nastawy", "Flow deviation from the setpoint"], "oa_exh_approach": ["Spaliny − powrót", "Exhaust − return"], "oa_power": ["Moc palnika (szac.)", "Burner power (est.)"], "oa_link_quality": ["Jakość łącza OpenTherm", "OpenTherm link quality"], "oa_burn_per_start": ["Średnie palenie na start (od początku)", "Average burn per start (lifetime)"], "oa_starts_per_hour_life": ["Starty na godzinę palnika (od początku)", "Starts per burner hour (lifetime)"], "oa_pressure_drop": ["Spadek ciśnienia w 24 h", "Pressure drop in 24 h"], "oa_condensing": ["Praca kondensacyjna", "Condensing operation"], "oa_leak_warning": ["Możliwy wyciek (spadek ciśnienia)", "Possible leak (pressure drop)"], "oa_op_state": ["Stan pracy", "Operating state"], "oa_gas_price": ["Cena gazu", "Gas price"], "oa_gas_today": ["Gaz dziś (szac.)", "Gas today (est.)"], "oa_gas_ch_today": ["Gaz CO dziś", "Gas heating today"], "oa_gas_dhw_today": ["Gaz CWU dziś", "Gas DHW today"], "oa_gas_total": ["Licznik gazu (szac.)", "Gas counter (est.)"], "oa_gas_cost_today": ["Koszt gazu dziś", "Gas cost today"], "oa_heat_today": ["Ciepło dziś (szac.)", "Heat today (est.)"], "oa_condensing_share": ["Kondensacja dziś (udział)", "Condensing today (share)"], "oa_minmod_share": ["Na min. modulacji dziś", "At min. modulation today"], "oa_mod_avg": ["Średnia modulacja dziś", "Average modulation today"], "oa_burn_avg": ["Średnie palenie dziś", "Average burn today"], "oa_short_burns": ["Krótkie palenia dziś", "Short burns today"], "oa_burn_last": ["Ostatnie palenie", "Last burn"], "oa_pause_last": ["Ostatnia przerwa", "Last pause"], "oa_draws_today": ["Pobory CWU dziś", "DHW draws today"], "oa_draw_last": ["Ostatni pobór CWU", "Last DHW draw"], "oa_dhw_litres": ["Ciepła woda dziś", "Hot water today"], "oa_dhw_heat": ["Ciepło CWU dziś", "DHW heat today"]});
 
 // gb_computed / gb_analytics / gb_*_calc
-Object.assign(ESP_GB, {"ga_delta_t": ["Delta T (zasilanie − powrót)", "Delta T (flow − return)"], "ga_mean_loop": ["Średnia obiegu", "Mean loop temperature"], "ga_setpoint_dev": ["Odchyłka zasilania od nastawy", "Flow deviation from the setpoint"], "ga_calc_dev": ["Odchyłka od obliczonej temperatury", "Deviation from the calculated flow"], "ga_sep_delta": ["Zasilanie − za sprzęgłem", "Flow − after the separator"], "ga_power": ["Moc palnika", "Burner power"], "ga_condensing": ["Praca kondensacyjna", "Condensing operation"], "ga_op_state": ["Stan pracy", "Operating state"], "ga_gas_price": ["Cena gazu", "Gas price"], "ga_starts_today": ["Starty palnika dziś", "Burner starts today"], "ga_starts_hour": ["Starty palnika / ostatnia godzina", "Burner starts / last hour"], "ga_burn_today": ["Czas palnika dziś", "Burner time today"], "ga_burn_avg": ["Średnie palenie dziś", "Average burn today"], "ga_short_burns": ["Krótkie palenia dziś", "Short burns today"], "ga_burn_last": ["Ostatnie palenie", "Last burn"], "ga_pause_last": ["Ostatnia przerwa", "Last pause"], "ga_mod_avg": ["Średnia modulacja dziś", "Average modulation today"], "ga_minmod_share": ["Na min. modulacji dziś", "At min. modulation today"], "ga_condensing_share": ["Kondensacja dziś (udział)", "Condensing today (share)"], "ga_heat_today": ["Ciepło dziś", "Heat today"], "ga_gas_today": ["Gaz dziś (szac.)", "Gas today (est.)"], "ga_gas_ch_today": ["Gaz CO dziś", "Gas heating today"], "ga_gas_dhw_today": ["Gaz CWU dziś", "Gas DHW today"], "ga_gas_total": ["Licznik gazu (szac.)", "Gas counter (est.)"], "ga_gas_cost_today": ["Koszt gazu dziś", "Gas cost today"], "ga_heat_meas": ["Moc cieplna (zmierzona)", "Heat output (measured)"], "ga_flue_return": ["Spaliny − powrót", "Flue − return"], "ga_pressure_drop": ["Spadek ciśnienia w 24 h", "Pressure drop in 24 h"], "ga_leak_warning": ["Możliwy wyciek (spadek ciśnienia)", "Possible leak (pressure drop)"], "ga_draws_today": ["Pobory CWU dziś", "DHW draws today"], "ga_draw_last": ["Ostatni pobór CWU", "Last DHW draw"], "ga_dhw_litres": ["Ciepła woda dziś", "Hot water today"], "ga_dhw_heat": ["Ciepło CWU dziś", "DHW heat today"], "ga_cold_avg": ["Średnia temp. wody zimnej", "Average cold water temperature"], "ga_dhw_hours_share": ["Udział CWU w godzinach palnika", "DHW share of the burner hours"], "ga_ion_avg": ["Prąd jonizacji (średnia)", "Ionisation current (average)"], "ga_ion_low": ["Niska jonizacja", "Low ionisation"], "ga_hp_hours_today": ["Pompa ciepła dziś", "Heat pump today"], "ga_defrosts_today": ["Odszraniania dziś", "Defrosts today"]});
+Object.assign(ESP_GB, {"ga_delta_t": ["Delta T (zasilanie − powrót)", "Delta T (flow − return)"], "ga_mean_loop": ["Średnia obiegu", "Mean loop temperature"], "ga_setpoint_dev": ["Odchyłka zasilania od nastawy", "Flow deviation from the setpoint"], "ga_calc_dev": ["Odchyłka od obliczonej temperatury", "Deviation from the calculated flow"], "ga_sep_delta": ["Zasilanie − za sprzęgłem", "Flow − after the separator"], "ga_power": ["Moc palnika", "Burner power"], "ga_condensing": ["Praca kondensacyjna", "Condensing operation"], "ga_op_state": ["Stan pracy", "Operating state"], "ga_gas_price": ["Cena gazu", "Gas price"], "ga_starts_today": ["Starty palnika dziś", "Burner starts today"], "ga_starts_hour": ["Starty palnika w ostatniej godzinie", "Burner starts in the last hour", "Starty palnika / ostatnia godzina", "Burner starts / last hour", "Starty palnika ⁄ ostatnia godzina", "Burner starts ⁄ last hour"], "ga_burn_today": ["Czas palnika dziś", "Burner time today"], "ga_burn_avg": ["Średnie palenie dziś", "Average burn today"], "ga_short_burns": ["Krótkie palenia dziś", "Short burns today"], "ga_burn_last": ["Ostatnie palenie", "Last burn"], "ga_pause_last": ["Ostatnia przerwa", "Last pause"], "ga_mod_avg": ["Średnia modulacja dziś", "Average modulation today"], "ga_minmod_share": ["Na min. modulacji dziś", "At min. modulation today"], "ga_condensing_share": ["Kondensacja dziś (udział)", "Condensing today (share)"], "ga_heat_today": ["Ciepło dziś", "Heat today"], "ga_gas_today": ["Gaz dziś (szac.)", "Gas today (est.)"], "ga_gas_ch_today": ["Gaz CO dziś", "Gas heating today"], "ga_gas_dhw_today": ["Gaz CWU dziś", "Gas DHW today"], "ga_gas_total": ["Licznik gazu (szac.)", "Gas counter (est.)"], "ga_gas_cost_today": ["Koszt gazu dziś", "Gas cost today"], "ga_heat_meas": ["Moc cieplna (zmierzona)", "Heat output (measured)"], "ga_flue_return": ["Spaliny − powrót", "Flue − return"], "ga_pressure_drop": ["Spadek ciśnienia w 24 h", "Pressure drop in 24 h"], "ga_leak_warning": ["Możliwy wyciek (spadek ciśnienia)", "Possible leak (pressure drop)"], "ga_draws_today": ["Pobory CWU dziś", "DHW draws today"], "ga_draw_last": ["Ostatni pobór CWU", "Last DHW draw"], "ga_dhw_litres": ["Ciepła woda dziś", "Hot water today"], "ga_dhw_heat": ["Ciepło CWU dziś", "DHW heat today"], "ga_cold_avg": ["Średnia temp. wody zimnej", "Average cold water temperature"], "ga_dhw_hours_share": ["Udział CWU w godzinach palnika", "DHW share of the burner hours"], "ga_ion_avg": ["Prąd jonizacji (średnia)", "Ionisation current (average)"], "ga_ion_low": ["Niska jonizacja", "Low ionisation"], "ga_hp_hours_today": ["Pompa ciepła dziś", "Heat pump today"], "ga_defrosts_today": ["Odszraniania dziś", "Defrosts today"]});
 
 const ESP_MT: Partial<Record<Key, string[]>> = {
   mt_conn: ["Połączenie Modbus", "Modbus connection"], mt_zone1: ["Strefa 1 grzanie i chłodzenie", "Zone 1 heating and cooling"],
@@ -331,7 +332,7 @@ function buildEspMt(hass: any): HubIndex | null {
   const r = findPkg<Key>(hass.states ?? {}, ESP_MT.mt_conn!, /^(switch|input_boolean)\./, ESP_MT);
   if (!r || Object.keys(r.ids).length < 5) return null;
   const ids: Partial<Record<Key, string>> = { ...r.ids, mt_conn: r.anchorId };
-  const lang = hass.states[r.anchorId]?.attributes?.friendly_name?.endsWith("Modbus connection") ? "en" : "pl";
+  const lang = hass.states[r.anchorId]?.attributes?.friendly_name?.endsWith("Połączenie Modbus") ? "pl" : "en";
   const deviceId = hass.entities?.[r.anchorId]?.device_id ?? "";
   return { deviceId, lang, ids, source: "hub", mt: true };
 }
@@ -471,4 +472,14 @@ export function hubIndex(hass: any, onReady: () => void, source?: string): HubIn
     cache = { index: build(hass), count, at: Date.now() };
   }
   return cache.index;
+}
+
+/** the ESP hubs in the other package languages: every [Polish, English, …] name list gets the same entity's names in
+ *  cs de es fr hu it nl pt sk (esp_names.ts, generated from the language files), so findPkg finds a hub in any language */
+for (const [map, pkg] of [[ESP_OT, "ot"], [ESP_GB, "gb"], [ESP_MT, "mt"]] as [Partial<Record<Key, string[]>>, string][]) {
+  const extra = ESP_LANGS[pkg] ?? {};
+  for (const list of Object.values(map)) {
+    if (!list) continue;
+    for (const x of extra[list[0]] ?? []) if (!list.includes(x)) list.push(x);
+  }
 }

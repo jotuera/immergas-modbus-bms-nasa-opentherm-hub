@@ -52,7 +52,7 @@ substitutions:
   n_tt_a11_outdoor_unit_model: "${tt_name_prefix} - A11 Modèle de l'unité extérieure"
   n_tt_a12_venting: "${tt_name_prefix} - A12 Désaération de l'installation"
   n_tt_bms_connection_switch: "${tt_name_prefix} - Connexion BMS"
-  n_tt_link: "${tt_name_prefix} - Connexion BMS"
+  n_tt_link: "${tt_name_prefix} - Connexion BMS (état)"
   n_tt_cooling_active: "${tt_name_prefix} - Refroidissement actif"
   n_tt_cwu_water_heater: "${tt_name_prefix} - ECS"
   n_tt_d03_dhw_temperatura_zasobnika: "${tt_name_prefix} - D03 Température du ballon ECS"

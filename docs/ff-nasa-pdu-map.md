@@ -1,5 +1,9 @@
 # Samsung NASA PDU map - F1/F2 bus of an Immergas Magis Pro / Combo
 
+**English** · [Polski](ff-nasa-pdu-map.pl.md)
+
+Back to the [protocol overview](../README.md).
+
 Values as seen on a **Magis Combo 9 Plus V2 + Audax Pro 9 V2** (Samsung EHS split, MIM-B19N interface board, rotary switch = 1).
 Bus participants: `10.00.00` = outdoor unit, `20.00.01` = indoor unit (the MIM board inside the Magis), `80.FF.00` = this ESP (only when `transmit: true`).
 

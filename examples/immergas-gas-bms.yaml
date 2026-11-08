@@ -52,7 +52,7 @@ packages:
     ref: main
     refresh: 1d
     files:
-      - packages/lang/gb_en.yaml        # or gb_pl.yaml
+      - packages/lang/gb_en.yaml        # or _cs _de _es _fr _hu _it _nl _pl _pt _sk
       - packages/gb_core.yaml
       - packages/gb_control.yaml
       - packages/gb_status.yaml

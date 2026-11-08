@@ -83,7 +83,7 @@ packages:
     ref: main
     refresh: 1d
     files:
-      # languages: dd_xx = cs de en es fr hu it nl pl pt sk, f1f2_xx / ot_xx = en pl
+      # languages: every packages/lang/<package>_xx.yaml = cs de en es fr hu it nl pl pt sk
       - packages/lang/dd_en.yaml
       - packages/lang/f1f2_en.yaml
       - packages/lang/ot_en.yaml

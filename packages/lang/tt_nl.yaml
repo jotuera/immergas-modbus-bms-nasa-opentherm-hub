@@ -52,7 +52,7 @@ substitutions:
   n_tt_a11_outdoor_unit_model: "${tt_name_prefix} - A11 Model buitenunit"
   n_tt_a12_venting: "${tt_name_prefix} - A12 Ontluchting installatie"
   n_tt_bms_connection_switch: "${tt_name_prefix} - BMS-verbinding"
-  n_tt_link: "${tt_name_prefix} - BMS-verbinding"
+  n_tt_link: "${tt_name_prefix} - BMS-verbinding (status)"
   n_tt_cooling_active: "${tt_name_prefix} - Koelen actief"
   n_tt_cwu_water_heater: "${tt_name_prefix} - SWW"
   n_tt_d03_dhw_temperatura_zasobnika: "${tt_name_prefix} - D03 SWW-boilertemperatuur"

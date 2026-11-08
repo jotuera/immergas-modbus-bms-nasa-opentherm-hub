@@ -2,6 +2,8 @@
 
 # Results — what the bridge proved on the Magis
 
+Back to the [protocol overview](../README.md) · [MAGIS PRO / COMBO V2](magis-pro-combo-v2.md).
+
 
 The goal of the project was to control **Samsung outdoor-unit functions that Immergas does not expose
 through its Modbus** (quiet mode, ODU-side heating curve, ODU-side maximum heating temperature)

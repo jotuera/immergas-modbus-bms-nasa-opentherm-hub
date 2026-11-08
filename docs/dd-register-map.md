@@ -1,5 +1,9 @@
 # Register map — Immergas Magis Combo, D+/D- bus
 
+**English** · [Polski](dd-register-map.pl.md)
+
+Back to the [protocol overview](../README.md).
+
 **Device:** Immergas **Magis Combo 9 Plus V2** (main board firmware **6.0**). RS-485 bus **D+/D-**, **9600 8E1**, **120 Ω termination required**.
 **Roles:** the **boiler is the Modbus master**; every other device is a slave. The boiler cyclically reads (func 03/04) and writes (func 06/16).
 **Sources:** passive sniffing (47 logs, 218 registers), the v1.2.0 bus sniffer, cross-checks against the **T-/T+ BMS** bus and the **Samsung NASA F1/F2** bus, the Magis Combo manual (EN rev. 8.0 / PL rev. 5.0), the zone remote panel manual **3.030863**, and the Dominus app screen map (`CFG-WFC01_IM_MBUS_MPROCOMBOV2.json`).

@@ -52,7 +52,7 @@ substitutions:
   n_tt_a11_outdoor_unit_model: "${tt_name_prefix} - A11 Outdoor Unit model"
   n_tt_a12_venting: "${tt_name_prefix} - A12 System vent"
   n_tt_bms_connection_switch: "${tt_name_prefix} - BMS connection"
-  n_tt_link: "${tt_name_prefix} - BMS connection"
+  n_tt_link: "${tt_name_prefix} - BMS connection status"
   n_tt_cooling_active: "${tt_name_prefix} - Cooling active"
   n_tt_cwu_water_heater: "${tt_name_prefix} - DHW"
   n_tt_d03_dhw_temperatura_zasobnika: "${tt_name_prefix} - D03 Storage tank unit temperature"

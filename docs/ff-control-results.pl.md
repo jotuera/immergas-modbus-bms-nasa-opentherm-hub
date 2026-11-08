@@ -2,6 +2,8 @@
 
 # Wyniki — co most udowodnił na Magisie
 
+Powrót do [przeglądu protokołów](../README.pl.md) · [MAGIS PRO / COMBO V2](magis-pro-combo-v2.pl.md).
+
 
 Celem projektu było sterowanie **funkcjami jednostki zewnętrznej Samsunga, których Immergas nie udostępnia
 przez swój Modbus** (tryb cichy, krzywa grzewcza po stronie ODU, maksymalna temperatura grzania po stronie

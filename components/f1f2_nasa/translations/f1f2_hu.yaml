@@ -53,6 +53,7 @@ sensors:
   discharge_temp: Kültéri nyomóoldali hőmérséklet 1 (820A)
   target_discharge_temp: Kültéri nyomóoldali célhőmérséklet
   comp_top_temp: Kültéri kompresszor fej hőmérséklet (8280)
+  comp_running_hours: Kompresszor üzemidő (0x8405)
   cond_out_temp: Kültéri kondenzátor kimeneti hőmérséklet (8218)
   ipm_temp: Kültéri IPM1 hőmérséklet (8254)
   main_eev: Kültéri fő expanziós szelep (EEV) állása

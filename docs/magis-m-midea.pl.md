@@ -47,7 +47,7 @@ Na H1 / H2 tylko jeden master, a panel musi zostać podłączony – to on podaj
 
    ```yaml
    files:
-     - packages/lang/mt_en.yaml        # albo mt_pl.yaml
+     - packages/lang/mt_en.yaml        # albo mt_pl / _cs / _de / _es / _fr / _hu / _it / _nl / _pt / _sk
      - packages/mt_core.yaml
      - packages/mt_status.yaml
      - packages/mt_sensors.yaml

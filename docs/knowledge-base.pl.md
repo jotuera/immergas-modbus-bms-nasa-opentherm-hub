@@ -393,7 +393,7 @@ podsuwać swoje domyślne wartości.
 
 Na 0x1E **nie ma** rzeczywistych obrotów wentylatora, mocy ani napięcia szyny DC. Te są tylko na F1/F2.
 
-Pełna mapa z pewnością każdego rejestru i kierunkami: [docs/dd-register-map.md](dd-register-map.md).
+Pełna mapa z pewnością każdego rejestru i kierunkami: [docs/dd-register-map.pl.md](dd-register-map.pl.md).
 
 ### 5.5 Krzywa grzewcza → D04 → zadana pompy
 
@@ -546,7 +546,7 @@ i gorącego gazu, grzałka tacy, **odszranianie i jego etap** · tryby i stany j
 opisem** · firmware ODU / EEPROM / falownika / MIM · opcjonalnie **94 parametry FSV** · nieznane PDU jako `RAW` +
 sniffer.
 
-Szczegóły: [docs/ff-nasa-pdu-map.md](ff-nasa-pdu-map.md) (wszystkie PDU),
+Szczegóły: [docs/ff-nasa-pdu-map.pl.md](ff-nasa-pdu-map.pl.md) (wszystkie PDU),
 [docs/ff-fsv-map.pl.md](ff-fsv-map.pl.md) (FSV), [docs/ff-samsung-error-codes.pl.md](ff-samsung-error-codes.pl.md).
 
 ### 7.3 Kto tu rządzi: Immergas, nie Samsung
@@ -828,8 +828,8 @@ Najcenniejsze nagrania: chłodzenie, odszranianie, mróz, instalacja wielostrefo
 
 | Plik | Zawartość |
 |---|---|
-| [docs/dd-register-map.md](dd-register-map.md) | D+/D-: pełna mapa 0x1E / 0x29 / 0x33 / 0x2A–0x2B z pewnością i kierunkiem (EN) |
-| [docs/ff-nasa-pdu-map.md](ff-nasa-pdu-map.md) | F1/F2: wszystkie PDU NASA z dekodowaniem (EN) |
+| [docs/dd-register-map.pl.md](dd-register-map.pl.md) | D+/D-: pełna mapa 0x1E / 0x29 / 0x33 / 0x2A–0x2B z pewnością i kierunkiem |
+| [docs/ff-nasa-pdu-map.pl.md](ff-nasa-pdu-map.pl.md) | F1/F2: wszystkie PDU NASA z dekodowaniem |
 | [docs/ff-fsv-map.pl.md](ff-fsv-map.pl.md) | F1/F2: 94 parametry FSV i ich status na Magisie |
 | [docs/ff-what-immergas-controls.pl.md](ff-what-immergas-controls.pl.md) | F1/F2: rejestry sterowane przez Immergasa |
 | [docs/ff-registers-outside-modbus.pl.md](ff-registers-outside-modbus.pl.md) | F1/F2: rejestry poza zasięgiem Modbusa Immergasa |

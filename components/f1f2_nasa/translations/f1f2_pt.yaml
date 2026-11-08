@@ -53,6 +53,7 @@ sensors:
   discharge_temp: Temperatura de descarga (820A)
   target_discharge_temp: Temperatura de descarga pretendida
   comp_top_temp: Temperatura do topo do compressor (8280)
+  comp_running_hours: Tempo de funcionamento do compressor (0x8405)
   cond_out_temp: Temperatura de saída do condensador (8218)
   ipm_temp: Temperatura do módulo IPM (8254)
   main_eev: Posição da válvula de expansão (EEV) principal

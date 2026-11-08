@@ -1,0 +1,21 @@
+# Immergas Magis Pro / Combo F1/F2 (Samsung NASA) - language file (f1f2_): Português
+# Selects the language of the f1f2_nasa component (entity names, state texts, error texts - they live in
+# components/f1f2_nasa/translations/f1f2_pt.yaml) and names the template entities below.
+# Pick ONE f1f2_ language file in the packages list. Changing the language renames the entities.
+
+substitutions:
+  f1f2_language: pt
+  n_f1f2_project_version: "Versão do projeto"
+  n_f1f2_night_limit_pct: "Limite noturno de capacidade"
+  n_f1f2_discovery: "Discovery (registo de alterações com contexto)"
+  n_f1f2_flow_delta: "Diferença ida-retorno"
+  n_f1f2_daily_energy: "Energia consumida hoje"
+  n_f1f2_cop_instant: "COP instantâneo"
+  n_f1f2_cop_total: "COP total"
+  # control (package f1f2_control, optional - writes to the pump)
+  n_f1f2_emulate_nasa: "Ligação NASA"
+  n_f1f2_link: "Estado da ligação NASA"
+  n_f1f2_emulate_panel: "Emular painel EHS"
+  n_f1f2_arm: "Controlo ativo da ODU"
+  n_f1f2_outing: "Modo ausência"
+  n_f1f2_fr_enable: "Limitação de frequência do compressor"

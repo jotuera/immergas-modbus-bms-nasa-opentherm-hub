@@ -53,6 +53,7 @@ sensors:
   discharge_temp: Druckgastemperatur 1 Außengerät (820A)
   target_discharge_temp: Soll-Druckgastemperatur Außengerät
   comp_top_temp: Verdichterkopf-Temperatur Außengerät (8280)
+  comp_running_hours: Verdichter-Laufzeit (0x8405)
   cond_out_temp: Kondensatoraustritt-Temperatur Außengerät (8218)
   ipm_temp: IPM1-Temperatur Außengerät (8254)
   main_eev: EEV-Hauptposition Außengerät

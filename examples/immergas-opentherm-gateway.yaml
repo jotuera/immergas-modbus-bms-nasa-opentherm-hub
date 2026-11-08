@@ -62,7 +62,7 @@ packages:
     ref: main
     refresh: 1d
     files:
-      - packages/lang/ot_en.yaml        # or ot_pl.yaml
+      - packages/lang/ot_en.yaml        # or _cs _de _es _fr _hu _it _nl _pl _pt _sk
       - packages/ot_core.yaml
       - packages/ot_gateway.yaml        # gateway mode: the Slave shield towards the room unit
       - packages/ot_sensors.yaml

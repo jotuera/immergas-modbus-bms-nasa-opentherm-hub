@@ -52,7 +52,7 @@ substitutions:
   n_tt_a11_outdoor_unit_model: "${tt_name_prefix} - A11 Külső egység típusa"
   n_tt_a12_venting: "${tt_name_prefix} - A12 Rendszer légtelenítése"
   n_tt_bms_connection_switch: "${tt_name_prefix} - BMS kapcsolat"
-  n_tt_link: "${tt_name_prefix} - BMS kapcsolat"
+  n_tt_link: "${tt_name_prefix} - BMS kapcsolat (állapot)"
   n_tt_cooling_active: "${tt_name_prefix} - Hűtés aktív"
   n_tt_cwu_water_heater: "${tt_name_prefix} - HMV"
   n_tt_d03_dhw_temperatura_zasobnika: "${tt_name_prefix} - D03 HMV tároló hőmérséklet"

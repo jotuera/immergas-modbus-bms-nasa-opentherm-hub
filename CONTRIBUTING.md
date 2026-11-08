@@ -1,5 +1,7 @@
 # Contributing
 
+**English** · [Polski](CONTRIBUTING.pl.md)
+
 Thank you for helping! Logs from other models and accessories are the most valuable contribution – see
 [docs/collecting-logs.md](docs/collecting-logs.md) and open an issue with the *New model or unknown signal* template.
 

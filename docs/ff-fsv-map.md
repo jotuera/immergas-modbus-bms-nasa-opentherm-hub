@@ -2,6 +2,8 @@
 
 # FSV installer map — Immergas Magis Combo V2 + Samsung NASA
 
+Back to the [protocol overview](../README.md) · [MAGIS PRO / COMBO V2](magis-pro-combo-v2.md).
+
 
 Full map of **all 94 FSV installer settings** from the Samsung NASA bus (F1/F2) and their status **on this particular installation** (Magis Combo V2 Plus + Audax Pro, the loop is run by the Immergas controller). The project has been slimmed down: **only what actually works is exposed by default**; the rest is **commented out** in the packages (not deleted — kept with a description for reference/restoring). See also [ff-control-results.md](ff-control-results.md).
 

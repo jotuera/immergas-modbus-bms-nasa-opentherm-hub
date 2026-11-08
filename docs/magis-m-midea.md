@@ -47,7 +47,7 @@ The hub is the master, the controller the slave: **9600 baud, 8N1, address 1** (
 
    ```yaml
    files:
-     - packages/lang/mt_en.yaml        # or mt_pl.yaml
+     - packages/lang/mt_en.yaml        # or mt_cs / _de / _es / _fr / _hu / _it / _nl / _pl / _pt / _sk
      - packages/mt_core.yaml
      - packages/mt_status.yaml
      - packages/mt_sensors.yaml

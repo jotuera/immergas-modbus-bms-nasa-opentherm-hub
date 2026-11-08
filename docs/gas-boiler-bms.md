@@ -64,7 +64,7 @@ is one. **Heating** then needs the *Heat request (CH)* switch on – drive it fr
 
    ```yaml
    files:
-     - packages/lang/gb_en.yaml        # or gb_pl.yaml
+     - packages/lang/gb_en.yaml        # or gb_cs / _de / _es / _fr / _hu / _it / _nl / _pl / _pt / _sk
      - packages/gb_core.yaml
      - packages/gb_control.yaml
      - packages/gb_status.yaml

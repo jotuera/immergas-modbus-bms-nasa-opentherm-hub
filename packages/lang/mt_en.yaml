@@ -18,7 +18,7 @@ substitutions:
   t_mt_force_off: "Forced off"
   # entity names
   n_mt_connection: "${mt_name_prefix} - Modbus connection"
-  n_mt_link: "${mt_name_prefix} - Modbus connection"
+  n_mt_link: "${mt_name_prefix} - Modbus connection status"
   n_mt_protocol_version: "${mt_name_prefix} - Protocol version"
   n_mt_status2_raw: "${mt_name_prefix} - Status 2 (raw)"
   n_mt_compressor_freq: "${mt_name_prefix} - Compressor frequency"
@@ -194,7 +194,7 @@ substitutions:
   n_mt_vac: "${mt_name_prefix} - Vacation"
   n_mt_vac_until: "${mt_name_prefix} - Vacation until"
   n_mt_vac_action: "${mt_name_prefix} - During the vacation"
-  n_mt_season: "${mt_name_prefix} - Automatic summer / winter"
+  n_mt_season: "${mt_name_prefix} - Automatic summer-winter"
   n_mt_win_below: "${mt_name_prefix} - Winter below"
   n_mt_sum_above: "${mt_name_prefix} - Summer above"
   n_mt_out_mean: "${mt_name_prefix} - Outdoor mean 24 h"

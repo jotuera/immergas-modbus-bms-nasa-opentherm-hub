@@ -2,6 +2,8 @@
 
 # Samsung EHS error codes (F1/F2 / NASA side)
 
+Back to the [protocol overview](../README.md) · [MAGIS PRO / COMBO V2](magis-pro-combo-v2.md).
+
 Inside the outdoor unit (ODU), the Magis Pro / Combo V2 uses a Samsung EHS system, and the F1/F2 bus
 is that unit's NASA bus. When a fault occurs in the Samsung part, the error code appears on the
 dedicated Samsung wired remote controller (e.g. **MWR-WW10N**). Immergas reads the same side through the

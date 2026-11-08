@@ -48,8 +48,8 @@ cycle and the cost of 1 kWh of heat from each source.
 - a **new-platform gas boiler** (ZEUS Superior 25–35, HERCULES 25 / 35, EXTRA) or a **MAGIS M TOP** without a
   Dominus → [Gas boilers over Modbus BMS](docs/gas-boiler-bms.md);
 - a **MAGIS M** (Midea-based, wired controller with H1 / H2) → [MAGIS M heat pumps](docs/magis-m-midea.md);
-- a **TRIO HYDRO** (ELECTRIC or HYBRID, UE HYDRO HP outdoor unit) → [TRIO HYDRO](docs/trio-hydro.md) – planned,
-  testers wanted;
+- a **TRIO HYDRO** (ELECTRIC or HYBRID, UE HYDRO HP outdoor unit) → [TRIO HYDRO](docs/trio-hydro.md) – configuration
+  ready, untested, testers wanted;
 - only an **Immergas Dominus** on the network, no hub hardware → the
   [Immergas Dominus integration](https://github.com/jotuera/immergas-dominus) uses the same cards.
 
@@ -105,6 +105,8 @@ Slovak.
 | [Knowledge base](docs/knowledge-base.md) | how the buses work, installation know-how, troubleshooting |
 | [Collecting logs](docs/collecting-logs.md) | a different model or an unknown signal – what to record for an issue |
 | [Cards](cards/README.md) | the Lovelace cards, options, install |
+| [Changelog](CHANGELOG.md) | the releases in short, with links to the full notes |
+| [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) | how to help, how to report a security problem privately |
 
 > ⚠️ The buses are inside the units and connect to mains-powered electronics. Disconnect the power before you open
 > anything, and leave the wiring to someone qualified. Connecting third-party hardware may affect the warranty – check

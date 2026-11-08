@@ -88,7 +88,7 @@ packages:
     ref: v1.8.0
     refresh: 1d
     files:
-      # languages: hub_xx / dd_xx / tt_xx = cs de en es fr hu it nl pl pt sk, f1f2_xx / hub_analytics_xx = en pl
+      # languages: every packages/lang/<package>_xx.yaml = cs de en es fr hu it nl pl pt sk
       - packages/lang/hub_en.yaml
       - packages/lang/hub_analytics_en.yaml
       - packages/lang/dd_en.yaml
@@ -117,6 +117,7 @@ packages:
       - packages/tt_computed.yaml
       - packages/tt_gas.yaml
       - packages/tt_diagnostics.yaml
+      # - packages/tt_scanner.yaml      # optional: T-/T+ PDU scanner for the bus map (finds undescribed registers)
       # F1/F2
       - packages/f1f2_core.yaml
       - packages/f1f2_indoor.yaml
@@ -126,6 +127,8 @@ packages:
       - packages/f1f2_diagnostics.yaml
       - packages/f1f2_control.yaml
       - packages/f1f2_outing_targets.yaml
+      # - packages/f1f2_fsv.yaml        # optional: all 94 FSV installer settings of the Samsung side (read only, polls the unit)
+      # - packages/f1f2_ehs_extra.yaml  # optional: Samsung EHS values a MAGIS does not provide (zone 2, flow, COP, PV, SG)
       # hub: values from all three buses, boiler menu settings for the cards, hardware profile
       - packages/hub_diagnostics.yaml
       - packages/hub_combined.yaml

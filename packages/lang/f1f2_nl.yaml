@@ -1,0 +1,21 @@
+# Immergas Magis Pro / Combo F1/F2 (Samsung NASA) - language file (f1f2_): Nederlands
+# Selects the language of the f1f2_nasa component (entity names, state texts, error texts - they live in
+# components/f1f2_nasa/translations/f1f2_nl.yaml) and names the template entities below.
+# Pick ONE f1f2_ language file in the packages list. Changing the language renames the entities.
+
+substitutions:
+  f1f2_language: nl
+  n_f1f2_project_version: "Projectversie"
+  n_f1f2_night_limit_pct: "Nachtelijke capaciteitslimiet"
+  n_f1f2_discovery: "Discovery (wijzigingslog met context)"
+  n_f1f2_flow_delta: "Verschil aanvoer-retour"
+  n_f1f2_daily_energy: "Verbruikte energie vandaag"
+  n_f1f2_cop_instant: "COP momentaan"
+  n_f1f2_cop_total: "COP totaal"
+  # control (package f1f2_control, optional - writes to the pump)
+  n_f1f2_emulate_nasa: "NASA-verbinding"
+  n_f1f2_link: "Status NASA-verbinding"
+  n_f1f2_emulate_panel: "EHS-paneel emuleren"
+  n_f1f2_arm: "Actieve ODU-aansturing"
+  n_f1f2_outing: "Afwezigheidsmodus"
+  n_f1f2_fr_enable: "Begrenzing compressorfrequentie"

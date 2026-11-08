@@ -53,6 +53,7 @@ sensors:
   discharge_temp: Temperatura mandata compressore 1 (820A)
   target_discharge_temp: Temperatura di mandata compressore obiettivo
   comp_top_temp: Temperatura testa compressore (8280)
+  comp_running_hours: Ore di funzionamento compressore (0x8405)
   cond_out_temp: Temperatura uscita condensatore (8218)
   ipm_temp: Temperatura IPM1 unità esterna (8254)
   main_eev: Posizione EEV principale

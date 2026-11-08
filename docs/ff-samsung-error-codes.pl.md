@@ -2,6 +2,8 @@
 
 # Kody błędów Samsung EHS (strona F1/F2 / NASA)
 
+Powrót do [przeglądu protokołów](../README.pl.md) · [MAGIS PRO / COMBO V2](magis-pro-combo-v2.pl.md).
+
 Magis Pro / Combo V2 używa we wnętrzu jednostki zewnętrznej (ODU) układu Samsung EHS, a magistrala
 F1/F2 to magistrala NASA tej jednostki. Gdy w części Samsunga wystąpi usterka, kod błędu pojawia się
 na dedykowanym przewodowym pilocie Samsung (np. **MWR-WW10N**). Immergas odczytuje tę samą stronę przez

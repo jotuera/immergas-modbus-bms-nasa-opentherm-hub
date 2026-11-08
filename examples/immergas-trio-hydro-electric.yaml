@@ -73,7 +73,7 @@ packages:
     ref: main
     refresh: 1d
     files:
-      # languages: dd_xx = cs de en es fr hu it nl pl pt sk, f1f2_xx = en pl
+      # languages: every packages/lang/<package>_xx.yaml = cs de en es fr hu it nl pl pt sk
       - packages/lang/dd_en.yaml
       - packages/lang/f1f2_en.yaml
       # zone bus (the D+/D- packages of MAGIS: zone panel 0x29 / Dominus 0x33 protocol)

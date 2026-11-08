@@ -2,6 +2,8 @@
 
 # Mapa FSV instalatora — Immergas Magis Combo V2 + Samsung NASA
 
+Powrót do [przeglądu protokołów](../README.pl.md) · [MAGIS PRO / COMBO V2](magis-pro-combo-v2.pl.md).
+
 
 Pełna mapa **wszystkich 94 ustawień instalatora FSV** z magistrali Samsung NASA (F1/F2) i ich status **na tej konkretnej instalacji** (Magis Combo V2 Plus + Audax Pro, pętlę prowadzi sterownik Immergasa). Projekt został odchudzony: **docelowo wystawione jest tylko to, co faktycznie działa**; reszta jest **zakomentowana** w pakietach (nie usunięta — zachowana z opisem do wglądu/przywrócenia). Patrz też [ff-control-results.pl.md](ff-control-results.pl.md).
 
@@ -82,7 +84,7 @@ Pełna mapa **wszystkich 94 ustawień instalatora FSV** z magistrali Samsung NAS
 | 4023 | 0x40A1 | Kompensacja niskiej temp. zewn. | 4xxx Ogrzewanie i strefy | — | 0 / 1 | 🔇 Wyłączona — nieczynna | kompensacja niskiej temp. (grzalka): bezczynna - grzalki po stronie Immergasa |
 | 4024 | 0x4270 | Temp. progowa grzałki zapasowej | 4xxx Ogrzewanie i strefy | °C | -15…35 (krok 1) | 🔇 Wyłączona — brak sprzętu | temp. progowa grzalki zapasowej: grzalki po stronie Immergasa - FSV trzyma ale bezczynny |
 | 4025 | 0x4271 | Temp. rezerwy przy odszranianiu | 4xxx Ogrzewanie i strefy | °C | 10…55 (krok 5) | 🔇 Wyłączona — brak sprzętu | temp. rezerwy przy odszranianiu: zwiazana z grzalka zapasowa (strona Immergasa) - FSV trzyma ale bezczynny |
-| 4031 | 0x40A2 | Bojler zapasowy - zastosowanie | 4xxx Ogrzewanie i strefy | — | 0 / 1 | 🔇 Wyłączona — brak sprzętu | bojler zapasowy - zastosowanie: brak na tej instalacji - FSV trzyma ale bezczynny |
+| 4031 | 0x40A2 | Kocioł zapasowy - zastosowanie | 4xxx Ogrzewanie i strefy | — | 0 / 1 | 🔇 Wyłączona — brak sprzętu | kocioł zapasowy - zastosowanie: brak na tej instalacji - FSV trzyma ale bezczynny |
 | 4032 | 0x40A3 | Priorytet bojlera zapasowego | 4xxx Ogrzewanie i strefy | — | 0 / 1 | 🔇 Wyłączona — brak sprzętu | priorytet bojlera zapasowego: brak na tej instalacji - FSV trzyma ale bezczynny |
 | 4033 | 0x4272 | Temp. progowa bojlera zapasowego | 4xxx Ogrzewanie i strefy | °C | -20…5 (krok 1) | 🔇 Wyłączona — brak sprzętu | temp. progowa bojlera zapasowego: brak na tej instalacji - FSV trzyma ale bezczynny |
 | 4041 | 0x40C0 | Zawór mieszający - zastosowanie | 4xxx Ogrzewanie i strefy | — | 0 / 1 | 🔇 Wyłączona — brak sprzętu | zawor mieszajacy - zastosowanie: brak na tej instalacji - FSV trzyma ale bezczynny |

@@ -2,6 +2,8 @@
 
 # F1/F2 registers — what Immergas controls and what the Samsung outdoor unit controls
 
+Back to the [protocol overview](../README.md) · [MAGIS PRO / COMBO V2](magis-pro-combo-v2.md).
+
 
 Classification of all registers read from the F1/F2 bus (catalogue of the `f1f2_nasa` component)
 based on our config and logs: cross-audit of the three buses (2026-10-01), test of the night

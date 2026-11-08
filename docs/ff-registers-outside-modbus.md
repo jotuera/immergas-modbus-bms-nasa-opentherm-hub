@@ -2,6 +2,8 @@
 
 # F1/F2 registers NOT controlled by the Immergas Modbus buses
 
+Back to the [protocol overview](../README.md) · [MAGIS PRO / COMBO V2](magis-pro-combo-v2.md).
+
 
 List of F1/F2 bus registers (catalogue `f1f2_nasa`) that the **Immergas Modbus buses
 (D+/D- and T-/T+) do NOT control** — this is the domain of the Samsung outdoor unit and the MIM board. Immergas

@@ -50,7 +50,7 @@ i koszt 1 kWh ciepła z każdego źródła.
   Dominusa → [Kotły gazowe po Modbus BMS](docs/gas-boiler-bms.pl.md);
 - **MAGIS M** (na Midea, panel przewodowy z H1 / H2) → [Pompy ciepła MAGIS M](docs/magis-m-midea.pl.md);
 - **TRIO HYDRO** (ELECTRIC albo HYBRID, jednostka zewnętrzna UE HYDRO HP) → [TRIO HYDRO](docs/trio-hydro.pl.md) –
-  planowany, szukamy testerów;
+  konfiguracja gotowa, niesprawdzona, szukamy testerów;
 - tylko **Immergas Dominus** w sieci, bez sprzętu huba → [integracja Immergas Dominus](https://github.com/jotuera/immergas-dominus)
   korzysta z tych samych kart.
 
@@ -106,6 +106,8 @@ portugalski, słowacki.
 | [Kopalnia wiedzy](docs/knowledge-base.pl.md) | jak działają magistrale, wiedza o instalacji, rozwiązywanie problemów |
 | [Zbieranie logów](docs/collecting-logs.pl.md) | inny model albo nieznany sygnał – co nagrać do zgłoszenia |
 | [Karty](cards/README.pl.md) | karty Lovelace, opcje, instalacja |
+| [Historia zmian](CHANGELOG.pl.md) | wydania w skrócie, z linkami do pełnych notatek |
+| [Współpraca](CONTRIBUTING.pl.md) · [Bezpieczeństwo](SECURITY.pl.md) | jak pomóc, jak prywatnie zgłosić problem z bezpieczeństwem |
 
 > ⚠️ Magistrale są wewnątrz urządzeń i łączą się z elektroniką zasilaną z sieci. Przed otwarciem czegokolwiek odłącz
 > zasilanie, a podłączenie zostaw komuś z uprawnieniami. Podłączenie obcego sprzętu może mieć wpływ na gwarancję –

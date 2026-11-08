@@ -1,0 +1,21 @@
+# Immergas Magis Pro / Combo F1/F2 (Samsung NASA) - language file (f1f2_): Magyar
+# Selects the language of the f1f2_nasa component (entity names, state texts, error texts - they live in
+# components/f1f2_nasa/translations/f1f2_hu.yaml) and names the template entities below.
+# Pick ONE f1f2_ language file in the packages list. Changing the language renames the entities.
+
+substitutions:
+  f1f2_language: hu
+  n_f1f2_project_version: "Projekt verzió"
+  n_f1f2_night_limit_pct: "Éjszakai teljesítménykorlát"
+  n_f1f2_discovery: "Discovery (változásnapló kontextussal)"
+  n_f1f2_flow_delta: "Előremenő-visszatérő különbség"
+  n_f1f2_daily_energy: "Felvett energia ma"
+  n_f1f2_cop_instant: "COP pillanatnyi"
+  n_f1f2_cop_total: "COP összesen"
+  # control (package f1f2_control, optional - writes to the pump)
+  n_f1f2_emulate_nasa: "NASA kapcsolat"
+  n_f1f2_link: "NASA kapcsolat állapota"
+  n_f1f2_emulate_panel: "EHS panel emulálása"
+  n_f1f2_arm: "Aktív ODU vezérlés"
+  n_f1f2_outing: "Távollét mód"
+  n_f1f2_fr_enable: "Kompresszor frekvenciakorlátozás"

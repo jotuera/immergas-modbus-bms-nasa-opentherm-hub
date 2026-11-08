@@ -1,0 +1,18 @@
+# Historia zmian
+
+[English](CHANGELOG.md) · **Polski**
+
+Krótka historia wydań. Każde wydanie ma pełne notatki na GitHubie (link) – co się zmieniło, co poprawić w YAML-u
+urządzenia i jakie wersje pakietów wnosi.
+
+| Wydanie | Data | Najważniejsze |
+|---|---|---|
+| [v1.8.0](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.8.0) | 2026-11-08 | status połączenia na każdej magistrali (TT, GB, MT, FF); opisy błędów dla OpenTherm, kotłów gazowych po Modbus BMS i MAGIS M (53 kody Midea); F1/F2: krok odszraniania, rozkaz pracy jednostki zewnętrznej, żądanie pracy jednostki wewnętrznej; przełącznik *Połączenie OpenTherm* w bramce; schematy dla TRIO HYDRO ELECTRIC, kotłów gazowych i MAGIS M |
+| [v1.7.0](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.7.0) | 2026-11-08 | instrukcja instalacji OpenTherm ze schematami (master na ATOMIC ToUnit Base, bramka na PortABC), `ot_3v3_supply`; strona i konfiguracje TRIO HYDRO; liczniki odszraniania NASA 0x824B / 0x824C; każdy przykład przechodzi `esphome config` |
+| [v1.6.0](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.6.0) | 2026-11-07 | karty *Dziś · analiza*, *Kalibracja* i *Automatyki*; `hub_analytics`, `ot_computed` / `ot_analytics`, `gb_computed` / `gb_analytics`, `mt_costs` / `mt_computed` / `mt_analytics` |
+| [v1.5.0](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.5.0) | 2026-11-06 | karty działają na hubach kotłów gazowych (`gb_`) i MAGIS M (`mt_`); programy w hubie; skanery mapy magistral |
+| [v1.4.0](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.4.0) | 2026-11-06 | hub OpenTherm robi wszystko to, co Dominus w trybie OpenTherm (regulator, programy, menu kotła) |
+| [v1.3.0](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.3.0) | 2026-11-06 | nowa nazwa *IMMERGAS Modbus BMS NASA OpenTherm HUB*; nowe protokoły: OpenTherm (master / bramka), kotły gazowe po Modbus BMS, MAGIS M (Midea M-Thermal) |
+| [v1.2.0](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.2.0) | 2026-11-04 | emulowany panel strefy przejmuje zmiany harmonogramu z Dominusa; jedna reguła AUTO / RĘCZNY dla tablic huba i Dominusa |
+| [v1.1.0](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.1.0) – [v1.1.2](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.1.2) | 2026-11-02 | parametry kotła R02 / R03 / R10 / R11 / P07 w `hub_boiler_params`; ustawienia podzielone na online / offline; poprawki |
+| [v1.0.0](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.0.0) – [v1.0.6](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.0.6) | 2026-11-01 – 02 | pierwsze publiczne wydanie: jedno urządzenie ESPHome na D+/D-, T-/T+ i F1/F2 MAGIS PRO / COMBO V2, strategia tablicy i karty w 11 językach; poprawki |
