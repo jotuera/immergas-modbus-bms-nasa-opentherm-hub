@@ -46,6 +46,8 @@ Zasady podłączenia:
 Port fabrycznie: **9600 bodów, 8E1, adres slave 1** we wszystkich. PRO V2 EU: terminacja 120 Ω mostkiem TRD – T−,
 a gdy master nie ma rezystorów podciągających – mostki TR+ – T+ i TR− – T−.
 
+<img src="images/gas-boiler-bms-wiring.svg" alt="Podłączenie huba do portu BMS kotła" width="100%">
+
 ## Instalacja
 
 > 📄 **Plik konfiguracji: [`examples/immergas-gas-bms.yaml`](../examples/immergas-gas-bms.yaml)**

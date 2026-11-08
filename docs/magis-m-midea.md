@@ -33,6 +33,8 @@ Any ESP32 with an RS485 transceiver works (`mt_uart_rx_pin` / `mt_uart_tx_pin`).
 The hub is the master, the controller the slave: **9600 baud, 8N1, address 1** (controller menu *FOR SERVICEMAN →
 17 HMI ADDRESS*). Only one master on H1 / H2, and the controller has to stay connected – it serves the registers.
 
+<img src="images/en/magis-m-wiring.svg" alt="Wiring of the hub to the MAGIS M wired controller" width="100%">
+
 ## Installation
 
 > 📄 **Configuration file: [`examples/immergas-magis-m.yaml`](../examples/immergas-magis-m.yaml)**

@@ -46,6 +46,8 @@ Wiring rules:
 Factory port: **9600 baud, 8E1, slave address 1** on all of them. PRO V2 EU: 120 Ω termination with the TRD – T− bridge
 and, when the master has no pull-ups, the TR+ – T+ and TR− – T− bridges.
 
+<img src="images/en/gas-boiler-bms-wiring.svg" alt="Wiring of the hub to the BMS port of the boiler" width="100%">
+
 ## Installation
 
 > 📄 **Configuration file: [`examples/immergas-gas-bms.yaml`](../examples/immergas-gas-bms.yaml)**

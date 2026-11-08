@@ -33,6 +33,8 @@ Działa każdy ESP32 z transceiverem RS485 (`mt_uart_rx_pin` / `mt_uart_tx_pin`)
 Hub jest masterem, panel slave'em: **9600 bodów, 8N1, adres 1** (menu panelu *FOR SERVICEMAN → 17 HMI ADDRESS*).
 Na H1 / H2 tylko jeden master, a panel musi zostać podłączony – to on podaje rejestry.
 
+<img src="images/magis-m-wiring.svg" alt="Podłączenie huba do sterownika przewodowego MAGIS M" width="100%">
+
 ## Instalacja
 
 > 📄 **Plik konfiguracji: [`examples/immergas-magis-m.yaml`](../examples/immergas-magis-m.yaml)**
