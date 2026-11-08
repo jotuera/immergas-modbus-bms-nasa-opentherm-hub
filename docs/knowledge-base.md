@@ -618,6 +618,13 @@ The Samsung outdoor unit decides when to defrost; two outdoor PDUs show its two 
   installation.
 - Stages (0x8061): 1 ~10 s, 2 ~20 s, **3 ~4–5 min (main)**, 4 ~10 s (ending), 6 ~30 s (back to heating). D+/D- shows
   the HP operating stage 0 (*Defrost*) for the whole defrost; T-/T+ 4588 = 1 (read every ~5 min, so late or missed).
+- **0x8247 *Defrost step*** (NASA wiki: defrost step) gives the finer progress, the same on all 9 defrosts of the night
+  of 6–7.11.2026: 1–2 preparation, 5–6 the 4-way valve reversed and the compressor running, 7–10 ending, 0 back to
+  heating.
+- **Start of a heat demand** (same night): 0x440E bit 0 (`indoor_demand`) at 22:15:00, bit 1 2 s later, **0x8002**
+  *Outdoor unit run command* 22:15:09, the compressor 22:15:31; at the end 0x440E back to 0x400 and 0x8002 = 0 within
+  7 s. Two more outdoor flags follow the compressor: 0x805E (= running) and 0x8033 (= running, 0 during a defrost) –
+  not exposed, they repeat *Compressor Status*.
 - The *Now* card shows a **Until defrost** bar from these two counters.
 
 ## 8. One quantity on three buses

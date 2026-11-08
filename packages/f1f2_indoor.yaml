@@ -39,6 +39,7 @@ sensor:
       return fmodf(v, 256.0f);   // low byte = capacity limit %
 
 binary_sensor:
+  - {platform: f1f2_nasa, key: indoor_demand, id: f1f2_indoor_demand}
   - {platform: f1f2_nasa, key: water_pump, id: f1f2_water_pump}
   - {platform: f1f2_nasa, key: backup_heater, id: f1f2_backup_heater}
   - {platform: f1f2_nasa, key: booster_heater, id: f1f2_booster_heater}

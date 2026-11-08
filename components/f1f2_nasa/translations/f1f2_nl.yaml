@@ -69,6 +69,7 @@ sensors:
   raw_824c: NASA PDU buiten 824C RAW
   defrost_since: Tijd sinds laatste ontdooiing
   defrost_frost_time: Bevriezingstijd verdamper
+  defrost_step: Ontdooistap
   raw_82e1: NASA PDU buiten 82E1 RAW
   raw_840f: NASA PDU buiten 840F LONG RAW
   raw_8417: NASA PDU buiten 8417 LONG RAW
@@ -97,6 +98,8 @@ binary_sensors:
   hot_gas_valve: Heetgasklep
   base_heater: Bodemverwarming
   night_limit: Nachtlimiet compressor (U11)
+  odu_run_command: Startopdracht buitenunit
+  indoor_demand: Vraag binnenunit
   night_mode: Nachtfunctie U11 actief
 
 text_sensors:

@@ -93,6 +93,9 @@ sensors:
   #         and 0x824B is at 2100; 0 from the defrost start (both observed, not in the NASA wiki)
   defrost_since:          {pdu: 0x824B, src: outdoor, dec: raw, unit: "s", dc: duration, sc: measurement, acc: 0, icon: "mdi:timer-sand", status: observed}
   defrost_frost_time:     {pdu: 0x824C, src: outdoor, dec: raw, unit: "s", dc: duration, sc: measurement, acc: 0, icon: "mdi:snowflake-alert", status: observed}
+  # 0x8247 (NASA wiki: NASA_OUTDOOR_DEFROST_STEP): the detailed defrost step - 1-2 preparation, 5-6 4-way valve reversed and
+  # the compressor running, 7-10 ending, 0 back to heating; holds the last step when the run stops right after a defrost
+  defrost_step:           {pdu: 0x8247, src: outdoor, dec: raw, acc: 0, icon: "mdi:snowflake-melt", status: observed}
   raw_82e1:               {pdu: 0x82E1, src: outdoor, dec: raw, acc: 0, cat: diagnostic, status: unknown}
   raw_840f:               {pdu: 0x840F, src: outdoor, dec: raw, acc: 0, cat: diagnostic, status: unknown}
   raw_8417:               {pdu: 0x8417, src: outdoor, dec: raw, acc: 0, cat: diagnostic, status: unknown}
@@ -124,6 +127,11 @@ binary_sensors:
   # 0x80B1 = 1 while the compressor runs under the Immergas night-function (U11) frequency limit (read-only
   # ODU flag; the limit itself is driven by Immergas via 0x428D -> 0x8239).
   night_limit:            {pdu: 0x80B1, src: outdoor, icon: "mdi:weather-night"}
+  # 0x8002 = 1 while the indoor unit orders the outdoor unit to run (on ~20 s before the compressor starts, off when the
+  # heat demand ends) - candidate, one heating block observed 6-7.11.2026
+  odu_run_command:        {pdu: 0x8002, src: outdoor, icon: "mdi:play-circle-outline"}
+  # 0x440E bit 0 = the indoor unit's demand (set at the start of a heat demand, bit 1 follows 2 s later; 0x400 idle)
+  indoor_demand:          {pdu: 0x440E, src: indoor, mask: 0x1, icon: "mdi:fire"}
 
 text_sensors:
   # mode: map (translations maps.<map>), error (translations errors), firmware (structure), hex (structure)

@@ -70,6 +70,7 @@ sensors:
   raw_824c: NASA Outdoor PDU 824C RAW
   defrost_since: Time since last defrost
   defrost_frost_time: Evaporator frosting time
+  defrost_step: Defrost Step
   raw_82e1: NASA Outdoor PDU 82E1 RAW
   raw_840f: NASA Outdoor PDU 840F LONG RAW
   raw_8417: NASA Outdoor PDU 8417 LONG RAW
@@ -99,6 +100,8 @@ binary_sensors:
   hot_gas_valve: Hot Gas Valve
   base_heater: Base Heater
   night_limit: Compressor night limit (U11)
+  odu_run_command: Outdoor Unit Run Command
+  indoor_demand: Indoor Unit Demand
   night_mode: Night function (U11) active
 
 text_sensors:

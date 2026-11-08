@@ -69,6 +69,7 @@ sensors:
   raw_824c: NASA PDU zewn. 824C RAW
   defrost_since: Czas od ostatniego odszraniania
   defrost_frost_time: Czas szronienia parownika
+  defrost_step: Krok odszraniania
   raw_82e1: NASA PDU zewn. 82E1 RAW
   raw_840f: NASA PDU zewn. 840F LONG RAW
   raw_8417: NASA PDU zewn. 8417 LONG RAW
@@ -97,6 +98,8 @@ binary_sensors:
   hot_gas_valve: Zawór gorącego gazu
   base_heater: Grzałka tacy ociekowej
   night_limit: Limit nocny sprężarki (U11)
+  odu_run_command: Rozkaz pracy jednostki zewnętrznej
+  indoor_demand: Żądanie pracy jednostki wewnętrznej
   night_mode: Funkcja nocna U11 (aktywna)
 
 text_sensors:

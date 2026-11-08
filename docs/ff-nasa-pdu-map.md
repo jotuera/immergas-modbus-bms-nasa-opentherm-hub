@@ -34,7 +34,7 @@ Status: decoded unless marked *candidate* / *unknown*. **Help with the unknown o
 | `0x4067` | indoor | `three_way_valve` | 3-Way Valve | raw |  |  |
 | `0x4001` | indoor | `operation_mode` | Indoor Operation Mode (4=Heat) | raw |  | 0 Auto, 1 Cool, 2 Dry, 3 Fan, 4 Heat, 21 Cool storage, 24 Hot water. |
 | `0x406F` | indoor | `control_reference` | EHS Control Reference (1=Water Out) | raw |  | 0 = room, 1 = water out (then the active setpoint is 0x4247). |
-| `0x440E` | indoor | `status_bits_440e` | Indoor Status Bits (440E) | raw |  | *candidate* 0x400 idle, 0x403 while the heat pump has a heat demand (not set by a zone demand alone). |
+| `0x440E` | indoor | `status_bits_440e` | Indoor Status Bits (440E) | raw |  | 0x400 idle, 0x403 while the heat pump has a heat demand (not set by a zone demand alone): **bit 0** at the start of the demand (`indoor_demand`), **bit 1** 2 s later, both cleared when it ends (6–7.11.2026). |
 | `0x0402` | indoor | `raw_0402` | NASA Indoor PDU 0402 LONG RAW | raw |  | *unknown* LVAR_AD_ADDRESS_RMC (address info). |
 | `0x0411` | indoor | `raw_0411` | NASA Indoor PDU 0411 LONG RAW | raw |  | *unknown* High 16 bits x0.1 = install limit (cooling upper, 30.0). |
 | `0x0412` | indoor | `raw_0412` | NASA Indoor PDU 0412 LONG RAW | raw |  | *unknown* High 16 bits x0.1 (cooling lower, 5.0). |
@@ -76,6 +76,7 @@ Status: decoded unless marked *candidate* / *unknown*. **Help with the unknown o
 | `0x8243` | outdoor | `raw_8243` | NASA Outdoor PDU 8243 RAW | raw |  | *unknown*  |
 | `0x824B` | outdoor | `defrost_since` | Time since last defrost | raw, s |  | Seconds since the end of the last defrost; holds at **2100 (35 min = the minimum interval)**, 0 from the defrost start (observed 6–7.11.2026, 10 defrosts). |
 | `0x824C` | outdoor | `defrost_frost_time` | Evaporator frosting time | raw, s |  | Seconds of compressor run with the evaporator below about **−6 °C** (counts only while that holds); a defrost starts when it reaches **~8–10 min** and 0x824B is at 2100; 0 from the defrost start (observed). |
+| `0x8247` | outdoor | `defrost_step` | Defrost Step | raw |  | NASA wiki *NASA_OUTDOOR_DEFROST_STEP*. Every defrost of 6–7.11.2026 (9×): **1–2** preparation, **5–6** 4-way valve reversed and the compressor running, **7–10** ending, **0** back to heating. Holds the last step (e.g. 7) when the run stops right after a defrost. |
 | `0x82E1` | outdoor | `raw_82e1` | NASA Outdoor PDU 82E1 RAW | raw |  | *unknown* Constant 0x5A5A. |
 | `0x80B1` | outdoor | `raw_80b1` | NASA Outdoor PDU 80B1 RAW | raw |  | *candidate* 0 -> 1 together with the night frequency limit (0x8239 -> 19 Hz) while the compressor was running; back to 0 when the compressor stopped at the end of the window. Candidate: "capacity limit active". |
 | `0x840F` | outdoor | `raw_840f` | NASA Outdoor PDU 840F LONG RAW | raw |  | *unknown*  |
@@ -98,6 +99,8 @@ Status: decoded unless marked *candidate* / *unknown*. **Help with the unknown o
 | `0x801A` | outdoor | `four_way_valve` | 4-Way Valve |
 | `0x8017` | outdoor | `hot_gas_valve` | Hot Gas Valve |
 | `0x80AF` | outdoor | `base_heater` | Base Heater |
+| `0x8002` | outdoor | `odu_run_command` | Outdoor Unit Run Command (*candidate*: on ~20 s before the compressor starts, off when the heat demand ends) |
+| `0x440E` bit 0 | indoor | `indoor_demand` | Indoor Unit Demand (`mask: 0x1`) |
 
 ## Text sensors
 

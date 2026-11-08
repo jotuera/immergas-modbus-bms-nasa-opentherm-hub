@@ -69,6 +69,7 @@ sensors:
   raw_824c: NASA PDU venkovní 824C RAW
   defrost_since: Čas od posledního odmrazování
   defrost_frost_time: Doba namrzání výparníku
+  defrost_step: Krok odmrazování
   raw_82e1: NASA PDU venkovní 82E1 RAW
   raw_840f: NASA PDU venkovní 840F LONG RAW
   raw_8417: NASA PDU venkovní 8417 LONG RAW
@@ -97,6 +98,8 @@ binary_sensors:
   hot_gas_valve: Ventil horkého plynu
   base_heater: Topení vany výparníku
   night_limit: Noční limit kompresoru (U11)
+  odu_run_command: Povel k chodu venkovní jednotky
+  indoor_demand: Požadavek vnitřní jednotky
   night_mode: Noční funkce U11 (aktivní)
 
 text_sensors:

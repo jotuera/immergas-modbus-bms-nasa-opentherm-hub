@@ -69,6 +69,7 @@ sensors:
   raw_824c: NASA PDU extérieur 824C RAW
   defrost_since: Temps depuis le dernier dégivrage
   defrost_frost_time: "Temps de givrage de l'évaporateur"
+  defrost_step: Pas de dégivrage
   raw_82e1: NASA PDU extérieur 82E1 RAW
   raw_840f: NASA PDU extérieur 840F LONG RAW
   raw_8417: NASA PDU extérieur 8417 LONG RAW
@@ -97,6 +98,8 @@ binary_sensors:
   hot_gas_valve: Vanne gaz chaud
   base_heater: Résistance de bac
   night_limit: Limite nocturne du compresseur (U11)
+  odu_run_command: "Ordre de marche de l'unité extérieure"
+  indoor_demand: "Demande de l'unité intérieure"
   night_mode: Fonction nocturne (U11) active
 
 text_sensors:

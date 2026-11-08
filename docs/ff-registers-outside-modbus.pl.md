@@ -50,6 +50,9 @@ Kolumny:
 | Etap odszraniania | 0x8061 | ODU | stan |
 | Czas od ostatniego odszraniania | 0x824B | ODU | licznik s, staje na 2100 (35 min) |
 | Czas szronienia parownika | 0x824C | ODU | licznik s pracy z parownikiem < ok. −6 °C; odszranianie przy ~8–10 min |
+| Krok odszraniania | 0x8247 | ODU | stan: 1–2 przygotowanie, 5–6 praca odwrócona, 7–10 zakończenie |
+| Rozkaz pracy jednostki zewnętrznej | 0x8002 | ODU | stan (jednostka wewnętrzna każe ODU pracować) |
+| Żądanie pracy jednostki wewnętrznej | 0x440E bit 0 | IDU | stan (żądanie ciepła MIM) |
 | Etap startu sprężarki | 0x8248 | ODU | stan (logika rozruchu) |
 | Blokada ponownego startu | 0x8249 | ODU | stan (ochrona) |
 | Sprężarka pracuje | 0x8010 | ODU | stan |

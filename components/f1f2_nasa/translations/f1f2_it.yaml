@@ -69,6 +69,7 @@ sensors:
   raw_824c: NASA PDU esterna 824C RAW
   defrost_since: "Tempo dall'ultimo sbrinamento"
   defrost_frost_time: Tempo di brinamento evaporatore
+  defrost_step: Passo di sbrinamento
   raw_82e1: NASA PDU esterna 82E1 RAW
   raw_840f: NASA PDU esterna 840F LONG RAW
   raw_8417: NASA PDU esterna 8417 LONG RAW
@@ -97,6 +98,8 @@ binary_sensors:
   hot_gas_valve: Valvola gas caldo
   base_heater: Resistenza di base
   night_limit: Limite notturno compressore (U11)
+  odu_run_command: Comando di marcia unità esterna
+  indoor_demand: Richiesta unità interna
   night_mode: Funzione notturna (U11) attiva
 
 text_sensors:

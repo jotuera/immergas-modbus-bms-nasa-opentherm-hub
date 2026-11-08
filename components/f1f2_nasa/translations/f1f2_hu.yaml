@@ -69,6 +69,7 @@ sensors:
   raw_824c: NASA kültéri PDU 824C RAW
   defrost_since: Utolsó leolvasztás óta eltelt idő
   defrost_frost_time: Elpárologtató jegesedési ideje
+  defrost_step: Jégtelenítési lépés
   raw_82e1: NASA kültéri PDU 82E1 RAW
   raw_840f: NASA kültéri PDU 840F LONG RAW
   raw_8417: NASA kültéri PDU 8417 LONG RAW
@@ -96,6 +97,8 @@ binary_sensors:
   hot_gas_valve: Forró gáz szelep
   base_heater: Kondenzvíztálca fűtés
   night_limit: Kompresszor éjszakai korlát (U11)
+  odu_run_command: Kültéri egység indítási parancs
+  indoor_demand: Beltéri egység igénye
   night_mode: Éjszakai funkció (U11) aktív
 
 text_sensors:

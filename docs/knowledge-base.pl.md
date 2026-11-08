@@ -609,6 +609,13 @@ O odszranianiu decyduje jednostka zewnętrzna Samsunga; dwa PDU jednostki zewnę
 - Etapy (0x8061): 1 ~10 s, 2 ~20 s, **3 ~4–5 min (główny)**, 4 ~10 s (zakończenie), 6 ~30 s (powrót do grzania).
   D+/D- przez całe odszranianie pokazuje etap pracy PC 0 (*Odszranianie*); T-/T+ 4588 = 1 (czytane co ~5 min, więc
   z opóźnieniem albo wcale).
+- **0x8247 *Krok odszraniania*** (wiki NASA: defrost step) pokazuje dokładniejszy przebieg, taki sam przy wszystkich 9
+  odszranianiach nocy 6–7.11.2026: 1–2 przygotowanie, 5–6 zawór 4-drogowy przełożony i sprężarka pracuje, 7–10
+  zakończenie, 0 powrót do grzania.
+- **Start żądania ciepła** (ta sama noc): 0x440E bit 0 (`indoor_demand`) o 22:15:00, bit 1 2 s później, **0x8002**
+  *Rozkaz pracy jednostki zewnętrznej* 22:15:09, sprężarka 22:15:31; na końcu 0x440E wraca do 0x400, a 0x8002 = 0 w ciągu
+  7 s. Dwie kolejne flagi jednostki zewnętrznej idą za sprężarką: 0x805E (= pracuje) i 0x8033 (= pracuje, 0 przy
+  odszranianiu) – bez encji, powtarzają *Sprężarka pracuje*.
 - Karta *Teraz* pokazuje z tych dwóch liczników pasek **Do odszraniania**.
 
 ## 8. Jedna wielkość na trzech magistralach

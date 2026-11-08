@@ -69,6 +69,7 @@ sensors:
   raw_824c: NASA PDU vonk. 824C RAW
   defrost_since: Čas od posledného odmrazovania
   defrost_frost_time: Doba namŕzania výparníka
+  defrost_step: Krok odmrazovania
   raw_82e1: NASA PDU vonk. 82E1 RAW
   raw_840f: NASA PDU vonk. 840F LONG RAW
   raw_8417: NASA PDU vonk. 8417 LONG RAW
@@ -97,6 +98,8 @@ binary_sensors:
   hot_gas_valve: Ventil horúceho plynu
   base_heater: Ohrev vane výparníka
   night_limit: Nočný limit kompresora (U11)
+  odu_run_command: Povel na chod vonkajšej jednotky
+  indoor_demand: Požiadavka vnútornej jednotky
   night_mode: Nočná funkcia U11 (aktívna)
 
 text_sensors:

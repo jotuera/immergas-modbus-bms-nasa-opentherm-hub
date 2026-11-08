@@ -50,6 +50,9 @@ Columns:
 | Defrost stage | 0x8061 | ODU | state |
 | Time since last defrost | 0x824B | ODU | counter s, holds at 2100 (35 min) |
 | Evaporator frosting time | 0x824C | ODU | counter s of run with the evaporator < about −6 °C; defrost at ~8–10 min |
+| Defrost step | 0x8247 | ODU | state: 1–2 preparation, 5–6 reversed run, 7–10 ending |
+| Outdoor unit run command | 0x8002 | ODU | state (the indoor unit orders the ODU to run) |
+| Indoor unit demand | 0x440E bit 0 | IDU | state (heat demand of the MIM) |
 | Compressor start stage | 0x8248 | ODU | state (start-up logic) |
 | Restart inhibit | 0x8249 | ODU | state (protection) |
 | Compressor running | 0x8010 | ODU | state |
