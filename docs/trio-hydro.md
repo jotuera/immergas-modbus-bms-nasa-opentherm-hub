@@ -52,9 +52,12 @@ The TRIO HYDRO indoor unit is the OpenTherm master towards the boiler, the hub s
 its own mains supply, so the Slave shield does not have to power it. The `ot_3v3_supply` package is **not** used here –
 G1 is taken by the zone bus and the regulator gives the 3.3 V. Shields and pins: [OpenTherm boilers](opentherm-hub.md#hardware).
 
-**ELECTRIC** (no boiler) – no OpenTherm, so no shields and no regulator: the AtomS3 Lite with the PortABC, the RS485
-unit for the zone bus in the Grove AtomS3 socket (RX G1, TX G2) and the one for F1/F2 on port B (RX G8, TX G7) – the
-same pins as HYBRID. F1/F2 alone needs only the Grove AtomS3 socket, no PortABC.
+**ELECTRIC** (no boiler) – no OpenTherm, so no shields and no regulator: the AtomS3 Lite with the PortABC and two
+M5Stack Isolated RS485 Units on Grove cables, the ports as in the MAGIS PRO / COMBO V2 hub – **port A** zone bus
+(RX G39, TX G38), **port B** F1/F2 (RX G8, TX G7), port C free. F1/F2 alone needs only the Grove AtomS3 socket, no
+PortABC.
+
+<img src="images/en/trio-hydro-electric-wiring.svg" alt="TRIO HYDRO ELECTRIC: the hub on F1/F2 and the zone bus" width="100%">
 
 **Without soldering, as two devices:** the ready-made [OT-thing](https://www.seegel-systeme.de/produkt/ot-thing/)
 gateway (OpenTherm master + slave in a box, ESP32-C3) for the boiler side and an AtomS3 Lite with the RS485 units for
@@ -67,7 +70,7 @@ F1/F2 and the zone bus – a configuration for the OT-thing is not prepared yet.
 | **HYBRID** – OpenTherm gateway + F1/F2 + zone bus | [`examples/immergas-trio-hydro.yaml`](../examples/immergas-trio-hydro.yaml) ([open on GitHub](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro.yaml) · [download (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro.yaml)) |
 | **ELECTRIC** – F1/F2 + zone bus | [`examples/immergas-trio-hydro-electric.yaml`](../examples/immergas-trio-hydro-electric.yaml) ([open on GitHub](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro-electric.yaml) · [download (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro-electric.yaml)) |
 
-The pins match the diagram above. Everything starts **passive** except the OpenTherm gateway (it relays the indoor
+The pins match the diagrams above. Everything starts **passive** except the OpenTherm gateway (it relays the indoor
 unit's frames to the boiler): F1/F2 with `f1f2_transmit: "false"` (listen only) and the zone bus emulation switches
 off – the hub only listens. The `ot_3v3_supply` package is not used (the regulator gives the 3.3 V).
 

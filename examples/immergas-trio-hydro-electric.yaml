@@ -2,9 +2,10 @@
 # One AtomS3 Lite + ATOMIC PortABC on the two RS485 buses of the system (no boiler, so no OpenTherm):
 #   Samsung NASA F1 / F2 (outdoor unit UE HYDRO HP <-> interface board A22) - listening first
 #   zone bus (Modbus RTU 9600 8E1, the indoor unit is master, zone panel 41 = 0x29 / 42) - listening first
-# Wiring (the same pins as TRIO HYDRO HYBRID, docs/trio-hydro.md#hardware-planned):
-#   port B -> M5Stack Isolated RS485 Unit -> F1 / F2 (RX G8, TX G7)
-#   Grove AtomS3 socket (next to USB-C) -> M5Stack Isolated RS485 Unit -> zone bus (RX G1, TX G2)
+# Wiring (diagram: docs/trio-hydro.md#hardware-planned; the ports as in the MAGIS PRO / COMBO V2 hub):
+#   port A -> M5Stack Isolated RS485 Unit -> zone bus (RX G39, TX G38); 120 ohm only if the bus shows CRC errors
+#   port B -> M5Stack Isolated RS485 Unit -> F1 / F2 (RX G8, TX G7), no resistor
+#   port C free
 # F1 / F2 only: leave out the dd_ packages, the uart / switch blocks at the end and the PortABC, and put the RS485
 # unit in the Grove AtomS3 socket (f1f2_uart_rx_pin: GPIO1, f1f2_uart_tx_pin: GPIO2).
 # Everything starts passive: F1 / F2 with f1f2_transmit: "false" (listen only), the zone bus emulation switches OFF.
@@ -20,9 +21,9 @@ substitutions:
   dd_name_prefix: "Immergas DD"
   f1f2_name_prefix: "Immergas FF - "
 
-  # zone bus on the Grove AtomS3 socket (white wire = RX)
-  dd_uart_rx_pin: GPIO1
-  dd_uart_tx_pin: GPIO2
+  # zone bus on PortABC port A (white wire = RX)
+  dd_uart_rx_pin: GPIO39
+  dd_uart_tx_pin: GPIO38
   dd_uart_de_pin: none          # the isolated unit switches the direction itself
   # F1 / F2 on PortABC port B
   f1f2_uart_rx_pin: GPIO8

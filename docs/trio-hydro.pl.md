@@ -52,9 +52,12 @@ Jednostka wewnętrzna TRIO HYDRO jest masterem OpenTherm wobec kotła, hub siedz
 z sieci, więc płytka Slave nie musi jej zasilać. Pakietu `ot_3v3_supply` tu **nie** używasz – G1 zajmuje magistrala
 strefowa, a 3,3 V daje stabilizator. Płytki i piny: [Kotły OpenTherm](opentherm-hub.pl.md#sprzęt).
 
-**ELECTRIC** (bez kotła) – bez OpenTherm, więc bez płytek i stabilizatora: AtomS3 Lite z PortABC, moduł RS485
-magistrali strefowej w gnieździe Grove AtomS3 (RX G1, TX G2) i moduł F1/F2 na porcie B (RX G8, TX G7) – te same piny
-co w HYBRID. Samo F1/F2 potrzebuje tylko gniazda Grove AtomS3, bez PortABC.
+**ELECTRIC** (bez kotła) – bez OpenTherm, więc bez płytek i stabilizatora: AtomS3 Lite z PortABC i dwa moduły
+M5Stack Isolated RS485 Unit na kablach Grove, porty jak w hubie MAGIS PRO / COMBO V2 – **port A** magistrala strefowa
+(RX G39, TX G38), **port B** F1/F2 (RX G8, TX G7), port C wolny. Samo F1/F2 potrzebuje tylko gniazda Grove AtomS3, bez
+PortABC.
+
+<img src="images/trio-hydro-electric-wiring.svg" alt="TRIO HYDRO ELECTRIC: hub na F1/F2 i magistrali strefowej" width="100%">
 
 **Bez lutowania, jako dwa urządzenia:** gotowa bramka [OT-thing](https://www.seegel-systeme.de/produkt/ot-thing/)
 (master + slave OpenTherm w obudowie, ESP32-C3) od strony kotła i AtomS3 Lite z modułami RS485 do F1/F2 i magistrali
@@ -67,7 +70,7 @@ strefowej – konfiguracji dla OT-thing jeszcze nie ma.
 | **HYBRID** – bramka OpenTherm + F1/F2 + magistrala strefowa | [`examples/immergas-trio-hydro.yaml`](../examples/immergas-trio-hydro.yaml) ([otwórz na GitHubie](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro.yaml) · [pobierz (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro.yaml)) |
 | **ELECTRIC** – F1/F2 + magistrala strefowa | [`examples/immergas-trio-hydro-electric.yaml`](../examples/immergas-trio-hydro-electric.yaml) ([otwórz na GitHubie](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro-electric.yaml) · [pobierz (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro-electric.yaml)) |
 
-Piny zgadzają się ze schematem wyżej. Wszystko startuje **biernie** poza bramką OpenTherm (przekazuje ramki jednostki
+Piny zgadzają się ze schematami wyżej. Wszystko startuje **biernie** poza bramką OpenTherm (przekazuje ramki jednostki
 wewnętrznej do kotła): F1/F2 z `f1f2_transmit: "false"` (tylko nasłuch), a przełączniki emulacji magistrali
 strefowej wyłączone – hub tylko słucha. Pakietu `ot_3v3_supply` nie ma (3,3 V daje stabilizator).
 
