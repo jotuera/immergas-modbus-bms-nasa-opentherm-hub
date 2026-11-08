@@ -59,6 +59,10 @@ class OtHub : public esphome::Component {
   void set_max_ch_follows(bool on) { this->follow_ = on; }
   // Data-ID 1 sent while CH is off (0 = the normal setpoint): some boilers heat to Data-ID 1 with the CH bit cleared
   void set_ch_off_setpoint(float c) { this->ch_off_raw_ = c > 0 ? uint16_t(lroundf(c * 256.0f)) : 0; }
+  // gateway: relay only (the "OpenTherm connection" switch off) - every frame of the room unit goes to the boiler
+  // unchanged and back, the hub sends nothing of its own: no reads, no overrides, no 57, no standalone mode
+  void set_relay_only(bool on);
+  bool relay_only() const { return this->relay_only_; }
 
   void setup() override;
   void loop() override;
@@ -106,7 +110,7 @@ class OtHub : public esphome::Component {
 
   bool boiler_online() const { return this->last_ok_ms_ != 0 && esphome::millis() - this->last_ok_ms_ < 10000; }
   bool room_online() const { return this->last_room_ms_ != 0 && esphome::millis() - this->last_room_ms_ < 10000; }
-  bool standalone() const { return this->mode_ == MODE_MASTER || this->standalone_; }
+  bool standalone() const { return this->mode_ == MODE_MASTER || (this->standalone_ && !this->relay_only_); }
   Mode mode() const { return this->mode_; }
   uint32_t frames_ok() const { return this->frames_ok_; }
   uint32_t errors() const { return this->errors_; }
@@ -166,6 +170,7 @@ class OtHub : public esphome::Component {
   bool free_slot_{false};      // the room unit's request was answered by the hub: the boiler slot is ours
   uint32_t last_room_ms_{0};
   bool standalone_{true};
+  bool relay_only_{false};
 
   // max. CH setpoint follows the CH setpoint
   bool follow_{true};

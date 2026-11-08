@@ -166,6 +166,7 @@ substitutions:
   n_ot_room_gain: "${ot_name_prefix} - Room correction (°C flow per °C)"
   n_ot_room_hysteresis: "${ot_name_prefix} - Room hysteresis"
   n_ot_room_online: "${ot_name_prefix} - Room unit connection"
+  n_ot_connection: "${ot_name_prefix} - OpenTherm connection"
   n_ot_standalone: "${ot_name_prefix} - Hub runs the boiler"
   n_ot_room_ch_enable: "${ot_name_prefix} - Room unit: CH enable"
   n_ot_room_dhw_enable: "${ot_name_prefix} - Room unit: DHW enable"

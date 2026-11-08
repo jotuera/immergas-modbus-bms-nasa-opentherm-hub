@@ -166,6 +166,7 @@ substitutions:
   n_ot_room_gain: "${ot_name_prefix} - Korekta pokojowa (°C zasilania na °C)"
   n_ot_room_hysteresis: "${ot_name_prefix} - Histereza pokoju"
   n_ot_room_online: "${ot_name_prefix} - Połączenie z pilotem"
+  n_ot_connection: "${ot_name_prefix} - Połączenie OpenTherm"
   n_ot_standalone: "${ot_name_prefix} - Hub prowadzi kocioł"
   n_ot_room_ch_enable: "${ot_name_prefix} - Pilot: zezwolenie CO"
   n_ot_room_dhw_enable: "${ot_name_prefix} - Pilot: zezwolenie CWU"

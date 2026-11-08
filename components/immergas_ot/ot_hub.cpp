@@ -35,6 +35,7 @@ void OtHub::dump_config() {
   ESP_LOGCONFIG(TAG, "  Max. CH setpoint (57) follows the CH setpoint (1): %s", YESNO(this->follow_));
   if (this->ch_off_raw_) ESP_LOGCONFIG(TAG, "  CH setpoint while CH is off: %.1f", this->ch_off_raw_ / 256.0f);
   if (this->mode_ == MODE_GATEWAY) ESP_LOGCONFIG(TAG, "  Standalone after: %u ms without the room unit", (unsigned) this->standalone_after_ms_);
+  if (this->mode_ == MODE_GATEWAY) ESP_LOGCONFIG(TAG, "  Relay only: %s", YESNO(this->relay_only_));
   ESP_LOGCONFIG(TAG, "  Polled Data-IDs: %u", (unsigned) this->polls_.size());
 }
 
@@ -57,6 +58,16 @@ void OtHub::set_flag(uint8_t flag, bool on) {
     this->flags_ |= flag;
   else
     this->flags_ &= ~flag;
+}
+
+void OtHub::set_relay_only(bool on) {
+  if (this->mode_ != MODE_GATEWAY || on == this->relay_only_) return;
+  this->relay_only_ = on;
+  this->free_slot_ = false;
+  if (on)
+    ESP_LOGW(TAG, "OpenTherm connection OFF - relay only: room unit <-> boiler unchanged, no own frames");
+  else
+    ESP_LOGI(TAG, "OpenTherm connection ON - the hub reads, overrides and takes over a silent room unit again");
 }
 
 void OtHub::set_override(uint8_t id, uint16_t value) { this->overrides_[id] = value; }
@@ -185,6 +196,12 @@ void OtHub::on_room_request_(uint32_t req) {
   s.room_ms = now;
   this->notify_(id, true);
 
+  if (this->relay_only_) {  // forwarded as it came, the answer goes back unchanged
+    this->room_req_ = req;
+    this->room_req_ms_ = now;
+    this->room_pending_ = true;
+    return;
+  }
   // the boiler does not know this ID: answer it here and use the boiler slot for the hub's own request
   if (type == READ_DATA && s.unknown && now - s.ms < UNKNOWN_RETRY_MS) {
     this->room_reply_ = make_frame(UNKNOWN_DATA_ID, id, value);
@@ -268,6 +285,7 @@ void OtHub::loop() {
     if (now - this->room_req_ms_ <= ROOM_MAX_AGE_MS) this->send_boiler_(this->room_req_, ORIGIN_ROOM);
     return;
   }
+  if (this->relay_only_) return;  // gateway, relay only: nothing of our own
   if (this->standalone()) {
     if (now - this->done_ms_ >= OWN_GAP_MS) this->send_boiler_(this->next_own_request_(), ORIGIN_OWN);
     return;

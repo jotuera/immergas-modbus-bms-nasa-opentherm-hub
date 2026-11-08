@@ -56,3 +56,17 @@ switch:
   - { platform: immergas_ot, type: override, data_id: 14, name: "${n_ot_override_max_modulation}", id: ot_override_max_modulation, icon: "mdi:swap-horizontal", restore_mode: RESTORE_DEFAULT_OFF, entity_category: config }
   # the hub's CH / DHW enable replace the room unit's flags (Data-ID 0)
   - { platform: immergas_ot, type: override, data_id: 0, name: "${n_ot_override_flags}", id: ot_override_flags, icon: "mdi:swap-horizontal", restore_mode: RESTORE_DEFAULT_OFF }
+  # OpenTherm connection (like the Modbus connection switches of the other buses): off = relay only - the room unit's
+  # frames go to the boiler unchanged and back, the hub sends nothing of its own (no reads, no overrides, no 57, no
+  # standalone mode when the room unit is silent). For diagnosis: is it the hub or the installation? On = normal gateway.
+  - platform: template
+    name: "${n_ot_connection}"
+    id: ot_connection
+    icon: mdi:lan-connect
+    entity_category: config
+    restore_mode: RESTORE_DEFAULT_ON
+    optimistic: true
+    turn_on_action:
+      - lambda: id(ot_hub).set_relay_only(false);
+    turn_off_action:
+      - lambda: id(ot_hub).set_relay_only(true);

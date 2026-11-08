@@ -182,7 +182,7 @@ najpierw ustaw M3 P33 = ON – kocioł grzeje wtedy nawet po utracie OpenTherm.
 | `ot_boiler_params` (opcjonalny) | menu kotła przepisane raz z kotła (OpenTherm go nie przenosi): rodzina menu (ZEUS 25 / EXA / OMNIA, TERA, EXA 24 X / NIKE, ZEUS Superior 26 / 32, HERCULES) i jej wartości t / P / A albo M1 / M3 / M5 dla kodów i podpowiedzi kart (taktowanie, TERA P7 = 2, HERCULES P33), przypomnienie o przeglądzie (CAR V2 MANUTZ) |
 | `ot_control` | **tryb pracy** (Stand-by / Lato / Zima / Tylko CO), zezwolenie CO / CWU, nastawa zasilania CO, nastawa CWU, maks. nastawa CO, maks. modulacja |
 | `ot_regulator` (master) | krzywa pogodowa (dwa punkty) + powolna korekta pokojowa z temperatury z Home Assistant, CO wł. / wył. z histerezą – regulator, którym byłby pilot / Dominus |
-| `ot_gateway` | tryb bramki: połączenie z pilotem, standalone, co zapisuje pilot (nastawa CO, zadana i temperatura pokoju, nastawa CWU, jego zezwolenia CO / CWU), przełączniki nadpisywania |
+| `ot_gateway` | tryb bramki: połączenie z pilotem, standalone, co zapisuje pilot (nastawa CO, zadana i temperatura pokoju, nastawa CWU, jego zezwolenia CO / CWU), przełączniki nadpisywania, **Połączenie OpenTherm** (wył. = tylko przekazywanie: ramki pilota przechodzą bez zmian, hub nie wysyła nic swojego – do diagnozy) |
 | `lang/ot_en`, `lang/ot_pl` | nazwy encji (`ot_name_prefix`, domyślnie „Immergas OT”) |
 
 Plik konfiguracji i kroki są w sekcji [Instalacja](#instalacja).

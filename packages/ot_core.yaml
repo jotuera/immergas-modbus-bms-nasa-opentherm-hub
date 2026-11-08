@@ -8,7 +8,7 @@
 # Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
 
 substitutions:
-  ot_project_version: "1.2.1"
+  ot_project_version: "1.2.2"
   ot_name_prefix: "Immergas OT"
   # master adapter (towards the boiler): default an ATOMIC ToUnit Base under the AtomS3 Lite, DIP 2 = IO2 = G6 (white,
   # in), DIP 5 = IO1 = G5 (yellow, out); the shields' 3.3 V comes from G1 of the Grove AtomS3 (ot_3v3_supply)

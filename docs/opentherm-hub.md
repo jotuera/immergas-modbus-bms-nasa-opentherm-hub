@@ -183,7 +183,7 @@ family set M3 P33 = ON first – the boiler then keeps heating even if OpenTherm
 | `ot_boiler_params` (optional) | the boiler menu copied once (OpenTherm does not carry it): menu family (ZEUS 25 / EXA / OMNIA, TERA, EXA 24 X / NIKE, ZEUS Superior 26 / 32, HERCULES) and its t / P / A or M1 / M3 / M5 values for the codes and hints of the cards (short cycling, TERA P7 = 2, HERCULES P33), the service reminder (CAR V2 MANUTZ) |
 | `ot_control` | the **operating mode** (Standby / Summer / Winter / CH only), CH / DHW enable, CH flow setpoint, DHW setpoint, max. CH setpoint, max. modulation |
 | `ot_regulator` (master) | weather curve (two points) + a slow room correction from a Home Assistant room temperature, CH on / off with a hysteresis – the regulator the room unit / Dominus would be |
-| `ot_gateway` | gateway mode: room unit connection, standalone, what the room unit writes (CH setpoint, room setpoint and temperature, DHW setpoint, its CH / DHW enable), the override switches |
+| `ot_gateway` | gateway mode: room unit connection, standalone, what the room unit writes (CH setpoint, room setpoint and temperature, DHW setpoint, its CH / DHW enable), the override switches, **OpenTherm connection** (off = relay only: the room unit's frames pass unchanged, the hub sends nothing of its own – for diagnosis) |
 | `lang/ot_en`, `lang/ot_pl` | entity names (`ot_name_prefix`, default "Immergas OT") |
 
 The configuration file and the steps are in [Installation](#installation).
