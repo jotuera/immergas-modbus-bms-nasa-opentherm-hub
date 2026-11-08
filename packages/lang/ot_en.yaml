@@ -132,6 +132,8 @@ substitutions:
   n_ot_air_pressure_fault: "${ot_name_prefix} - Air pressure fault"
   n_ot_water_overtemp: "${ot_name_prefix} - Water over-temperature"
   n_ot_fault_code: "${ot_name_prefix} - Fault code"
+  n_ot_fault_text: "${ot_name_prefix} - Fault (description)"
+  ot_fault_lang: "0"   # language of the fault texts (immergas_core: 0 en, 1 it, 2 pl, 3 cs, 4 hu, 5 de, 6 fr, 7 es, 8 nl, 9 pt, 10 sk)
   n_ot_oem_code: "${ot_name_prefix} - OEM diagnostic code"
   n_ot_flow_temp: "${ot_name_prefix} - Flow temperature"
   n_ot_return_temp: "${ot_name_prefix} - Return temperature"

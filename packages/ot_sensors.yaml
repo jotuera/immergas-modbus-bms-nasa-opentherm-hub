@@ -108,3 +108,19 @@ sensor:
   - { platform: immergas_ot, data_id: 120, value_type: u16, name: "${n_ot_burner_hours}", id: ot_burner_hours, unit_of_measurement: "h", state_class: total_increasing, accuracy_decimals: 0, entity_category: diagnostic }
   - { platform: immergas_ot, data_id: 119, value_type: u16, name: "${n_ot_dhw_burner_starts}", id: ot_dhw_burner_starts, state_class: total_increasing, accuracy_decimals: 0, entity_category: diagnostic, disabled_by_default: true }
   - { platform: immergas_ot, data_id: 123, value_type: u16, name: "${n_ot_dhw_burner_hours}", id: ot_dhw_burner_hours, unit_of_measurement: "h", state_class: total_increasing, accuracy_decimals: 0, entity_category: diagnostic, disabled_by_default: true }
+
+text_sensor:
+  # Fault (description): the Immergas fault code of Data-ID 5 with the project's own texts (immergas_core, 11 languages,
+  # the same as D+/D- and T-/T+; the Dominus app uses one fault list for its OpenTherm and Modbus boilers)
+  - platform: template
+    name: "${n_ot_fault_text}"
+    id: ot_fault_text
+    icon: mdi:alert-circle-outline
+    update_interval: 10s
+    lambda: |-
+      if (isnan(id(ot_fault_code).state)) return {};
+      int c = (int) id(ot_fault_code).state;
+      if (c == 0 || !id(ot_fault).state) return immergas::fault_description(0, ${ot_fault_lang});
+      char pfx[12];
+      snprintf(pfx, sizeof(pfx), "E%02d: ", c);
+      return std::string(pfx) + immergas::fault_description(c, ${ot_fault_lang});

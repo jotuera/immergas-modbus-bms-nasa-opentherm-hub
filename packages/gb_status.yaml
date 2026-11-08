@@ -190,4 +190,7 @@ text_sensor:
       if (code == 0) return std::string("${t_gb_no_fault}");
       if (code == 144) return std::string("E144 - ${t_gb_fault_144}");
       if (code == 100) return std::string("100 - ${t_gb_fault_100}");
-      return std::string("E") + to_string(code);
+      // the other E codes are the Immergas boiler codes: the project's own texts (immergas_core, 11 languages)
+      char pfx[12];
+      snprintf(pfx, sizeof(pfx), "E%02d: ", code);
+      return std::string(pfx) + immergas::fault_description(code, ${gb_fault_lang});

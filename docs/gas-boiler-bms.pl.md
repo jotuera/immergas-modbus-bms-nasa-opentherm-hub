@@ -91,7 +91,7 @@ wymaga potem włączonego przełącznika *Żądanie grzania (CO)* – steruj nim
 |---|---|
 | `gb_core` | UART / Modbus, przełącznik *Połączenie BMS*, przełącznik **Żądanie grzania (CO)** – gdy włączony, hub co 10 s wpisuje 0x0055 do rejestru 512 (żądanie wygasa po 30 s) |
 | `gb_control` | *Tryb pracy* (Stand-by / Tylko CWU / Ogrzewanie / Ogrzewanie + CWU), *Nastawa zasilania CO* (514), *Nastawa CWU* (515), *Reset usterki* (257 = 0xAA55) |
-| `gb_status` | bity stanu (płomień, pompa CO / CWU, CO / CWU / ochrona przed zamarzaniem dozwolone, funkcja specjalna, usterka kasowalna / niekasowalna), kod i opis usterki, limity CO / CWU kotła, konfiguracja portu |
+| `gb_status` | bity stanu (płomień, pompa CO / CWU, CO / CWU / ochrona przed zamarzaniem dozwolone, funkcja specjalna, usterka kasowalna / niekasowalna), kod i opis usterki (teksty błędów Immergasa jak w D+/D- i T-/T+, 11 języków; 144 i 100 = łącze BMS), limity CO / CWU kotła, konfiguracja portu |
 | `gb_sensors` | zasilanie, powrót, CWU, temp. zewnętrzna, modulacja, obliczone zasilanie, temperatura za sprzęgłem (HVDT) |
 | `gb_superior` / `gb_extra` / `gb_pro` / `gb_mtop` / `gb_iu23` | dodatki modelu z tabeli niżej – wczytaj dokładnie jeden |
 | `gb_curve` (opcjonalny) | krzywa pogodowa w hubie: co minutę nastawa zasilania CO z sondy zewnętrznej kotła, między dwoma punktami, w granicach limitów kotła |

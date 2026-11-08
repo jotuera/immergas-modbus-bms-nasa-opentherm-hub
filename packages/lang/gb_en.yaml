@@ -24,6 +24,7 @@ substitutions:
   n_gb_status_raw: "${gb_name_prefix} - Boiler status (raw)"
   n_gb_fault_code: "${gb_name_prefix} - Fault code"
   n_gb_fault: "${gb_name_prefix} - Fault"
+  gb_fault_lang: "0"   # language of the fault texts (immergas_core: 0 en, 1 it, 2 pl, 3 cs, 4 hu, 5 de, 6 fr, 7 es, 8 nl, 9 pt, 10 sk)
   n_gb_ch_max: "${gb_name_prefix} - CH max. temperature"
   n_gb_ch_min: "${gb_name_prefix} - CH min. temperature"
   n_gb_dhw_max: "${gb_name_prefix} - DHW max. temperature"

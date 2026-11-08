@@ -91,7 +91,7 @@ is one. **Heating** then needs the *Heat request (CH)* switch on – drive it fr
 |---|---|
 | `gb_core` | UART / Modbus, the *BMS connection* switch, the **Heat request (CH)** switch – while on, the hub writes 0x0055 to register 512 every 10 s (the request expires after 30 s) |
 | `gb_control` | *Operating mode* (Standby / DHW only / Heating / Heating + DHW), *CH flow setpoint* (514), *DHW setpoint* (515), *Fault reset* (257 = 0xAA55) |
-| `gb_status` | state bits (flame, CH / DHW pump, CH / DHW / frost allowed, special function, resettable / locked fault), fault code and text, the boiler's CH / DHW limits, port configuration |
+| `gb_status` | state bits (flame, CH / DHW pump, CH / DHW / frost allowed, special function, resettable / locked fault), fault code and text (the Immergas fault texts of D+/D- and T-/T+, 11 languages; 144 and 100 = BMS link), the boiler's CH / DHW limits, port configuration |
 | `gb_sensors` | flow, return, DHW, outdoor, modulation, calculated flow, temperature after the separator (HVDT) |
 | `gb_superior` / `gb_extra` / `gb_pro` / `gb_mtop` / `gb_iu23` | the model extras below – load exactly one |
 | `gb_curve` (optional) | weather curve in the hub: every minute the CH flow setpoint from the boiler's outdoor probe, between two points, clamped to the boiler limits |
