@@ -38,12 +38,13 @@ give no register map or terminals for the BMS option, so it stays open.
 |---|---|
 | [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) + USB-C 5 V power supply | – |
 | [M5Stack ATOMIC PortABC](https://shop.m5stack.com/products/atomic-portabc-extension-base) | under the AtomS3 Lite |
-| Grove cable + Grove → 4-pin screw terminal | **port A** – the junction: GND and 5 V go both to the Master shield and to the regulator |
+| Grove cable + [Grove → 4-pin screw terminal](https://botland.com.pl/grove-konwertery-i-przetworniki/11348-grove-4-pinowe-zlacze-srubowe-5904422340063.html) | **port A** – the junction: GND and 5 V go both to the Master shield and to the regulator |
 | [DIYLess Master OpenTherm Shield](https://diyless.com/product/master-opentherm-shield) | port A (G39 → D2, G38 → D1, GND) → boiler VICTRIX TERA, terminals 41 / 44 |
 | 3.3 V regulator module AMS1117-3.3 | IN ← 5 V of port A, GND common, **OUT → 3V3 of both shields** |
 | [DIYLess Slave OpenTherm Shield](https://diyless.com/product/slave-opentherm-shield) | **port C** (G6 → D6, G5 → D7, GND, 5 V) → the indoor unit's OpenTherm output (the wires that went to the boiler) |
-| M5Stack RS485 Unit no. 1 | **port B** (RX G8, TX G7) → F1 / F2, listening in parallel |
-| M5Stack RS485 Unit no. 2 | **Grove AtomS3** socket next to USB-C (RX G1, TX G2) → zone bus (Modbus 9600 8E1) |
+| [Grove → Dupont cables, 4-pin, female / male 2.54 mm](https://botland.com.pl/przewody-polaczeniowe-grove/21690-grove-zestaw-5-przewodow-4-pin-2mm-przewody-zenskiemeskie-254mm-20cm-6972934173751.html) | port C → Slave shield; the loose wires from the screw terminal to the Master shield and the regulator |
+| [M5Stack Isolated RS485 Unit](https://botland.com.pl/moduly-unit-moduly-komunikacyjne/19118-izolowany-modul-nadawczo-odbiorczy-rs485-modul-rozszerzen-unit-do-modulow-deweloperskich-m5stack-5904422363673.html) no. 1 | **port B** (RX G8, TX G7) → F1 / F2, listening in parallel |
+| [M5Stack Isolated RS485 Unit](https://botland.com.pl/moduly-unit-moduly-komunikacyjne/19118-izolowany-modul-nadawczo-odbiorczy-rs485-modul-rozszerzen-unit-do-modulow-deweloperskich-m5stack-5904422363673.html) no. 2 | **Grove AtomS3** socket next to USB-C (RX G1, TX G2) → zone bus (Modbus 9600 8E1) |
 
 ![TRIO HYDRO HYBRID: OpenTherm gateway, F1/F2 and the zone bus on one AtomS3 Lite with the PortABC](images/en/trio-hydro-hybrid-wiring.png)
 

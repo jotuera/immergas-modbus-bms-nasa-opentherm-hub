@@ -38,12 +38,13 @@ sygnały + 2 × RS485 po 2), więc 3,3 V dla płytek daje mały stabilizator, a 
 |---|---|
 | [M5Stack AtomS3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) + zasilacz USB-C 5 V | – |
 | [M5Stack ATOMIC PortABC](https://shop.m5stack.com/products/atomic-portabc-extension-base) | pod AtomS3 Lite |
-| kabel Grove + złącze śrubowe Grove 4-pin | **port A** – rozgałęźnik: GND i 5 V idą do płytki Master i do stabilizatora |
+| kabel Grove + [złącze śrubowe Grove 4-pin](https://botland.com.pl/grove-konwertery-i-przetworniki/11348-grove-4-pinowe-zlacze-srubowe-5904422340063.html) | **port A** – rozgałęźnik: GND i 5 V idą do płytki Master i do stabilizatora |
 | [DIYLess Master OpenTherm Shield](https://diyless.com/product/master-opentherm-shield) | port A (G39 → D2, G38 → D1, GND) → kocioł VICTRIX TERA, zaciski 41 / 44 |
 | moduł stabilizatora 3,3 V AMS1117-3.3 | IN ← 5 V z portu A, GND wspólna, **OUT → 3V3 obu płytek** |
 | [DIYLess Slave OpenTherm Shield](https://diyless.com/product/slave-opentherm-shield) | **port C** (G6 → D6, G5 → D7, GND, 5 V) → wyjście OpenTherm jednostki wewnętrznej (przewody, które szły do kotła) |
-| M5Stack RS485 Unit nr 1 | **port B** (RX G8, TX G7) → F1 / F2, nasłuch równolegle |
-| M5Stack RS485 Unit nr 2 | gniazdo **Grove AtomS3** przy USB-C (RX G1, TX G2) → magistrala strefowa (Modbus 9600 8E1) |
+| [przewody Grove → Dupont, 4-pin, żeńskie / męskie 2,54 mm](https://botland.com.pl/przewody-polaczeniowe-grove/21690-grove-zestaw-5-przewodow-4-pin-2mm-przewody-zenskiemeskie-254mm-20cm-6972934173751.html) | port C → płytka Slave; luźne przewody ze złącza śrubowego do płytki Master i stabilizatora |
+| [M5Stack Isolated RS485 Unit](https://botland.com.pl/moduly-unit-moduly-komunikacyjne/19118-izolowany-modul-nadawczo-odbiorczy-rs485-modul-rozszerzen-unit-do-modulow-deweloperskich-m5stack-5904422363673.html) nr 1 | **port B** (RX G8, TX G7) → F1 / F2, nasłuch równolegle |
+| [M5Stack Isolated RS485 Unit](https://botland.com.pl/moduly-unit-moduly-komunikacyjne/19118-izolowany-modul-nadawczo-odbiorczy-rs485-modul-rozszerzen-unit-do-modulow-deweloperskich-m5stack-5904422363673.html) nr 2 | gniazdo **Grove AtomS3** przy USB-C (RX G1, TX G2) → magistrala strefowa (Modbus 9600 8E1) |
 
 ![TRIO HYDRO HYBRID: bramka OpenTherm, F1/F2 i magistrala strefowa na jednym AtomS3 Lite z PortABC](images/trio-hydro-hybrid-wiring.png)
 
