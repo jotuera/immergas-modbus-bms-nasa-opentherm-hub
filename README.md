@@ -23,6 +23,7 @@ OpenTherm – and brings them to Home Assistant, with a set of Lovelace cards th
 | **Generator BMS** (Modbus RTU) | gas boilers VICTRIX ZEUS Superior 25–35, EXTRA, PRO V2; MAGIS M TOP heat pump; IMG-BUS boilers (ZEUS, EXA, TERA, OMNIA, HERCULES …) through the Immergas IU23 interface (hypothesis) | Modbus master: heat request, flow and DHW setpoints, temperatures, faults | experimental | [Gas boilers over Modbus BMS](docs/gas-boiler-bms.md) |
 | **Midea M-Thermal Modbus** (H1 / H2) | MAGIS M (R32) | Modbus master: on / off, mode, setpoints, curves, compressor, energy, COP | experimental | [MAGIS M heat pumps](docs/magis-m-midea.md) |
 | **Samsung NASA F1/F2 + OpenTherm + zone Modbus** | TRIO HYDRO ELECTRIC / HYBRID 5 – 12 (UE HYDRO HP outdoor unit, VICTRIX TERA 24 PLUS boiler) | another hub on the same packages: outdoor unit over F1/F2, the boiler through an OpenTherm gateway | configuration ready, untested – testers wanted | [TRIO HYDRO](docs/trio-hydro.md) |
+| **Modbus / OpenTherm over TCP** (Immergas Dominus Wi-Fi module) | units with the Dominus module: MAGIS PRO / COMBO V2 (Modbus), OpenTherm boilers (VICTRIX ZEUS, TERA …) | no ESP: a Home Assistant integration (HACS) talks to the Dominus over local TCP – no cloud, no MQTT | stable | [Immergas Dominus](https://github.com/jotuera/immergas-dominus) |
 
 Each page has the hardware, the wiring and the knowledge base of its protocol. On top of the buses the hub computes
 what none of them shows alone – COP now and today, heat output, the operating state, starts and runtime, the last DHW

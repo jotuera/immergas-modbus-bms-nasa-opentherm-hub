@@ -24,6 +24,7 @@ dashboard.
 | **BMS generatora** (Modbus RTU) | kotły gazowe VICTRIX ZEUS Superior 25–35, EXTRA, PRO V2; pompa ciepła MAGIS M TOP; kotły IMG-BUS (ZEUS, EXA, TERA, OMNIA, HERCULES …) przez interfejs Immergas IU23 (hipoteza) | master Modbus: żądanie grzania, nastawy zasilania i CWU, temperatury, błędy | eksperymentalny | [Kotły gazowe po Modbus BMS](docs/gas-boiler-bms.pl.md) |
 | **Modbus Midea M-Thermal** (H1 / H2) | MAGIS M (R32) | master Modbus: wł. / wył., tryb, nastawy, krzywe, sprężarka, energia, COP | eksperymentalny | [Pompy ciepła MAGIS M](docs/magis-m-midea.pl.md) |
 | **Samsung NASA F1/F2 + OpenTherm + Modbus strefowy** | TRIO HYDRO ELECTRIC / HYBRID 5 – 12 (jednostka zewnętrzna UE HYDRO HP, kocioł VICTRIX TERA 24 PLUS) | kolejny hub na tych samych pakietach: jednostka zewnętrzna po F1/F2, kocioł przez bramkę OpenTherm | konfiguracja gotowa, niesprawdzona – szukamy testerów | [TRIO HYDRO](docs/trio-hydro.pl.md) |
+| **Modbus / OpenTherm po TCP** (moduł Wi-Fi Immergas Dominus) | urządzenia z modułem Dominus: MAGIS PRO / COMBO V2 (Modbus), kotły OpenTherm (VICTRIX ZEUS, TERA …) | bez ESP: integracja Home Assistant (HACS) rozmawia z Dominusem po lokalnym TCP – bez chmury, bez MQTT | stabilny | [Immergas Dominus](https://github.com/jotuera/immergas-dominus) |
 
 Każda strona ma sprzęt, schemat podłączenia i bazę wiedzy swojego protokołu. Ponad magistralami hub liczy to, czego
 żadna z nich nie pokazuje osobno – COP teraz i dziś, moc cieplną, stan pracy, starty i czas pracy, ostatni cykl CWU
