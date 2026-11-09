@@ -95,25 +95,30 @@ function liveEntity(hass: any, id: string): boolean {
  *  the integration keeps in Home Assistant (Dominus 1.6). */
 function otDashboard(config: any, t: (a: string, b: string) => string) {
   const card = (type: string, extra: Record<string, unknown> = {}) => ({ type: "custom:" + type, grid_options: { columns: "full" }, source: "dominus", ...extra });
+  const online = () => card("immergas-settings-card", { part: "online", ...(config.settings ?? {}) });
+  const offline = () => card("immergas-settings-card", { part: "offline", ...(config.settings_offline ?? {}) });
+  const wide = [{ condition: "screen", media_query: "(min-width: 768px)" }], narrow = [{ condition: "screen", media_query: "(max-width: 767px)" }];
   return {
     title: config.title ?? "Immergas Dominus",
     views: [{
       title: t("Kocioł", "Boiler"), path: "dominus", icon: "mdi:water-boiler", type: "sections", max_columns: 3,
       sections: [
-        // diagram + charts + connectivity (2 columns) | now + setpoints; then weather curve + Data-ID map | operating mode | schedule + boiler + settings
+        // diagram + charts + connectivity (2 columns) | now + setpoints; then weather curve + Data-ID map | operating mode | schedule + boiler
         { type: "grid", column_span: 2, cards: [card("immergas-diagram-card", { stats: false, ...(config.diagram ?? {}) }), card("immergas-charts-card", config.charts ?? {}),
           card("immergas-links-card", { four_in_row: true, ...(config.links ?? {}) })] },
         { type: "grid", cards: [card("immergas-now-card", config.now ?? {}), card("immergas-setpoints-card", config.setpoints ?? {})] },
         { type: "grid", cards: [card("immergas-ot-curve-card", config.ot_curve ?? {}), card("immergas-ot-map-card", config.ot_map ?? {})] },
         { type: "grid", cards: [card("immergas-mode-card", config.mode ?? {})] },
-        { type: "grid", cards: [card("immergas-schedule-card", config.schedule ?? {}), card("immergas-ot-boiler-card", config.ot_boiler ?? {}),
-          card("immergas-settings-card", { part: "online", ...(config.settings ?? {}) }),
-          card("immergas-settings-card", { part: "offline", ...(config.settings_offline ?? {}) })] },
+        { type: "grid", cards: [card("immergas-schedule-card", config.schedule ?? {}), card("immergas-ot-boiler-card", config.ot_boiler ?? {})] },
         // Dominus 1.6.14: today's analysis (gas, condensing, short cycling, DHW, room / degree days) - hidden tiles without data
         { type: "grid", column_span: 3, cards: [card("immergas-day-card", config.day ?? {})] },
         // calibration from the Today analysis and the boiler menu profile
         { type: "grid", column_span: 3, cards: [card("immergas-calibration-card", config.calibration ?? {})] },
         { type: "grid", column_span: 3, cards: [card("immergas-automations-card", config.automations ?? {})] },
+        // online settings and boiler parameters: 50 % each, one under the other on a phone
+        { type: "grid", column_span: 3, cards: [
+          { type: "horizontal-stack", grid_options: { columns: "full" }, visibility: wide, cards: [online(), offline()] },
+          { ...online(), visibility: narrow }, { ...offline(), visibility: narrow }] },
       ],
     }],
   };
