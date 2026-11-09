@@ -719,6 +719,16 @@ granicę Carnota). Shelly mierzy więc źle (odwrócony przekładnik albo inna f
 61 Hz NASA podaje 3,1 kW, a Shelly mierzy 9,3 A × 224 V = 2,1 kVA, więc NASA może zawyżać nawet ~1,5 ×. Rozstrzygnie
 pomiar prądu miernikiem cęgowym na zasilaniu jednostki zewnętrznej.
 
+
+Listopad 2026, pierwsze porównanie z licznikiem rozliczeniowym (odczyt głównego licznika przez Piggymeter, jedna noc
+w panelu Energia Home Assistanta, wartości odczytane z wykresu): z energią NASA jako pompą (około 1,36 kWh na godzinę)
+niezmierzona reszta domu to około 0,35 kWh na godzinę, blisko 0,25 kWh na godzinę z godzin postoju pompy; z Shelly
+(około 0,70 kWh na godzinę) to około 1,0. To **przemawia za NASA** i za zaniżaniem przez Shelly, więc zawyżanie przez
+NASA o 1,5 × jest mało prawdopodobne. Shelly nie ma też zwykłego błędu skali: minuta po minucie stosunek zmienia się od
+1,3 × (odszranianie) do 2,4 × (15–30 Hz). NASA obejmuje tylko jednostkę zewnętrzną, więc jednostka wewnętrzna na
+osobnym zasilaniu jest pominięta, a COP z NASA jest nieco zawyżony. Jedna noc to nie ostateczny dowód; byłby nim pomiar
+miernikiem cęgowym.
+
 ---
 
 ## 10. Duplikaty encji: DD > TT > FF

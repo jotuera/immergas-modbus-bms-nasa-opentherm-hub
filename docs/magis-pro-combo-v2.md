@@ -134,6 +134,15 @@ entity at the start and end of a period (a few days with the boiler running), di
 increase and multiply both *Gas consumption CH / DHW (calibration)* values by that factor. *Gas: reset counter*
 starts from zero. On a Magis Pro (no gas boiler) the entity stays at 0 and is not needed.
 
+## Heat pump electricity in the Energy dashboard
+
+With the F1/F2 bus connected, **Immergas FF - Total Consumed Energy** (kWh, `device_class: energy`,
+`state_class: total_increasing`) is ready for the Home Assistant Energy dashboard: *Settings → Dashboards → Energy →
+Individual devices → Add device* and pick this entity. No separate energy meter is needed for the outdoor unit.
+
+It covers the **outdoor unit only** (reported by the unit itself over NASA). If the indoor unit has its own supply, its
+circulation pump and electronics are not included and stay in the dashboard's untracked consumption.
+
 ## How it stays safe
 
 - **F1/F2:** only the outing mode, the compressor frequency limit and the outing targets FSV 5011–5019 are ever

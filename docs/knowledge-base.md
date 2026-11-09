@@ -730,6 +730,15 @@ comes out at 13.6 (above the Carnot limit). So the Shelly measures wrongly (reve
 voltage input). On the other hand, at 61 Hz NASA reports 3.1 kW while the Shelly measures 9.3 A × 224 V = 2.1 kVA, so
 NASA may overstate by up to ~1.5 ×. A clamp-meter current reading on the outdoor-unit supply will settle it.
 
+
+November 2026, first comparison with the billing meter (a Piggymeter reading of the main meter, one night in the Home
+Assistant Energy dashboard, values read from the chart): with NASA energy as the heat pump (about 1.36 kWh per hour)
+the untracked rest of the house is about 0.35 kWh per hour, close to the 0.25 kWh per hour of the hours with the heat
+pump off; with the Shelly (about 0.70 kWh per hour) it is about 1.0. This **supports NASA** and the Shelly reading low,
+which also makes NASA overstating by 1.5 × unlikely. The Shelly is not a plain scale error either: minute by minute the
+ratio goes from 1.3 × (defrost) to 2.4 × (15–30 Hz). NASA covers the outdoor unit only, so the indoor unit on its own
+supply is left out and COP from NASA is slightly high. One night is not a final proof; a clamp-meter reading would be.
+
 ---
 
 ## 10. Duplicate entities: DD > TT > FF

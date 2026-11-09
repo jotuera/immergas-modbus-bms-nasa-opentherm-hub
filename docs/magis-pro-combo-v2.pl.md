@@ -135,6 +135,15 @@ i na końcu okresu (kilka dni z pracującym kotłem), podziel przyrost gazomierz
 wartości *Gaz zużycie CO / CWU (kalibracja)* przez ten współczynnik. *Gaz: wyzeruj licznik* zaczyna od zera.
 W Magis Pro (bez kotła gazowego) encja zostaje na 0 i nie jest potrzebna.
 
+## Prąd pompy ciepła w panelu Energia
+
+Przy podłączonej magistrali F1/F2 encja **Immergas FF - Pobrana energia (łącznie)** (kWh, `device_class: energy`,
+`state_class: total_increasing`) jest gotowa do panelu Energia w Home Assistancie: *Ustawienia → Dashboardy → Energia →
+Poszczególne urządzenia → Dodaj urządzenie* i wybierz tę encję. Do jednostki zewnętrznej nie trzeba osobnego licznika.
+
+Obejmuje **tylko jednostkę zewnętrzną** (wartość podaje sama jednostka po NASA). Jeśli jednostka wewnętrzna ma własne
+zasilanie, jej pompa obiegowa i elektronika nie są wliczone i zostają w niezmierzonym zużyciu panelu.
+
 ## Bezpieczeństwo
 
 - **F1/F2:** zapisywane są tylko tryb wyjazdowy, ograniczenie częstotliwości sprężarki i cele trybu wyjazdowego
