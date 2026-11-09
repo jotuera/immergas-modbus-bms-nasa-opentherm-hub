@@ -8643,6 +8643,13 @@
   ]
  },
  {
+  "en": "before DHW",
+  "pl": "przed CWU",
+  "files": [
+   "diagram.ts"
+  ]
+ },
+ {
   "en": "return ",
   "pl": "powrót ",
   "files": [
@@ -8652,6 +8659,13 @@
  {
   "en": "set ",
   "pl": "nastawa ",
+  "files": [
+   "diagram.ts"
+  ]
+ },
+ {
+  "en": "max. ",
+  "pl": "maks. ",
   "files": [
    "diagram.ts"
   ]

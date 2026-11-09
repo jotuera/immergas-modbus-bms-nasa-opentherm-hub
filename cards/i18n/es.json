@@ -2455,5 +2455,7 @@
   "IBH heater today": "Resistencia IBH hoy",
   "TBH heater today": "Resistencia TBH hoy",
   "Heater electricity today (est.)": "Electricidad de resistencias hoy (est.)",
-  "System COP today (with heaters)": "COP del sistema hoy (con resistencias)"
+  "System COP today (with heaters)": "COP del sistema hoy (con resistencias)",
+  "max. ": "máx. ",
+  "before DHW": "antes de ACS"
 }

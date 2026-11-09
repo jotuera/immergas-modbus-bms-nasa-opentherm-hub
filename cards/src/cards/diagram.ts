@@ -68,6 +68,8 @@ class ImmergasDiagramCard extends HubCard {
       ${this.label(64, 80, cut(title, 58), col, 16, "start", 800)}
       ${sub ? this.label(64, 108, cut(sub, 86), "", 11.5, "start", 600) : nothing}</g>`;
   }
+  private dhwAt = 0;
+  private chFlow = NaN;
   private val(k: Key, d = 1, unit = "") { const v = this.n(k); return isNaN(v) ? "–" : this.f(v, d) + unit; }
 
   /** Dominus: cylinder samples from the last 10 min of history, then from every state update */
@@ -137,13 +139,20 @@ class ImmergasDiagramCard extends HubCard {
     g.push(this.label(540, 226, this.t("CO", "CH"), heat ? "peach" : "overlay1", 10, "middle", 800));
     const ph = this.bad("zone1_phase") ? "" : this.txt("zone1_phase") ?? "";
     const chT = this.n("dom_ch_time_today"), st = this.n("dom_starts_today");
+    // OpenTherm has one flow reading (Data-ID 25): while the boiler heats the cylinder, and for a few minutes after, it is
+    // not the heating circuit - the house keeps the last value from before DHW
+    if (ot && dw) this.dhwAt = now;
+    const afterDhw = ot && now - this.dhwAt < 3 * 60e3;
+    if (ot && !afterDhw && !isNaN(this.n("ot_flow"))) this.chFlow = this.n("ot_flow");
+    const houseFlow = afterDhw ? this.chFlow : this.n("ot_flow");
     g.push(svg`<g @click=${this.tap(ot ? "ot_flow" : "zone1")} class="hit">
         <path d="M 680 92 L 790 30 L 900 92 L 900 230 L 680 230 Z" class="house" style="stroke:${c(heat ? "peach" : "overlay2")}"/>
         <path d="M 696 214 h 188 M 696 214 q 0 -8 10 -8 h 168 q 10 0 10 -8 q 0 -8 -10 -8 h -168" fill="none"
           stroke=${c(heat ? "peach" : "overlay2")} stroke-width="2.5" stroke-linecap="round" style=${heat ? `filter:drop-shadow(0 0 4px ${ca("peach", 0.7)})` : "opacity:.5"}/>
         ${ot ? svg`${this.label(790, 92, this.t("Ogrzewanie", "Heating"), "", 10, "middle", 700)}
-          ${this.label(790, 134, isNaN(this.n("ot_flow")) ? "–" : this.f(this.n("ot_flow"), 1, 1) + "°", "", 24)}
-          ${this.label(790, 156, this.t("powrót ", "return ") + this.f(this.n("ot_ret"), 1, 1) + "° · " + this.t("nastawa ", "set ") + this.f(this.n("ot_ch_set"), 0) + "°", "", 10, "middle", 600)}`
+          ${this.label(790, 134, isNaN(houseFlow) ? "–" : this.f(houseFlow, 1, 1) + "°", "", 24)}
+          ${this.label(790, 156, (afterDhw ? this.t("przed CWU", "before DHW") : this.t("powrót ", "return ") + this.f(this.n("ot_ret"), 1, 1) + "°") + " · "
+            + (isNaN(this.n("outdoor")) ? this.t("nastawa ", "set ") : this.t("maks. ", "max. ")) + this.f(this.n("ot_ch_set"), 0) + "°", "", 10, "middle", 600)}`
         : svg`${this.label(790, 92, this.t("Strefa 1", "Zone 1"), "", 10, "middle", 700)}
         ${this.label(790, 134, isNaN(z1) ? "–" : this.f(z1, 1, 1) + "°", "", 24)}
         ${this.label(790, 156, this.t("zadana ", "set ") + this.f(zs, 1, 1) + "°" + (ph ? " · " + ph : ""), "", 10, "middle", 600)}`}

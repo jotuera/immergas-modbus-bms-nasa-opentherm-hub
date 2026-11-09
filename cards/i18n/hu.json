@@ -2455,5 +2455,7 @@
   "IBH heater today": "IBH fűtőpatron ma",
   "TBH heater today": "TBH fűtőpatron ma",
   "Heater electricity today (est.)": "Fűtőpatronok áramfelvétele ma (becs.)",
-  "System COP today (with heaters)": "Rendszer COP ma (fűtőpatronokkal)"
+  "System COP today (with heaters)": "Rendszer COP ma (fűtőpatronokkal)",
+  "max. ": "max. ",
+  "before DHW": "HMV előtt"
 }

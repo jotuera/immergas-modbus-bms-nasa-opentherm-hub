@@ -2455,5 +2455,7 @@
   "IBH heater today": "Topná tyč IBH dnes",
   "TBH heater today": "Topná tyč TBH dnes",
   "Heater electricity today (est.)": "Elektřina topných tyčí dnes (odhad)",
-  "System COP today (with heaters)": "COP systému dnes (s topnými tyčemi)"
+  "System COP today (with heaters)": "COP systému dnes (s topnými tyčemi)",
+  "max. ": "max. ",
+  "before DHW": "před TUV"
 }

@@ -2455,5 +2455,7 @@
   "IBH heater today": "Element IBH vandaag",
   "TBH heater today": "Element TBH vandaag",
   "Heater electricity today (est.)": "Stroom elementen vandaag (geschat)",
-  "System COP today (with heaters)": "Systeem-COP vandaag (met elementen)"
+  "System COP today (with heaters)": "Systeem-COP vandaag (met elementen)",
+  "max. ": "max. ",
+  "before DHW": "vóór SWW"
 }

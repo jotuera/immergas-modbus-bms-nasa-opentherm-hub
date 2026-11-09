@@ -2455,5 +2455,7 @@
   "IBH heater today": "Heizstab IBH heute",
   "TBH heater today": "Heizstab TBH heute",
   "Heater electricity today (est.)": "Strom Heizstäbe heute (gesch.)",
-  "System COP today (with heaters)": "System-COP heute (mit Heizstäben)"
+  "System COP today (with heaters)": "System-COP heute (mit Heizstäben)",
+  "max. ": "max. ",
+  "before DHW": "vor WW"
 }
