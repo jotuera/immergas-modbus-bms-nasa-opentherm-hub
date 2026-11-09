@@ -537,19 +537,19 @@ class ImmergasNowCard extends HubCard {
   .banner { cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 13px; margin-bottom: 8px; }
   .banner ha-icon { --mdc-icon-size: 24px; flex: none; }
   .bt { font-size: 13px; font-weight: 800; letter-spacing: .04em; }
-  .bs { font-size: 11px; opacity: .75; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bs { font-size: 11px; opacity: var(--ih-o75, .75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .hero { cursor: pointer; display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 4px 10px; padding: 12px 14px; border-radius: 12px; min-height: 96px; }
   .hi { --mdc-icon-size: 40px; align-self: center; justify-self: center; }
   .hm { min-width: 0; }
-  .hn { font-size: 12px; font-weight: 700; opacity: .65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hn { font-size: 12px; font-weight: 700; opacity: var(--ih-o65, .65); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .mode { font-size: 22px; font-weight: 800; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sub { font-size: 11.5px; opacity: .75; }
+  .sub { font-size: 11.5px; opacity: var(--ih-o75, .75); }
   .flow { font-size: 15px; font-weight: 800; white-space: nowrap; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
   .copr { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); grid-auto-flow: column; gap: 6px; margin-top: 8px; }
   .cop { cursor: pointer; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 4px 6px; border-radius: 11px; }
   /* three buttons in a narrow hero: a smaller label that wraps ("COP" over "NOW") instead of spilling over */
   .cop .cl { font-size: 8.5px; letter-spacing: .02em; text-align: center; line-height: 1.15; }
-  .cl { font-size: 9.5px; font-weight: 800; opacity: .6; letter-spacing: .06em; }
+  .cl { font-size: 9.5px; font-weight: 800; opacity: var(--ih-o6, .6); letter-spacing: .06em; }
   .cv { font-size: 22px; font-weight: 800; line-height: 1.1; }
   .tmr { display: flex; flex-direction: column; gap: 9px; margin-top: 8px; padding: 10px 12px; border-radius: 12px; background: rgba(var(--ih-overlay1-rgb), .06); }
   .tb { cursor: pointer; min-width: 0; }
@@ -557,17 +557,17 @@ class ImmergasNowCard extends HubCard {
   .tbh ha-icon { --mdc-icon-size: 16px; flex: none; }
   .tbl { font-size: 11.5px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
   .tbv { margin-left: auto; font-size: 12.5px; font-weight: 800; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .tbo { opacity: .5; font-weight: 700; }
+  .tbo { opacity: var(--ih-o5, .5); font-weight: 700; }
   .tbt { height: 6px; border-radius: 3px; margin: 4px 0 3px; background: rgba(var(--ih-overlay1-rgb), .16); overflow: hidden; }
   .tbf { height: 100%; border-radius: 3px; transition: width .6s; }
   .tbf.ind { animation: ih-pulse 2s ease-in-out infinite; }
-  @keyframes ih-pulse { 50% { opacity: .35; } }
-  .tbs { font-size: 10.5px; opacity: .65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @keyframes ih-pulse { 50% { opacity: var(--ih-o35, .35); } }
+  .tbs { font-size: 10.5px; opacity: var(--ih-o65, .65); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sh { display: flex; align-items: baseline; gap: 8px; margin-top: 2px; min-width: 0; }
   .sh .tbs { margin-left: auto; }
   .strip { position: relative; height: 14px; border-radius: 4px; overflow: hidden; background: rgba(var(--ih-overlay1-rgb), .08); }
   .sg { position: absolute; top: 0; bottom: 0; }
-  .sx { display: flex; justify-content: space-between; font-size: 9.5px; opacity: .5; font-variant-numeric: tabular-nums; margin-top: -5px; }
+  .sx { display: flex; justify-content: space-between; font-size: 9.5px; opacity: var(--ih-o5, .5); font-variant-numeric: tabular-nums; margin-top: -5px; }
   .chips2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
   .chips2 > * { min-width: 0; display: flex; }
   .chips2 > * > .chip { flex: 1; }

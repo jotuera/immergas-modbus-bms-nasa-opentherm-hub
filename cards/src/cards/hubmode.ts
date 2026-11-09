@@ -70,7 +70,7 @@ class ImmergasHubModeCard extends HubCard {
     const cur = this.current;
     return ui.filter(([md]) => this.fam === "ot" || !!this.gbOption(md)).map(([md, lbl, icon, col]) => {
       const sel = cur === md, tag = "hm_" + md, armed = this.isArmed(tag);
-      return html`<div class="mb" style=${sel ? box(col, true) : "background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)"}
+      return html`<div class="mb" style=${sel ? box(col, true) : "background:rgba(var(--ih-ov-rgb), .04);border:1px solid rgba(var(--ih-ov-rgb), .06)"}
         @click=${() => !sel && this.confirm(tag, () => this.apply(md))}>
         <ha-icon icon=${icon} style="color:${sel ? c(col) : "var(--secondary-text-color)"}"></ha-icon>
         <span style=${sel ? `color:${c(col)}` : "opacity:.7"}>${armed ? this.t("Potwierdź", "Confirm") : lbl}</span></div>`;
@@ -146,7 +146,7 @@ class ImmergasHubModeCard extends HubCard {
 
   static styles = [HubCard.styles, css`
     .head > div:nth-child(2) { min-width: 0; }
-    .hs { font-size: 10px; opacity: .45; }
+    .hs { font-size: 10px; opacity: var(--ih-o45, .45); }
     .modes { display: flex; gap: 6px; }
     .mb { cursor: pointer; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 9px 2px; border-radius: 13px; }
     .mb ha-icon { --mdc-icon-size: 20px; }
@@ -155,7 +155,7 @@ class ImmergasHubModeCard extends HubCard {
     .gwh ha-icon { --mdc-icon-size: 18px; flex: none; }
     .ctl { flex: 1 1 200px; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 14px; }
     .cn { font-size: 12px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .cs { font-size: 10px; opacity: .55; }
+    .cs { font-size: 10px; opacity: var(--ih-o55, .55); }
     .cvv { min-width: 50px; text-align: center; font-size: 16px; font-weight: 800; white-space: nowrap; }
     .hint { cursor: pointer; font-size: 11px; margin-top: 8px; color: var(--ih-red); }
   `];

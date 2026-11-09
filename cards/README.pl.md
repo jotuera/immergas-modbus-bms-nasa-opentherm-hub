@@ -69,7 +69,7 @@ entity_id (np. `kotlownia_…`) ani zmiana nazwy encji w HA nie mają znaczenia.
 korzysta z nazw przyjaznych. Etykiety są w języku Home Assistanta: polski, angielski, czeski, niemiecki, hiszpański, francuski, węgierski, włoski, niderlandzki, portugalski albo słowacki (pozostałe – angielski). Teksty są w kodzie jako `this.t(polski, angielski)`; `tools/extract_strings.cjs` je zbiera, tłumaczenia są w `i18n/<język>.json`, a `tools/gen_i18n.py` buduje `src/i18n_data.ts`.
 
 Kolory biorą zmienne palety Catppuccin, gdy taki motyw jest aktywny, a w innym przypadku wbudowane wartości Catppuccin
-Mocha.
+Mocha. Na jasnej karcie te same kolory są automatycznie przyciemniane, żeby tekst był czytelny na białym tle.
 
 ## Instalacja przez HACS (zalecana)
 

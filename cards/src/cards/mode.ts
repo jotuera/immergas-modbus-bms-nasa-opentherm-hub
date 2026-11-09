@@ -33,7 +33,7 @@ class ImmergasModeCard extends HubCard {
       const opt = byName ? known[i] : opts[i], [lbl0, , icon0, col0] = ui[i], sel = cur === opt, tag = "mode" + i, armed = this.isArmed(tag);
       const lbl = i === 0 && off ? "OFF" : lbl0, icon = i === 0 && off ? "mdi:power" : off ? "mdi:lock-outline" : icon0, lock = off && !sel;
       const col = i === 0 && off ? "red" : col0;
-      return html`<div class="mb ${lock ? "lock" : ""}" style=${sel ? box(col, true) : "background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)"}
+      return html`<div class="mb ${lock ? "lock" : ""}" style=${sel ? box(col, true) : "background:rgba(var(--ih-ov-rgb), .04);border:1px solid rgba(var(--ih-ov-rgb), .06)"}
         title=${off ? this.t("Piec wyłączony przyciskiem (OFF) – włącz go na piecu", "Boiler switched off with its button (OFF) – switch it on at the boiler") : ""}
         @click=${() => !off && !sel && this.confirm(tag, () => this.call("select", "select_option", "mode", { option: opt }))}>
         <ha-icon icon=${icon} style="color:${sel ? c(col) : "var(--secondary-text-color)"}"></ha-icon>
@@ -48,7 +48,7 @@ class ImmergasModeCard extends HubCard {
     const cur = this.s("mode");
     return ui.filter(([o]) => opts.includes(o)).map(([opt, lbl, icon, col]) => {
       const sel = cur === opt, tag = "mode_" + opt, armed = this.isArmed(tag);
-      return html`<div class="mb" style=${sel ? box(col, true) : "background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)"}
+      return html`<div class="mb" style=${sel ? box(col, true) : "background:rgba(var(--ih-ov-rgb), .04);border:1px solid rgba(var(--ih-ov-rgb), .06)"}
         @click=${() => !sel && !this.otRO && this.confirm(tag, () => this.call("select", "select_option", "mode", { option: opt }))}>
         <ha-icon icon=${icon} style="color:${sel ? c(col) : "var(--secondary-text-color)"}"></ha-icon>
         <span style=${sel ? `color:${c(col)}` : "opacity:.7"}>${armed ? this.t("Potwierdź", "Confirm") : lbl}</span></div>`;
@@ -85,7 +85,7 @@ class ImmergasModeCard extends HubCard {
       <ha-icon icon="mdi:bacteria-outline" style="color:${c(col)}" @click=${() => this.moreInfo("p15")}></ha-icon>
       <div class="cx" @click=${() => this.moreInfo("p15")}><div class="nt">${this.t("Anty-legionella", "Anti-legionella")} <span style="font-size:9.5px;opacity:.5">P15</span></div>
         <div class="ns" style="color:${c(col)}">${st}</div></div>
-      <div class="tgl ${bad ? "dis" : ""}" style="flex:none;align-self:flex-start;background:${on ? ca("red", 0.35) : "rgba(255,255,255,.08)"}${conf ? `;outline:2px solid ${c("red")}` : ""}"
+      <div class="tgl ${bad ? "dis" : ""}" style="flex:none;align-self:flex-start;background:${on ? ca("red", 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${conf ? `;outline:2px solid ${c("red")}` : ""}"
         @click=${() => !bad && this.confirm("tg_p15", () => this.call("switch", on ? "turn_off" : "turn_on", "p15"))}>
         <div class="kn" style="left:${on ? 23 : 3}px;background:${on ? c("red") : c("overlay1")}"></div></div>
       ${unset ? chips : tm !== null || d !== null ? html`<div class="tcs full">${tchip(this.opt("legionella_day"), this.t("DZIEŃ · P17", "DAY · P17"), d === null ? null : longDay(d), "red")}
@@ -111,7 +111,7 @@ class ImmergasModeCard extends HubCard {
       <ha-icon icon="mdi:bacteria-outline" style="color:${c(col)}" @click=${() => this.moreInfo("ot_leg")}></ha-icon>
       <div class="cx" @click=${() => this.moreInfo("ot_leg")}><div class="nt">${this.t("Anty-legionella", "Anti-legionella")}</div>
         <div class="ns" style="color:${c(col)}">${st}</div></div>
-      <div class="tgl ${bad ? "dis" : ""}" style="flex:none;align-self:flex-start;background:${on ? ca("red", 0.35) : "rgba(255,255,255,.08)"}${conf ? `;outline:2px solid ${c("red")}` : ""}"
+      <div class="tgl ${bad ? "dis" : ""}" style="flex:none;align-self:flex-start;background:${on ? ca("red", 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${conf ? `;outline:2px solid ${c("red")}` : ""}"
         @click=${() => !bad && this.confirm("tg_otleg", () => this.call("select", "select_option", "ot_leg", { option: on ? "off" : "weekly" }))}>
         <div class="kn" style="left:${on ? 23 : 3}px;background:${on ? c("red") : c("overlay1")}"></div></div>
       ${on ? html`<div class="tcs full">${tchip(this.eid("ot_leg"), this.t("DZIEŃ", "DAY"), v === "daily" ? this.t("Codziennie", "Daily") : this.t("Poniedziałek", "Monday"), "red")}
@@ -138,7 +138,7 @@ class ImmergasModeCard extends HubCard {
       <ha-icon icon="mdi:bag-suitcase-outline" style="color:${c(col)}" @click=${() => this.moreInfo("dom_vacation")}></ha-icon>
       <div class="cx" @click=${() => this.moreInfo("dom_vacation")}><div class="nt">${this.t("Tryb wyjazdowy", "Vacation")}</div>
         <div class="ns" style="color:${c(on ? "sky" : "overlay2")}">${st}</div></div>
-      <div class="tgl ${bad ? "dis" : ""}" style="flex:none;align-self:flex-start;background:${on ? ca("sky", 0.35) : "rgba(255,255,255,.08)"}${conf ? `;outline:2px solid ${c("sky")}` : ""}"
+      <div class="tgl ${bad ? "dis" : ""}" style="flex:none;align-self:flex-start;background:${on ? ca("sky", 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${conf ? `;outline:2px solid ${c("sky")}` : ""}"
         @click=${() => !bad && this.confirm("tg_vac", () => this.call("switch", on ? "turn_off" : "turn_on", "dom_vacation"))}>
         <div class="kn" style="left:${on ? 23 : 3}px;background:${on ? c("sky") : c("overlay1")}"></div></div>
       <div class="tcs full">${this.ot || this.mtx ? tchip(this.eid("ot_vac_action"), this.t("NA CZAS URLOPU", "DURING"), this.s("ot_vac_action") === "summer" ? this.t("Lato", "Summer") : "Stand-by", "sky")
@@ -154,7 +154,7 @@ class ImmergasModeCard extends HubCard {
       <ha-icon icon=${icon} style="color:${c(cc)}" @click=${() => this.moreInfo(k)}></ha-icon>
       <div class="cx" @click=${() => this.moreInfo(k)}><div class="nt">${title}</div>
         <div class="ns" style="color:${c(cc)}">${dim ? this.t("wstrzymane – steruje pilot", "paused – the remote is in charge") : conf ? this.t("dotknij ponownie, aby potwierdzić", "tap again to confirm") : st}</div></div>
-      <div class="tgl ${bad ? "dis" : ""}" style="flex:none;align-self:flex-start;background:${on ? ca(col, 0.35) : "rgba(255,255,255,.08)"}${conf ? `;outline:2px solid ${c(col)}` : ""}"
+      <div class="tgl ${bad ? "dis" : ""}" style="flex:none;align-self:flex-start;background:${on ? ca(col, 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${conf ? `;outline:2px solid ${c(col)}` : ""}"
         @click=${() => !bad && this.confirm(tag, () => this.call("switch", on ? "turn_off" : "turn_on", k))}>
         <div class="kn" style="left:${on ? 23 : 3}px;background:${on ? c(col) : c("overlay1")}"></div></div>
       ${chips}
@@ -249,7 +249,7 @@ class ImmergasModeCard extends HubCard {
       <div class="cx" @click=${() => this.moreInfo("u11")}><div class="nt">${this.t("Tryb nocny", "Night mode")} <span style="font-size:9.5px;opacity:.5">U11</span></div>
         <div class="ns" style="color:${c(on ? "lavender" : "overlay2")}">${st}</div></div>
       ${ns || ne || unset ? html`<div class="tcs">${tchip(this.opt("night_start"), "START · U12", this.isSet("u12") ? ns : sg("u12"), "lavender", !this.isSet("u12"))}<span style="opacity:.4">–</span>${tchip(this.opt("night_stop"), "STOP · U13", this.isSet("u13") ? ne : sg("u13"), "lavender", !this.isSet("u13"))}</div>` : nothing}
-      <div class="tgl" style="flex:none;align-self:center;background:${on ? ca("lavender", 0.35) : "rgba(255,255,255,.08)"}${conf ? `;outline:2px solid ${c("lavender")}` : ""}"
+      <div class="tgl" style="flex:none;align-self:center;background:${on ? ca("lavender", 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${conf ? `;outline:2px solid ${c("lavender")}` : ""}"
         @click=${() => this.confirm("tg_u11", () => this.call("switch", on ? "turn_off" : "turn_on", "u11"))}>
         <div class="kn" style="left:${on ? 23 : 3}px;background:${on ? c("lavender") : c("overlay1")}"></div></div></div>`;
   }
@@ -460,7 +460,7 @@ class ImmergasModeCard extends HubCard {
     .pwr > ha-icon { --mdc-icon-size: 20px; cursor: pointer; }
     .pwr .tgx { flex: 1; min-width: 0; cursor: pointer; }
     .pv { width: 52px; text-align: center; font-size: 16px; font-weight: 800; }
-    .setp .st { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .55; margin: 2px 0 2px; }
+    .setp .st { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: var(--ih-o55, .55); margin: 2px 0 2px; }
     .modes { display: flex; gap: 6px; }
     .mb.lock { opacity: .4; cursor: not-allowed; }
     .mb { cursor: pointer; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 9px 2px; border-radius: 13px; }
@@ -476,14 +476,16 @@ class ImmergasModeCard extends HubCard {
     .tcs { display: flex; align-items: center; gap: 6px; flex: none; margin-left: auto; }
     /* legionella: time boxes on their own line under the title, the switch stays top right */
     .tcs.full { flex-basis: 100%; }
-    .tcs.full .tc { flex: 1 1 0; min-width: 0; }
+    .tcs.full .tc { flex: 1 1 0; min-width: 0; padding: 4px 6px; overflow: hidden; }
+    .tcs.full .tc:first-child { flex: 1.7 1 0; }
+    .tcs.full .tt { font-size: 13px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .wins { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-top: 4px; }
     .win { display: inline-flex; align-items: center; gap: 2px; font-size: 10.5px; padding: 1px 4px 1px 7px; border: 1px solid; border-radius: 10px; }
     .win ha-icon { --mdc-icon-size: 13px; cursor: pointer; opacity: .6; }
     .wins select.langs { font-size: 10.5px; }
     .tc { cursor: pointer; display: flex; flex-direction: column; align-items: center; padding: 4px 10px; border-radius: 10px; }
     .tt { font-size: 14px; font-weight: 800; }
-    .tl { font-size: 8.5px; opacity: .5; letter-spacing: .06em; white-space: nowrap; }
+    .tl { font-size: 8.5px; opacity: var(--ih-o5, .5); letter-spacing: .06em; white-space: nowrap; }
     .hint { font-size: 10px; margin-top: 5px; color: var(--ih-yellow); }
   `];
 }

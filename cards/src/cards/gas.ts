@@ -73,18 +73,18 @@ class ImmergasGasCard extends HubCard {
     .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
     .tl { display: flex; align-items: center; gap: 8px; min-width: 0; }
     .tl ha-icon { --mdc-icon-size: 18px; opacity: .55; }
-    .ttl { font-size: 10.5px; font-weight: 800; opacity: .55; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ttl { font-size: 10.5px; font-weight: 800; opacity: var(--ih-o55, .55); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .tabs { display: flex; gap: 4px; flex: none; align-items: center; }
-    .tab { cursor: pointer; padding: 3px 9px; border-radius: 9px; font-size: 10.5px; font-weight: 800; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
+    .tab { cursor: pointer; padding: 3px 9px; border-radius: 9px; font-size: 10.5px; font-weight: 800; border: 1px solid rgba(var(--ih-ov-rgb), .08); background: rgba(var(--ih-ov-rgb), .04); }
     .verdict { cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; }
     .verdict ha-icon { --mdc-icon-size: 26px; flex: none; }
     .vt { font-size: 14px; font-weight: 800; }
-    .vs { font-size: 10.5px; opacity: .6; }
+    .vs { font-size: 10.5px; opacity: var(--ih-o6, .6); }
     .bar { cursor: pointer; margin-top: 8px; }
     .bh { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; }
     .bh ha-icon { --mdc-icon-size: 16px; flex: none; }
     .best { font-size: 9px; font-weight: 800; padding: 0 5px; border: 1px solid; border-radius: 6px; }
-    .bn { font-size: 9.5px; font-weight: 700; opacity: .5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bn { font-size: 9.5px; font-weight: 700; opacity: var(--ih-o5, .5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .bv { margin-left: auto; flex: none; }
     .bt { height: 7px; border-radius: 5px; margin-top: 4px; overflow: hidden; }
     .bt > div { height: 100%; border-radius: 5px; }

@@ -186,37 +186,37 @@ class ImmergasScheduleCard extends HubCard {
     .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
     .tl { display: flex; align-items: center; gap: 8px; }
     .tl ha-icon { --mdc-icon-size: 18px; opacity: .55; }
-    .ttl { font-size: 10.5px; font-weight: 800; opacity: .55; letter-spacing: .08em; text-transform: uppercase; }
+    .ttl { font-size: 10.5px; font-weight: 800; opacity: var(--ih-o55, .55); letter-spacing: .08em; text-transform: uppercase; }
     .tabs { display: flex; gap: 6px; align-items: center; }
     .tab { cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 10px; font-size: 11px; font-weight: 800;
-      border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
+      border: 1px solid rgba(var(--ih-ov-rgb), .08); background: rgba(var(--ih-ov-rgb), .04); }
     .tab ha-icon { --mdc-icon-size: 15px; }
     .vt { cursor: pointer; width: 30px; height: 28px; border-radius: 9px; display: flex; align-items: center; justify-content: center;
-      border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
+      border: 1px solid rgba(var(--ih-ov-rgb), .08); background: rgba(var(--ih-ov-rgb), .04); }
     .vt ha-icon { --mdc-icon-size: 17px; opacity: .8; }
     .st { font-size: 10.5px; font-weight: 800; margin: 6px 0 8px; }
     .cals { display: grid; gap: 8px; }
     .cal { padding: 8px 10px; border-radius: 13px; }
     .ch { cursor: pointer; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
     .cn { font-size: 12px; font-weight: 800; white-space: nowrap; }
-    .ct { flex: 1; min-width: 0; font-size: 11px; opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+    .ct { flex: 1; min-width: 0; font-size: 11px; opacity: var(--ih-o7, .7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
     .ch ha-icon { --mdc-icon-size: 16px; opacity: .6; }
-    .bar { position: relative; border-radius: 5px; background: rgba(255,255,255,.06); }
-    .tick { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,.12); }
+    .bar { position: relative; border-radius: 5px; background: rgba(var(--ih-ov-rgb), .06); }
+    .tick { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(var(--ih-ov-rgb), .12); }
     .seg { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
     .now { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--primary-text-color); border-radius: 1px; box-shadow: 0 0 6px var(--primary-text-color); }
     .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 7px; }
     .day { cursor: pointer; position: relative; text-align: center; padding: 4px 0; border-radius: 8px; font-size: 11px; font-weight: 800;
-      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); }
+      background: rgba(var(--ih-ov-rgb), .04); border: 1px solid rgba(var(--ih-ov-rgb), .07); }
     .td { position: absolute; top: 2px; right: 3px; width: 5px; height: 5px; border-radius: 50%; background: var(--primary-text-color); }
-    .axis { position: relative; height: 13px; font-size: 9.5px; opacity: .45; margin: 4px 10px 0; }
+    .axis { position: relative; height: 13px; font-size: 9.5px; opacity: var(--ih-o45, .45); margin: 4px 10px 0; }
     .axis span { position: absolute; }
     .wax .axis { margin: 2px 116px 0 32px; }
     .wr { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 3px 0; }
     .dl { font-size: 12px; font-weight: 800; }
     .picks { display: flex; gap: 3px; }
     .pk { cursor: pointer; width: 25px; height: 22px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;
-      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06); }
+      background: rgba(var(--ih-ov-rgb), .04); border: 1px solid rgba(var(--ih-ov-rgb), .06); }
     .pk.big { height: 24px; }
     .allr { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
     .al { flex: 1; font-size: 11.5px; font-weight: 800; }
@@ -224,7 +224,7 @@ class ImmergasScheduleCard extends HubCard {
     .eh { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 10.5px; font-weight: 800; opacity: .8; letter-spacing: .05em; text-transform: uppercase; }
     .zs { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 6px; margin-top: 8px; }
     .zr { display: flex; align-items: center; gap: 6px; }
-    .zn { font-size: 11px; font-weight: 800; opacity: .5; width: 10px; }
+    .zn { font-size: 11px; font-weight: 800; opacity: var(--ih-o5, .5); width: 10px; }
     .tg { display: flex; align-items: center; gap: 4px; padding: 2px; border-radius: 9px; }
     .btn.sm { width: 24px; height: 24px; border-radius: 8px; }
     .btn.sm ha-icon { --mdc-icon-size: 14px; }

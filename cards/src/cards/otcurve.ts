@@ -171,8 +171,8 @@ class ImmergasOtCurveCard extends HubCard {
     .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
     .tl { display: flex; align-items: center; gap: 8px; }
     .tl ha-icon { --mdc-icon-size: 22px; }
-    .ttl { font-size: 10.5px; font-weight: 800; opacity: .55; letter-spacing: .08em; text-transform: uppercase; }
-    .tsub { font-size: 10.5px; opacity: .7; }
+    .ttl { font-size: 10.5px; font-weight: 800; opacity: var(--ih-o55, .55); letter-spacing: .08em; text-transform: uppercase; }
+    .tsub { font-size: 10.5px; opacity: var(--ih-o7, .7); }
     .lnk { cursor: pointer; text-decoration: underline dotted; }
     .state { cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 10px; font-size: 11px; font-weight: 800; }
     .state ha-icon { --mdc-icon-size: 15px; }
@@ -180,17 +180,17 @@ class ImmergasOtCurveCard extends HubCard {
     .tr span { cursor: pointer; }
     .nums { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
     .numc { cursor: pointer; min-width: 26px; text-align: center; padding: 4px 6px; border-radius: 8px; font-size: 12px; font-weight: 800;
-      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); }
+      background: rgba(var(--ih-ov-rgb), .04); border: 1px solid rgba(var(--ih-ov-rgb), .08); }
     svg { width: 100%; height: auto; display: block; margin-top: 6px; touch-action: pan-y; }
     .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
     .ctl { flex: 1 1 210px; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 14px; }
     .cx { flex: 1; min-width: 0; cursor: pointer; }
     .cn { font-size: 12px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .cs { font-size: 10px; opacity: .55; }
+    .cs { font-size: 10px; opacity: var(--ih-o55, .55); }
     .cvv { width: 44px; text-align: center; font-size: 16px; font-weight: 800; }
-    .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 10.5px; opacity: .65; margin-top: 8px; }
+    .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 10.5px; opacity: var(--ih-o65, .65); margin-top: 8px; }
     .legend i { display: inline-block; width: 14px; height: 3px; vertical-align: middle; margin-right: 4px; }
-    .note, .hint { font-size: 10.5px; opacity: .6; margin-top: 6px; line-height: 1.35; }
+    .note, .hint { font-size: 10.5px; opacity: var(--ih-o6, .6); margin-top: 6px; line-height: 1.35; }
   `];
 }
 

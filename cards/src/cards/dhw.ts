@@ -71,14 +71,14 @@ class ImmergasDhwCard extends HubCard {
     .top { cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; }
     .top ha-icon { --mdc-icon-size: 26px; flex: none; }
     .st { font-size: 14px; font-weight: 800; }
-    .ss { font-size: 10.5px; opacity: .65; }
+    .ss { font-size: 10.5px; opacity: var(--ih-o65, .65); }
     .big { cursor: pointer; flex: 1 1 120px; padding: 8px 10px; border-radius: 12px; text-align: center; }
     .bv { font-size: 24px; font-weight: 800; line-height: 1.15; }
     .cost { cursor: pointer; display: flex; align-items: center; gap: 12px; margin-top: 8px; padding: 8px 12px; border-radius: 12px; }
     .vd { font-size: 12px; font-weight: 800; white-space: nowrap; }
     .tabs { display: inline-flex; gap: 4px; align-items: center; }
     .lnk { cursor: pointer; text-decoration: underline dotted; }
-    .tab { cursor: pointer; padding: 3px 9px; border-radius: 9px; font-size: 10.5px; font-weight: 800; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
+    .tab { cursor: pointer; padding: 3px 9px; border-radius: 9px; font-size: 10.5px; font-weight: 800; border: 1px solid rgba(var(--ih-ov-rgb), .08); background: rgba(var(--ih-ov-rgb), .04); }
   `];
 }
 

@@ -384,7 +384,7 @@ class ImmergasChartsCard extends HubCard {
     .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
     .tl { display: flex; align-items: center; gap: 8px; }
     .tl ha-icon { --mdc-icon-size: 18px; opacity: .55; }
-    .ttl { font-size: 10.5px; font-weight: 800; opacity: .55; letter-spacing: .08em; text-transform: uppercase; }
+    .ttl { font-size: 10.5px; font-weight: 800; opacity: var(--ih-o55, .55); letter-spacing: .08em; text-transform: uppercase; }
     .tabs { display: flex; gap: 4px; }
     .tab { cursor: pointer; padding: 4px 11px; border-radius: 9px; font-size: 11px; font-weight: 800; border: 1px solid rgba(127,127,127,.2); background: rgba(127,127,127,.06); color: var(--secondary-text-color); }
     .tab.on { color: var(--primary-text-color); border-color: rgba(127,127,127,.45); background: rgba(127,127,127,.16); }

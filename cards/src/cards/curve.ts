@@ -299,24 +299,24 @@ class ImmergasCurveCard extends HubCard {
     .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
     .setup { margin-top: 10px; padding: 10px 12px; border-radius: 12px; border: 1px dashed rgba(var(--ih-yellow-rgb), .4); background: rgba(var(--ih-yellow-rgb), .05); }
     .setup .st { font-size: 12.5px; font-weight: 800; color: var(--ih-yellow); }
-    .setup .sd { font-size: 11px; opacity: .65; margin: 3px 0 6px; line-height: 1.35; }
+    .setup .sd { font-size: 11px; opacity: var(--ih-o65, .65); margin: 3px 0 6px; line-height: 1.35; }
     .tl { display: flex; align-items: center; gap: 8px; }
     .tl ha-icon { --mdc-icon-size: 22px; }
-    .ttl { font-size: 10.5px; font-weight: 800; opacity: .55; letter-spacing: .08em; text-transform: uppercase; }
-    .tsub { font-size: 10.5px; opacity: .55; }
+    .ttl { font-size: 10.5px; font-weight: 800; opacity: var(--ih-o55, .55); letter-spacing: .08em; text-transform: uppercase; }
+    .tsub { font-size: 10.5px; opacity: var(--ih-o55, .55); }
     .tabs, .sub { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
     .sub { margin-top: 8px; }
     .tab { cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 10px; font-size: 11px; font-weight: 800;
-      border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
+      border: 1px solid rgba(var(--ih-ov-rgb), .08); background: rgba(var(--ih-ov-rgb), .04); }
     .tab ha-icon { --mdc-icon-size: 15px; }
     .state { cursor: pointer; margin-left: auto; padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; }
     .tr { display: flex; gap: 10px; flex-wrap: wrap; font-size: 11.5px; }
     svg { width: 100%; height: auto; display: block; margin-top: 6px; touch-action: pan-y; }
     .ctl { flex: 1 1 210px; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 14px; }
     .cn { font-size: 12px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .cs { font-size: 10px; opacity: .55; }
+    .cs { font-size: 10px; opacity: var(--ih-o55, .55); }
     .cvv { width: 44px; text-align: center; font-size: 16px; font-weight: 800; }
-    .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 10.5px; opacity: .65; margin-top: 8px; }
+    .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 10.5px; opacity: var(--ih-o65, .65); margin-top: 8px; }
     .legend i { display: inline-block; width: 14px; height: 3px; vertical-align: middle; margin-right: 4px; }
   `];
 }

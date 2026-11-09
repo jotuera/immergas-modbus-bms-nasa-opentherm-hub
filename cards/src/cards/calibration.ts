@@ -1678,7 +1678,7 @@ class ImmergasCalibrationCard extends HubCard {
 
   static styles = [HubCard.styles, css`
     .tbl { display: grid; grid-template-columns: minmax(110px, 1.3fr) repeat(3, minmax(80px, 1fr)); gap: 6px 8px; align-items: stretch; }
-    .th { font-size: 9.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; opacity: .5; padding-bottom: 2px; }
+    .th { font-size: 9.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; opacity: var(--ih-o5, .5); padding-bottom: 2px; }
     .th.c { text-align: center; }
     .pn { cursor: pointer; font-size: 12px; font-weight: 700; line-height: 1.25; align-self: center; }
     .code { display: inline-block; font-size: 9.5px; font-weight: 800; padding: 1px 5px; margin-right: 5px; border-radius: 5px; background: rgba(var(--ih-blue-rgb), .16); color: var(--ih-blue); }
@@ -1686,11 +1686,11 @@ class ImmergasCalibrationCard extends HubCard {
       background: rgba(var(--ih-overlay1-rgb), .06); border: 1px solid transparent; min-width: 0; }
     /* long values (e.g. calendar ranges) wrap inside the cell instead of spilling over the next column */
     .v { font-size: 13.5px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: normal; overflow-wrap: anywhere; max-width: 100%; }
-    .effn { grid-column: 1 / -1; font-size: 10px; opacity: .6; line-height: 1.4; margin-top: 2px; }
+    .effn { grid-column: 1 / -1; font-size: 10px; opacity: var(--ih-o6, .6); line-height: 1.4; margin-top: 2px; }
     .grp { grid-column: 1 / -1; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ih-blue); margin-top: 8px;
       padding-bottom: 3px; border-bottom: 1px solid rgba(var(--ih-blue-rgb), .25); }
     .txt { font-size: 11.5px; font-weight: 800; line-height: 1.25; }
-    .why { font-size: 9.5px; opacity: .6; line-height: 1.25; margin-top: 2px; }
+    .why { font-size: 9.5px; opacity: var(--ih-o6, .6); line-height: 1.25; margin-top: 2px; }
     .set { cursor: pointer; display: inline-flex; align-items: center; gap: 3px; margin-top: 5px; padding: 3px 9px; border-radius: 8px; font-size: 10.5px; font-weight: 800;
       background: rgba(var(--ih-peach-rgb), .22); color: var(--ih-peach); }
     .set ha-icon { --mdc-icon-size: 13px; }

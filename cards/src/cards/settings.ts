@@ -509,11 +509,11 @@ class ImmergasSettingsCard extends HubCard {
     ha-card { padding: 8px 12px; }
     .sh { cursor: pointer; display: flex; align-items: center; gap: 8px; }
     .sh > ha-icon { --mdc-icon-size: 17px; opacity: .55; }
-    .ttl { font-size: 10.5px; font-weight: 800; opacity: .55; letter-spacing: .08em; text-transform: uppercase; }
-    .sum { flex: 1; font-size: 10.5px; opacity: .4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ttl { font-size: 10.5px; font-weight: 800; opacity: var(--ih-o55, .55); letter-spacing: .08em; text-transform: uppercase; }
+    .sum { flex: 1; font-size: 10.5px; opacity: var(--ih-o4, .4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .chev { margin-left: auto; }
-    .note { font-size: 11px; opacity: .6; line-height: 1.35; margin: 6px 0 2px; }
-    .grp { font-size: 9.5px; font-weight: 800; opacity: .45; letter-spacing: .06em; text-transform: uppercase; margin: 10px 0 2px; }
+    .note { font-size: 11px; opacity: var(--ih-o6, .6); line-height: 1.35; margin: 6px 0 2px; }
+    .grp { font-size: 9.5px; font-weight: 800; opacity: var(--ih-o45, .45); letter-spacing: .06em; text-transform: uppercase; margin: 10px 0 2px; }
     .langs { cursor: pointer; margin-left: auto; padding: 4px 8px; border-radius: 8px; font: inherit; font-size: 12px; font-weight: 700; color: inherit;
       border: 1px solid rgba(var(--ih-teal-rgb), .45); background: rgba(var(--ih-teal-rgb), .1); }
     .langs option { color: #1e1e2e; }

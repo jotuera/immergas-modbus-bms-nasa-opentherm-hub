@@ -14,15 +14,33 @@ export const PROFS: Prof[] = ["zeus25", "tera", "classic", "superior", "hercules
 export { html, css, nothing };
 export type { TemplateResult };
 
-// Catppuccin Mocha by default; a Catppuccin theme in HA overrides it automatically.
+// Catppuccin Mocha by default; a Catppuccin theme in HA overrides it automatically. On a light card PALETTE_LIGHT is
+// used instead: the same hues darkened until each one reads as text on white (at least 5:1).
 const PALETTE: Record<string, string> = {
   red: "243,139,168", peach: "250,179,135", yellow: "249,226,175", green: "166,227,161", teal: "148,226,213",
   sky: "137,220,235", sapphire: "116,199,236", blue: "137,180,250", lavender: "180,190,254", mauve: "203,166,247",
   overlay1: "127,132,156", overlay2: "147,153,178",
 };
+const PALETTE_LIGHT: Record<string, string> = {
+  red: "179,20,58", peach: "184,74,0", yellow: "140,104,0", green: "42,122,30", teal: "15,118,110",
+  sky: "3,105,161", sapphire: "14,116,144", blue: "29,78,216", lavender: "79,91,213", mauve: "124,47,208",
+  overlay1: "92,95,119", overlay2: "84,87,110",
+};
+const paletteLightCss = Object.entries(PALETTE_LIGHT).map(([n, rgb]) => `--ih-${n}: rgb(${rgb}); --ih-${n}-rgb: ${rgb};`).join("\n");
 const paletteCss = Object.entries(PALETTE)
   .map(([n, rgb]) => `--ih-${n}: var(--catppuccin-${n}, rgb(${rgb})); --ih-${n}-rgb: var(--catppuccin-${n}-rgb, ${rgb});`)
   .join("\n");
+
+/** is the card drawn on a light surface: the real card background when it can be read, else the theme's dark mode flag */
+function lightSurface(el: HTMLElement, hass: any): boolean {
+  const cs = getComputedStyle(el), v = (cs.getPropertyValue("--ha-card-background").trim() || cs.getPropertyValue("--card-background-color").trim());
+  const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(v)?.[1];
+  const m = /^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+))?/i.exec(v);
+  let rgb: number[] | null = null;
+  if (hex) rgb = (hex.length === 3 ? [...hex].map((x) => x + x) : [hex.slice(0, 2), hex.slice(2, 4), hex.slice(4, 6)]).map((x) => parseInt(x, 16));
+  else if (m && (m[4] === undefined || parseFloat(m[4]) > 0.5)) rgb = [+m[1], +m[2], +m[3]];
+  return rgb ? (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255 > 0.5 : !hass?.themes?.darkMode;
+}
 
 /** messages one card leaves for another on the same dashboard (e.g. the top Calibration recommendation for the
  *  diagram); `rec.ok` = nothing to change */
@@ -30,11 +48,13 @@ export const hubNote: { rec?: { text: string; reason: string; ok: boolean; entit
 
 /** color var */
 export const c = (n: string) => `var(--ih-${n})`;
-/** translucent color */
-export const ca = (n: string, a: number) => `rgba(var(--ih-${n}-rgb), ${a})`;
+/** translucent color; on a light card the tint is paler (--ih-tint) so that coloured text stays readable on it */
+export const ca = (n: string, a: number) => `rgba(var(--ih-${n}-rgb), calc(${a} * var(--ih-tint, 1)))`;
+/** translucent color at the exact alpha (borders) */
+const cline = (n: string, a: number) => `rgba(var(--ih-${n}-rgb), ${a})`;
 /** chip/box style: tinted background + border, glowing when hot */
 export const box = (col: string, hot = false, dashed = false) =>
-  `background:${ca(col, hot ? 0.24 : 0.08)};border:1px ${dashed ? "dashed" : "solid"} ${ca(col, hot ? 0.6 : 0.22)};${hot ? `box-shadow:0 0 10px ${ca(col, 0.35)};` : ""}`;
+  `background:${ca(col, hot ? 0.24 : 0.08)};border:1px ${dashed ? "dashed" : "solid"} ${cline(col, hot ? 0.6 : 0.22)};${hot ? `box-shadow:0 0 10px ${ca(col, 0.35)};` : ""}`;
 
 // Boiler-side settings that are not on any bus (night window U12/U13, anti-legionella day/time/duration, floor flow
 // limit) come from the hub's own config entities (package hub_boiler_params). A card option (entity or literal) set
@@ -56,6 +76,16 @@ export abstract class HubCard extends LitElement {
   config: any = {};
   protected idx: HubIndex | null = null;
   private armed: Record<string, number> = {};
+  private themesSeen: unknown;
+
+  protected willUpdate(changed: Map<PropertyKey, unknown>) {
+    super.willUpdate(changed);
+    const themes = this.hass?.themes;
+    if (changed.has("hass") && themes !== this.themesSeen) {
+      this.themesSeen = themes;
+      this.toggleAttribute("ih-light", lightSurface(this, this.hass));
+    }
+  }
 
   setConfig(config: any) {
     this.config = config || {};
@@ -437,7 +467,7 @@ export abstract class HubCard extends LitElement {
           : act ? this.t("WŁĄCZONY od ", "ON for ") + this.ago(k) : this.t("wyłączony", "off")}</span></div>
         ${conf || sub ? html`<div class="ss">${conf ? this.t("dotknij ponownie, aby potwierdzić", "tap again to confirm") : sub}</div>` : nothing}</div>
       <div class="tgl ${dis ? "dis" : ""}"
-        style="background:${act ? ca(col, 0.35) : "rgba(255,255,255,.08)"};${act ? `box-shadow:0 0 8px ${ca(col, 0.55)}` : ""}${conf ? `;outline:2px solid ${c(col)}` : ""}"
+        style="background:${act ? ca(col, 0.35) : "rgba(var(--ih-ov-rgb), .08)"};${act ? `box-shadow:0 0 8px ${ca(col, 0.55)}` : ""}${conf ? `;outline:2px solid ${c(col)}` : ""}"
         @click=${() => !dis && this.confirm(tag, () => this.call("switch", act ? "turn_off" : "turn_on", k))}>
         <div class="kn" style="left:${act ? 23 : 3}px;background:${act ? c(col) : c("overlay1")}">${dis ? html`<ha-icon icon="mdi:lock"></ha-icon>` : nothing}</div></div></div>`;
   }
@@ -538,7 +568,7 @@ export abstract class HubCard extends LitElement {
         <ha-icon icon=${icon} style="color:${c(on || tint ? col : "overlay2")}${!on && tint ? ";opacity:.75" : ""}" @click=${() => this.moreInfo(k)}></ha-icon>
         <div class="tgx" @click=${() => this.moreInfo(k)}><div class="tgl2">${conf ? this.t("Potwierdź – dotknij ponownie", "Confirm – tap again") : label}</div>
           ${sub ? html`<div class="tgs2">${sub}</div>` : nothing}</div>
-        <div class="tgl ${bad ? "dis" : ""}" style="background:${on ? ca(col, 0.35) : "rgba(255,255,255,.08)"}${conf ? `;outline:2px solid ${c(col)}` : ""}"
+        <div class="tgl ${bad ? "dis" : ""}" style="background:${on ? ca(col, 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${conf ? `;outline:2px solid ${c(col)}` : ""}"
           @click=${() => !bad && this.confirm(tag, flip)}>
           <div class="kn" style="left:${on ? 23 : 3}px;background:${on ? c(col) : c("overlay1")}"></div></div></div>`;
     })}</div>`;
@@ -584,27 +614,29 @@ export abstract class HubCard extends LitElement {
     .rr { display: flex; gap: 8px; align-items: flex-start; }
     .rr ha-icon { --mdc-icon-size: 17px; flex: none; margin-top: 1px; }
     .rl { font-size: 11.5px; font-weight: 800; }
-    .rs { font-size: 10px; opacity: .6; line-height: 1.3; }
-    :host { ${unsafeCSS(paletteCss)} }
+    .rs { font-size: 10px; opacity: var(--ih-o6, .6); line-height: 1.3; }
+    :host { ${unsafeCSS(paletteCss)} --ih-ov-rgb: 255,255,255; }
+    :host([ih-light]) { ${unsafeCSS(paletteLightCss)} --ih-ov-rgb: 0,0,0; --ih-tint: .5;
+      --ih-o35: .7; --ih-o4: .72; --ih-o45: .74; --ih-o5: .76; --ih-o55: .78; --ih-o6: .8; --ih-o65: .82; --ih-o7: .85; --ih-o75: .88; }
     *, *::before, *::after { box-sizing: border-box; }
     ha-card { padding: 12px 14px; }
-    .empty { padding: 8px; opacity: .6; font-size: 12px; }
+    .empty { padding: 8px; opacity: var(--ih-o6, .6); font-size: 12px; }
     .head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
     .head ha-icon { --mdc-icon-size: 18px; opacity: .55; }
-    .head .ttl { font-size: 10.5px; font-weight: 800; opacity: .55; letter-spacing: .08em; text-transform: uppercase; }
-    .head .right { margin-left: auto; font-size: 10.5px; opacity: .55; }
+    .head .ttl { font-size: 10.5px; font-weight: 800; opacity: var(--ih-o55, .55); letter-spacing: .08em; text-transform: uppercase; }
+    .head .right { margin-left: auto; font-size: 10.5px; opacity: var(--ih-o55, .55); }
     .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
     .capl { cursor: pointer; font-weight: 800; }
     .chip { cursor: pointer; flex: 1 1 calc(50% - 4px); min-width: 0; display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 12px; }
     .chip ha-icon, .tile ha-icon { --mdc-icon-size: 18px; flex: none; }
     .cx { min-width: 0; flex: 1; }
-    .lbl { font-size: 9.5px; font-weight: 800; opacity: .55; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lbl { font-size: 9.5px; font-weight: 800; opacity: var(--ih-o55, .55); letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .val { font-size: 12.5px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .grid { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); }
     .tile { cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 12px; min-width: 0; }
     .tv { font-size: 14px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .note { font-size: 10.5px; opacity: .55; margin-top: 6px; }
-    .btn { cursor: pointer; flex: none; width: 30px; height: 30px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.08); }
+    .note { font-size: 10.5px; opacity: var(--ih-o55, .55); margin-top: 6px; }
+    .btn { cursor: pointer; flex: none; width: 30px; height: 30px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(var(--ih-ov-rgb), .07); border: 1px solid rgba(var(--ih-ov-rgb), .08); }
     .btn ha-icon { --mdc-icon-size: 18px; }
     .btn.off { opacity: .35; cursor: default; }
     .nr { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 12px; }
@@ -614,15 +646,15 @@ export abstract class HubCard extends LitElement {
     .nv { min-width: 78px; text-align: center; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
     .btn.xs { width: 24px; height: 24px; border-radius: 8px; }
     .btn.xs ha-icon { --mdc-icon-size: 14px; }
-    .gear { cursor: pointer; flex: none; width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; opacity: .5; }
-    .gear:hover, .gear.on { opacity: 1; background: rgba(255,255,255,.06); }
+    .gear { cursor: pointer; flex: none; width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; opacity: var(--ih-o5, .5); }
+    .gear:hover, .gear.on { opacity: 1; background: rgba(var(--ih-ov-rgb), .06); }
     .gear ha-icon { --mdc-icon-size: 16px; }
-    .setp { margin-top: 8px; padding: 6px 10px; border-radius: 12px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07); }
+    .setp { margin-top: 8px; padding: 6px 10px; border-radius: 12px; background: rgba(var(--ih-ov-rgb), .03); border: 1px solid rgba(var(--ih-ov-rgb), .07); }
     .warn { font-size: 11px; color: var(--ih-yellow); margin-bottom: 4px; }
     .arm { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; }
     .arm > ha-icon { --mdc-icon-size: 24px; flex: none; }
     .at { font-size: 13px; font-weight: 800; }
-    .as, .ss { font-size: 10.5px; opacity: .6; }
+    .as, .ss { font-size: 10.5px; opacity: var(--ih-o6, .6); }
     .ab { cursor: pointer; flex: none; display: flex; align-items: center; gap: 5px; padding: 6px 11px; border-radius: 11px; font-size: 11px; font-weight: 800; }
     .ab ha-icon { --mdc-icon-size: 15px; }
     .sr { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 13px; margin-top: 8px; }
@@ -636,27 +668,27 @@ export abstract class HubCard extends LitElement {
     .sh2 { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
     .sbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 7px; }
     .sb { cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 7px 4px; border-radius: 10px; font-size: 11px; font-weight: 800;
-      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); min-width: 0; text-align: center; line-height: 1.15; }
+      background: rgba(var(--ih-ov-rgb), .04); border: 1px solid rgba(var(--ih-ov-rgb), .08); min-width: 0; text-align: center; line-height: 1.15; }
     .sb ha-icon { --mdc-icon-size: 15px; flex: none; }
     .tgs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
-    .tgi { display: flex; align-items: center; gap: 7px; padding: 6px 8px; border-radius: 11px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07); min-width: 0; }
+    .tgi { display: flex; align-items: center; gap: 7px; padding: 6px 8px; border-radius: 11px; background: rgba(var(--ih-ov-rgb), .03); border: 1px solid rgba(var(--ih-ov-rgb), .07); min-width: 0; }
     .tgi > ha-icon { --mdc-icon-size: 17px; flex: none; cursor: pointer; }
     .tgi.wide { grid-column: 1 / -1; }
     .tgx { flex: 1; min-width: 0; cursor: pointer; }
     .tgl2 { font-size: 11.5px; font-weight: 700; line-height: 1.2; }
-    .tgs2 { font-size: 9.5px; opacity: .6; line-height: 1.2; margin-top: 1px; }
+    .tgs2 { font-size: 9.5px; opacity: var(--ih-o6, .6); line-height: 1.2; margin-top: 1px; }
     .pick { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; opacity: 1; }
     .pick select { cursor: pointer; padding: 1px 4px; border-radius: 6px; font: inherit; font-size: 10.5px; font-weight: 800; color: inherit;
-      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); max-width: 100%; }
+      background: rgba(var(--ih-ov-rgb), .08); border: 1px solid rgba(var(--ih-ov-rgb), .18); max-width: 100%; }
     .pick option { color: #1e1e2e; }
     @keyframes ih-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    @keyframes ih-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    @keyframes ih-pulse { 0%, 100% { opacity: 1; } 50% { opacity: var(--ih-o5, .5); } }
   `;
 }
 
 /** registers a card element + card picker entry */
 /** this bundle's version (also in package.json) */
-export const VERSION = "0.88.0";
+export const VERSION = "0.89.2";
 
 // The bundle can be loaded twice: the hub cards resource and the copy shipped with the Dominus integration, in any
 // order. A custom element can be defined only once, so every bundle (0.85.0+) queues its elements on a shared window

@@ -202,29 +202,29 @@ class ImmergasSetpointsCard extends HubCard {
     .top { cursor: pointer; display: flex; align-items: flex-start; gap: 8px; }
     .top ha-icon { --mdc-icon-size: 24px; flex: none; }
     .t1 { font-size: 14px; font-weight: 800; }
-    .t2 { font-size: 10.5px; opacity: .6; }
+    .t2 { font-size: 10.5px; opacity: var(--ih-o6, .6); }
     .big { cursor: pointer; display: flex; align-items: baseline; gap: 2px; margin: 4px 0 2px; flex-wrap: wrap; }
     .big > span:first-child { font-size: 34px; font-weight: 300; line-height: 1.1; }
     .u { font-size: 15px; font-weight: 600; }
     .hum { margin-left: auto; font-size: 11.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 2px; opacity: .85; }
     .hum ha-icon { --mdc-icon-size: 14px; }
-    .st { font-size: 11px; font-weight: 700; opacity: .65; margin: 6px 0 6px; }
+    .st { font-size: 11px; font-weight: 700; opacity: var(--ih-o65, .65); margin: 6px 0 6px; }
     .reg { display: flex; align-items: center; gap: 8px; }
     .rb { cursor: pointer; flex: none; width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
-      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.12); }
+      background: rgba(var(--ih-ov-rgb), .1); border: 1px solid rgba(var(--ih-ov-rgb), .12); }
     .rb ha-icon { --mdc-icon-size: 20px; }
     .rv { cursor: pointer; flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 0; }
     .rn { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; }
-    .rl { font-size: 8.5px; font-weight: 800; letter-spacing: .08em; opacity: .5; }
+    .rl { font-size: 8.5px; font-weight: 800; letter-spacing: .08em; opacity: var(--ih-o5, .5); }
     .pf { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
     .pb { cursor: pointer; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 5px 4px; border-radius: 10px; font-size: 10px; font-weight: 800;
-      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); letter-spacing: .03em; }
+      background: rgba(var(--ih-ov-rgb), .05); border: 1px solid rgba(var(--ih-ov-rgb), .1); letter-spacing: .03em; }
     .pl { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
     .pb ha-icon { --mdc-icon-size: 13px; }
     .pv { font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; }
-    .hint { font-size: 10px; opacity: .65; margin-top: 6px; }
+    .hint { font-size: 10px; opacity: var(--ih-o65, .65); margin-top: 6px; }
     .presets { margin-top: 10px; padding: 8px 10px; border-radius: 12px; background: rgba(var(--ih-overlay1-rgb), .06); }
-    .grp { font-size: 9.5px; font-weight: 800; opacity: .45; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 2px; }
+    .grp { font-size: 9.5px; font-weight: 800; opacity: var(--ih-o45, .45); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 2px; }
   `];
 }
 

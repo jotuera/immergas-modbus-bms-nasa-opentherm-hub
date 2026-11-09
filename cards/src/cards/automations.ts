@@ -243,7 +243,7 @@ class ImmergasAutomationsCard extends HubCard {
           ${i.param && on ? this.param(i.param, i.paramLabel) : nothing}
           ${on ? (i.params ?? []).map(([e, l]) => this.param(e, l)) : nothing}
         </div></div>
-      <div class="tgl" style="flex:none;background:${on ? ca(col, 0.35) : "rgba(255,255,255,.08)"};${on ? `box-shadow:0 0 6px ${ca(col, 0.5)}` : ""}"
+      <div class="tgl" style="flex:none;background:${on ? ca(col, 0.35) : "rgba(var(--ih-ov-rgb), .08)"};${on ? `box-shadow:0 0 6px ${ca(col, 0.5)}` : ""}"
         @click=${(e: Event) => { e.stopPropagation(); this.hass.callService(i.toggle.split(".")[0] === "input_boolean" ? "input_boolean" : "homeassistant", "toggle", { entity_id: i.toggle }); }}>
         <div class="kn" style="left:${on ? 23 : 3}px;background:${on ? c(col) : c("overlay1")}"></div></div></div>`;
   }
@@ -279,20 +279,21 @@ class ImmergasAutomationsCard extends HubCard {
   }
 
   static styles = [HubCard.styles, css`
-    .gh { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; opacity: .7; margin: 10px 0 6px; }
+    .gh { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; opacity: var(--ih-o7, .7); margin: 10px 0 6px; }
     .gh ha-icon { --mdc-icon-size: 15px; }
     .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 8px; }
     .ar { cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 9px 11px; border-radius: 13px; min-width: 0;
-      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07); }
+      background: rgba(var(--ih-ov-rgb), .03); border: 1px solid rgba(var(--ih-ov-rgb), .07); }
     .ar.off .an, .ar.off .ad { opacity: .55; }
     .ai { --mdc-icon-size: 20px; flex: none; margin-top: 1px; }
     .an { font-size: 12.5px; font-weight: 800; line-height: 1.25; }
-    .ad { font-size: 10.5px; opacity: .7; line-height: 1.35; margin-top: 2px; }
+    .ad { font-size: 10.5px; opacity: var(--ih-o7, .7); line-height: 1.35; margin-top: 2px; }
     .as { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 5px; }
+    :host([ih-light]) .as { opacity: 1; }
     .tag { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; opacity: .85; }
     .tag ha-icon { --mdc-icon-size: 12px; opacity: .7; }
     .prm { display: inline-flex; align-items: center; gap: 5px; }
-    .pl { font-size: 10px; font-weight: 700; opacity: .6; }
+    .pl { font-size: 10px; font-weight: 700; opacity: var(--ih-o6, .6); }
     .pvv { font-size: 11px; font-weight: 800; min-width: 28px; text-align: center; font-variant-numeric: tabular-nums; }
     .ar .tgl { margin-top: 1px; }
     .pill { flex: none; font-size: 10px; font-weight: 800; letter-spacing: .05em; padding: 2px 8px; border-radius: 9px; border: 1px solid; margin-top: 1px; }

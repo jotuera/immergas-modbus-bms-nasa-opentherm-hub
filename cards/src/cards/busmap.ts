@@ -118,8 +118,8 @@ class ImmergasBusMapCard extends HubCard {
     ha-card { padding: 8px 12px; }
     .sh { cursor: pointer; display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
     .sh > ha-icon { --mdc-icon-size: 17px; opacity: .55; }
-    .ttl { font-size: 10.5px; font-weight: 800; opacity: .55; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
-    .sum { flex: 1; font-size: 10.5px; opacity: .45; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ttl { font-size: 10.5px; font-weight: 800; opacity: var(--ih-o55, .55); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+    .sum { flex: 1; font-size: 10.5px; opacity: var(--ih-o45, .45); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .chev { margin-left: auto; }
     .model { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
     .model ha-icon { --mdc-icon-size: 20px; opacity: .7; }
@@ -129,8 +129,8 @@ class ImmergasBusMapCard extends HubCard {
     .row { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 12px; }
     .cx { flex: 1; min-width: 0; }
     .ln { font-size: 12.5px; font-weight: 800; display: flex; align-items: baseline; gap: 6px; }
-    .bus { font-size: 9.5px; font-weight: 800; opacity: .5; letter-spacing: .04em; }
-    .ld { font-size: 10.5px; opacity: .65; margin-top: 2px; line-height: 1.35; overflow-wrap: anywhere; }
+    .bus { font-size: 9.5px; font-weight: 800; opacity: var(--ih-o5, .5); letter-spacing: .04em; }
+    .ld { font-size: 10.5px; opacity: var(--ih-o65, .65); margin-top: 2px; line-height: 1.35; overflow-wrap: anywhere; }
     .cnt { font-size: 18px; font-weight: 800; cursor: pointer; min-width: 36px; text-align: right; }
     .go { display: flex; align-items: center; gap: 5px; font: inherit; font-size: 11.5px; font-weight: 800; cursor: pointer;
       padding: 6px 10px; border-radius: 10px; border: 1px solid var(--ih-overlay1); background: transparent; color: inherit; }
@@ -139,8 +139,8 @@ class ImmergasBusMapCard extends HubCard {
     .rep { margin-top: 8px; padding: 9px 10px; border-radius: 12px; }
     .rep a { display: inline-flex; align-items: center; gap: 5px; font-weight: 800; font-size: 12.5px; color: var(--ih-green); }
     .rep a ha-icon { --mdc-icon-size: 16px; }
-    .rep pre { font-size: 10px; max-height: 180px; overflow: auto; white-space: pre-wrap; margin: 6px 0 0; opacity: .75; }
-    .hint { font-size: 10px; opacity: .55; margin-top: 8px; line-height: 1.35; }
+    .rep pre { font-size: 10px; max-height: 180px; overflow: auto; white-space: pre-wrap; margin: 6px 0 0; opacity: var(--ih-o75, .75); }
+    .hint { font-size: 10px; opacity: var(--ih-o55, .55); margin-top: 8px; line-height: 1.35; }
   `];
 }
 

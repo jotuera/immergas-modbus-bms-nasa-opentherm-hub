@@ -327,25 +327,25 @@ class ImmergasDiagramCard extends HubCard {
     ha-card { padding: 8px; }
     .dia { width: 100%; height: auto; display: block; }
     .dia text { font-family: var(--paper-font-body1_-_font-family, inherit); }
-    .stat { fill: rgba(255,255,255,.035); stroke: rgba(255,255,255,.08); stroke-width: 1; }
-    .panel { fill: rgba(255,255,255,.025); stroke: rgba(255,255,255,.09); stroke-width: 1.2; }
-    .pb { fill: none; stroke: rgba(255,255,255,.06); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+    .stat { fill: rgba(var(--ih-ov-rgb), .035); stroke: rgba(var(--ih-ov-rgb), .08); stroke-width: 1; }
+    .panel { fill: rgba(var(--ih-ov-rgb), .025); stroke: rgba(var(--ih-ov-rgb), .09); stroke-width: 1.2; }
+    .pb { fill: none; stroke: rgba(var(--ih-ov-rgb), .06); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
     .pl { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
     .pf { fill: none; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 2 16; animation: ih-dash linear infinite; filter: brightness(1.8); }
     .coil { fill: none; stroke-width: 3; stroke-linecap: round; }
-    .dev { fill: rgba(255,255,255,.04); stroke-width: 2.5; }
-    .tank, .house { fill: rgba(255,255,255,.035); stroke-width: 2.2; }
+    .dev { fill: rgba(var(--ih-ov-rgb), .04); stroke-width: 2.5; }
+    .tank, .house { fill: rgba(var(--ih-ov-rgb), .035); stroke-width: 2.2; }
     .valve { stroke-width: 2; stroke-linejoin: round; }
-    .fanring { fill: rgba(255,255,255,.03); stroke: rgba(255,255,255,.1); stroke-width: 2; }
-    .blade { fill: rgba(255,255,255,.16); }
-    .hub { fill: rgba(255,255,255,.35); }
+    .fanring { fill: rgba(var(--ih-ov-rgb), .03); stroke: rgba(var(--ih-ov-rgb), .1); stroke-width: 2; }
+    .blade { fill: rgba(var(--ih-ov-rgb), .16); }
+    .hub { fill: rgba(var(--ih-ov-rgb), .35); }
     /* rotate around the local origin (the hub), not the centre of the blades bounding box */
     .fan { transform-box: view-box; transform-origin: 0 0; }
     .hit { cursor: pointer; }
     .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 6px; }
-    .st { cursor: pointer; padding: 7px 10px; border-radius: 12px; min-width: 0; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.08); }
+    .st { cursor: pointer; padding: 7px 10px; border-radius: 12px; min-width: 0; background: rgba(var(--ih-ov-rgb), .035); border: 1px solid rgba(var(--ih-ov-rgb), .08); }
     .st.wide { grid-column: span 2; }
-    .sl { font-size: 12px; font-weight: 700; opacity: .75; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sl { font-size: 12px; font-weight: 700; opacity: var(--ih-o75, .75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .sv { font-size: 19px; font-weight: 800; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .st.defrost { cursor: default; text-align: center; font-weight: 800; font-size: 15px; color: var(--ih-sky, #89dceb); background: rgba(137,220,235,.15); border-color: rgba(137,220,235,.6); }
     @keyframes ih-dash { to { stroke-dashoffset: -36; } }

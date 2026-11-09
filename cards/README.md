@@ -69,7 +69,7 @@ area prefix in the entity id (e.g. `boiler_room_…`) or a renamed entity in HA 
 fall back to friendly names. Labels follow the Home Assistant language: Polish, English, Czech, German, Spanish, French, Hungarian, Italian, Dutch, Portuguese or Slovak (others fall back to English). Texts are written as `this.t(polish, english)`; `tools/extract_strings.cjs` collects them, the translations live in `i18n/<lang>.json` and `tools/gen_i18n.py` builds `src/i18n_data.ts`.
 
 Colours use the Catppuccin palette variables when a Catppuccin theme is active, otherwise built-in Catppuccin Mocha
-values.
+values. On a light card the same colours are darkened automatically, so they stay readable on white.
 
 ## Install with HACS (recommended)
 

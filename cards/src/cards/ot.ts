@@ -168,15 +168,15 @@ class ImmergasOtBoilerCard extends HubCard {
   static styles = [HubCard.styles, css`
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .grid1 { display: grid; gap: 8px; }
-    .sec { font-size: 10.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; opacity: .6; margin: 12px 0 6px; }
-    .hint { font-size: 10.5px; opacity: .6; margin-top: 6px; line-height: 1.35; }
+    .sec { font-size: 10.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; opacity: var(--ih-o6, .6); margin: 12px 0 6px; }
+    .hint { font-size: 10.5px; opacity: var(--ih-o6, .6); margin-top: 6px; line-height: 1.35; }
     .ro { display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 800; color: var(--ih-sky); }
     .ro ha-icon { --mdc-icon-size: 14px; }
     .hist { margin-top: 8px; padding: 8px 10px; border-radius: 12px; background: rgba(var(--ih-overlay1-rgb), 0.08); border: 1px solid rgba(var(--ih-overlay1-rgb), 0.2); }
     .hh { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; cursor: pointer; margin-bottom: 4px; }
     .hh ha-icon { --mdc-icon-size: 16px; opacity: .7; }
     .hr { font-size: 11px; line-height: 1.4; display: flex; gap: 6px; padding: 2px 0; }
-    .hn { font-weight: 800; opacity: .55; min-width: 16px; }
+    .hn { font-weight: 800; opacity: var(--ih-o55, .55); min-width: 16px; }
     .row { display: flex; gap: 8px; margin: 10px 0 8px; flex-wrap: wrap; }
     .act { display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer;
       padding: 7px 12px; border-radius: 10px; border: 1px solid rgba(var(--ih-red-rgb), 0.4); background: rgba(var(--ih-red-rgb), 0.08); color: inherit; }
@@ -244,7 +244,7 @@ class ImmergasOtMapCard extends HubCard {
       const s = sup.includes(id), u = unk.includes(id), r = nor.includes(id), v = vals[String(id)];
       const col = s ? "green" : u ? "red" : r ? "peach" : "overlay1";
       return html`<div class="cell" title=${`${id}${nm(id) ? " · " + nm(id) : ""}${s ? this.t(" · kocioł odpowiada", " · the boiler answers") : u ? this.t(" · kocioł nie zna", " · unknown to the boiler") : r ? this.t(" · brak odpowiedzi", " · no reply") : ""}${v != null ? " · " + v : ""}`}
-        style="background:${s || u || r ? ca(col, s ? 0.45 : 0.3) : "rgba(255,255,255,.04)"}">${id}</div>`;
+        style="background:${s || u || r ? ca(col, s ? 0.45 : 0.3) : "rgba(var(--ih-ov-rgb), .04)"}">${id}</div>`;
     };
     const list = (ids: number[], col: string) => html`<div class="ids">${ids.map((id) => html`<span class="idc" style=${box(col, false)}><b>${id}</b>${nm(id) ? " " + nm(id) : ""}${vals[String(id)] != null ? html` <span class="raw">${String(vals[String(id)])}</span>` : nothing}</span>`)}</div>`;
     const kv = (o: Record<string, unknown>, col: string, pre: string) => html`<div class="ids">${Object.entries(o).map(([k, v]) => html`<span class="idc" style=${box(typeof v === "number" ? col : "overlay1", false)}><b>${pre}${k}</b> ${typeof v === "number" ? v : "–"}</span>`)}</div>`;
@@ -253,7 +253,7 @@ class ImmergasOtMapCard extends HubCard {
       <div class="legend"><span><i style="background:${ca("green", 0.45)}"></i>${this.t("kocioł odpowiada", "answers")}</span>
         <span><i style="background:${ca("red", 0.3)}"></i>${this.t("kocioł nie zna", "unknown")}</span>
         <span><i style="background:${ca("peach", 0.3)}"></i>${this.t("brak odpowiedzi", "no reply")}</span>
-        <span><i style="background:rgba(255,255,255,.04)"></i>${this.t("nie pytano", "not asked")}</span></div>
+        <span><i style="background:rgba(var(--ih-ov-rgb), .04)"></i>${this.t("nie pytano", "not asked")}</span></div>
       <div class="sec2">${this.t("Kocioł odpowiada", "The boiler answers")}</div>${list(sup, "green")}
       ${unk.length ? html`<div class="sec2">${this.t("Kocioł nie zna", "Unknown to the boiler")}</div>${list(unk, "red")}` : nothing}
       ${nor.length ? html`<div class="sec2">${this.t("Brak odpowiedzi", "No reply")}</div>${list(nor, "peach")}` : nothing}
@@ -273,7 +273,7 @@ class ImmergasOtMapCard extends HubCard {
       const s = sup.includes(id), u = unk.includes(id), r = room.includes(id);
       const col = s ? "green" : u ? "red" : "overlay1";
       return html`<div class="cell" title=${`${id}${nm(id) ? " · " + nm(id) : ""}${s ? this.t(" · kocioł odpowiada", " · the boiler answers") : u ? this.t(" · kocioł nie zna", " · unknown to the boiler") : ""}${r ? this.t(" · pyta pilot", " · asked by the room unit") : ""}`}
-        style="background:${s || u ? ca(col, s ? 0.45 : 0.3) : "rgba(255,255,255,.04)"};${r ? `outline:1.5px solid ${c("sky")};outline-offset:-1.5px` : ""}">${id}</div>`;
+        style="background:${s || u ? ca(col, s ? 0.45 : 0.3) : "rgba(var(--ih-ov-rgb), .04)"};${r ? `outline:1.5px solid ${c("sky")};outline-offset:-1.5px` : ""}">${id}</div>`;
     };
     const list = (ids: number[], col: string) => html`<div class="ids">${ids.map((id) => html`<span class="idc" style=${box(col, false)}><b>${id}</b>${nm(id) ? " " + nm(id) : ""}</span>`)}</div>`;
     const report = () => {
@@ -296,7 +296,7 @@ class ImmergasOtMapCard extends HubCard {
       <div class="cells">${Array.from({ length: 128 }, (_, i) => cell(i))}</div>
       <div class="legend"><span><i style="background:${ca("green", 0.45)}"></i>${this.t("kocioł odpowiada", "answers")}</span>
         <span><i style="background:${ca("red", 0.3)}"></i>${this.t("kocioł nie zna", "unknown")}</span>
-        <span><i style="background:rgba(255,255,255,.04)"></i>${this.t("nie pytano", "not asked")}</span>
+        <span><i style="background:rgba(var(--ih-ov-rgb), .04)"></i>${this.t("nie pytano", "not asked")}</span>
         ${room.length ? html`<span><i style="outline:1.5px solid ${c("sky")};outline-offset:-1.5px"></i>${this.t("pyta pilot", "room unit")}</span>` : nothing}</div>
       <div class="sec2">${this.t("Kocioł odpowiada", "The boiler answers")}</div>${list(sup, "green")}
       ${unk.length ? html`<div class="sec2">${this.t("Kocioł nie zna (hub pyta raz na godzinę)", "Unknown to the boiler (asked again hourly)")}</div>${list(unk, "red")}` : nothing}
@@ -309,16 +309,16 @@ class ImmergasOtMapCard extends HubCard {
     ha-card { padding: 8px 12px; }
     .cells { display: grid; grid-template-columns: repeat(16, 1fr); gap: 2px; margin-top: 10px; }
     .cell { font-size: 8.5px; font-weight: 700; text-align: center; padding: 3px 0; border-radius: 4px; opacity: .9; font-variant-numeric: tabular-nums; }
-    .legend { display: flex; gap: 10px; flex-wrap: wrap; font-size: 10px; opacity: .65; margin-top: 6px; }
+    .legend { display: flex; gap: 10px; flex-wrap: wrap; font-size: 10px; opacity: var(--ih-o65, .65); margin-top: 6px; }
     .legend i { display: inline-block; width: 12px; height: 10px; border-radius: 3px; vertical-align: middle; margin-right: 4px; }
-    .sec2 { font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; opacity: .55; margin: 10px 0 4px; }
+    .sec2 { font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; opacity: var(--ih-o55, .55); margin: 10px 0 4px; }
     .ids { display: flex; flex-wrap: wrap; gap: 4px; }
     .idc { font-size: 10.5px; padding: 2px 7px; border-radius: 8px; }
-    .raw { opacity: .6; font-variant-numeric: tabular-nums; }
+    .raw { opacity: var(--ih-o6, .6); font-variant-numeric: tabular-nums; }
     .sh { cursor: pointer; display: flex; align-items: center; gap: 8px; }
     .sh > ha-icon { --mdc-icon-size: 17px; opacity: .55; }
-    .ttl { font-size: 10.5px; font-weight: 800; opacity: .55; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
-    .sum { flex: 1; font-size: 10.5px; opacity: .4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ttl { font-size: 10.5px; font-weight: 800; opacity: var(--ih-o55, .55); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+    .sum { flex: 1; font-size: 10.5px; opacity: var(--ih-o4, .4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .chev { margin-left: auto; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
     .model { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
@@ -330,7 +330,7 @@ class ImmergasOtMapCard extends HubCard {
       padding: 7px 12px; border-radius: 10px; border: 1px solid var(--ih-overlay1); background: transparent; color: inherit; }
     .go[disabled] { opacity: .4; cursor: default; }
     .go ha-icon { --mdc-icon-size: 16px; }
-    .hint { font-size: 10.5px; opacity: .6; margin-top: 6px; line-height: 1.35; }
+    .hint { font-size: 10.5px; opacity: var(--ih-o6, .6); margin-top: 6px; line-height: 1.35; }
   `];
 }
 

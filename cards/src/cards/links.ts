@@ -144,7 +144,7 @@ class ImmergasLinksCard extends HubCard {
       st, label, detail,
       extra: this.eid("ot_ro") ? html`<div class="ro" @click=${(e: Event) => e.stopPropagation()}>
         <span>${armed ? this.t("Potwierdź – dotknij ponownie", "Confirm – tap again") : this.t("Blokada zapisu z HA", "Block writes from HA")}</span>
-        <div class="tgl ${this.bad("ot_ro") ? "dis" : ""}" style="background:${ro ? ca("sky", 0.35) : "rgba(255,255,255,.08)"}${armed ? `;outline:2px solid ${c("sky")}` : ""}"
+        <div class="tgl ${this.bad("ot_ro") ? "dis" : ""}" style="background:${ro ? ca("sky", 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${armed ? `;outline:2px solid ${c("sky")}` : ""}"
           @click=${() => !this.bad("ot_ro") && this.confirm(tag, () => this.call("switch", ro ? "turn_off" : "turn_on", "ot_ro"))}>
           <div class="kn" style="left:${ro ? 23 : 3}px;background:${ro ? c("sky") : c("overlay1")}"></div></div></div>
         ${ro ? html`<div class="ld">${this.t("HA tylko czyta. Po włączeniu raz odłącz zasilanie modułu Dominus – zapomni ostatnią nastawę z HA.",
@@ -165,7 +165,7 @@ class ImmergasLinksCard extends HubCard {
       detail: this.s("mt_proto") ? this.t("protokół ", "protocol ") + this.s("mt_proto") : "",
       extra: html`<div class="ro" @click=${(e: Event) => e.stopPropagation()}>
         <span>${armed ? this.t("Potwierdź – dotknij ponownie", "Confirm – tap again") : this.t("Połączenie Modbus", "Modbus connection")}</span>
-        <div class="tgl" style="background:${conn ? ca("green", 0.35) : "rgba(255,255,255,.08)"}${armed ? `;outline:2px solid ${c("green")}` : ""}"
+        <div class="tgl" style="background:${conn ? ca("green", 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${armed ? `;outline:2px solid ${c("green")}` : ""}"
           @click=${() => { const id = this.eid("mt_conn")!; this.confirm(tag, () => this.hass.callService(id.split(".")[0], conn ? "turn_off" : "turn_on", { entity_id: id })); }}>
           <div class="kn" style="left:${conn ? 23 : 3}px;background:${conn ? c("green") : c("overlay1")}"></div></div></div>` });
     const heaters: [Key, string][] = [["backup_heater", "IBH1"], ["mt_ibh2", "IBH2"], ["dhw_heater", "TBH"]];
@@ -198,7 +198,7 @@ class ImmergasLinksCard extends HubCard {
       detail: (isNaN(addr) ? "" : this.t("adres slave ", "slave address ") + this.f(addr, 0) + " · ") + this.t("bez mastera > 30 s kocioł zgłasza E144", "without a master > 30 s the boiler shows E144"),
       extra: html`<div class="ro" @click=${(e: Event) => e.stopPropagation()}>
         <span>${armed ? this.t("Potwierdź – dotknij ponownie", "Confirm – tap again") : this.t("Połączenie BMS", "BMS connection")}</span>
-        <div class="tgl" style="background:${conn ? ca("green", 0.35) : "rgba(255,255,255,.08)"}${armed ? `;outline:2px solid ${c("green")}` : ""}"
+        <div class="tgl" style="background:${conn ? ca("green", 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${armed ? `;outline:2px solid ${c("green")}` : ""}"
           @click=${() => { const id = this.eid("gb_conn")!; this.confirm(tag, () => this.hass.callService(id.split(".")[0], conn ? "turn_off" : "turn_on", { entity_id: id })); }}>
           <div class="kn" style="left:${conn ? 23 : 3}px;background:${conn ? c("green") : c("overlay1")}"></div></div></div>` });
     if (this.eid("gb_req")) {
@@ -242,7 +242,7 @@ class ImmergasLinksCard extends HubCard {
           + (isNaN(room) ? "" : ` · ${this.f(room, 1, 1)} °C`),
         extra: this.eid("ot_ov_flags") ? html`<div class="ro" @click=${(e: Event) => e.stopPropagation()}>
           <span>${armed ? this.t("Potwierdź – dotknij ponownie", "Confirm – tap again") : this.t("Zezwolenia z huba", "Enable flags from the hub")}</span>
-          <div class="tgl" style="background:${ov ? ca("green", 0.35) : "rgba(255,255,255,.08)"}${armed ? `;outline:2px solid ${c("green")}` : ""}"
+          <div class="tgl" style="background:${ov ? ca("green", 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${armed ? `;outline:2px solid ${c("green")}` : ""}"
             @click=${() => { const id = this.eid("ot_ov_flags")!; this.confirm(tag, () => this.hass.callService(id.split(".")[0], ov ? "turn_off" : "turn_on", { entity_id: id })); }}>
             <div class="kn" style="left:${ov ? 23 : 3}px;background:${ov ? c("green") : c("overlay1")}"></div></div></div>` : undefined });
     } else {
@@ -370,16 +370,16 @@ class ImmergasLinksCard extends HubCard {
     .lk > ha-icon { --mdc-icon-size: 22px; flex: none; margin-top: 2px; }
     .cx { min-width: 0; }
     .ln { font-size: 12.5px; font-weight: 800; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
-    .bus { font-size: 9.5px; font-weight: 800; opacity: .5; letter-spacing: .04em; }
+    .bus { font-size: 9.5px; font-weight: 800; opacity: var(--ih-o5, .5); letter-spacing: .04em; }
     .ls { display: flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 800; margin-top: 2px; }
     .ls ha-icon { --mdc-icon-size: 14px; }
-    .ld { font-size: 10px; opacity: .6; margin-top: 2px; line-height: 1.3; overflow-wrap: anywhere; }
+    .ld { font-size: 10px; opacity: var(--ih-o6, .6); margin-top: 2px; line-height: 1.3; overflow-wrap: anywhere; }
     .ro { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 7px; font-size: 11px; font-weight: 800; }
     .segs { display: flex; gap: 4px; margin-top: 7px; flex-wrap: wrap; }
-    .seg { cursor: pointer; font-size: 10.5px; font-weight: 800; padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,.12); opacity: .7; }
+    .seg { cursor: pointer; font-size: 10.5px; font-weight: 800; padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(var(--ih-ov-rgb), .12); opacity: var(--ih-o7, .7); }
     .seg.on { opacity: 1; background: rgba(var(--ih-sky-rgb), .25); border-color: rgba(var(--ih-sky-rgb), .6); }
     .src { margin-top: 6px; width: 100%; font: inherit; font-size: 11px; padding: 5px 6px; border-radius: 8px; background: transparent; color: inherit;
-      border: 1px solid rgba(255,255,255,.18); }
+      border: 1px solid rgba(var(--ih-ov-rgb), .18); }
   `];
 }
 
