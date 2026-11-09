@@ -2457,5 +2457,11 @@
   "Heater electricity today (est.)": "Stroom elementen vandaag (geschat)",
   "System COP today (with heaters)": "Systeem-COP vandaag (met elementen)",
   "max. ": "max. ",
-  "before DHW": "vóór SWW"
+  "before DHW": "vóór SWW",
+  "Appearance": "Weergave",
+  "Card theme": "Kaartthema",
+  "Automatic": "Automatisch",
+  "Light": "Licht",
+  "Dark": "Donker",
+  "Saved in this browser. The page background changes after a reload.": "Opgeslagen in deze browser. De pagina-achtergrond verandert na herladen."
 }

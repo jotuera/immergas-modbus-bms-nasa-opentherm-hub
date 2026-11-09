@@ -2457,5 +2457,11 @@
   "Heater electricity today (est.)": "Fűtőpatronok áramfelvétele ma (becs.)",
   "System COP today (with heaters)": "Rendszer COP ma (fűtőpatronokkal)",
   "max. ": "max. ",
-  "before DHW": "HMV előtt"
+  "before DHW": "HMV előtt",
+  "Appearance": "Megjelenés",
+  "Card theme": "Kártyák témája",
+  "Automatic": "Automatikus",
+  "Light": "Világos",
+  "Dark": "Sötét",
+  "Saved in this browser. The page background changes after a reload.": "Ebben a böngészőben mentve. Az oldal háttere újratöltés után változik."
 }

@@ -2457,5 +2457,11 @@
   "Heater electricity today (est.)": "Strom Heizstäbe heute (gesch.)",
   "System COP today (with heaters)": "System-COP heute (mit Heizstäben)",
   "max. ": "max. ",
-  "before DHW": "vor WW"
+  "before DHW": "vor WW",
+  "Appearance": "Darstellung",
+  "Card theme": "Karten-Design",
+  "Automatic": "Automatisch",
+  "Light": "Hell",
+  "Dark": "Dunkel",
+  "Saved in this browser. The page background changes after a reload.": "In diesem Browser gespeichert. Der Seitenhintergrund ändert sich nach dem Neuladen."
 }

@@ -14,11 +14,11 @@ export const PROFS: Prof[] = ["zeus25", "tera", "classic", "superior", "hercules
 export { html, css, nothing };
 export type { TemplateResult };
 
-// Catppuccin Mocha by default; a Catppuccin theme in HA overrides it automatically. On a light card PALETTE_LIGHT is
+// Vivid colours by default (the accents of Catppuccin Mocha Neon); a Catppuccin theme in HA overrides them automatically. On a light card PALETTE_LIGHT is
 // used instead: the same hues darkened until each one reads as text on white (at least 5:1).
 const PALETTE: Record<string, string> = {
-  red: "243,139,168", peach: "250,179,135", yellow: "249,226,175", green: "166,227,161", teal: "148,226,213",
-  sky: "137,220,235", sapphire: "116,199,236", blue: "137,180,250", lavender: "180,190,254", mauve: "203,166,247",
+  red: "255,45,85", peach: "255,123,0", yellow: "255,230,0", green: "57,255,136", teal: "0,255,209",
+  sky: "0,229,255", sapphire: "0,179,255", blue: "61,123,255", lavender: "157,123,255", mauve: "192,75,255",
   overlay1: "127,132,156", overlay2: "147,153,178",
 };
 const PALETTE_LIGHT: Record<string, string> = {
@@ -27,9 +27,23 @@ const PALETTE_LIGHT: Record<string, string> = {
   overlay1: "92,95,119", overlay2: "84,87,110",
 };
 const paletteLightCss = Object.entries(PALETTE_LIGHT).map(([n, rgb]) => `--ih-${n}: rgb(${rgb}); --ih-${n}-rgb: ${rgb};`).join("\n");
+const paletteNeonCss = Object.entries(PALETTE).map(([n, rgb]) => `--ih-${n}: rgb(${rgb}); --ih-${n}-rgb: ${rgb};`).join("\n");
 const paletteCss = Object.entries(PALETTE)
   .map(([n, rgb]) => `--ih-${n}: var(--catppuccin-${n}, rgb(${rgb})); --ih-${n}-rgb: var(--catppuccin-${n}-rgb, ${rgb});`)
   .join("\n");
+
+/** card look: auto = follow Home Assistant; light / dark force it; neon = the full Mocha Neon look built into the cards */
+export type CardTheme = "auto" | "light" | "dark" | "neon";
+const CARD_THEMES: string[] = ["auto", "light", "dark", "neon"];
+const THEME_KEY = "immergas_cards_theme";
+/** the look picked in this browser (Settings card), "auto" when none */
+export function storedTheme(): CardTheme {
+  try { const v = localStorage.getItem(THEME_KEY) ?? ""; return CARD_THEMES.includes(v) ? (v as CardTheme) : "auto"; } catch { return "auto"; }
+}
+export function saveTheme(t: CardTheme) {
+  try { localStorage.setItem(THEME_KEY, t); } catch { /* private window: this page only */ }
+  window.dispatchEvent(new Event("immergas-theme"));
+}
 
 /** is the card drawn on a light surface: the real card background when it can be read, else the theme's dark mode flag */
 function lightSurface(el: HTMLElement, hass: any): boolean {
@@ -77,13 +91,26 @@ export abstract class HubCard extends LitElement {
   protected idx: HubIndex | null = null;
   private armed: Record<string, number> = {};
   private themesSeen: unknown;
+  private onTheme = () => { this.applyTheme(); this.requestUpdate(); };
+
+  connectedCallback() { super.connectedCallback(); window.addEventListener("immergas-theme", this.onTheme); }
+  disconnectedCallback() { super.disconnectedCallback(); window.removeEventListener("immergas-theme", this.onTheme); }
+
+  /** the look picked in this browser wins over the card / dashboard option `theme`; auto follows the card background */
+  private applyTheme() {
+    const pick = storedTheme(), t: CardTheme = pick !== "auto" ? pick : CARD_THEMES.includes(this.config?.theme) ? this.config.theme : "auto";
+    this.toggleAttribute("ih-neon", t === "neon");
+    this.toggleAttribute("ih-dark", t === "dark");
+    this.toggleAttribute("ih-forcelight", t === "light");
+    this.toggleAttribute("ih-light", t === "light" || (t === "auto" && lightSurface(this, this.hass)));
+  }
 
   protected willUpdate(changed: Map<PropertyKey, unknown>) {
     super.willUpdate(changed);
     const themes = this.hass?.themes;
-    if (changed.has("hass") && themes !== this.themesSeen) {
+    if (changed.has("config") || (changed.has("hass") && themes !== this.themesSeen)) {
       this.themesSeen = themes;
-      this.toggleAttribute("ih-light", lightSurface(this, this.hass));
+      this.applyTheme();
     }
   }
 
@@ -616,6 +643,12 @@ export abstract class HubCard extends LitElement {
     .rl { font-size: 11.5px; font-weight: 800; }
     .rs { font-size: 10px; opacity: var(--ih-o6, .6); line-height: 1.3; }
     :host { ${unsafeCSS(paletteCss)} --ih-ov-rgb: 255,255,255; }
+    :host([ih-forcelight]) { --ha-card-background: #fff; --card-background-color: #fff; --primary-text-color: #141414; --secondary-text-color: #5e5e5e;
+      --disabled-text-color: #bdbdbd; --divider-color: #0000001f; --secondary-background-color: #e5e5e5; --ha-card-border-color: #e0e0e0; color: #141414; }
+    :host([ih-dark]) { --ha-card-background: #1c1c1c; --card-background-color: #1c1c1c; --primary-text-color: #e1e1e1; --secondary-text-color: #9b9b9b;
+      --disabled-text-color: #6f6f6f; --divider-color: rgba(225,225,225,.12); --secondary-background-color: #282828; --ha-card-border-color: rgba(225,225,225,.12); color: #e1e1e1; }
+    :host([ih-neon]) { ${unsafeCSS(paletteNeonCss)} --ha-card-background: #1e1e2e; --card-background-color: #1e1e2e; --primary-text-color: #cdd6f4; --secondary-text-color: #bac2de;
+      --disabled-text-color: #7f849c; --divider-color: rgba(127,132,156,.15); --secondary-background-color: #181825; --ha-card-border-color: rgba(127,132,156,.25); color: #cdd6f4; }
     :host([ih-light]) { ${unsafeCSS(paletteLightCss)} --ih-ov-rgb: 0,0,0; --ih-tint: .5;
       --ih-o35: .7; --ih-o4: .72; --ih-o45: .74; --ih-o5: .76; --ih-o55: .78; --ih-o6: .8; --ih-o65: .82; --ih-o7: .85; --ih-o75: .88; }
     *, *::before, *::after { box-sizing: border-box; }
@@ -688,7 +721,7 @@ export abstract class HubCard extends LitElement {
 
 /** registers a card element + card picker entry */
 /** this bundle's version (also in package.json) */
-export const VERSION = "0.89.4";
+export const VERSION = "0.90.0";
 
 // The bundle can be loaded twice: the hub cards resource and the copy shipped with the Dominus integration, in any
 // order. A custom element can be defined only once, so every bundle (0.85.0+) queues its elements on a shared window

@@ -2457,5 +2457,11 @@
   "Heater electricity today (est.)": "Eletricidade das resistências hoje (est.)",
   "System COP today (with heaters)": "COP do sistema hoje (com resistências)",
   "max. ": "máx. ",
-  "before DHW": "antes de AQS"
+  "before DHW": "antes de AQS",
+  "Appearance": "Aparência",
+  "Card theme": "Tema dos cartões",
+  "Automatic": "Automático",
+  "Light": "Claro",
+  "Dark": "Escuro",
+  "Saved in this browser. The page background changes after a reload.": "Guardado neste navegador. O fundo da página muda ao recarregar."
 }

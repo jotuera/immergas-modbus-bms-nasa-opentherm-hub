@@ -68,8 +68,10 @@ match every entity by its **original ESPHome name** (in any of the 11 package la
 area prefix in the entity id (e.g. `boiler_room_…`) or a renamed entity in HA do not matter. Users without admin rights
 fall back to friendly names. Labels follow the Home Assistant language: Polish, English, Czech, German, Spanish, French, Hungarian, Italian, Dutch, Portuguese or Slovak (others fall back to English). Texts are written as `this.t(polish, english)`; `tools/extract_strings.cjs` collects them, the translations live in `i18n/<lang>.json` and `tools/gen_i18n.py` builds `src/i18n_data.ts`.
 
-Colours use the Catppuccin palette variables when a Catppuccin theme is active, otherwise built-in Catppuccin Mocha
-values. On a light card the same colours are darkened automatically, so they stay readable on white.
+Colours use the Catppuccin palette variables when a Catppuccin theme is active, otherwise built-in vivid
+colours (the accents of Catppuccin Mocha Neon). The *Card theme* setting (Online settings) picks Automatic, Light, Dark or
+Mocha Neon for this browser; the option `theme: auto | light | dark | neon` sets it for a card or a dashboard strategy.
+Mocha Neon is built into the cards, so it needs no theme in Home Assistant. On a light card the same colours are darkened automatically, so they stay readable on white.
 
 ## Install with HACS (recommended)
 

@@ -2457,5 +2457,11 @@
   "Heater electricity today (est.)": "Elektřina topných tyčí dnes (odhad)",
   "System COP today (with heaters)": "COP systému dnes (s topnými tyčemi)",
   "max. ": "max. ",
-  "before DHW": "před TUV"
+  "before DHW": "před TUV",
+  "Appearance": "Vzhled",
+  "Card theme": "Motiv karet",
+  "Automatic": "Automaticky",
+  "Light": "Světlý",
+  "Dark": "Tmavý",
+  "Saved in this browser. The page background changes after a reload.": "Uloženo v tomto prohlížeči. Pozadí stránky se změní po obnovení."
 }

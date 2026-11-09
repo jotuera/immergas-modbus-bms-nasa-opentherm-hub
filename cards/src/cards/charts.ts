@@ -38,7 +38,7 @@ class ImmergasChartsCard extends HubCard {
   }
   disconnectedCallback() { super.disconnectedCallback(); this.ro?.disconnect(); }
 
-  private get dark() { return !!this.hass?.themes?.darkMode; }
+  private get dark() { return !this.hasAttribute("ih-light"); }
   private col(slot: number) { return (this.dark ? SLOTS_DARK : SLOTS_LIGHT)[slot]; }
 
   // ---------------- data ----------------

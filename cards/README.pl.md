@@ -68,8 +68,10 @@ Karty szukają urządzenia z encją „Immergas Hub - Stan pracy” („Operatin
 entity_id (np. `kotlownia_…`) ani zmiana nazwy encji w HA nie mają znaczenia. Użytkownik bez uprawnień administratora
 korzysta z nazw przyjaznych. Etykiety są w języku Home Assistanta: polski, angielski, czeski, niemiecki, hiszpański, francuski, węgierski, włoski, niderlandzki, portugalski albo słowacki (pozostałe – angielski). Teksty są w kodzie jako `this.t(polski, angielski)`; `tools/extract_strings.cjs` je zbiera, tłumaczenia są w `i18n/<język>.json`, a `tools/gen_i18n.py` buduje `src/i18n_data.ts`.
 
-Kolory biorą zmienne palety Catppuccin, gdy taki motyw jest aktywny, a w innym przypadku wbudowane wartości Catppuccin
-Mocha. Na jasnej karcie te same kolory są automatycznie przyciemniane, żeby tekst był czytelny na białym tle.
+Kolory biorą zmienne palety Catppuccin, gdy taki motyw jest aktywny, a w innym przypadku wbudowane wyraziste
+kolory (akcenty Catppuccin Mocha Neon). Ustawienie *Motyw kart* (Ustawienia online) wybiera Automatycznie, Jasny, Ciemny albo
+Mocha Neon w tej przeglądarce; opcja `theme: auto | light | dark | neon` ustawia go dla karty lub strategii dashboardu.
+Mocha Neon jest wbudowany w karty, więc nie wymaga motywu w Home Assistant. Na jasnej karcie te same kolory są automatycznie przyciemniane, żeby tekst był czytelny na białym tle.
 
 ## Instalacja przez HACS (zalecana)
 

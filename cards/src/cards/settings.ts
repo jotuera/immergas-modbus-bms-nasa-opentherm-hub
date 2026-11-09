@@ -2,7 +2,7 @@
 // capacity, gas-estimate calibration, DHW boost duration, fault description language and the night-function window
 // (U12 / U13 are not on any bus: options night_start / night_stop point to input_datetime helpers, edited here ±15 min).
 // Option: expanded: true (open by default).
-import { HubCard, html, css, nothing, c, register, Prof, PROFS } from "../base";
+import { HubCard, html, css, nothing, c, register, Prof, PROFS, CardTheme, storedTheme, saveTheme } from "../base";
 import { Key } from "../names";
 
 // the ESP hub selects carry keys as options (no HA translation): their labels, PL / EN
@@ -32,6 +32,18 @@ class ImmergasSettingsCard extends HubCard {
   }
 
   /** input_select day helper (e.g. anti-legionella day): previous / next option */
+  /** the look of the cards in this browser */
+  private themeRow() {
+    const cur = storedTheme();
+    const opts: [CardTheme, string, string][] = [["auto", "Automatycznie", "Automatic"], ["light", "Jasny", "Light"], ["dark", "Ciemny", "Dark"], ["neon", "Mocha Neon", "Mocha Neon"]];
+    return html`<div class="grp">${this.t("Wygląd", "Appearance")}</div>
+      <div class="nr"><ha-icon icon="mdi:palette-outline"></ha-icon><span class="nl">${this.t("Motyw kart", "Card theme")}</span>
+        <select class="langs" @change=${(e: Event) => saveTheme((e.target as HTMLSelectElement).value as CardTheme)}>
+          ${opts.map(([v, pl, en]) => html`<option value=${v} ?selected=${v === cur}>${this.t(pl, en)}</option>`)}
+        </select></div>
+      <div class="note">${this.t("Zapisane w tej przeglądarce. Tło strony zmienia się po odświeżeniu.", "Saved in this browser. The page background changes after a reload.")}</div>`;
+  }
+
   private selRow(entity: string | undefined, label: string, icon: string) {
     const st = entity ? this.hass.states[entity] : undefined;
     if (!entity || !st || !/^(input_)?select\./.test(entity)) return nothing;
@@ -459,6 +471,7 @@ class ImmergasSettingsCard extends HubCard {
         <span class="sum">${open ? "" : sum}</span>
         <ha-icon class="chev" icon=${open ? "mdi:chevron-up" : "mdi:chevron-down"}></ha-icon></div>
       ${open && note ? html`<div class="note">${note}</div>` : nothing}
+      ${open && on ? this.themeRow() : nothing}
       ${open && this.mtx && on ? this.mtRows() : nothing}
       ${open && this.mtx && off ? this.mtOffline() : nothing}
       ${open && !this.dominus && !this.mtx && on ? html`

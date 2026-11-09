@@ -13833,6 +13833,48 @@
   ]
  },
  {
+  "en": "Automatic",
+  "pl": "Automatycznie",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Light",
+  "pl": "Jasny",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Dark",
+  "pl": "Ciemny",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Appearance",
+  "pl": "Wygląd",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Card theme",
+  "pl": "Motyw kart",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Saved in this browser. The page background changes after a reload.",
+  "pl": "Zapisane w tej przeglądarce. Tło strony zmienia się po odświeżeniu.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
   "en": "inactive – fill in",
   "pl": "nieaktywne – uzupełnij",
   "files": [
