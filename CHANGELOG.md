@@ -7,6 +7,7 @@ in your device YAML, which package versions it brings.
 
 | Release | Date | Highlights |
 |---|---|---|
+| [v1.11.2](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.2) | 2026-11-09 | VICTRIX TT and Maior TT added to the ZEUS 25 / OMNIA boiler menu profile |
 | [v1.11.1](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.1) | 2026-11-09 | OpenTherm boiler menu profiles checked against the manuals: EXA 28 / 32 moved to the S / P / t family, new VICTRIX HYBRID profile, OMNIA V2 named, TERA short-cycling hint fixed |
 | [v1.11.0](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.0) | 2026-11-09 | card themes (Automatic, Light, Dark, built-in Mocha Neon), readable light look, every card text in 11 languages, OpenTherm: gas or electricity, last DHW cycle, target from the P66 curve |
 | [v1.10.0](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.10.0) | 2026-11-08 | OpenTherm: CH supervision (does the boiler really take up the demand), the regulator falls back to the curve when Home Assistant is gone, optional integral room correction; cards 0.87.0 |
