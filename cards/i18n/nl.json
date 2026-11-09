@@ -2475,5 +2475,6 @@
   "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "Gas wordt omgerekend naar nuttige warmte: ongeveer 10,6 kWh uit 1 m³.",
   "Last DHW cycle gas": "Gas laatste SWW-cyclus",
   "Last DHW cycle cylinder rise": "Stijging boiler in laatste SWW-cyclus",
-  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "te vaak – verleng t4 (ontstekingstimer CV) of verlaag de stooklijn"
+  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "te vaak – verleng t4 (ontstekingstimer CV) of verlaag de stooklijn",
+  "module OTC setpoint": "OTC-instelpunt van de module"
 }

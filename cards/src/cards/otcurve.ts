@@ -144,6 +144,7 @@ class ImmergasOtCurveCard extends HubCard {
         <span @click=${() => this.moreInfo("outdoor")}>${this.t("na zewnątrz", "outdoor")} <b>${this.f(out)} °C</b></span>
         ${!isNaN(room) ? html`<span @click=${() => this.moreInfo("zone1")}>${this.t("pokój", "room")} <b>${this.f(room)}°</b>/${this.f(tr)}°</span>` : nothing}
         <span>${wx || !isNaN(p66) ? this.t("z krzywej", "from the curve") : this.t("nastawa", "setpoint")} <b style="color:${c("yellow")}">${this.f(tgt)} °C</b></span>
+        ${wx && !isNaN(this.n("ot_max_ch")) ? html`<span @click=${() => this.moreInfo("ot_max_ch")}>${this.t("nastawa OTC modułu", "module OTC setpoint")} <b>${this.f(this.n("ot_max_ch"))} °C</b></span>` : nothing}
         <span @click=${() => this.moreInfo("ot_flow")}>${this.t("zasilanie", "flow")} <b style="color:${c("red")}">${this.f(flow)} °C</b></span></div>
       ${this.eid("ot_curve") ? html`<div class="nums">${chips.map((n) => html`<div class="numc" style=${Math.round(crv) === n ? box(col, true) : ""}
           @click=${() => n !== crv && this.setNum("ot_curve", n)}>${n}</div>`)}</div>` : nothing}

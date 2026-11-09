@@ -13221,6 +13221,13 @@
   ]
  },
  {
+  "en": "module OTC setpoint",
+  "pl": "nastawa OTC modułu",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
   "en": "OTC 1–9, step 0.1",
   "pl": "OTC 1–9, co 0,1",
   "files": [

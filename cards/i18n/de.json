@@ -2475,5 +2475,6 @@
   "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "Gas wird in Nutzwärme umgerechnet: etwa 10,6 kWh aus 1 m³.",
   "Last DHW cycle gas": "Gas letzter WW-Zyklus",
   "Last DHW cycle cylinder rise": "Speicheranstieg im letzten WW-Zyklus",
-  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "zu oft – t4 (Heizungs-Taktsperre) verlängern oder die Kurve senken"
+  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "zu oft – t4 (Heizungs-Taktsperre) verlängern oder die Kurve senken",
+  "module OTC setpoint": "OTC-Sollwert des Moduls"
 }

@@ -2475,5 +2475,6 @@
   "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "A gáz hasznos hővé számítva: kb. 10,6 kWh 1 m³-ből.",
   "Last DHW cycle gas": "Utolsó HMV-ciklus gázfogyasztása",
   "Last DHW cycle cylinder rise": "Tároló emelkedése az utolsó HMV ciklusban",
-  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "túl gyakori – növelje a t4-öt (fűtési újragyújtás tiltás) vagy csökkentse a görbét"
+  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "túl gyakori – növelje a t4-öt (fűtési újragyújtás tiltás) vagy csökkentse a görbét",
+  "module OTC setpoint": "modul OTC alapjel"
 }

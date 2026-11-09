@@ -7,6 +7,7 @@ urządzenia i jakie wersje pakietów wnosi.
 
 | Wydanie | Data | Najważniejsze |
 |---|---|---|
+| [v1.11.3](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.3) | 2026-11-10 | 23 kolejne opisy błędów kotła w 11 językach; nastawa OTC modułu na karcie krzywej pogodowej |
 | [v1.11.2](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.2) | 2026-11-09 | VICTRIX TT i Maior TT dodane do profilu menu kotła ZEUS 25 / OMNIA |
 | [v1.11.1](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.1) | 2026-11-09 | profile menu kotłów OpenTherm sprawdzone z instrukcjami: EXA 28 / 32 przeniesione do rodziny S / P / t, nowy profil VICTRIX HYBRID, nazwany OMNIA V2, poprawiona podpowiedź taktowania TERA |
 | [v1.11.0](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.0) | 2026-11-09 | motywy kart (Automatycznie, Jasny, Ciemny, wbudowany Mocha Neon), czytelny jasny wygląd, wszystkie teksty kart w 11 językach, OpenTherm: gaz czy prąd, ostatni cykl CWU, cel z krzywej P66 |

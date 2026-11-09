@@ -2475,5 +2475,6 @@
   "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "Plyn je prepočítaný na užitočné teplo: asi 10,6 kWh z 1 m³.",
   "Last DHW cycle gas": "Plyn posledného cyklu TÚV",
   "Last DHW cycle cylinder rise": "Nárast zásobníka v poslednom cykle TÚV",
-  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "príliš často – predĺžte t4 (blokovanie zapálenia ÚK) alebo znížte krivku"
+  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "príliš často – predĺžte t4 (blokovanie zapálenia ÚK) alebo znížte krivku",
+  "module OTC setpoint": "nastavenie OTC modulu"
 }
