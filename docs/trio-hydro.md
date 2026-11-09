@@ -63,6 +63,7 @@ PortABC.
 
 | Version | Configuration file |
 |---|---|
+| **First test** – F1/F2 only, listen only, no PortABC (ELECTRIC and HYBRID) | [`examples/immergas-trio-hydro-f1f2-listen.yaml`](../examples/immergas-trio-hydro-f1f2-listen.yaml) ([open on GitHub](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro-f1f2-listen.yaml) · [download (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro-f1f2-listen.yaml)) |
 | **HYBRID** – OpenTherm gateway + F1/F2 + zone bus | [`examples/immergas-trio-hydro.yaml`](../examples/immergas-trio-hydro.yaml) ([open on GitHub](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro.yaml) · [download (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro.yaml)) |
 | **ELECTRIC** – F1/F2 + zone bus | [`examples/immergas-trio-hydro-electric.yaml`](../examples/immergas-trio-hydro-electric.yaml) ([open on GitHub](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro-electric.yaml) · [download (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro-electric.yaml)) |
 
@@ -81,6 +82,7 @@ off – the hub only listens. The `ot_3v3_supply` package is not used (the regul
 1. **Electric part first, read only.** The RS485 unit on F1 / F2 in parallel (it only listens), as on the
    [MAGIS PRO / COMBO V2](magis-pro-combo-v2.md#wiring). Compressor, refrigerant circuit, defrost, flow and outdoor
    temperatures, power – and a raw log of what the Samsung outdoor unit sends.
+   Configuration: the *First test* file above; it sends nothing on the bus.
 2. **HYBRID: the OpenTherm gateway** between the indoor unit and the VICTRIX TERA 24 PLUS (see
    [OpenTherm boilers](opentherm-hub.md#two-modes)): what the indoor unit asks the boiler for, flame, modulation, faults.
 3. **The zone bus, recording only.** A log of the Modbus traffic between the indoor unit and the zone panel or Dominus,

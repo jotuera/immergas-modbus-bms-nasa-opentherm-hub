@@ -63,6 +63,7 @@ PortABC.
 
 | Wersja | Plik konfiguracji |
 |---|---|
+| **Pierwszy test** – tylko F1/F2, tylko nasłuch, bez PortABC (ELECTRIC i HYBRID) | [`examples/immergas-trio-hydro-f1f2-listen.yaml`](../examples/immergas-trio-hydro-f1f2-listen.yaml) ([otwórz na GitHubie](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro-f1f2-listen.yaml) · [pobierz (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro-f1f2-listen.yaml)) |
 | **HYBRID** – bramka OpenTherm + F1/F2 + magistrala strefowa | [`examples/immergas-trio-hydro.yaml`](../examples/immergas-trio-hydro.yaml) ([otwórz na GitHubie](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro.yaml) · [pobierz (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro.yaml)) |
 | **ELECTRIC** – F1/F2 + magistrala strefowa | [`examples/immergas-trio-hydro-electric.yaml`](../examples/immergas-trio-hydro-electric.yaml) ([otwórz na GitHubie](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-trio-hydro-electric.yaml) · [pobierz (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-trio-hydro-electric.yaml)) |
 
@@ -81,6 +82,7 @@ strefowej wyłączone – hub tylko słucha. Pakietu `ot_3v3_supply` nie ma (3,3
 1. **Najpierw część elektryczna, tylko odczyt.** Moduł RS485 na F1 / F2 równolegle (tylko słucha), jak w
    [MAGIS PRO / COMBO V2](magis-pro-combo-v2.pl.md#podłączenie). Sprężarka, obieg chłodniczy, odszranianie,
    temperatury zasilania i zewnętrzna, moc – i surowy log tego, co wysyła jednostka zewnętrzna Samsung.
+   Konfiguracja: plik *Pierwszy test* powyżej; niczego nie nadaje na magistralę.
 2. **HYBRID: bramka OpenTherm** między jednostką wewnętrzną a VICTRIX TERA 24 PLUS (zobacz
    [Kotły OpenTherm](opentherm-hub.pl.md#dwa-tryby)): o co jednostka wewnętrzna prosi kocioł, płomień, modulacja, błędy.
 3. **Magistrala strefowa, tylko nagrywanie.** Log ruchu Modbus między jednostką wewnętrzną a panelem strefy albo
