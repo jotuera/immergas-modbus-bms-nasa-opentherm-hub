@@ -98,7 +98,8 @@ class ImmergasOtCurveCard extends HubCard {
     const bMin = !gen && !isNaN(this.n("ot_t0")) ? this.n("ot_t0") : +(b49.min ?? NaN), bMax = !gen && !isNaN(this.n("ot_t1")) ? this.n("ot_t1") : +(b49.max ?? NaN);
     const lo = Math.max(isNaN(dMin) ? -99 : dMin, isNaN(bMin) ? -99 : bMin), hi = Math.min(isNaN(dMax) ? 99 : dMax, isNaN(bMax) ? 99 : bMax);
     const otc = (x: number) => Math.max(lo, Math.min(hi, tr + off + crv / 4 * (tr - x)));
-    const tgt = isNaN(out) ? NaN : wx ? (isNaN(crv) ? NaN : Math.round(otc(out) * 2) / 2) : isNaN(dMax) ? NaN : Math.min(hi, dMax);
+    const p66 = this.p66Target();
+    const tgt = isNaN(out) ? NaN : wx ? (isNaN(crv) ? NaN : Math.round(otc(out) * 2) / 2) : !isNaN(p66) ? p66 : isNaN(dMax) ? NaN : Math.min(hi, dMax);
     // the boiler's own climatic curve (ZEUS Superior / HERCULES)
     const d = this.drag, oc = this.n("ot_sup_out_min"), ow = this.n("ot_sup_out_max");
     const pc = d?.k === "c" ? [d.x, d.y] : [oc, bMax], pw = d?.k === "w" ? [d.x, d.y] : [ow, bMin];
@@ -142,7 +143,7 @@ class ImmergasOtCurveCard extends HubCard {
       <div class="tr">
         <span @click=${() => this.moreInfo("outdoor")}>${this.t("na zewnątrz", "outdoor")} <b>${this.f(out)} °C</b></span>
         ${!isNaN(room) ? html`<span @click=${() => this.moreInfo("zone1")}>${this.t("pokój", "room")} <b>${this.f(room)}°</b>/${this.f(tr)}°</span>` : nothing}
-        <span>${wx ? this.t("z krzywej", "from the curve") : this.t("nastawa", "setpoint")} <b style="color:${c("yellow")}">${this.f(tgt)} °C</b></span>
+        <span>${wx || !isNaN(p66) ? this.t("z krzywej", "from the curve") : this.t("nastawa", "setpoint")} <b style="color:${c("yellow")}">${this.f(tgt)} °C</b></span>
         <span @click=${() => this.moreInfo("ot_flow")}>${this.t("zasilanie", "flow")} <b style="color:${c("red")}">${this.f(flow)} °C</b></span></div>
       ${this.eid("ot_curve") ? html`<div class="nums">${chips.map((n) => html`<div class="numc" style=${Math.round(crv) === n ? box(col, true) : ""}
           @click=${() => n !== crv && this.setNum("ot_curve", n)}>${n}</div>`)}</div>` : nothing}

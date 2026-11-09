@@ -144,7 +144,7 @@ class ImmergasDiagramCard extends HubCard {
     if (ot && dw) this.dhwAt = now;
     const afterDhw = ot && now - this.dhwAt < 3 * 60e3;
     if (ot && !afterDhw && !isNaN(this.n("ot_flow"))) this.chFlow = this.n("ot_flow");
-    const houseFlow = afterDhw ? this.chFlow : this.n("ot_flow");
+    const houseFlow = afterDhw ? this.chFlow : this.n("ot_flow"), p66 = ot ? this.p66Target() : NaN;
     g.push(svg`<g @click=${this.tap(ot ? "ot_flow" : "zone1")} class="hit">
         <path d="M 680 92 L 790 30 L 900 92 L 900 230 L 680 230 Z" class="house" style="stroke:${c(heat ? "peach" : "overlay2")}"/>
         <path d="M 696 214 h 188 M 696 214 q 0 -8 10 -8 h 168 q 10 0 10 -8 q 0 -8 -10 -8 h -168" fill="none"
@@ -152,7 +152,7 @@ class ImmergasDiagramCard extends HubCard {
         ${ot ? svg`${this.label(790, 92, this.t("Ogrzewanie", "Heating"), "", 10, "middle", 700)}
           ${this.label(790, 134, isNaN(houseFlow) ? "–" : this.f(houseFlow, 1, 1) + "°", "", 24)}
           ${this.label(790, 156, (afterDhw ? this.t("przed CWU", "before DHW") : this.t("powrót ", "return ") + this.f(this.n("ot_ret"), 1, 1) + "°") + " · "
-            + (isNaN(this.n("outdoor")) ? this.t("nastawa ", "set ") : this.t("maks. ", "max. ")) + this.f(this.n("ot_ch_set"), 0) + "°", "", 10, "middle", 600)}`
+            + (!isNaN(p66) ? this.t("cel ", "target ") + "≈" + this.f(p66, 1, 1) : (isNaN(this.n("outdoor")) ? this.t("nastawa ", "set ") : this.t("maks. ", "max. ")) + this.f(this.n("ot_ch_set"), 0)) + "°", "", 10, "middle", 600)}`
         : svg`${this.label(790, 92, this.t("Strefa 1", "Zone 1"), "", 10, "middle", 700)}
         ${this.label(790, 134, isNaN(z1) ? "–" : this.f(z1, 1, 1) + "°", "", 24)}
         ${this.label(790, 156, this.t("zadana ", "set ") + this.f(zs, 1, 1) + "°" + (ph ? " · " + ph : ""), "", 10, "middle", 600)}`}

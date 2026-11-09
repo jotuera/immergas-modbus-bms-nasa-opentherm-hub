@@ -2463,5 +2463,6 @@
   "Automatic": "Automático",
   "Light": "Claro",
   "Dark": "Escuro",
-  "Saved in this browser. The page background changes after a reload.": "Guardado neste navegador. O fundo da página muda ao recarregar."
+  "Saved in this browser. The page background changes after a reload.": "Guardado neste navegador. O fundo da página muda ao recarregar.",
+  "target ": "alvo "
 }

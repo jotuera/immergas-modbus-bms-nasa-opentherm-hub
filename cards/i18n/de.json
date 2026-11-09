@@ -2463,5 +2463,6 @@
   "Automatic": "Automatisch",
   "Light": "Hell",
   "Dark": "Dunkel",
-  "Saved in this browser. The page background changes after a reload.": "In diesem Browser gespeichert. Der Seitenhintergrund ändert sich nach dem Neuladen."
+  "Saved in this browser. The page background changes after a reload.": "In diesem Browser gespeichert. Der Seitenhintergrund ändert sich nach dem Neuladen.",
+  "target ": "Ziel "
 }

@@ -2463,5 +2463,6 @@
   "Automatic": "Automatikus",
   "Light": "Világos",
   "Dark": "Sötét",
-  "Saved in this browser. The page background changes after a reload.": "Ebben a böngészőben mentve. Az oldal háttere újratöltés után változik."
+  "Saved in this browser. The page background changes after a reload.": "Ebben a böngészőben mentve. Az oldal háttere újratöltés után változik.",
+  "target ": "cél "
 }
