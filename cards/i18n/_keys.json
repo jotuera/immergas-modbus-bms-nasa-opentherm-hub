@@ -52,7 +52,8 @@
   "en": "daily",
   "pl": "codziennie",
   "files": [
-   "base.ts"
+   "base.ts",
+   "automations.ts"
   ]
  },
  {
@@ -60,7 +61,20 @@
   "pl": "Lato",
   "files": [
    "base.ts",
+   "hubmode.ts",
    "mode.ts"
+  ]
+ },
+ {
+  "en": "Cooling",
+  "pl": "Chłodzenie",
+  "files": [
+   "base.ts",
+   "calibration.ts",
+   "curve.ts",
+   "mode.ts",
+   "now.ts",
+   "setpoints.ts"
   ]
  },
  {
@@ -68,7 +82,45 @@
   "pl": "Zima",
   "files": [
    "base.ts",
+   "hubmode.ts",
    "mode.ts"
+  ]
+ },
+ {
+  "en": "Comfort",
+  "pl": "Komfort",
+  "files": [
+   "base.ts",
+   "schedule.ts",
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "Eco",
+  "pl": "Eko",
+  "files": [
+   "base.ts",
+   "schedule.ts",
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "Manual",
+  "pl": "Ręczny",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "Anti-legionella",
+  "pl": "Anty-legionella",
+  "files": [
+   "base.ts",
+   "calibration.ts",
+   "mode.ts",
+   "now.ts",
+   "settings.ts",
+   "hub.ts"
   ]
  },
  {
@@ -76,7 +128,15 @@
   "pl": "Tylko CO",
   "files": [
    "base.ts",
+   "hubmode.ts",
    "mode.ts"
+  ]
+ },
+ {
+  "en": "not needed – weather compensation (outdoor probe / the boiler's curve)",
+  "pl": "niepotrzebne – regulacja pogodowa (sonda zewnętrzna / krzywa kotła)",
+  "files": [
+   "base.ts"
   ]
  },
  {
@@ -189,7 +249,9 @@
   "pl": "on",
   "files": [
    "base.ts",
+   "automations.ts",
    "calibration.ts",
+   "hubmode.ts",
    "mode.ts"
   ]
  },
@@ -224,6 +286,123 @@
  {
   "en": "Running without the CAR V2",
   "pl": "Praca bez CAR V2",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "The boiler answers OpenTherm",
+  "pl": "Kocioł odpowiada na OpenTherm",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "master adapter on the remote terminals 41 / 44 (IMG BUS)",
+  "pl": "adapter master na zaciskach pilota 41 / 44 (IMG BUS)",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "without the CAR V2 put it back (or a thermostat), else the boiler will not heat",
+  "pl": "bez CAR V2 załóż go z powrotem (albo termostat), inaczej kocioł nie włączy CO",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "Hub regulator on",
+  "pl": "Regulator hubu włączony",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "weather curve + room correction",
+  "pl": "krzywa pogodowa + korekta pokojowa",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "Room temperature for the regulator",
+  "pl": "Temperatura pokoju dla regulatora",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "set ot_room_entity (a Home Assistant sensor)",
+  "pl": "ustaw ot_room_entity (czujnik z Home Assistant)",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "Frost protection",
+  "pl": "Ochrona przed zamarzaniem",
+  "files": [
+   "base.ts",
+   "automations.ts",
+   "mode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH program AUTO",
+  "pl": "Program CO AUTO",
+  "files": [
+   "base.ts",
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "DHW program",
+  "pl": "Program CWU",
+  "files": [
+   "base.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Gateway mode – the room unit is connected",
+  "pl": "Tryb bramki – pilot jest podłączony",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "the list is about running without the remote (master)",
+  "pl": "lista dotyczy pracy bez pilota (master)",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "set ON on the boiler and declare it in the Boiler parameters",
+  "pl": "ustaw ON na kotle i zadeklaruj w Parametrach pieca",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "P7 = 2 – third-party remote",
+  "pl": "P7 = 2 – pilot innej firmy",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "on the boiler; power-cycle it after the change",
+  "pl": "na kotle; po zmianie odłącz i włącz zasilanie",
+  "files": [
+   "base.ts"
+  ]
+ },
+ {
+  "en": "Running without the CAR V2 (hub)",
+  "pl": "Praca bez CAR V2 (hub)",
   "files": [
    "base.ts"
   ]
@@ -309,6 +488,7 @@
   "files": [
    "base.ts",
    "calibration.ts",
+   "hubmode.ts",
    "mode.ts"
   ]
  },
@@ -601,21 +781,24 @@
   "en": "Winter below",
   "pl": "Zima poniżej",
   "files": [
-   "automations.ts"
+   "automations.ts",
+   "hub.ts"
   ]
  },
  {
   "en": "Summer above",
   "pl": "Lato powyżej",
   "files": [
-   "automations.ts"
+   "automations.ts",
+   "hub.ts"
   ]
  },
  {
   "en": "24 h mean {0} °C",
   "pl": "średnia 24 h {0} °C",
   "files": [
-   "automations.ts"
+   "automations.ts",
+   "mode.ts"
   ]
  },
  {
@@ -727,6 +910,258 @@
   ]
  },
  {
+  "en": "summer (DHW only)",
+  "pl": "Lato (tylko CWU)",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "standby",
+  "pl": "Czuwanie",
+  "files": [
+   "automations.ts",
+   "diagram.ts",
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "weekly",
+  "pl": "co tydzień",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "24 h outdoor mean below the threshold → heating, above → DHW only; the hub decides, also without Home Assistant",
+  "pl": "średnia zewnętrzna z 24 h poniżej progu → grzanie, powyżej → tylko CWU; liczy hub, działa też bez Home Assistanta",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "24 h outdoor mean below the threshold → winter (CH + DHW), above → summer (DHW); the hub decides, also without Home Assistant",
+  "pl": "średnia zewnętrzna z 24 h poniżej progu → Zima (CO + CWU), powyżej → Lato (CWU); liczy hub, działa też bez Home Assistanta",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "for the vacation {0} switches the mode (standby or summer) and goes back at “Away until” or when switched off",
+  "pl": "na czas wyjazdu {0} przełącza tryb (Czuwanie albo Lato) i wraca do poprzedniego po „Wyjazd do” albo wyłączeniu",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "DHW Comfort / Eco by program",
+  "pl": "CWU Komfort / Eko wg programu",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "Comfort setpoint inside the DHW program windows, Eco outside – the heat pump heats the water at chosen hours (e.g. the cheap tariff)",
+  "pl": "w oknach programu CWU nastawa Komfort, poza nimi Eko – pompa grzeje wodę w wybranych godzinach (np. tania taryfa)",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "Comfort setpoint inside the DHW program windows, Eco outside",
+  "pl": "w oknach programu CWU nastawa Komfort, poza nimi Eko",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "room or flow below the threshold → the hub heats even in standby",
+  "pl": "pokój albo zasilanie poniżej progu → hub włącza grzanie nawet w Czuwaniu",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "a fault code reported by the unit",
+  "pl": "kod błędu zgłoszony przez jednostkę",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "No link to the device",
+  "pl": "Brak łączności z urządzeniem",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "the boiler does not answer OpenTherm",
+  "pl": "kocioł nie odpowiada na OpenTherm",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "the device does not answer Modbus",
+  "pl": "urządzenie nie odpowiada na Modbus",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "Burner short cycling",
+  "pl": "Taktowanie palnika",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "more than 3 burner starts in the last hour",
+  "pl": "więcej niż 3 starty palnika w ostatniej godzinie",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "starts in the last hour: {0}",
+  "pl": "starty w ostatniej godzinie: {0}",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "Frequent defrosting",
+  "pl": "Częste odszranianie",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "more than {0} cycles < 10 min today (limit for a {1} kW unit)",
+  "pl": "więcej niż {0} cykle < 10 min dziś (próg dla jednostki {1} kW)",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "more than {0} defrosts today",
+  "pl": "więcej niż {0} odszraniań dziś",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "today: {0}",
+  "pl": "dziś: {0}",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "Possible leak",
+  "pl": "Możliwy wyciek",
+  "files": [
+   "automations.ts",
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "the system pressure drops faster than usual",
+  "pl": "ciśnienie instalacji spada szybciej niż zwykle",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "Low flame current",
+  "pl": "Niski prąd płomienia",
+  "files": [
+   "automations.ts",
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Low ionisation",
+  "pl": "Niska jonizacja",
+  "files": [
+   "automations.ts",
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "the electrode or the mixture to check at the service",
+  "pl": "elektroda albo mieszanka do sprawdzenia przy przeglądzie",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "Antifreeze active",
+  "pl": "Ochrona przed zamarzaniem aktywna",
+  "files": [
+   "automations.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "the unit heats the water so the circuit does not freeze",
+  "pl": "jednostka grzeje wodę, żeby obieg nie zamarzł",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "Unit alarm",
+  "pl": "Alarm jednostki",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "the alarm output of the MAGIS M controller",
+  "pl": "wyjście alarmowe sterownika MAGIS M",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "Service due",
+  "pl": "Przegląd serwisowy",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "the service date by the interval from the parameters (the boiler has its own reminder in menu M1 too)",
+  "pl": "termin przeglądu wg interwału z parametrów (kocioł ma też własne przypomnienie w menu M1)",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "the service date by the interval set in the parameters",
+  "pl": "termin przeglądu wg interwału ustawionego w parametrach",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "unavailable",
+  "pl": "unknown",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
+  "en": "last: ",
+  "pl": "ostatni: ",
+  "files": [
+   "automations.ts"
+  ]
+ },
+ {
   "en": "has not fired yet",
   "pl": "jeszcze nie zadziałała",
   "files": [
@@ -820,6 +1255,34 @@
   ]
  },
  {
+  "en": "registers the boiler answers that no gb_ package reads (scan)",
+  "pl": "rejestry, na które kocioł odpowiada, a żaden pakiet gb_ ich nie czyta (skan)",
+  "files": [
+   "busmap.ts"
+  ]
+ },
+ {
+  "en": "registers the unit answers that no mt_ package reads (scan)",
+  "pl": "rejestry, na które jednostka odpowiada, a żaden pakiet mt_ ich nie czyta (skan)",
+  "files": [
+   "busmap.ts"
+  ]
+ },
+ {
+  "en": "map_gb_st",
+  "pl": "map_gb_scan",
+  "files": [
+   "busmap.ts"
+  ]
+ },
+ {
+  "en": "map_mt_st",
+  "pl": "map_mt_scan",
+  "files": [
+   "busmap.ts"
+  ]
+ },
+ {
   "en": "Bus map",
   "pl": "Mapa magistral",
   "files": [
@@ -834,8 +1297,15 @@
   ]
  },
  {
-  "en": "undescribed PDUs",
-  "pl": "nieopisane PDU",
+  "en": "scanning… · ",
+  "pl": "skanuję… · ",
+  "files": [
+   "busmap.ts"
+  ]
+ },
+ {
+  "en": "undescribed: {0}",
+  "pl": "nieopisane: {0}",
   "files": [
    "busmap.ts"
   ]
@@ -843,6 +1313,42 @@
  {
   "en": "Boiler and heat pump model (rating plate)",
   "pl": "Model kotła i pompy (z tabliczki)",
+  "files": [
+   "busmap.ts"
+  ]
+ },
+ {
+  "en": "scanning ",
+  "pl": "skanuję ",
+  "files": [
+   "busmap.ts"
+  ]
+ },
+ {
+  "en": "scan done",
+  "pl": "skan zakończony",
+  "files": [
+   "busmap.ts"
+  ]
+ },
+ {
+  "en": "not scanned yet",
+  "pl": "jeszcze nie skanowano",
+  "files": [
+   "busmap.ts",
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Confirm – a few minutes",
+  "pl": "Potwierdź – kilka minut",
+  "files": [
+   "busmap.ts"
+  ]
+ },
+ {
+  "en": "Scan",
+  "pl": "Skanuj",
   "files": [
    "busmap.ts"
   ]
@@ -872,6 +1378,13 @@
  {
   "en": "The hub did not answer within 15 s – is it online?",
   "pl": "Hub nie odpowiedział w 15 s – czy jest online?",
+  "files": [
+   "busmap.ts"
+  ]
+ },
+ {
+  "en": "The scan reads every register of the usual ranges one by one (a few minutes, the normal polling keeps running) and keeps the ones that answer and that no package describes. Then Prepare report – nothing is sent until you press Create on GitHub.",
+  "pl": "Skan czyta po kolei każdy rejestr z typowych zakresów (kilka minut, zwykłe odpytywanie działa dalej) i zostawia te, które odpowiadają, a żaden pakiet ich nie opisuje. Potem Przygotuj zgłoszenie – nic nie jest wysyłane, dopóki nie naciśniesz Create na GitHubie.",
   "files": [
    "busmap.ts"
   ]
@@ -910,6 +1423,7 @@
   "files": [
    "calibration.ts",
    "charts.ts",
+   "circuits.ts",
    "diagram.ts",
    "now.ts",
    "setpoints.ts",
@@ -931,21 +1445,11 @@
   ]
  },
  {
-  "en": "Cooling",
-  "pl": "Chłodzenie",
-  "files": [
-   "calibration.ts",
-   "curve.ts",
-   "mode.ts",
-   "now.ts",
-   "setpoints.ts"
-  ]
- },
- {
   "en": "Other",
   "pl": "Pozostałe",
   "files": [
-   "calibration.ts"
+   "calibration.ts",
+   "settings.ts"
   ]
  },
  {
@@ -1330,7 +1834,9 @@
   "en": "Compressor starts today",
   "pl": "Starty sprężarki dziś",
   "files": [
-   "calibration.ts"
+   "calibration.ts",
+   "circuits.ts",
+   "hub.ts"
   ]
  },
  {
@@ -1400,6 +1906,7 @@
    "calibration.ts",
    "gas.ts",
    "now.ts",
+   "ot.ts",
    "strategy.ts"
   ]
  },
@@ -1749,16 +2256,6 @@
   ]
  },
  {
-  "en": "Anti-legionella",
-  "pl": "Anty-legionella",
-  "files": [
-   "calibration.ts",
-   "mode.ts",
-   "now.ts",
-   "settings.ts"
-  ]
- },
- {
   "en": "on with DHW < 55 °C",
   "pl": "wł. przy CWU < 55 °C",
   "files": [
@@ -1989,7 +2486,9 @@
   "files": [
    "calibration.ts",
    "now.ts",
-   "schedule.ts"
+   "ot.ts",
+   "schedule.ts",
+   "hub.ts"
   ]
  },
  {
@@ -2208,7 +2707,8 @@
   "en": "DHW Comfort",
   "pl": "CWU Komfort",
   "files": [
-   "calibration.ts"
+   "calibration.ts",
+   "hub.ts"
   ]
  },
  {
@@ -2243,7 +2743,8 @@
   "en": "DHW Eco",
   "pl": "CWU Eko",
   "files": [
-   "calibration.ts"
+   "calibration.ts",
+   "hub.ts"
   ]
  },
  {
@@ -3831,11 +4332,1331 @@
   ]
  },
  {
+  "en": "no data (yet)",
+  "pl": "brak danych (jeszcze)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
   "en": "on",
   "pl": "wł.",
   "files": [
    "calibration.ts",
+   "hubmode.ts",
    "mode.ts"
+  ]
+ },
+ {
+  "en": "→ switch on",
+  "pl": "→ włącz",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "→ switch off",
+  "pl": "→ wyłącz",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Device profile",
+  "pl": "Profil urządzenia",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "the codes and parameters in the rows above depend on the profile",
+  "pl": "kody i parametry w wierszach wyżej zależą od profilu",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "heat pump: every degree higher lowers the DHW COP",
+  "pl": "pompa ciepła: każdy stopień wyżej obniża COP CWU",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "a higher setpoint = more cylinder loss and less condensing on DHW",
+  "pl": "wyższa nastawa = większe straty zasobnika i mniej kondensacji przy CWU",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "{0} °C is more than needed",
+  "pl": "{0} °C to więcej niż potrzeba",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "generic (OpenTherm)",
+  "pl": "ogólny (OpenTherm)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too often – lengthen t5 (CH ignitions timer) or lower the curve",
+  "pl": "za często – wydłuż t5 (blokada zapłonu CO) albo obniż krzywą",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too often – lower the P66 curve / CH max. output (M3) or the CH setpoint",
+  "pl": "za często – obniż krzywą P66 / maks. moc CO (M3) albo nastawę CO",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too often – lower the CH max. output (menu P) or the curve",
+  "pl": "za często – obniż maks. moc CO (menu P) albo krzywą",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too often – lower the hub max. modulation or the curve",
+  "pl": "za często – obniż maks. modulację huba albo krzywą",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too often – lower the curve or the CH setpoint",
+  "pl": "za często – obniż krzywą albo nastawę CO",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Cycling: burner starts per hour",
+  "pl": "Taktowanie: starty palnika na godzinę",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "condensing boiler: fewer starts = fewer losses and less wear",
+  "pl": "kocioł kondensacyjny: mniej startów = mniej strat i zużycia",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "{0} starts today, average burn {1} min",
+  "pl": "dziś {0} startów, średnie palenie {1} min",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Average burn",
+  "pl": "Średnie palenie",
+  "files": [
+   "calibration.ts",
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "short burns = the boiler is too big for the current load",
+  "pl": "krótkie palenia = kocioł za duży na obecne obciążenie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "short at min. output – the boiler cannot go lower, lengthen the pauses (t5 / hysteresis)",
+  "pl": "krótko na min. mocy – kocioł nie zejdzie niżej, wydłuż przerwy (t5 / histereza)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "short – lower the CH max. output",
+  "pl": "krótko – obniż maks. moc CO",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "{0} % of the burn at min. modulation",
+  "pl": "na min. modulacji {0} % palenia",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Short burns today",
+  "pl": "Krótkie palenia dziś",
+  "files": [
+   "calibration.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "a burn < 5 min",
+  "pl": "palenie < 5 min",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "CH ignitions timer",
+  "pl": "Blokada ponownego zapłonu CO",
+  "files": [
+   "calibration.ts",
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "the minimum pause between CH ignitions",
+  "pl": "minimalna przerwa między zapłonami CO",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "{0} starts/h",
+  "pl": "{0} startów/h",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Hub max. modulation",
+  "pl": "Maks. modulacja huba",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "lower = longer, calmer burns at a low load",
+  "pl": "niższa = dłuższe, spokojniejsze palenia przy małym obciążeniu",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "{0} starts/h, {1} % at min. modulation",
+  "pl": "{0} startów/h, na min. modulacji {1} %",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Curve offset (Dominus regulator)",
+  "pl": "Offset krzywej (regulator Dominusa)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "shifts the whole OTC curve: +1 = warmer water",
+  "pl": "przesuwa całą krzywą OTC: +1 = cieplejsza woda",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "outdoor sensor off – the regulator computes no curve",
+  "pl": "sonda zewnętrzna wyłączona – regulator nie liczy krzywej",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "no room deviation (Dominus 1.6.14)",
+  "pl": "brak odchyłki pokoju (Dominus 1.6.14)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "room {0}{1} K from the target (1 h)",
+  "pl": "pokój {0}{1} K od zadanej (1 h)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "no room temperature",
+  "pl": "brak temperatury pokoju",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "room {0}{1} K from the target, outdoor {2} °C",
+  "pl": "pokój {0}{1} K od zadanej, na zewnątrz {2} °C",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Curve: flow at the warmest",
+  "pl": "Krzywa: zasilanie przy najwyższej temp.",
+  "files": [
+   "calibration.ts",
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "the curve foot – matters in mild weather",
+  "pl": "stopa krzywej – liczy się, gdy na zewnątrz łagodnie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Curve: flow at the coldest",
+  "pl": "Krzywa: zasilanie przy najniższej temp.",
+  "files": [
+   "calibration.ts",
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "≤ 60 °C (condensing)",
+  "pl": "≤ 60 °C (kondensacja)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "the curve top – matters in frost",
+  "pl": "szczyt krzywej – liczy się w mrozy",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Room correction",
+  "pl": "Korekta pokojowa",
+  "files": [
+   "calibration.ts",
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "how many °C of water per 1 °C missing in the room",
+  "pl": "o ile °C podnieść wodę na 1 °C brakującą w pokoju",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "a large correction makes the control swing",
+  "pl": "duża korekta rozkołysuje regulację",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Condensing today",
+  "pl": "Praca kondensacyjna dziś",
+  "files": [
+   "calibration.ts",
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "return below ~55 °C = the boiler recovers the flue heat",
+  "pl": "powrót poniżej ~55 °C = kocioł odzyskuje ciepło spalin",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "low – lower the curve / max. flow",
+  "pl": "mało – obniż krzywą / maks. zasilanie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "CH max. flow temperature",
+  "pl": "Maks. temperatura zasilania CO",
+  "files": [
+   "calibration.ts",
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "the top water limit: lower = more condensing, but slower reheating",
+  "pl": "górny limit wody: niżej = więcej kondensacji, ale wolniejsze dogrzewanie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "condensing {0} % of the day",
+  "pl": "kondensacja {0} % doby",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Delta T flow − return",
+  "pl": "Delta T zasilanie − powrót",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "a small difference = the pump moves too much, the return is too warm for condensing",
+  "pl": "mała różnica = pompa tłoczy za dużo, powrót za ciepły na kondensację",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too low – A5 to ΔT mode (15–20) or a lower A3",
+  "pl": "za mało – A5 w tryb ΔT (15–20) albo niższe A3",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too low with the pump in AUTO – check the bypass, the radiator valves and the system flow",
+  "pl": "za mało mimo pompy w AUTO – sprawdź by-pass, zawory termostatyczne i przepływ instalacji",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too low – pump speed AUTO (ΔT)",
+  "pl": "za mało – prędkość pompy AUTO (ΔT)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too low – pump control AUTO",
+  "pl": "za mało – sterowanie pompą AUTO",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too low – a lower pump speed",
+  "pl": "za mało – niższy bieg pompy",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Pump mode (0 = proportional head, 5-25 = ΔT)",
+  "pl": "Tryb pompy (0 = proporcjonalny, 5-25 = ΔT)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "the ΔT mode holds the flow − return difference",
+  "pl": "tryb ΔT trzyma różnicę zasilanie − powrót",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Pump speed",
+  "pl": "Prędkość pompy",
+  "files": [
+   "calibration.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "AUTO holds the boiler ΔT",
+  "pl": "AUTO trzyma ΔT kotła",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "delta T {0} K – change it in the boiler menu M3",
+  "pl": "delta T {0} K – zmień w menu M3 kotła",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Pump control",
+  "pl": "Sterowanie pompą",
+  "files": [
+   "calibration.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "AUTO = speed by ΔT",
+  "pl": "AUTO = prędkość wg ΔT",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "many – a wider cylinder hysteresis (t2) or a shorter DHW program",
+  "pl": "dużo – szersza histereza zasobnika (t2) albo krótszy program CWU",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "many – start the DHW lower (5 / 10 °C below the setpoint)",
+  "pl": "dużo – start CWU niżej (5 / 10 °C poniżej nastawy)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "many – lower the setpoint or shorten the DHW program",
+  "pl": "dużo – obniż nastawę albo skróć program CWU",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "DHW restart below the setpoint",
+  "pl": "Start CWU poniżej nastawy",
+  "files": [
+   "calibration.ts",
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "an earlier restart = more short DHW cycles",
+  "pl": "wcześniejszy restart = więcej krótkich cykli CWU",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "many DHW cycles – change it in the boiler menu",
+  "pl": "dużo cykli CWU – zmień w menu kotła",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Pressure drop 24 h",
+  "pl": "Spadek ciśnienia 24 h",
+  "files": [
+   "calibration.ts",
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "a fast drop = a leak or the expansion vessel",
+  "pl": "szybki spadek = wyciek albo naczynie wzbiorcze",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "check for a leak and the vessel pressure",
+  "pl": "sprawdź wyciek i ciśnienie naczynia",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Flame current (average)",
+  "pl": "Prąd płomienia (średnia)",
+  "files": [
+   "calibration.ts",
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "a low current = a dirty electrode / a wrong mixture",
+  "pl": "niski prąd = zabrudzona elektroda / zła mieszanka",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "low – service the ionisation electrode",
+  "pl": "niski – serwis elektrody jonizacyjnej",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "OpenTherm link quality",
+  "pl": "Jakość łącza OpenTherm",
+  "files": [
+   "calibration.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "frame errors = interference or a bad wire",
+  "pl": "błędy ramek = zakłócenia albo zły przewód",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "poor – check the wire and the adapter",
+  "pl": "słabe – sprawdź przewód i adapter",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "check the probe placement",
+  "pl": "sprawdź umiejscowienie sondy",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Burner hours per degree day",
+  "pl": "Godziny palnika na stopniodzień",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "less = the house needs less heating",
+  "pl": "mniej = dom potrzebuje mniej grzania",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "pick the menu profile in the Settings – you get the boiler parameter codes",
+  "pl": "wybierz profil menu w Ustawieniach – dostaniesz kody parametrów kotła",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "OpenTherm hub: writes over Data-IDs, the boiler menu by hand",
+  "pl": "hub OpenTherm: zapisy przez Data-ID, menu kotła ręcznie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "the menu parameters are copies – change them on the boiler",
+  "pl": "parametry menu to kopie – zmieniasz je na kotle",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "other",
+  "pl": "inny",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "fewer starts = fewer losses and less wear",
+  "pl": "mniej startów = mniej strat i zużycia",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too often – check the cascade / separator and lower the CH setpoint",
+  "pl": "za często – sprawdź kaskadę / sprzęgło i obniż nastawę CO",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too often – lower the setpoint / curve or the upper power limit",
+  "pl": "za często – obniż nastawę / krzywą albo górny limit mocy",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "short burns = the boiler is too big for the load",
+  "pl": "krótkie palenia = kocioł za duży na obciążenie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "short – lower the upper power limit",
+  "pl": "krótko – obniż górny limit mocy",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "many – see the upper power limit",
+  "pl": "dużo – patrz górny limit mocy",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Upper power limit",
+  "pl": "Górny limit mocy",
+  "files": [
+   "calibration.ts",
+   "hubmode.ts",
+   "mode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "≈ the building load",
+  "pl": "≈ obciążenie budynku",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "a boiler burning briefly at a high output burns longer with a lower limit",
+  "pl": "kocioł palący krótko na wysokiej mocy pali dłużej po obniżeniu limitu",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "{0} short burns, average modulation {1} %",
+  "pl": "{0} krótkich palień, średnia modulacja {1} %",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "return below ~55 °C",
+  "pl": "powrót poniżej ~55 °C",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "low – lower the CH setpoint / curve",
+  "pl": "mało – obniż nastawę CO / krzywą",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Weather curve in the hub",
+  "pl": "Krzywa pogodowa w hubie",
+  "files": [
+   "calibration.ts",
+   "hubcurve.ts",
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "water by the outdoor temperature = lower most of the season",
+  "pl": "woda wg temperatury zewnętrznej = niższa przez większość sezonu",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "no outdoor temperature",
+  "pl": "brak temperatury zewnętrznej",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "the outdoor probe is there",
+  "pl": "sonda zewnętrzna jest",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "CH flow setpoint",
+  "pl": "Nastawa zasilania CO",
+  "files": [
+   "calibration.ts",
+   "hubcurve.ts",
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "without the curve the water is fixed – lower = more condensing",
+  "pl": "bez krzywej stała woda – niżej = więcej kondensacji",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "condensing {0} %",
+  "pl": "kondensacja {0} %",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Setpoint deviation",
+  "pl": "Odchyłka od nastawy",
+  "files": [
+   "calibration.ts",
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "the boiler does not reach or overshoots",
+  "pl": "kocioł nie dochodzi albo przegrzewa",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "check the output / flow",
+  "pl": "sprawdź moc / przepływ",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "a small difference = a too warm return",
+  "pl": "mała różnica = za ciepły powrót",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too low – a lower pump speed / ΔT mode",
+  "pl": "za mało – niższy bieg / tryb ΔT pompy",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Flow − after the separator",
+  "pl": "Zasilanie − za sprzęgłem",
+  "files": [
+   "calibration.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "a large difference = the boiler pump moves less than the system (or the other way)",
+  "pl": "duża różnica = pompa kotła tłoczy mniej niż instalacja (albo odwrotnie)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "balance the boiler pump with the circuit pumps",
+  "pl": "zrównoważ pompę kotła z pompami obiegów",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "a fast drop = a leak or the vessel",
+  "pl": "szybki spadek = wyciek albo naczynie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "check for a leak and the vessel",
+  "pl": "sprawdź wyciek i naczynie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Ionisation (average)",
+  "pl": "Jonizacja (średnia)",
+  "files": [
+   "calibration.ts",
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "low = the electrode / mixture",
+  "pl": "niska = elektroda / mieszanka",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "low – service the electrode",
+  "pl": "niska – serwis elektrody",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Heat pump today",
+  "pl": "Pompa ciepła dziś",
+  "files": [
+   "calibration.ts",
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "most of the heating",
+  "pl": "większość grzania",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "MAGIS M TOP: the boiler only tops up",
+  "pl": "MAGIS M TOP: kocioł tylko dogrzewa",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Defrosts today",
+  "pl": "Odszraniania dziś",
+  "files": [
+   "calibration.ts",
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "≤ 1 per running hour",
+  "pl": "≤ 1 na godzinę pracy",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "frequent defrosts = humid frost or a dirty evaporator",
+  "pl": "częste odszranianie = wilgotny mróz albo zabrudzony parownik",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "many – check the evaporator and its surroundings",
+  "pl": "dużo – sprawdź parownik i jego otoczenie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Cooling: min. flow",
+  "pl": "Chłodzenie: min. zasilanie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Cooling: max. flow",
+  "pl": "Chłodzenie: maks. zasilanie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "at least 2 K above the min. flow",
+  "pl": "min. 2 K nad min. zasilaniem",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "DHW ECO (no exchanger preheating)",
+  "pl": "CWU ECO (bez podgrzewania wymiennika)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "on with ≤ 5 draws / day",
+  "pl": "wł. przy ≤ 5 poborach / dzień",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "preheating keeps the exchanger warm all day – a loss with rare draws",
+  "pl": "podgrzewanie trzyma ciepły wymiennik całą dobę – przy rzadkich poborach to strata",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "{0} draws today",
+  "pl": "dziś {0} poborów",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "pick the model in the Settings – you get its rows",
+  "pl": "wybierz model w Ustawieniach – dostaniesz wiersze dla niego",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "heat pump and cooling rows instead of the burner",
+  "pl": "wiersze pompy ciepła i chłodzenia zamiast palnika",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "system boiler: separator and cascade",
+  "pl": "kocioł systemowy: sprzęgło i kaskada",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "combi boiler: DHW ECO",
+  "pl": "kocioł dwufunkcyjny: CWU ECO",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Average compressor cycle",
+  "pl": "Średni cykl sprężarki",
+  "files": [
+   "calibration.ts",
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "the compressor warms up and runs efficiently when modulating",
+  "pl": "sprężarka rozgrzewa się i modulując pracuje wydajnie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "short – lower the curve by 1 or add a buffer / open loops",
+  "pl": "krótko – obniż krzywą o 1 albo dodaj bufor / otwórz pętle",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Short cycles today",
+  "pl": "Krótkie cykle dziś",
+  "files": [
+   "calibration.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "a cycle < 10 min",
+  "pl": "cykl < 10 min",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "many – too little water volume or a too high curve",
+  "pl": "dużo – za mała pojemność wodna albo za wysoka krzywa",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "CH and DHW since midnight",
+  "pl": "łącznie CO i CWU od północy",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "too many – see the cycle and the curve",
+  "pl": "za dużo – patrz cykl i krzywa",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Weather curve zone 1",
+  "pl": "Krzywa pogodowa strefa 1",
+  "files": [
+   "calibration.ts",
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "water by the weather = the lowest possible = the best COP",
+  "pl": "woda wg pogody = najniższa możliwa = najlepszy COP",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Curve number zone 1",
+  "pl": "Numer krzywej strefa 1",
+  "files": [
+   "calibration.ts",
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "a higher number = warmer water at the same weather",
+  "pl": "wyższy numer = cieplejsza woda przy tej samej pogodzie",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "room {0}{1} K from the target{2}",
+  "pl": "pokój {0}{1} K od zadanej{2}",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Flow − curve",
+  "pl": "Zasilanie − krzywa",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "the unit does not reach the curve or overshoots",
+  "pl": "jednostka nie dochodzi do krzywej albo ją przegrzewa",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "check the unit output / flow",
+  "pl": "sprawdź moc jednostki / przepływ",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Heating water max.",
+  "pl": "Grzanie – maks. woda",
+  "files": [
+   "calibration.ts",
+   "hubcurve.ts",
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "≤ 45 °C floor / ≤ 55 °C radiators",
+  "pl": "≤ 45 °C podłoga / ≤ 55 °C grzejniki",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "the top water limit – above it the COP drops fast",
+  "pl": "górny limit wody – wyżej COP szybko spada",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "high – lower it in the unit menu",
+  "pl": "wysoko – obniż w menu jednostki",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Heating outdoor max. (T4HMAX)",
+  "pl": "Grzanie – maks. temp. zewn. (T4HMAX)",
+  "files": [
+   "calibration.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "above this outdoor temperature the heating stops",
+  "pl": "powyżej tej temperatury zewnętrznej grzanie stoi",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "high – heating on warm days, lower it in the unit menu",
+  "pl": "wysoko – grzanie w ciepłe dni, obniż w menu jednostki",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Heating COP today",
+  "pl": "COP grzania dziś",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "a low COP = too warm water or a lot of defrosting",
+  "pl": "niski COP = za ciepła woda albo dużo odszraniania",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "low – lower the curve by 1",
+  "pl": "nisko – obniż krzywą o 1",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Heat pump delta T",
+  "pl": "Delta T pompy ciepła",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "a heat pump likes a small, steady difference",
+  "pl": "pompa ciepła lubi małą, stałą różnicę",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "out of range – set the circulation pump flow",
+  "pl": "poza zakresem – ustaw przepływ pompy obiegowej",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "DHW COP today",
+  "pl": "COP CWU dziś",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "DHW is hot water – a lower COP than heating",
+  "pl": "CWU to wysoka woda – COP niższy niż przy grzaniu",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "low – lower the DHW setpoint",
+  "pl": "nisko – obniż nastawę CWU",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Disinfection (anti-legionella)",
+  "pl": "Dezynfekcja (antylegionella)",
+  "files": [
+   "calibration.ts",
+   "mode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "~60 °C once a week kills Legionella",
+  "pl": "raz w tygodniu ~60 °C zabija Legionellę",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "DHW setpoint {0} °C",
+  "pl": "nastawa CWU {0} °C",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Tank heater (TBH) today",
+  "pl": "Grzałka zasobnika (TBH) dziś",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "the heater is COP 1",
+  "pl": "grzałka to COP 1",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "it ran – check the DHW setpoint and the TBH timings",
+  "pl": "pracowała – sprawdź nastawę CWU i czasy TBH",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Backup heater IBH today",
+  "pl": "Grzałka IBH dziś",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "0 h above −5 °C",
+  "pl": "0 h powyżej −5 °C",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "in mild weather – check the heater start temperature (T4)",
+  "pl": "przy łagodnej pogodzie – sprawdź temperaturę włączenia grzałki (T4)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "no unit capacity – thresholds for a medium unit (8–10 kW)",
+  "pl": "brak mocy jednostki – progi dla średniej (8–10 kW)",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "small unit: shorter cycles are normal",
+  "pl": "mała jednostka: krótsze cykle są normalne",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "big unit: longer cycles and fewer starts",
+  "pl": "duża jednostka: dłuższe cykle i mniej startów",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "medium unit",
+  "pl": "średnia jednostka",
+  "files": [
+   "calibration.ts"
   ]
  },
  {
@@ -3903,8 +5724,22 @@
   ]
  },
  {
-  "en": "Recommendations from the Immergas Dominus statistics (last hour and day).",
-  "pl": "Rekomendacje liczone ze statystyk integracji Immergas Dominus (ostatnia godzina i doba).",
+  "en": "Recommendations from the OpenTherm Today analysis (ot_computed / ot_analytics or Immergas Dominus 1.6.14) and the boiler menu profile.",
+  "pl": "Rekomendacje z analizy dnia OpenTherm (ot_computed / ot_analytics albo Immergas Dominus 1.6.14) i profilu menu kotła.",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Recommendations from the Today analysis (gb_computed / gb_analytics) and the boiler model.",
+  "pl": "Rekomendacje z analizy dnia (gb_computed / gb_analytics) i modelu kotła.",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Recommendations from the Today analysis (mt_computed / mt_analytics) and the unit capacity.",
+  "pl": "Rekomendacje z analizy dnia (mt_computed / mt_analytics) i mocy jednostki.",
   "files": [
    "calibration.ts"
   ]
@@ -3912,6 +5747,13 @@
  {
   "en": "Change one parameter at a time and judge after a day.",
   "pl": "Zmieniaj po jednym parametrze i oceniaj po dobie.",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
+  "en": "Recommendations from the Immergas Dominus statistics (last hour and day).",
+  "pl": "Rekomendacje liczone ze statystyk integracji Immergas Dominus (ostatnia godzina i doba).",
   "files": [
    "calibration.ts"
   ]
@@ -3999,7 +5841,8 @@
   "files": [
    "charts.ts",
    "diagram.ts",
-   "now.ts"
+   "now.ts",
+   "ot.ts"
   ]
  },
  {
@@ -4031,7 +5874,9 @@
   "en": "Compressor frequency",
   "pl": "Częstotliwość sprężarki",
   "files": [
-   "charts.ts"
+   "charts.ts",
+   "circuits.ts",
+   "hub.ts"
   ]
  },
  {
@@ -4076,7 +5921,8 @@
   "files": [
    "charts.ts",
    "circuits.ts",
-   "diagram.ts"
+   "diagram.ts",
+   "hub.ts"
   ]
  },
  {
@@ -4132,14 +5978,16 @@
   "en": "CH setpoint",
   "pl": "Nastawa CO",
   "files": [
-   "charts.ts"
+   "charts.ts",
+   "otcurve.ts"
   ]
  },
  {
   "en": "Return",
   "pl": "Powrót",
   "files": [
-   "charts.ts"
+   "charts.ts",
+   "ot.ts"
   ]
  },
  {
@@ -4155,7 +6003,8 @@
   "pl": "Zasilanie",
   "files": [
    "charts.ts",
-   "now.ts"
+   "now.ts",
+   "ot.ts"
   ]
  },
  {
@@ -4187,6 +6036,7 @@
   "files": [
    "charts.ts",
    "diagram.ts",
+   "links.ts",
    "now.ts"
   ]
  },
@@ -4211,7 +6061,9 @@
    "charts.ts",
    "mode.ts",
    "now.ts",
-   "settings.ts"
+   "ot.ts",
+   "settings.ts",
+   "hub.ts"
   ]
  },
  {
@@ -4225,14 +6077,16 @@
   "en": "Comfort phase",
   "pl": "faza Komfort",
   "files": [
-   "charts.ts"
+   "charts.ts",
+   "circuits.ts"
   ]
  },
  {
   "en": "Eco phase",
   "pl": "faza Eko",
   "files": [
-   "charts.ts"
+   "charts.ts",
+   "circuits.ts"
   ]
  },
  {
@@ -4278,9 +6132,12 @@
    "charts.ts",
    "curve.ts",
    "diagram.ts",
+   "hubmode.ts",
    "now.ts",
+   "ot.ts",
    "schedule.ts",
-   "setpoints.ts"
+   "setpoints.ts",
+   "hub.ts"
   ]
  },
  {
@@ -4330,7 +6187,8 @@
   "en": "unknown",
   "pl": "unavailable",
   "files": [
-   "circuits.ts"
+   "circuits.ts",
+   "ot.ts"
   ]
  },
  {
@@ -4338,6 +6196,130 @@
   "pl": "Obieg wodny",
   "files": [
    "circuits.ts"
+  ]
+ },
+ {
+  "en": "Water outlet (TW_O)",
+  "pl": "Woda wylot (TW_O)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Water inlet (TW_I)",
+  "pl": "Woda wlot (TW_I)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Total water (T1)",
+  "pl": "Woda całkowita (T1)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Zone 2 water (T1B)",
+  "pl": "Woda strefy 2 (T1B)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Buffer – top",
+  "pl": "Bufor – góra",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Buffer – bottom",
+  "pl": "Bufor – dół",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Water flow",
+  "pl": "Przepływ wody",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Curve target zone 1",
+  "pl": "Z krzywej strefa 1",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Curve target zone 2",
+  "pl": "Z krzywej strefa 2",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Water setpoint zone 1",
+  "pl": "Nastawa wody strefa 1",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW tank (T5)",
+  "pl": "Zasobnik CWU (T5)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Water delta T",
+  "pl": "Delta T wody",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Thermal lift",
+  "pl": "Lift termiczny",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Mean loop",
+  "pl": "Średnia obiegu",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heat from the flow",
+  "pl": "Moc z przepływu",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Curve deviation",
+  "pl": "Odchyłka od krzywej",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Buffer stratification",
+  "pl": "Rozwarstwienie bufora",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
   ]
  },
  {
@@ -4397,13 +6379,6 @@
   ]
  },
  {
-  "en": "Thermal lift",
-  "pl": "Lift termiczny",
-  "files": [
-   "circuits.ts"
-  ]
- },
- {
   "en": "3-way valve (1=DHW)",
   "pl": "Zawór 3-dr. (1=CWU)",
   "files": [
@@ -4426,15 +6401,186 @@
   ]
  },
  {
-  "en": "Frequency (D71)",
-  "pl": "Częstotliwość (D71)",
+  "en": "Target frequency",
+  "pl": "Częstotl. docelowa",
   "files": [
    "circuits.ts"
   ]
  },
  {
-  "en": "Target frequency",
-  "pl": "Częstotl. docelowa",
+  "en": "Discharge (Tp)",
+  "pl": "Tłoczenie (Tp)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Suction (Th)",
+  "pl": "Ssanie (Th)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Outdoor coil (T3)",
+  "pl": "Wymiennik zewn. (T3)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Outdoor (T4)",
+  "pl": "Zewnętrzna (T4)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Refrigerant liquid (T2)",
+  "pl": "Czynnik – ciecz (T2)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Refrigerant gas (T2B)",
+  "pl": "Czynnik – gaz (T2B)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "High pressure",
+  "pl": "Ciśnienie wysokie",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Low pressure",
+  "pl": "Ciśnienie niskie",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Expansion valve (EEV)",
+  "pl": "Zawór rozprężny (EEV)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Fan",
+  "pl": "Wentylator",
+  "files": [
+   "circuits.ts",
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "ODU current",
+  "pl": "Prąd jedn. zewn.",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "ODU voltage",
+  "pl": "Napięcie jedn. zewn.",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Inverter module",
+  "pl": "Moduł inwertera",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Unit capacity",
+  "pl": "Moc jednostki",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Electric power",
+  "pl": "Pobór mocy",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Compressor hours",
+  "pl": "Godziny sprężarki",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Condensing (from pressure)",
+  "pl": "Skraplanie (z ciśnienia)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Evaporating (from pressure)",
+  "pl": "Parowanie (z ciśnienia)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Suction superheat",
+  "pl": "Przegrzanie ssania",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Subcooling",
+  "pl": "Dochłodzenie",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Discharge superheat",
+  "pl": "Przegrzanie tłoczenia",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Compression ratio",
+  "pl": "Stopień sprężania",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Power from U × I",
+  "pl": "Moc z U × I",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Frequency (D71)",
+  "pl": "Częstotliwość (D71)",
   "files": [
    "circuits.ts"
   ]
@@ -4587,18 +6733,11 @@
   ]
  },
  {
-  "en": "Fan",
-  "pl": "Wentylator",
+  "en": "Running",
+  "pl": "Praca",
   "files": [
    "circuits.ts",
-   "ot.ts"
-  ]
- },
- {
-  "en": "Run request",
-  "pl": "Zlecenie pracy",
-  "files": [
-   "circuits.ts"
+   "hub.ts"
   ]
  },
  {
@@ -4606,7 +6745,90 @@
   "pl": "Odszranianie",
   "files": [
    "circuits.ts",
-   "now.ts"
+   "now.ts",
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Internal pump",
+  "pl": "Pompa wewn.",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Outer pump",
+  "pl": "Pompa zewn.",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Valve SV1 (DHW)",
+  "pl": "Zawór SV1 (CWU)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heater IBH1",
+  "pl": "Grzałka IBH1",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heater IBH2",
+  "pl": "Grzałka IBH2",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heater TBH",
+  "pl": "Grzałka TBH",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Antifreeze",
+  "pl": "Ochrona przed zamarzaniem",
+  "files": [
+   "circuits.ts",
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Oil return",
+  "pl": "Powrót oleju",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Thermostat: heat",
+  "pl": "Termostat: grzanie",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Thermostat: cool",
+  "pl": "Termostat: chłodzenie",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Run request",
+  "pl": "Zlecenie pracy",
+  "files": [
+   "circuits.ts"
   ]
  },
  {
@@ -4659,6 +6881,856 @@
   ]
  },
  {
+  "en": "Operating state",
+  "pl": "Stan pracy",
+  "files": [
+   "circuits.ts",
+   "diagram.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Today · analysis",
+  "pl": "Dziś · analiza",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "No data: add the hub analysis packages (hub_analytics, ot_computed / ot_analytics, gb_computed / gb_analytics, mt_computed / mt_analytics) or update Immergas Dominus to 1.6.14+.",
+  "pl": "Brak danych: dodaj pakiety analizy huba (hub_analytics, ot_computed / ot_analytics, gb_computed / gb_analytics, mt_computed / mt_analytics) albo zaktualizuj Immergas Dominus do 1.6.14+.",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Today · operation analysis",
+  "pl": "Dziś · analiza pracy",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Today · boiler analysis",
+  "pl": "Dziś · analiza kotła",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Freeze risk",
+  "pl": "Ryzyko zamarznięcia",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Condensing",
+  "pl": "Praca kondensacyjna",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Time in comfort",
+  "pl": "Czas w komforcie",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Too cold",
+  "pl": "Za zimno",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Too warm",
+  "pl": "Za ciepło",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Room min.",
+  "pl": "Pokój min.",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Room max.",
+  "pl": "Pokój maks.",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Mean room deviation",
+  "pl": "Średnia odchyłka pokoju",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heating rate",
+  "pl": "Tempo nagrzewania",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Cooling rate",
+  "pl": "Tempo stygnięcia",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Building loss",
+  "pl": "Straty budynku",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Suggested U03 change",
+  "pl": "Sugerowana zmiana U03",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Deviation for the curve (3-5 days)",
+  "pl": "Odchyłka do krzywej (3-5 dni)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Starts / last hour",
+  "pl": "Starty / ostatnia h",
+  "files": [
+   "circuits.ts",
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "CH starts",
+  "pl": "Starty CO",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "DHW starts",
+  "pl": "Starty CWU",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Last cycle",
+  "pl": "Ostatni cykl",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Last pause",
+  "pl": "Ostatnia przerwa",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Short cycles",
+  "pl": "Krótkie cykle",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "CH electricity",
+  "pl": "Prąd CO",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "CH heat",
+  "pl": "Ciepło CO",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "COP CH today",
+  "pl": "COP CO dziś",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "DHW electricity",
+  "pl": "Prąd CWU",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "DHW heat",
+  "pl": "Ciepło CWU",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "COP DHW today",
+  "pl": "COP CWU dziś",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "COP today (total)",
+  "pl": "COP dziś (razem)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heat from gas",
+  "pl": "Ciepło z gazu",
+  "files": [
+   "circuits.ts",
+   "gas.ts"
+  ]
+ },
+ {
+  "en": "Boiler share of heat",
+  "pl": "Udział kotła w cieple",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Energy cost today",
+  "pl": "Koszt energii dziś",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "DHW cycles",
+  "pl": "Cykle CWU",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Average DHW cycle",
+  "pl": "Średni cykl CWU",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Hot water used",
+  "pl": "Ciepła woda zużyta",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "DHW heat used",
+  "pl": "Ciepło CWU zużyte",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Cylinder standing loss",
+  "pl": "Straty postojowe zasobnika",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Cylinder min.",
+  "pl": "Zasobnik min.",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Defrosts",
+  "pl": "Odszraniania",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Average defrost",
+  "pl": "Średnie odszranianie",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Last defrost",
+  "pl": "Ostatnie odszranianie",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Defrost share",
+  "pl": "Udział odszraniania",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Boiler CH joins",
+  "pl": "Dołączenia kotła do CO",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heat pump + boiler",
+  "pl": "Pompa + kocioł razem",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Boiler only",
+  "pl": "Tylko kocioł",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Short burns",
+  "pl": "Krótkie palenia",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Last burn",
+  "pl": "Ostatnie palenie",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Outdoor at the boiler join",
+  "pl": "Zewn. przy dołączeniu kotła",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Bivalent point (learned)",
+  "pl": "Punkt biwalentny (wyuczony)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Outdoor min.",
+  "pl": "Zewnętrzna min.",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Outdoor max.",
+  "pl": "Zewnętrzna maks.",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Outdoor mean 24 h",
+  "pl": "Średnia zewn. 24 h",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Degree days today",
+  "pl": "Stopniodni dziś",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Degree days this month",
+  "pl": "Stopniodni w miesiącu",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heating h / degree day",
+  "pl": "Godz. grzania / stopniodzień",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "CH kWh / degree day",
+  "pl": "Prąd CO / stopniodzień",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "D+/D- availability",
+  "pl": "Dostępność D+/D-",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "T-/T+ availability",
+  "pl": "Dostępność T-/T+",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "F1/F2 availability",
+  "pl": "Dostępność F1/F2",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Link breaks",
+  "pl": "Przerwy w łączności",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Room deviation (1 h)",
+  "pl": "Odchyłka pokoju (1 h)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Time to the target",
+  "pl": "Dojście do zadanej",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Suggested curve change",
+  "pl": "Sugerowana zmiana krzywej",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heating today",
+  "pl": "Grzanie CO dziś",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heating starts today",
+  "pl": "Starty CO dziś",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Deviation in Comfort",
+  "pl": "Odchyłka w Komforcie",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Deviation in Eco",
+  "pl": "Odchyłka w Eko",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Phase changes",
+  "pl": "Zmiany faz",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Cylinder volume",
+  "pl": "Pojemność zasobnika",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Module availability",
+  "pl": "Dostępność modułu",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Zone 2 · heating",
+  "pl": "Strefa 2 · grzanie",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Zone 2 · starts",
+  "pl": "Strefa 2 · starty",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Zone 2 · deviation",
+  "pl": "Strefa 2 · odchyłka",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Zone 3 · heating",
+  "pl": "Strefa 3 · grzanie",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Zone 3 · starts",
+  "pl": "Strefa 3 · starty",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Zone 3 · deviation",
+  "pl": "Strefa 3 · odchyłka",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Burner power",
+  "pl": "Moc palnika",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heat output (measured)",
+  "pl": "Moc cieplna (zmierzona)",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heat today",
+  "pl": "Ciepło dziś",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Gas today",
+  "pl": "Gaz dziś",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Gas heating",
+  "pl": "Gaz CO",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Gas DHW",
+  "pl": "Gaz CWU",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Gas cost today",
+  "pl": "Koszt gazu dziś",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Gas price",
+  "pl": "Cena gazu",
+  "files": [
+   "circuits.ts",
+   "gas.ts",
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Gas counter",
+  "pl": "Licznik gazu",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Burner starts today",
+  "pl": "Starty palnika dziś",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Burner time today",
+  "pl": "Czas palnika dziś",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Average modulation",
+  "pl": "Średnia modulacja",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "At min. modulation",
+  "pl": "Na min. modulacji",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Calculated flow deviation",
+  "pl": "Odchyłka od obliczonej",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Flow − after separator",
+  "pl": "Zasilanie − za sprzęgłem",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Flue − return",
+  "pl": "Spaliny − powrót",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW draws",
+  "pl": "Pobory CWU",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Last draw",
+  "pl": "Ostatni pobór",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Cold water (average)",
+  "pl": "Woda zimna (średnia)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "DHW share of hours",
+  "pl": "Udział CWU w godzinach",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Burner power (est.)",
+  "pl": "Moc palnika (szac.)",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Exhaust − return",
+  "pl": "Spaliny − powrót",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Control setpoint (ID 1)",
+  "pl": "Nastawa wysyłana (ID 1)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Last DHW cycle",
+  "pl": "Ostatni cykl CWU",
+  "files": [
+   "circuits.ts",
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "Cylinder rise",
+  "pl": "Przyrost w zasobniku",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Fan − setpoint",
+  "pl": "Wentylator − zadane",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "OT link quality",
+  "pl": "Jakość łącza OT",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Burn per start (lifetime)",
+  "pl": "Palenie na start (całość)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Starts / burner h (lifetime)",
+  "pl": "Starty / h palnika (całość)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "COP heating today",
+  "pl": "COP grzanie dziś",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "System COP (with heaters)",
+  "pl": "COP systemu (z grzałkami)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "COP since installation",
+  "pl": "COP od początku",
+  "files": [
+   "circuits.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heating – compressor",
+  "pl": "Grzanie – sprężarka",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "DHW – compressor",
+  "pl": "CWU – sprężarka",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heating electricity",
+  "pl": "Prąd grzanie",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heating heat",
+  "pl": "Ciepło grzanie",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Since the defrost",
+  "pl": "Od odszraniania",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "IBH heater",
+  "pl": "Grzałka IBH",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "TBH heater",
+  "pl": "Grzałka TBH",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
+  "en": "Heater electricity (est.)",
+  "pl": "Prąd grzałek (szac.)",
+  "files": [
+   "circuits.ts"
+  ]
+ },
+ {
   "en": "F1/F2 write locked",
   "pl": "Zapis F1/F2 zablokowany",
   "files": [
@@ -4701,7 +7773,8 @@
   "en": "comfort ✓",
   "pl": "komfort ✓",
   "files": [
-   "curve.ts"
+   "curve.ts",
+   "hubcurve.ts"
   ]
  },
  {
@@ -4744,7 +7817,9 @@
   "pl": "pokój",
   "files": [
    "curve.ts",
-   "links.ts"
+   "hubcurve.ts",
+   "links.ts",
+   "otcurve.ts"
   ]
  },
  {
@@ -5030,6 +8105,7 @@
   "files": [
    "curve.ts",
    "gas.ts",
+   "hubcurve.ts",
    "now.ts"
   ]
  },
@@ -5093,7 +8169,9 @@
   "en": "from the curve",
   "pl": "z krzywej",
   "files": [
-   "curve.ts"
+   "curve.ts",
+   "hubcurve.ts",
+   "otcurve.ts"
   ]
  },
  {
@@ -5114,7 +8192,9 @@
   "en": "flow",
   "pl": "zasilanie",
   "files": [
-   "curve.ts"
+   "curve.ts",
+   "hubcurve.ts",
+   "otcurve.ts"
   ]
  },
  {
@@ -5185,6 +8265,7 @@
   "pl": "Krzywa grzewcza",
   "files": [
    "curve.ts",
+   "otcurve.ts",
    "settings.ts"
   ]
  },
@@ -5238,13 +8319,6 @@
   "pl": "Wyjazd",
   "files": [
    "curve.ts"
-  ]
- },
- {
-  "en": "Last DHW cycle",
-  "pl": "Ostatni cykl CWU",
-  "files": [
-   "dhw.ts"
   ]
  },
  {
@@ -5341,6 +8415,20 @@
  {
   "en": "heater cheaper",
   "pl": "grzałka taniej",
+  "files": [
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "Cylinder: volume",
+  "pl": "Zasobnik: pojemność",
+  "files": [
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "× temperature rise (misses hot water drawn during the cycle). Flow: the unit's heat output over the cycle. Electricity: the unit's input – the TBH heater is not metered in it.",
+  "pl": "× przyrost temperatury (nie widzi poboru wody w trakcie). Przepływ: moc cieplna jednostki w czasie cyklu. Prąd: pobór jednostki – grzałka TBH nie jest w nim liczona.",
   "files": [
    "dhw.ts"
   ]
@@ -5518,14 +8606,6 @@
   ]
  },
  {
-  "en": "standby",
-  "pl": "czuwanie",
-  "files": [
-   "diagram.ts",
-   "setpoints.ts"
-  ]
- },
- {
   "en": "no flame",
   "pl": "płomień zgaszony",
   "files": [
@@ -5558,7 +8638,8 @@
   "en": "CH",
   "pl": "CO",
   "files": [
-   "diagram.ts"
+   "diagram.ts",
+   "hubmode.ts"
   ]
  },
  {
@@ -5659,13 +8740,6 @@
  {
   "en": "State · ☾ U11",
   "pl": "Stan · ☾ U11",
-  "files": [
-   "diagram.ts"
-  ]
- },
- {
-  "en": "Operating state",
-  "pl": "Stan pracy",
   "files": [
    "diagram.ts"
   ]
@@ -5784,13 +8858,6 @@
   ]
  },
  {
-  "en": "Heat from gas",
-  "pl": "Ciepło z gazu",
-  "files": [
-   "gas.ts"
-  ]
- },
- {
   "en": "Heat from heater",
   "pl": "Ciepło z grzałki",
   "files": [
@@ -5830,15 +8897,8 @@
   "pl": "Cena prądu",
   "files": [
    "gas.ts",
-   "settings.ts"
-  ]
- },
- {
-  "en": "Gas price",
-  "pl": "Cena gazu",
-  "files": [
-   "gas.ts",
-   "settings.ts"
+   "settings.ts",
+   "hub.ts"
   ]
  },
  {
@@ -5849,10 +8909,685 @@
   ]
  },
  {
+  "en": "MAGIS M has no gas boiler: the backup is the IBH / TBH heaters. Heat pump = electricity price ÷ COP (counted in the hub, package mt_costs), heater = electricity price.",
+  "pl": "MAGIS M nie ma kotła gazowego: rezerwą są grzałki IBH / TBH. Pompa = cena prądu ÷ COP (liczone w hubie, pakiet mt_costs), grzałka = cena prądu.",
+  "files": [
+   "gas.ts"
+  ]
+ },
+ {
   "en": "Magis Pro has no gas boiler: the backup is the electric heater. Heat pump = electricity price ÷ COP, heater = electricity price.",
   "pl": "Magis Pro nie ma kotła gazowego: rezerwą jest grzałka elektryczna. Pompa = cena prądu ÷ COP, grzałka = cena prądu.",
   "files": [
    "gas.ts"
+  ]
+ },
+ {
+  "en": "Curve: coldest outdoor temperature",
+  "pl": "Krzywa: najniższa temp. zewnętrzna",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Curve: warmest outdoor temperature",
+  "pl": "Krzywa: najwyższa temp. zewnętrzna",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Outdoor temperature",
+  "pl": "Temperatura zewnętrzna",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Flow temperature",
+  "pl": "Temperatura zasilania",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH max. temperature",
+  "pl": "Maks. temperatura CO",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH min. temperature",
+  "pl": "Min. temperatura CO",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Regulator in the hub",
+  "pl": "Regulator w hubie",
+  "files": [
+   "hubcurve.ts",
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH max.",
+  "pl": "CO maks.",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH min.",
+  "pl": "CO min.",
+  "files": [
+   "hubcurve.ts",
+   "otcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Room target",
+  "pl": "Zadana pokoju",
+  "files": [
+   "hubcurve.ts",
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Room correction (°C flow per °C)",
+  "pl": "Korekta pokojowa (°C zasilania na °C)",
+  "files": [
+   "hubcurve.ts",
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Room hysteresis",
+  "pl": "Histereza pokoju",
+  "files": [
+   "hubcurve.ts",
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Custom curve: outdoor cold point",
+  "pl": "Krzywa własna: punkt zimny",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Custom curve: flow at cold",
+  "pl": "Krzywa własna: zasilanie przy mrozie",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Custom curve: outdoor warm point",
+  "pl": "Krzywa własna: punkt ciepły",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Custom curve: flow at warm",
+  "pl": "Krzywa własna: zasilanie przy cieple",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Curve flow target zone 1",
+  "pl": "Zasilanie z krzywej strefa 1",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Water outlet temperature",
+  "pl": "Temperatura wody na wylocie",
+  "files": [
+   "hubcurve.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heating water min.",
+  "pl": "Grzanie – min. woda",
+  "files": [
+   "hubcurve.ts",
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "fc",
+  "pl": "oc",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "fw",
+  "pl": "ow",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "read only",
+  "pl": "tylko odczyt",
+  "files": [
+   "hubcurve.ts",
+   "ot.ts",
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "CH max. ",
+  "pl": "maks. CO ",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "CH min. ",
+  "pl": "min. CO ",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "cold",
+  "pl": "mróz",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "warm",
+  "pl": "ciepło",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "too warm",
+  "pl": "za ciepło",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "too cold",
+  "pl": "za zimno",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "Midea · the unit's curve for zone 1 (the unit computes the water setpoint)",
+  "pl": "Midea · krzywa jednostki dla strefy 1 (nastawa wody liczy jednostka)",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "OpenTherm regulator in the hub · CH setpoint (Data-ID 1) every minute",
+  "pl": "Regulator OpenTherm w hubie · nastawa CO (Data-ID 1) co minutę",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "Hub · CH flow setpoint (514) from the boiler probe (772) every minute",
+  "pl": "Hub · nastawa zasilania (514) z sondy kotła (772) co minutę",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "Weather curve",
+  "pl": "Krzywa pogodowa",
+  "files": [
+   "hubcurve.ts",
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "On",
+  "pl": "Włączona",
+  "files": [
+   "hubcurve.ts",
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Off",
+  "pl": "Wyłączona",
+  "files": [
+   "hubcurve.ts",
+   "links.ts",
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "setpoint",
+  "pl": "nastawa",
+  "files": [
+   "hubcurve.ts",
+   "otcurve.ts",
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": "Factory curve no. {0} – the chart shows the custom curve (9) and the flow the unit computes.",
+  "pl": "Krzywa fabryczna nr {0} – na wykresie krzywa własna (9) i zasilanie, które liczy jednostka.",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "Flow when cold",
+  "pl": "Zasilanie przy mrozie",
+  "files": [
+   "hubcurve.ts",
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "at {0} °C and colder",
+  "pl": "przy {0} °C i zimniej",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "Flow when warm",
+  "pl": "Zasilanie przy cieple",
+  "files": [
+   "hubcurve.ts",
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "at {0} °C and warmer",
+  "pl": "przy {0} °C i cieplej",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "Cold point",
+  "pl": "Punkt mrozu",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "outdoor temp. of the max. flow",
+  "pl": "temp. zewn. maks. zasilania",
+  "files": [
+   "hubcurve.ts",
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "Warm point",
+  "pl": "Punkt ciepła",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "outdoor temp. of the min. flow",
+  "pl": "temp. zewn. min. zasilania",
+  "files": [
+   "hubcurve.ts",
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "correction and CH on / off",
+  "pl": "korekta i CO wł. / wył.",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "°C flow per 1 °C error",
+  "pl": "°C zasilania na 1 °C błędu",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "custom curve (9)",
+  "pl": "krzywa własna (9)",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "hub curve",
+  "pl": "krzywa hubu",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "with the room correction {0}{1} °C",
+  "pl": "z korektą pokojową {0}{1} °C",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "● setpoint · ○ actual flow",
+  "pl": "● nastawa · ○ faktyczne zasilanie",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "Pick the curve (1–9) here; the custom curve (9) points are set in the unit's installer menu – the hub only reads them.",
+  "pl": "Krzywą (1–9) wybierasz tutaj; punkty krzywej własnej (9) ustawia się w menu instalatora jednostki – hub je tylko czyta.",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "Drag a point (up / down = flow, left / right = outdoor temperature) or use −/+.",
+  "pl": "Przeciągnij punkt (góra / dół = zasilanie, lewo / prawo = temp. zewnętrzna) albo użyj −/+.",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": " The regulator adds the room correction and switches CH on / off with a hysteresis; the setpoint stays within the boiler's CH min. / max. (Data-ID 49).",
+  "pl": " Regulator dodaje korektę pokojową i włącza / wyłącza CO z histerezą; nastawa zostaje w granicach CO min. / maks. kotła (Data-ID 49).",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": " The setpoint stays within the boiler's CH min. / max. Off = the flow setpoint stays as you set it.",
+  "pl": " Nastawa zostaje w granicach CO min. / maks. kotła. Wyłączona = nastawa zasilania zostaje taka, jak ją ustawisz.",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "Looking for the hub weather curve… (package gb_curve or ot_regulator)",
+  "pl": "Szukam krzywej pogodowej huba… (pakiet gb_curve albo ot_regulator)",
+  "files": [
+   "hubcurve.ts"
+  ]
+ },
+ {
+  "en": "Operating mode",
+  "pl": "Tryb pracy",
+  "files": [
+   "hubmode.ts",
+   "mode.ts",
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH allowed",
+  "pl": "CO dozwolone",
+  "files": [
+   "hubmode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW allowed",
+  "pl": "CWU dozwolona",
+  "files": [
+   "hubmode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Flame",
+  "pl": "Płomień",
+  "files": [
+   "hubmode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heat request (CH)",
+  "pl": "Żądanie grzania (CO)",
+  "files": [
+   "hubmode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Fault",
+  "pl": "Usterka",
+  "files": [
+   "hubmode.ts",
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH enable",
+  "pl": "Zezwolenie CO",
+  "files": [
+   "hubmode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW enable",
+  "pl": "Zezwolenie CWU",
+  "files": [
+   "hubmode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH active",
+  "pl": "CO aktywne",
+  "files": [
+   "hubmode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW active",
+  "pl": "CWU aktywna",
+  "files": [
+   "hubmode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Max. CH setpoint",
+  "pl": "Maks. nastawa CO",
+  "files": [
+   "hubmode.ts",
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Max. modulation",
+  "pl": "Maks. modulacja",
+  "files": [
+   "hubmode.ts",
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Room unit connection",
+  "pl": "Połączenie z pilotem",
+  "files": [
+   "hubmode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Override CH and DHW enable",
+  "pl": "Nadpisz zezwolenia CO i CWU",
+  "files": [
+   "hubmode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Hub runs the boiler",
+  "pl": "Hub prowadzi kocioł",
+  "files": [
+   "hubmode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Gateway: the hub sets CH / DHW enable (overrides the room unit).",
+  "pl": "Bramka: zezwolenia CO / CWU ustawia hub (nadpisuje pilota).",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "Gateway: the room unit sets CH / DHW enable – the mode here applies when it goes silent. ",
+  "pl": "Bramka: zezwolenia CO / CWU ustawia pilot – tryb tutaj działa, gdy pilot milknie. ",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "Tap again",
+  "pl": "Dotknij ponownie",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "Give back to the room unit",
+  "pl": "Oddaj pilotowi",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "Override from the hub",
+  "pl": "Nadpisuj z huba",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "OpenTherm · CH / DHW enable (Data-ID 0)",
+  "pl": "OpenTherm · zezwolenia CO / CWU (Data-ID 0)",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "Modbus BMS · boiler operating mode",
+  "pl": "Modbus BMS · tryb pracy kotła",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "tap 2× to change",
+  "pl": "dotknij 2× aby zmienić",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "heating",
+  "pl": "grzeje",
+  "files": [
+   "hubmode.ts",
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "allowed",
+  "pl": "dozwolone",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "idle",
+  "pl": "nie grzeje",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "blocked",
+  "pl": "zablokowane",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "Heat request",
+  "pl": "Żądanie grzania",
+  "files": [
+   "hubmode.ts",
+   "links.ts"
+  ]
+ },
+ {
+  "en": "sent",
+  "pl": "wysyłane",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "none",
+  "pl": "brak",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "ot",
+  "pl": "gb",
+  "files": [
+   "hubmode.ts"
+  ]
+ },
+ {
+  "en": "Looking for the hub boiler mode… (gb_ or ot_ packages)",
+  "pl": "Szukam trybu pracy kotła huba… (pakiety gb_ albo ot_)",
+  "files": [
+   "hubmode.ts"
   ]
  },
  {
@@ -6095,23 +9830,72 @@
   ]
  },
  {
-  "en": "Dominus",
+  "en": "BMS master",
   "pl": "Boiler",
   "files": [
    "links.ts"
   ]
  },
  {
-  "en": "Thermostat",
+  "en": "Dominus",
+  "pl": "Heat request",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "OpenTherm hub",
   "pl": "Dominus",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Thermostat",
+  "pl": "OpenTherm hub",
   "files": [
    "links.ts",
    "settings.ts"
   ]
  },
  {
+  "en": "Room unit",
+  "pl": "Thermostat",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Regulator",
+  "pl": "Room unit",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
   "en": "CAR V2 remote",
   "pl": "Zone 1 panel",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Heaters",
+  "pl": "Modbus master",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Signals",
+  "pl": "Heaters",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Hub",
+  "pl": "Signals",
   "files": [
    "links.ts"
   ]
@@ -6238,6 +10022,309 @@
  {
   "en": "HA only reads. After switching it on, power-cycle the Dominus once – it forgets the last setpoint from HA.",
   "pl": "HA tylko czyta. Po włączeniu raz odłącz zasilanie modułu Dominus – zapomni ostatnią nastawę z HA.",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "unit fault",
+  "pl": "błąd jednostki",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Modbus master",
+  "pl": "Master Modbus",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "The hub polls the unit",
+  "pl": "Hub odpytuje jednostkę",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Polling off",
+  "pl": "Odpytywanie wyłączone",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "protocol ",
+  "pl": "protokół ",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Modbus connection",
+  "pl": "Połączenie Modbus",
+  "files": [
+   "links.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "IBH1",
+  "pl": "backup_heater",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "IBH2",
+  "pl": "mt_ibh2",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "TBH",
+  "pl": "dhw_heater",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "electric",
+  "pl": "elektryczne",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Heating: ",
+  "pl": "Grzeje: ",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": " active",
+  "pl": " aktywne",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "No signals",
+  "pl": "Brak sygnałów",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "SG = cheap energy / PV surplus, EVU = utility lock",
+  "pl": "SG = tania energia / nadwyżka PV, EVU = blokada przez dostawcę",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "E144 – the boiler does not see the BMS master",
+  "pl": "E144 – kocioł nie widzi mastera BMS",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "The hub polls the boiler",
+  "pl": "Hub odpytuje kocioł",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "slave address ",
+  "pl": "adres slave ",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "without a master > 30 s the boiler shows E144",
+  "pl": "bez mastera > 30 s kocioł zgłasza E144",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "BMS connection",
+  "pl": "Połączenie BMS",
+  "files": [
+   "links.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Request sent",
+  "pl": "Żądanie wysyłane",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "No request",
+  "pl": "Bez żądania",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "the hub repeats it every 10 s – the boiler forgets it after 30 s",
+  "pl": "hub ponawia je co 10 s – kocioł zapomina je po 30 s",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "the boiler heats CH only with the request (or a thermostat on 40-41)",
+  "pl": "kocioł grzeje CO tylko z żądaniem (albo z termostatem 40-41)",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Hub weather curve running",
+  "pl": "Krzywa pogodowa hubu działa",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Curve off",
+  "pl": "Krzywa wyłączona",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "flow setpoint from the boiler probe every minute",
+  "pl": "nastawa zasilania z sondy kotła co minutę",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "you set the flow setpoint by hand",
+  "pl": "nastawę zasilania ustawiasz ręcznie",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "the boiler does not answer – check the master adapter and the remote terminals",
+  "pl": "kocioł nie odpowiada – sprawdź adapter master i zaciski pilota",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": " · no answer ",
+  "pl": " · bez odp. ",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "OpenTherm · gateway",
+  "pl": "OpenTherm · bramka",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Room unit connected – the hub relays",
+  "pl": "Pilot połączony – hub przekazuje",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Room unit silent – the hub runs the boiler",
+  "pl": "Pilot milczy – hub prowadzi kocioł",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "the hub overrides CH / DHW enable",
+  "pl": "zezwolenia CO / CWU nadpisuje hub",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "the room unit sets CH / DHW enable",
+  "pl": "zezwolenia CO / CWU ustawia pilot",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "no frames from the room unit – the hub sends its own values",
+  "pl": "brak ramek pilota – hub wysyła swoje wartości",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Enable flags from the hub",
+  "pl": "Zezwolenia z huba",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "OpenTherm · master",
+  "pl": "OpenTherm · master",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "The hub instead of the remote",
+  "pl": "Hub zamiast pilota",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "master mode – the remote removed, jumper X40 on 40-41; the ot_gateway package keeps the remote",
+  "pl": "tryb master – pilot odłączony, zworka X40 na 40-41; pakiet ot_gateway zostawia pilota",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Hub regulator running",
+  "pl": "Regulator hubu działa",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "Regulator off",
+  "pl": "Regulator wyłączony",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "weather curve + room correction, CH on / off with a hysteresis",
+  "pl": "krzywa pogodowa + korekta pokojowa, CO wł. / wył. z histerezą",
+  "files": [
+   "links.ts"
+  ]
+ },
+ {
+  "en": "set the flow setpoint by hand or by an automation",
+  "pl": "nastawę zasilania ustawiasz ręcznie albo automatyzacją",
   "files": [
    "links.ts"
   ]
@@ -6453,13 +10540,6 @@
   ]
  },
  {
-  "en": "Off",
-  "pl": "Wyłączone",
-  "files": [
-   "links.ts"
-  ]
- },
- {
   "en": "No link",
   "pl": "Brak łączności",
   "files": [
@@ -6552,6 +10632,13 @@
   ]
  },
  {
+  "en": "hub program · the cylinder to the disinfection temperature, held 20 min",
+  "pl": "program hubu · zasobnik do temperatury dezynfekcji, trzymana 20 min",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
   "en": "HA program · the cylinder to the boiler maximum for 20 min",
   "pl": "program HA · zasobnik do maks. kotła przez 20 min",
   "files": [
@@ -6636,7 +10723,8 @@
   "pl": "Tryb wyjazdowy",
   "files": [
    "mode.ts",
-   "now.ts"
+   "now.ts",
+   "hub.ts"
   ]
  },
  {
@@ -6668,17 +10756,12 @@
   ]
  },
  {
-  "en": "24 h mean {0} °C ({1} h)",
-  "pl": "średnia 24 h {0} °C ({1} h)",
-  "files": [
-   "mode.ts"
-  ]
- },
- {
   "en": "Automatic summer / winter",
   "pl": "Automatyczne Lato / Zima",
   "files": [
-   "mode.ts"
+   "mode.ts",
+   "settings.ts",
+   "hub.ts"
   ]
  },
  {
@@ -6815,13 +10898,6 @@
   ]
  },
  {
-  "en": "Frost protection",
-  "pl": "Ochrona przed zamarzaniem",
-  "files": [
-   "mode.ts"
-  ]
- },
- {
   "en": "THRESHOLD",
   "pl": "PRÓG",
   "files": [
@@ -6862,6 +10938,35 @@
   "files": [
    "mode.ts",
    "now.ts"
+  ]
+ },
+ {
+  "en": "Forced DHW",
+  "pl": "Wymuszona CWU",
+  "files": [
+   "mode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Tank heater (TBH)",
+  "pl": "Grzałka zasobnika (TBH)",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "Backup heater (IBH)",
+  "pl": "Grzałka IBH",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "program",
+  "pl": "wg programu",
+  "files": [
+   "mode.ts"
   ]
  },
  {
@@ -6985,13 +11090,6 @@
   ]
  },
  {
-  "en": "Operating mode",
-  "pl": "Tryb pracy",
-  "files": [
-   "mode.ts"
-  ]
- },
- {
   "en": "tap twice to change",
   "pl": "dotknij 2× aby zmienić",
   "files": [
@@ -7001,6 +11099,13 @@
  {
   "en": "Read only – the remote (CAR V2 / Super Amico) sets the mode",
   "pl": "Tylko odczyt – tryb ustawia pilot (CAR V2 / Super Amico)",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "Gateway: the room unit sets CH / DHW enable until you switch on “Override CH and DHW enable” in the hub.",
+  "pl": "Bramka: zezwolenia CO / CWU ustawia pilot, dopóki w hubie nie włączysz „Nadpisz zezwolenia CO i CWU”.",
   "files": [
    "mode.ts"
   ]
@@ -7055,6 +11160,49 @@
   ]
  },
  {
+  "en": "Silent mode",
+  "pl": "Tryb cichy",
+  "files": [
+   "mode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "lower compressor and fan speed",
+  "pl": "niższe obroty sprężarki i wentylatora",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "the unit's economy mode",
+  "pl": "tryb ekonomiczny jednostki",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "the unit's program – day and time in its menu",
+  "pl": "program jednostki – dzień i godzina w jej menu",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "Zone 1 weather curve",
+  "pl": "Krzywa pogodowa strefy 1",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "water setpoint from curve no. ",
+  "pl": "nastawa wody z krzywej nr ",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
   "en": "Venting running · ",
   "pl": "Odpowietrzanie trwa · ",
   "files": [
@@ -7071,6 +11219,109 @@
  {
   "en": "one-off AP99 cycle – the boiler does not heat meanwhile; switch off to stop",
   "pl": "jednorazowy cykl AP99 – piec w tym czasie nie grzeje; wyłącz, aby przerwać",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "DHW BOOST",
+  "pl": "CWU BOOST",
+  "files": [
+   "mode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "a one-off quick DHW heat-up",
+  "pl": "jednorazowe szybkie grzanie CWU",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "DHW ECO",
+  "pl": "CWU ECO",
+  "files": [
+   "mode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "lower DHW keep-warm",
+  "pl": "niższa temperatura utrzymania CWU",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "Heat request without DHW priority",
+  "pl": "Grzanie bez priorytetu CWU",
+  "files": [
+   "mode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "the CH request does not wait for the cylinder",
+  "pl": "żądanie CO nie czeka na zasobnik",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "CH before DHW",
+  "pl": "CO przed CWU",
+  "files": [
+   "mode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "heating goes before DHW",
+  "pl": "ogrzewanie ma pierwszeństwo przed CWU",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "lower fan / heat pump speed",
+  "pl": "niższe obroty wentylatora / pompy ciepła",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "Allow cooling",
+  "pl": "Zezwól na chłodzenie",
+  "files": [
+   "mode.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "MAGIS M TOP: cooling by the heat pump",
+  "pl": "MAGIS M TOP: chłodzenie z pompy ciepła",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "Request: heating / cooling",
+  "pl": "Żądanie: grzanie / chłodzenie",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "off = heating, on = cooling",
+  "pl": "wył. = grzanie, wł. = chłodzenie",
+  "files": [
+   "mode.ts"
+  ]
+ },
+ {
+  "en": "BMS 513 · max. burner output",
+  "pl": "BMS 513 · maks. moc palnika",
   "files": [
    "mode.ts"
   ]
@@ -7148,6 +11399,41 @@
  {
   "en": "since ",
   "pl": "od ",
+  "files": [
+   "now.ts"
+  ]
+ },
+ {
+  "en": "Until defrost",
+  "pl": "Do odszraniania",
+  "files": [
+   "now.ts"
+  ]
+ },
+ {
+  "en": "35 min minimum interval since the last one · earliest ~",
+  "pl": "min. odstęp 35 min od ostatniego · najwcześniej ~",
+  "files": [
+   "now.ts"
+  ]
+ },
+ {
+  "en": "evaporator below about −6 °C – a defrost usually after ~8–10 min of frosting",
+  "pl": "parownik poniżej ok. −6 °C – odszranianie zwykle po ~8–10 min szronienia",
+  "files": [
+   "now.ts"
+  ]
+ },
+ {
+  "en": "evaporator warmer than about −6 °C – no defrost coming",
+  "pl": "parownik cieplejszy niż ok. −6 °C – odszranianie się nie zbliża",
+  "files": [
+   "now.ts"
+  ]
+ },
+ {
+  "en": "frost ",
+  "pl": "szron ",
   "files": [
    "now.ts"
   ]
@@ -7503,6 +11789,44 @@
   ]
  },
  {
+  "en": "Starts today",
+  "pl": "Starty dziś",
+  "files": [
+   "now.ts",
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Starts / hour",
+  "pl": "Starty / godzina",
+  "files": [
+   "now.ts"
+  ]
+ },
+ {
+  "en": " · cycling",
+  "pl": " · taktowanie",
+  "files": [
+   "now.ts"
+  ]
+ },
+ {
+  "en": "Starts (total)",
+  "pl": "Starty (od początku)",
+  "files": [
+   "now.ts"
+  ]
+ },
+ {
+  "en": "Burner hours",
+  "pl": "Godziny palnika",
+  "files": [
+   "now.ts",
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
   "en": "Boiler fault flag",
   "pl": "Flaga błędu kotła",
   "files": [
@@ -7513,7 +11837,9 @@
   "en": "System pressure",
   "pl": "Ciśnienie instalacji",
   "files": [
-   "now.ts"
+   "now.ts",
+   "ot.ts",
+   "hub.ts"
   ]
  },
  {
@@ -7597,14 +11923,16 @@
   "en": "yes",
   "pl": "tak",
   "files": [
-   "now.ts"
+   "now.ts",
+   "ot.ts"
   ]
  },
  {
   "en": "no",
   "pl": "nie",
   "files": [
-   "now.ts"
+   "now.ts",
+   "ot.ts"
   ]
  },
  {
@@ -7765,7 +12093,8 @@
   "en": "Low water pressure",
   "pl": "Niskie ciśnienie wody",
   "files": [
-   "ot.ts"
+   "ot.ts",
+   "hub.ts"
   ]
  },
  {
@@ -7779,19 +12108,386 @@
   "en": "Air pressure fault",
   "pl": "Błąd ciągu powietrza",
   "files": [
-   "ot.ts"
+   "ot.ts",
+   "hub.ts"
   ]
  },
  {
   "en": "Water over-temperature",
   "pl": "Przegrzanie wody",
   "files": [
-   "ot.ts"
+   "ot.ts",
+   "hub.ts"
   ]
  },
  {
   "en": "Service request",
   "pl": "Wymagany serwis",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Master configuration",
+  "pl": "Konfiguracja mastera",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Slave configuration",
+  "pl": "Konfiguracja kotła",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Remote command",
+  "pl": "Polecenie zdalne",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Fault flags / code",
+  "pl": "Flagi i kod usterki",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Remote parameters",
+  "pl": "Parametry zdalne",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Cooling control",
+  "pl": "Sygnał chłodzenia",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "CH2 flow setpoint",
+  "pl": "Nastawa CO2",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Room setpoint override",
+  "pl": "Nadpisanie nastawy pokoju",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "TSP count",
+  "pl": "Liczba TSP",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "TSP entry",
+  "pl": "Parametr TSP",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Fault buffer size",
+  "pl": "Liczba wpisów historii błędów",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Fault buffer entry",
+  "pl": "Historia błędów",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Max. capacity / min. modulation",
+  "pl": "Moc maks. / min. modulacja",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Room setpoint",
+  "pl": "Zadana pokoju",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Water pressure",
+  "pl": "Ciśnienie wody",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW flow",
+  "pl": "Przepływ CWU",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Day and time",
+  "pl": "Dzień i godzina",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Date",
+  "pl": "Data",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Year",
+  "pl": "Rok",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Room setpoint CH2",
+  "pl": "Zadana pokoju CO2",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Room temperature",
+  "pl": "Temperatura pokoju",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Solar storage",
+  "pl": "Zasobnik solarny",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Solar collector",
+  "pl": "Kolektor solarny",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Flow CH2",
+  "pl": "Zasilanie CO2",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "DHW 2",
+  "pl": "CWU 2",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Heat exchanger",
+  "pl": "Wymiennik",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Fan speed",
+  "pl": "Wentylator",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Flame current",
+  "pl": "Prąd płomienia",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Room CH2",
+  "pl": "Pokój CO2",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Humidity",
+  "pl": "Wilgotność",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "DHW bounds",
+  "pl": "Zakres CWU",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "CH bounds",
+  "pl": "Zakres CO",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "OTC bounds",
+  "pl": "Zakres krzywej OTC",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "OTC ratio",
+  "pl": "Krzywa OTC",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Ventilation status",
+  "pl": "Status wentylacji",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Remote override",
+  "pl": "Nadpisanie pilota",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Unsuccessful starts",
+  "pl": "Nieudane starty",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Flame lost",
+  "pl": "Zaniki płomienia",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "OEM diagnostic code",
+  "pl": "Kod diagnostyczny OEM",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Burner starts",
+  "pl": "Starty palnika",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH pump starts",
+  "pl": "Starty pompy CO",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "DHW pump starts",
+  "pl": "Starty pompy CWU",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "DHW burner starts",
+  "pl": "Starty palnika CWU",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "CH pump hours",
+  "pl": "Godziny pompy CO",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "DHW pump hours",
+  "pl": "Godziny pompy CWU",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "DHW burner hours",
+  "pl": "Godziny palnika CWU",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Master OT version",
+  "pl": "Wersja OT mastera",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Slave OT version",
+  "pl": "Wersja OT kotła",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Master version",
+  "pl": "Wersja mastera",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Slave version",
+  "pl": "Wersja kotła",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "not reported",
+  "pl": "kocioł nie podaje",
   "files": [
    "ot.ts"
   ]
@@ -7832,6 +12528,13 @@
   ]
  },
  {
+  "en": "Boiler · Modbus BMS",
+  "pl": "Kocioł · Modbus BMS",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
   "en": "Boiler · OpenTherm",
   "pl": "Kocioł · OpenTherm",
   "files": [
@@ -7839,22 +12542,8 @@
   ]
  },
  {
-  "en": "read only",
-  "pl": "tylko odczyt",
-  "files": [
-   "ot.ts"
-  ]
- },
- {
   "en": "Max. capacity",
   "pl": "Moc maks.",
-  "files": [
-   "ot.ts"
-  ]
- },
- {
-  "en": "not reported",
-  "pl": "kocioł nie podaje",
   "files": [
    "ot.ts"
   ]
@@ -7881,27 +12570,6 @@
   ]
  },
  {
-  "en": "Flame current",
-  "pl": "Prąd płomienia",
-  "files": [
-   "ot.ts"
-  ]
- },
- {
-  "en": "Starts today",
-  "pl": "Starty dziś",
-  "files": [
-   "ot.ts"
-  ]
- },
- {
-  "en": "Starts / last hour",
-  "pl": "Starty / ostatnia godzina",
-  "files": [
-   "ot.ts"
-  ]
- },
- {
   "en": " · short cycling",
   "pl": " · taktowanie",
   "files": [
@@ -7909,8 +12577,53 @@
   ]
  },
  {
+  "en": "Counted in the hub from the flame bit of every status frame (~1 s) – no burn is missed.",
+  "pl": "Liczone w hubie z bitu płomienia każdej ramki statusu (~1 s) – żaden zapłon nie umyka.",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
   "en": "Counted from the flame flag every polling cycle (~45 s) – very short burns may be missed.",
   "pl": "Liczone z płomienia co cykl odczytu (~45 s) – bardzo krótkie zapłony mogą umknąć.",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "OpenTherm link",
+  "pl": "Komunikacja OpenTherm",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Frames OK",
+  "pl": "Ramki poprawne",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Frame errors",
+  "pl": "Błędy ramek",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "No answer",
+  "pl": "Brak odpowiedzi",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Error share",
+  "pl": "Udział błędów",
   "files": [
    "ot.ts"
   ]
@@ -7926,7 +12639,8 @@
   "en": "Boiler service",
   "pl": "Przegląd kotła",
   "files": [
-   "ot.ts"
+   "ot.ts",
+   "settings.ts"
   ]
  },
  {
@@ -7993,6 +12707,94 @@
   ]
  },
  {
+  "en": "CH burner hours",
+  "pl": "Godziny palnika CO",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Calculated flow",
+  "pl": "Obliczone zasilanie",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "After the separator (HVDT)",
+  "pl": "Za sprzęgłem (HVDT)",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "DHW inlet",
+  "pl": "Woda zimna CWU",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Pump flow",
+  "pl": "Przepływ pompy",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "System flow",
+  "pl": "Przepływ instalacji",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Cooling allowed",
+  "pl": "Chłodzenie dozwolone",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Cooling range ",
+  "pl": "Zakres chłodzenia ",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Fault E{0}",
+  "pl": "Usterka E{0}",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "not resettable – needs service or the cause removed",
+  "pl": "niekasowalna – wymaga serwisu albo usunięcia przyczyny",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "resettable – you can reset it",
+  "pl": "kasowalna – możesz ją zresetować",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Fault reset",
+  "pl": "Reset usterki",
+  "files": [
+   "ot.ts",
+   "hub.ts"
+  ]
+ },
+ {
   "en": "Data-ID map",
   "pl": "Mapa Data-ID",
   "files": [
@@ -8030,13 +12832,6 @@
  {
   "en": "Supported Data-IDs",
   "pl": "Obsługiwane Data-ID",
-  "files": [
-   "ot.ts"
-  ]
- },
- {
-  "en": "not scanned yet",
-  "pl": "jeszcze nie skanowano",
   "files": [
    "ot.ts"
   ]
@@ -8081,6 +12876,385 @@
   "pl": "Skan czyta raz każdy standardowy Data-ID i parametry kotła (odczyt w tym czasie pauzuje). Zgłoszenie: link w powiadomieniach HA otwiera GitHub z gotową mapą i modelem – nic nie jest wysyłane, dopóki nie naciśniesz Create.",
   "files": [
    "ot.ts"
+  ]
+ },
+ {
+  "en": " · the boiler answers",
+  "pl": " · kocioł odpowiada",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": " · unknown to the boiler",
+  "pl": " · kocioł nie zna",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": " · no reply",
+  "pl": " · brak odpowiedzi",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "answers",
+  "pl": "kocioł odpowiada",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "no reply",
+  "pl": "brak odpowiedzi",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "not asked",
+  "pl": "nie pytano",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "The boiler answers",
+  "pl": "Kocioł odpowiada",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Unknown to the boiler",
+  "pl": "Kocioł nie zna",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "No reply",
+  "pl": "Brak odpowiedzi",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Boiler parameters (TSP, ID 10/11)",
+  "pl": "Parametry kotła (TSP, ID 10/11)",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Fault history (FHB, ID 12/13)",
+  "pl": "Historia błędów (FHB, ID 12/13)",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "add the ot_core package ≥ 1.3",
+  "pl": "dodaj pakiet ot_core ≥ 1.3",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": " · {0} unknown",
+  "pl": " · {0} nieznanych",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": " · room unit {0}",
+  "pl": " · pilot {0}",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": " · asked by the room unit",
+  "pl": " · pyta pilot",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Unknown to the boiler: {0}",
+  "pl": "Supported: {0}",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Asked by the room unit",
+  "pl": "Pyta pilot",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "room unit",
+  "pl": "pyta pilot",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Unknown to the boiler (asked again hourly)",
+  "pl": "Kocioł nie zna (hub pyta raz na godzinę)",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "Report the map on GitHub",
+  "pl": "Zgłoś mapę na GitHubie",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "The hub builds the map from every frame (no separate scan) – the Data-IDs the hub packages and the room unit ask for. The report opens GitHub with the map filled in; nothing is sent until you press Create.",
+  "pl": "Hub buduje mapę z każdej ramki (bez osobnego skanu) – pokazuje Data-ID, o które pytają pakiety huba i pilot. Zgłoszenie otwiera GitHub z gotową mapą; nic nie jest wysyłane, dopóki nie naciśniesz Create.",
+  "files": [
+   "ot.ts"
+  ]
+ },
+ {
+  "en": "ot_t1",
+  "pl": "ot_sup_out_min",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "ot_t0",
+  "pl": "ot_sup_out_max",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "This card is for the Immergas Dominus integration in the OpenTherm mode (ESP OpenTherm: the Hub weather curve card).",
+  "pl": "Ta karta jest dla integracji Immergas Dominus w trybie OpenTherm (ESP OpenTherm: karta Krzywa pogodowa w hubie).",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "t1",
+  "pl": "t0",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "S6",
+  "pl": "S5",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "P66/B",
+  "pl": "P66/A",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "boiler max.",
+  "pl": "maks. kotła",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "boiler min.",
+  "pl": "min. kotła",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "generic",
+  "pl": "ogólny",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "Dominus module regulator (OTC) · profile",
+  "pl": "Regulator modułu Dominus (OTC) · profil",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "Weather",
+  "pl": "Pogodowa",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "Fixed setpoint",
+  "pl": "Stała nastawa",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "outdoor",
+  "pl": "na zewnątrz",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "OTC 1–9, step 0.1",
+  "pl": "OTC 1–9, co 0,1",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "CH offset",
+  "pl": "Offset CO",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "moves the curve up / down",
+  "pl": "przesuwa krzywą w górę / dół",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "max. flow of the curve (parameter 17)",
+  "pl": "maks. zasilanie z krzywej (parametr 17)",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "Min. CH temperature",
+  "pl": "Min. temperatura CO",
+  "files": [
+   "otcurve.ts",
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "lowest flow (parameter 16)",
+  "pl": "najniższe zasilanie (parametr 16)",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "boiler CH max.",
+  "pl": "maks. CO kotła",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "flow when cold",
+  "pl": "zasilanie przy mrozie",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "from the boiler menu",
+  "pl": "z menu kotła",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "boiler CH min.",
+  "pl": "min. CO kotła",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "flow when warm",
+  "pl": "zasilanie przy cieple",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "cold point",
+  "pl": "punkt mrozu",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "warm point",
+  "pl": "punkt ciepła",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "Dominus curve (approximate)",
+  "pl": "krzywa Dominusa (orientacyjnie)",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "boiler curve P66 (without a remote)",
+  "pl": "krzywa kotła P66 (bez pilota)",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "● from the curve · ○ actual flow",
+  "pl": "● z krzywej · ○ faktyczne zasilanie",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "Read only (remote in charge) – changes are blocked.",
+  "pl": "Tylko odczyt (steruje pilot) – zmiany są zablokowane.",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "The module computes the flow from the boiler's outdoor temperature (Data-ID 27) and sends it every cycle; the boiler keeps it within its limits. The OTC shape is approximate (not published by Immergas) – compare the dot with the actual flow.",
+  "pl": "Moduł liczy zasilanie z temperatury zewnętrznej kotła (Data-ID 27) i wysyła je co cykl; kocioł trzyma je w swoich granicach. Kształt krzywej OTC jest orientacyjny (Immergas go nie publikuje) – porównaj kropkę z faktycznym zasilaniem.",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": "Outdoor sensor off: the module does not use the curve – flow = CH setpoint (with the room modulation).",
+  "pl": "Sonda zewnętrzna wyłączona: moduł nie używa krzywej – zasilanie = Nastawa CO (z modulacją wg pokoju).",
+  "files": [
+   "otcurve.ts"
+  ]
+ },
+ {
+  "en": " The P66 curve is a copy of the boiler menu (drag a point or −/+) – the boiler uses it only without a remote / without the Dominus as master.",
+  "pl": " Krzywa P66 to kopia menu kotła (przeciągnij punkt albo −/+) – kocioł używa jej tylko bez pilota / bez Dominusa jako mastera.",
+  "files": [
+   "otcurve.ts"
   ]
  },
  {
@@ -8133,19 +13307,10 @@
   ]
  },
  {
-  "en": "Eco",
-  "pl": "Eko",
+  "en": "Eco: flow reduction",
+  "pl": "Eko: obniżenie zasilania",
   "files": [
-   "schedule.ts",
-   "setpoints.ts"
-  ]
- },
- {
-  "en": "Comfort",
-  "pl": "Komfort",
-  "files": [
-   "schedule.ts",
-   "setpoints.ts"
+   "schedule.ts"
   ]
  },
  {
@@ -8184,6 +13349,27 @@
   ]
  },
  {
+  "en": "Eco without a heat request",
+  "pl": "Eko bez żądania grzania",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": "in the Eco phase CH stands (no heat request)",
+  "pl": "w fazie Eko CO stoi (hub nie wysyła żądania)",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": "off – Eco lowers the flow (the curve or the setpoint)",
+  "pl": "wył. – Eko obniża zasilanie (krzywą albo nastawę)",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
   "en": "Comfort / Eco by the DHW schedule",
   "pl": "Komfort / Eko wg harmonogramu CWU",
   "files": [
@@ -8194,13 +13380,6 @@
  {
   "en": "now ",
   "pl": "teraz ",
-  "files": [
-   "schedule.ts"
-  ]
- },
- {
-  "en": "setpoint",
-  "pl": "nastawa",
   "files": [
    "schedule.ts"
   ]
@@ -8262,13 +13441,6 @@
   ]
  },
  {
-  "en": "heating",
-  "pl": "grzeje",
-  "files": [
-   "setpoints.ts"
-  ]
- },
- {
   "en": "ECO",
   "pl": "EKO",
   "files": [
@@ -8318,6 +13490,41 @@
   ]
  },
  {
+  "en": "the hub weather curve computes it from the boiler probe (514 every minute)",
+  "pl": "nastawę liczy krzywa pogodowa hubu z sondy kotła (zapis 514 co minutę)",
+  "files": [
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "the flow setpoint is written to the boiler (BMS 514)",
+  "pl": "nastawa zasilania zapisywana do kotła (BMS 514)",
+  "files": [
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "the hub regulator computes the setpoint (weather curve + room correction)",
+  "pl": "nastawę liczy regulator hubu (krzywa pogodowa + korekta pokojowa)",
+  "files": [
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "gateway: the room unit sends the setpoint (the hub can override it)",
+  "pl": "bramka: nastawę wysyła pilot (nadpiszesz ją w hubie)",
+  "files": [
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "the hub sends the flow setpoint every cycle",
+  "pl": "hub wysyła nastawę zasilania co cykl",
+  "files": [
+   "setpoints.ts"
+  ]
+ },
+ {
   "en": "setpoint = max flow temperature; with a CAR V2 remote the remote runs the heating curve",
   "pl": "nastawa = maks. temperatura zasilania; z pilotem CAR V2 pilot prowadzi krzywą grzewczą",
   "files": [
@@ -8334,6 +13541,48 @@
  {
   "en": "cooling",
   "pl": "chłodzi",
+  "files": [
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "Midea: room temperature control",
+  "pl": "Midea: sterowanie wg temperatury pokoju",
+  "files": [
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "Midea: zone 1 water setpoint ",
+  "pl": "Midea: nastawa wody strefy 1 ",
+  "files": [
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": " · curve no. ",
+  "pl": " · krzywa nr ",
+  "files": [
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "the DHW setpoint is written to the boiler (BMS 515)",
+  "pl": "nastawa CWU zapisywana do kotła (BMS 515)",
+  "files": [
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "gateway: the room unit sends the DHW setpoint (the hub can override it)",
+  "pl": "bramka: nastawę CWU wysyła pilot (nadpiszesz ją w hubie)",
+  "files": [
+   "setpoints.ts"
+  ]
+ },
+ {
+  "en": "the hub sends the DHW setpoint every 30 s",
+  "pl": "hub wysyła nastawę CWU co 30 s",
   "files": [
    "setpoints.ts"
   ]
@@ -8406,6 +13655,167 @@
   "pl": "Wskaż w opcjach karty dhw_eco / dhw_comfort pomocników input_number, aby edytować je tutaj (teraz ",
   "files": [
    "setpoints.ts"
+  ]
+ },
+ {
+  "en": "0: DHW setpoint + 25 °C",
+  "pl": "0: nastawa CWU + 25 °C",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "1: by the boiler output",
+  "pl": "1: wg mocy kotła",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "2: 1.1 × DHW setpoint + 6 °C",
+  "pl": "2: 1,1 × nastawa CWU + 6 °C",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Intermittent (by the thermostat)",
+  "pl": "Przerywana (wg termostatu)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Continuous",
+  "pl": "Ciągła",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "By the thermostat and the flow probe",
+  "pl": "Wg termostatu i sondy zasilania",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Other / generic",
+  "pl": "Inny / ogólny",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "3 °C below",
+  "pl": "3 °C poniżej",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "5 °C below (solar)",
+  "pl": "5 °C poniżej (solar)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "10 °C below (solar)",
+  "pl": "10 °C poniżej (solar)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Third-party remote (OpenTherm)",
+  "pl": "Pilot innej firmy (OpenTherm)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "FIX (constant speed)",
+  "pl": "FIX (stała prędkość)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "every 6 months",
+  "pl": "co 6 miesięcy",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "every 12 months",
+  "pl": "co 12 miesięcy",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "every 18 months",
+  "pl": "co 18 miesięcy",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "every 24 months",
+  "pl": "co 24 miesiące",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Weekly (Mon 02:00)",
+  "pl": "Co tydzień (pon. 02:00)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Daily 02:00",
+  "pl": "Codziennie 02:00",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "MAGIS M TOP (heat pump)",
+  "pl": "MAGIS M TOP (pompa ciepła)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "IMG-BUS boiler + IU23 interface",
+  "pl": "Kocioł IMG-BUS + interfejs IU23",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Lower the flow",
+  "pl": "Obniż zasilanie",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "No heat request (CH stands)",
+  "pl": "Bez żądania grzania (CO stoi)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Switch zone 1 off",
+  "pl": "Wyłącz strefę 1",
+  "files": [
+   "settings.ts"
   ]
  },
  {
@@ -8678,7 +14088,8 @@
   "en": "Boiler menu profile",
   "pl": "Profil menu kotła",
   "files": [
-   "settings.ts"
+   "settings.ts",
+   "hub.ts"
   ]
  },
  {
@@ -8717,13 +14128,6 @@
   ]
  },
  {
-  "en": "CH max. flow temperature",
-  "pl": "maks. temperatura zasilania CO",
-  "files": [
-   "settings.ts"
-  ]
- },
- {
   "en": "outdoor temp. at max. flow",
   "pl": "temp. zewnętrzna przy maks. zasilaniu",
   "files": [
@@ -8747,13 +14151,6 @@
  {
   "en": "Ignition and DHW",
   "pl": "Zapłon i CWU",
-  "files": [
-   "settings.ts"
-  ]
- },
- {
-  "en": "CH ignitions timer",
-  "pl": "blokada ponownego zapłonu CO",
   "files": [
    "settings.ts"
   ]
@@ -8803,13 +14200,6 @@
  {
   "en": "flow while heating the cylinder",
   "pl": "zasilanie przy grzaniu zasobnika",
-  "files": [
-   "settings.ts"
-  ]
- },
- {
-  "en": "DHW restart below the setpoint",
-  "pl": "start CWU poniżej nastawy",
   "files": [
    "settings.ts"
   ]
@@ -8972,7 +14362,8 @@
   "en": "CH without a working remote",
   "pl": "CO bez działającego pilota",
   "files": [
-   "settings.ts"
+   "settings.ts",
+   "hub.ts"
   ]
  },
  {
@@ -9025,6 +14416,13 @@
   ]
  },
  {
+  "en": "CH and DHW program (hub)",
+  "pl": "Program CO i CWU (hub)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
   "en": "CH and DHW program (Home Assistant)",
   "pl": "Program CO i CWU (Home Assistant)",
   "files": [
@@ -9049,7 +14447,8 @@
   "en": "In the Eco phase",
   "pl": "W fazie Eko",
   "files": [
-   "settings.ts"
+   "settings.ts",
+   "hub.ts"
   ]
  },
  {
@@ -9158,22 +14557,8 @@
   ]
  },
  {
-  "en": "Min. CH temperature",
-  "pl": "Min. temperatura CO",
-  "files": [
-   "settings.ts"
-  ]
- },
- {
   "en": "Building inertia (BUILD)",
   "pl": "Bezwładność budynku (DIMENS)",
-  "files": [
-   "settings.ts"
-  ]
- },
- {
-  "en": "Room hysteresis",
-  "pl": "Histereza pokojowa",
   "files": [
    "settings.ts"
   ]
@@ -9188,6 +14573,504 @@
  {
   "en": "Frost protection threshold",
   "pl": "Próg ochrony przed zamarzaniem",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "The hub polls the unit (Modbus connection)",
+  "pl": "Hub odpytuje jednostkę (Połączenie Modbus)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "RS485 H1 / H2 of the controller, address 1, 9600 8N1",
+  "pl": "RS485 H1 / H2 sterownika, adres 1, 9600 8N1",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "The unit without a fault",
+  "pl": "Jednostka bez błędu",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Zone 1 on",
+  "pl": "Strefa 1 włączona",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Winter / Cooling in the Operating mode card",
+  "pl": "tryb Zima / Chłodzenie w karcie Tryb pracy",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "DHW on",
+  "pl": "CWU włączona",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Room temperature control",
+  "pl": "Sterowanie wg temperatury pokoju",
+  "files": [
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Comfort / Eco change the room setpoint",
+  "pl": "Komfort / Eko zmieniają zadaną pokoju",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "off – Eco acts on the zone 1 water setpoint",
+  "pl": "wył. – Eko działa na nastawę wody strefy 1",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "calendars in the Schedule card",
+  "pl": "kalendarze w karcie Harmonogram",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Running with the hub (MAGIS M)",
+  "pl": "Praca z hubem (MAGIS M)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "CH program (hub)",
+  "pl": "Program CO (hub)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Eco without room control",
+  "pl": "Eko bez sterowania wg pokoju",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Eco water setpoint reduction",
+  "pl": "Obniżenie nastawy wody w Eko",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "DHW program (hub)",
+  "pl": "Program CWU (hub)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Winter below (24 h mean)",
+  "pl": "Zima poniżej (średnia 24 h)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Summer above (24 h mean)",
+  "pl": "Lato powyżej (średnia 24 h)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Water temperature limits",
+  "pl": "Granice temperatury wody",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Cooling water max.",
+  "pl": "Chłodzenie – maks. woda",
+  "files": [
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Cooling water min.",
+  "pl": "Chłodzenie – min. woda",
+  "files": [
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW max.",
+  "pl": "CWU – maks.",
+  "files": [
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW min.",
+  "pl": "CWU – min.",
+  "files": [
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heating operating range",
+  "pl": "Zakres pracy grzania",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Max. outdoor (T4HMAX)",
+  "pl": "Maks. temp. zewnętrzna (T4HMAX)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Min. outdoor (T4HMIN)",
+  "pl": "Min. temp. zewnętrzna (T4HMIN)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Custom curve (no. 9)",
+  "pl": "Krzywa własna (nr 9)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Cold point (outdoor)",
+  "pl": "Punkt zimny (temp. zewn.)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Warm point (outdoor)",
+  "pl": "Punkt ciepły (temp. zewn.)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Software",
+  "pl": "Oprogramowanie",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Modbus protocol version",
+  "pl": "Wersja protokołu Modbus",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Indoor unit",
+  "pl": "Jednostka wewnętrzna",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Controller",
+  "pl": "Panel sterownika",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "The hub polls the boiler (BMS connection)",
+  "pl": "Hub odpytuje kocioł (Połączenie BMS)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "RS485 A / B, 9600, slave address from the boiler menu",
+  "pl": "RS485 A / B, 9600, adres slave z menu kotła",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "The boiler sees the master (no E144)",
+  "pl": "Kocioł widzi mastera (brak E144)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "E144 = no polling for 30 s",
+  "pl": "E144 = brak odpytywania przez 30 s",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "The boiler in the BMS mode",
+  "pl": "Kocioł w trybie BMS",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Modbus menu → Type = BMS (SUPERIOR / EXTRA: P.18 = 2) – Dominus and BMS exclude each other",
+  "pl": "menu Modbus → Typ = BMS (SUPERIOR / EXTRA: P.18 = 2) – Dominus i BMS wykluczają się",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "CH heat request",
+  "pl": "Żądanie grzania CO",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "without it the boiler does not heat CH (or a thermostat on 40-41)",
+  "pl": "bez niego kocioł nie grzeje CO (albo termostat na 40-41)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Hub weather curve",
+  "pl": "Krzywa pogodowa hubu",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "flow setpoint from the boiler's outdoor probe",
+  "pl": "nastawa zasilania z sondy zewnętrznej kotła",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Running with the hub (Modbus BMS)",
+  "pl": "Praca z hubem (Modbus BMS)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "flow setpoint (514) from the boiler probe (772) every minute",
+  "pl": "nastawa zasilania (514) z sondy kotła (772) co minutę",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Curve: cold point (outdoor)",
+  "pl": "Krzywa: punkt mrozu (temp. zewn.)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Curve: flow when cold",
+  "pl": "Krzywa: zasilanie przy mrozie",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Curve: warm point (outdoor)",
+  "pl": "Krzywa: punkt ciepła (temp. zewn.)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Curve: flow when warm",
+  "pl": "Krzywa: zasilanie przy cieple",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Eco phase (CH program)",
+  "pl": "Faza Eko (program CO)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Eco flow reduction",
+  "pl": "Obniżenie zasilania w Eko",
+  "files": [
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Limits",
+  "pl": "Limity",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Upper power limit (BMS 513)",
+  "pl": "Górny limit mocy (BMS 513)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "DHW program and anti-legionella (hub)",
+  "pl": "Program CWU i anty-legionella (hub)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "what the boiler accepts",
+  "pl": "tyle przyjmuje kocioł",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Text menu: Service → Modbus → Type = BMS; slave address 21 (boilers on D+ / D-).",
+  "pl": "Menu tekstowe: Pomoc techniczna → Modbus → Typ = BMS; adres slave 21 (kotły na D+ / D-).",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Code menu: P.18 = 2 (BMS); address 21; wired on D+ / D-.",
+  "pl": "Menu kodowe: P.18 = 2 (BMS); adres 21; połączenie na D+ / D-.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "VICTRIX PRO V2: BMS on the T+ / T- terminals (A38); without a master fault 100.",
+  "pl": "VICTRIX PRO V2: BMS na zaciskach T+ / T- (A38); bez mastera błąd 100.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "MAGIS M TOP: the generator BMS – address 21, 9600 8N2; cooling through the Request type.",
+  "pl": "MAGIS M TOP: BMS generatora – adres 21, 9600 8N2; tryb chłodzenia przez Rodzaj żądania.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "IU23 (kit 3.029912) on the remote terminals 44 / 41 instead of the CAR V2; address by dip switches 21–36; 9600 8N2. Hypothesis – not confirmed.",
+  "pl": "IU23 (kit 3.029912) na zaciskach pilota 44 / 41 zamiast CAR V2; adres dipswitchami 21–36; 9600 8N2. Hipoteza – niepotwierdzone.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Check the boiler manual for how to switch Modbus BMS on and the slave address.",
+  "pl": "Sprawdź w instrukcji kotła, jak włączyć Modbus BMS i jaki jest adres slave.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Boiler model / interface",
+  "pl": "Model kotła / interfejs",
+  "files": [
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Modbus address (read from the boiler)",
+  "pl": "Adres Modbus (odczyt z kotła)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "the boiler reports the CH range {0}–{1} °C",
+  "pl": "kocioł podaje zakres CO {0}–{1} °C",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Hub regulator",
+  "pl": "Regulator hubu",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "CH setpoint every minute from the curve + room correction",
+  "pl": "nastawa CO co minutę z krzywej + korekta pokojowa",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Integral room correction (°C per °C·h)",
+  "pl": "Korekta całkująca (°C na °C·h)",
+  "files": [
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "OpenTherm limits",
+  "pl": "Limity OpenTherm",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Max. CH setpoint (Data-ID 57)",
+  "pl": "Maks. nastawa CO (Data-ID 57)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Max. modulation (Data-ID 14)",
+  "pl": "Maks. modulacja (Data-ID 14)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Heat pump service",
+  "pl": "Przegląd pompy ciepła",
   "files": [
    "settings.ts"
   ]
@@ -9210,7 +15093,8 @@
   "en": "Last service",
   "pl": "Ostatni przegląd",
   "files": [
-   "settings.ts"
+   "settings.ts",
+   "hub.ts"
   ]
  },
  {
@@ -9298,6 +15182,20 @@
   ]
  },
  {
+  "en": "Online settings",
+  "pl": "Ustawienia online",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Unit parameters (offline)",
+  "pl": "Parametry jednostki (offline)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
   "en": "Hub settings (online)",
   "pl": "Ustawienia huba (online)",
   "files": [
@@ -9319,15 +15217,22 @@
   ]
  },
  {
-  "en": "Online settings",
-  "pl": "Ustawienia online",
+  "en": "Settings",
+  "pl": "Ustawienia",
   "files": [
    "settings.ts"
   ]
  },
  {
-  "en": "Settings",
-  "pl": "Ustawienia",
+  "en": "running with the hub, Comfort / Eco programs, summer / winter, service",
+  "pl": "praca z hubem, programy Komfort / Eko, Lato / Zima, przegląd",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "installer parameters (read only), curve 9, software",
+  "pl": "parametry instalatora (odczyt), krzywa 9, oprogramowanie",
   "files": [
    "settings.ts"
   ]
@@ -9354,6 +15259,20 @@
   ]
  },
  {
+  "en": "running with the hub (BMS), curve, Eco, limits, DHW programs, service",
+  "pl": "praca z hubem (BMS), krzywa, Eko, limity, programy CWU, przegląd",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "running without the CAR V2, hub regulator, OpenTherm limits, CH / DHW programs, service",
+  "pl": "praca bez CAR V2, regulator hubu, limity OpenTherm, programy CO / CWU, przegląd",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
   "en": "running without the CAR V2, CH / DHW programs, Dominus regulator, service, summer/winter, alerts",
   "pl": "praca bez CAR V2, programy CO / CWU, regulator Dominusa, przegląd, Lato/Zima, alarmy",
   "files": [
@@ -9363,6 +15282,13 @@
  {
   "en": "flow, humidity, screed, floor area, summer/winter, alerts, fault language",
   "pl": "zasilanie, wilgotność, posadzka, powierzchnia, Lato/Zima, alarmy, język błędów",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "boiler model / interface, BMS setup on the boiler, address",
+  "pl": "model kotła / interfejs, ustawienie BMS na kotle, adres",
   "files": [
    "settings.ts"
   ]
@@ -9389,6 +15315,20 @@
   ]
  },
  {
+  "en": "The unit reports the installer parameters over Modbus read only – change them in the installer menu of the controller.",
+  "pl": "Parametry instalatora jednostka podaje po Modbusie tylko do odczytu – zmienia się je w menu instalatora sterownika.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Work right away: the hub runs the programs itself (without Home Assistant – only its time) and writes the setpoints to the unit over Modbus.",
+  "pl": "Działają od razu: hub liczy programy sam (bez Home Assistant – tylko jego czas) i zapisuje nastawy do jednostki po Modbusie.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
   "en": "The hub cannot read these from the buses – copy them once from the boiler menu; they drive the timer bars, the curve and the calibration.",
   "pl": "Hub nie czyta tych ustawień z magistral – przepisz je raz z menu pieca; służą paskom czasu, krzywej i kalibracji.",
   "files": [
@@ -9396,8 +15336,36 @@
   ]
  },
  {
+  "en": "Work right away: the hub runs the curve and the programs itself (without Home Assistant – only its time) and writes the setpoints to the boiler over Modbus BMS.",
+  "pl": "Działają od razu: hub liczy krzywą i programy sam (bez Home Assistant – tylko jego czas) i zapisuje nastawy do kotła po Modbus BMS.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Work right away: the hub runs the regulator and the programs itself (without Home Assistant – only its time) and sends the setpoints to the boiler over OpenTherm.",
+  "pl": "Działają od razu: hub liczy regulator i programy sam (bez Home Assistant – tylko jego czas) i wysyła nastawy do kotła po OpenTherm.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
   "en": "Work right away: zone setpoints, vacation and summer/winter write to the boiler through Dominus, alerts and language run in Home Assistant.",
   "pl": "Działają od razu: nastawy strefy, wyjazd i Lato/Zima zapisują do kotła przez Dominusa, alarmy i język liczy Home Assistant.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "The BMS does not report the boiler model – pick it once; the card shows how to switch BMS on at the boiler. Nothing is sent to the boiler.",
+  "pl": "BMS nie podaje modelu kotła – wybierz go raz; karta pokaże, jak włączyć BMS na kotle. Nic nie trafia do kotła.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "OpenTherm does not carry the boiler menu – copy it once from the boiler (ot_boiler_params package). Nothing is sent to the boiler; they drive the codes and the hints.",
+  "pl": "OpenTherm nie przenosi menu kotła – przepisz je raz z kotła (pakiet ot_boiler_params). Nic nie trafia do kotła; służą kodom i podpowiedziom.",
   "files": [
    "settings.ts"
   ]
@@ -9550,45 +15518,1403 @@
   ]
  },
  {
-  "en": "not needed – weather compensation (outdoor probe / the boiler's curve)",
-  "pl": "niepotrzebne – regulacja pogodowa (sonda zewnętrzna / krzywa kotła)",
+  "en": "DHW temperature",
+  "pl": "Temperatura CWU",
   "files": [
-   "base.ts"
+   "hub.ts"
   ]
  },
  {
-  "en": "Until defrost",
-  "pl": "Do odszraniania",
+  "en": "Fault code",
+  "pl": "Kod usterki",
   "files": [
-   "now.ts"
+   "hub.ts"
   ]
  },
  {
-  "en": "35 min minimum interval since the last one · earliest ~",
-  "pl": "min. odstęp 35 min od ostatniego · najwcześniej ~",
+  "en": "Return temperature",
+  "pl": "Temperatura powrotu",
   "files": [
-   "now.ts"
+   "hub.ts"
   ]
  },
  {
-  "en": "evaporator below about −6 °C – a defrost usually after ~8–10 min of frosting",
-  "pl": "parownik poniżej ok. −6 °C – odszranianie zwykle po ~8–10 min szronienia",
+  "en": "Exhaust temperature",
+  "pl": "Temperatura spalin",
   "files": [
-   "now.ts"
+   "hub.ts"
   ]
  },
  {
-  "en": "evaporator warmer than about −6 °C – no defrost coming",
-  "pl": "parownik cieplejszy niż ok. −6 °C – odszranianie się nie zbliża",
+  "en": "Max. CH setpoint (boiler)",
+  "pl": "Maks. nastawa CO (kocioł)",
   "files": [
-   "now.ts"
+   "hub.ts"
   ]
  },
  {
-  "en": "frost ",
-  "pl": "szron ",
+  "en": "Gas or flame fault",
+  "pl": "Usterka gazu lub płomienia",
   "files": [
-   "now.ts"
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Lockout (reset needed)",
+  "pl": "Blokada (wymaga resetu)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Room unit: room temperature",
+  "pl": "Pilot: temperatura pokoju",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Boiler connection",
+  "pl": "Połączenie z kotłem",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Data-IDs supported",
+  "pl": "Data-ID obsługiwane",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Data-IDs unknown to the boiler",
+  "pl": "Data-ID nieznane kotłowi",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Data-IDs of the room unit",
+  "pl": "Data-ID pilota",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Boiler max. capacity",
+  "pl": "Moc maks. kotła",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Boiler min. modulation",
+  "pl": "Min. modulacja kotła",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Burner starts in the last hour",
+  "pl": "Starty palnika w ostatniej godzinie",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Starty palnika / ostatnia godzina",
+  "pl": "Burner starts in the last hour",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Burner starts / last hour",
+  "pl": "Starty palnika / ostatnia godzina",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Starty palnika ⁄ ostatnia godzina",
+  "pl": "Burner starts / last hour",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Burner starts ⁄ last hour",
+  "pl": "Starty palnika ⁄ ostatnia godzina",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH program",
+  "pl": "Program CO",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH Comfort",
+  "pl": "Komfort CO",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH Eco",
+  "pl": "Eko CO",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH program phase",
+  "pl": "Faza programu CO",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW program phase",
+  "pl": "Faza programu CWU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Anti-legionella: temperature",
+  "pl": "Anty-legionella: temperatura",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Anti-legionella running",
+  "pl": "Anty-legionella trwa",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Vacation until",
+  "pl": "Wyjazd do",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "During the vacation",
+  "pl": "Na czas wyjazdu",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Automatic summer-winter",
+  "pl": "Automatyczne Lato-Zima",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Automatyczne Lato / Zima",
+  "pl": "Automatic summer-winter",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Automatyczne Lato ⁄ Zima",
+  "pl": "Automatic summer / winter",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Automatic summer ⁄ winter",
+  "pl": "Automatyczne Lato ⁄ Zima",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Frost threshold",
+  "pl": "Próg zamarzania",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "t0 · CH min. flow temperature",
+  "pl": "t0 · Min. temperatura zasilania CO",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "t1 · CH max. flow temperature",
+  "pl": "t1 · Maks. temperatura zasilania CO",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "t4 · DHW priority timing",
+  "pl": "t4 · Opóźnienie po CWU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "t5 · CH ignitions timer",
+  "pl": "t5 · Blokada ponownego zapłonu CO",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "t6 · CH ramp timer",
+  "pl": "t6 · Rampa mocy CO",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "t7 · CH ignition delay",
+  "pl": "t7 · Opóźnienie zapłonu CO",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P0 · DHW max. output",
+  "pl": "P0 · Maks. moc CWU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P1 · Min. output",
+  "pl": "P1 · Min. moc",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P2 · CH max. output",
+  "pl": "P2 · Maks. moc CO",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P7 · Outdoor probe correction",
+  "pl": "P7 · Korekta sondy zewnętrznej",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "A3 · Pump max. speed",
+  "pl": "A3 · Maks. prędkość pompy",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "A4 · Pump min. speed",
+  "pl": "A4 · Min. prędkość pompy",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "A5 · Pump mode (0 = proportional head, 5-25 = ΔT)",
+  "pl": "A5 · Tryb pompy (0 = proporcjonalny, 5-25 = ΔT)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P66 C · Outdoor temperature at max. flow",
+  "pl": "P66 C · Temp. zewnętrzna przy maks. zasilaniu",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P66/C · Temp. zewnętrzna przy maks. zasilaniu",
+  "pl": "P66 C · Outdoor temperature at max. flow",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P66/C · Outdoor temperature at max. flow",
+  "pl": "P66/C · Temp. zewnętrzna przy maks. zasilaniu",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P66⁄C · Temp. zewnętrzna przy maks. zasilaniu",
+  "pl": "P66/C · Outdoor temperature at max. flow",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P66⁄C · Outdoor temperature at max. flow",
+  "pl": "P66⁄C · Temp. zewnętrzna przy maks. zasilaniu",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P66 D · Outdoor temperature at min. flow",
+  "pl": "P66 D · Temp. zewnętrzna przy min. zasilaniu",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P66/D · Temp. zewnętrzna przy min. zasilaniu",
+  "pl": "P66 D · Outdoor temperature at min. flow",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P66/D · Outdoor temperature at min. flow",
+  "pl": "P66/D · Temp. zewnętrzna przy min. zasilaniu",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P66⁄D · Temp. zewnętrzna przy min. zasilaniu",
+  "pl": "P66/D · Outdoor temperature at min. flow",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P66⁄D · Outdoor temperature at min. flow",
+  "pl": "P66⁄D · Temp. zewnętrzna przy min. zasilaniu",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW max. output (fan speed)",
+  "pl": "Maks. moc CWU (obroty wentylatora)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW min. output (fan speed)",
+  "pl": "Min. moc CWU (obroty wentylatora)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH max. output (fan speed)",
+  "pl": "Maks. moc CO (obroty wentylatora)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH min. output (fan speed)",
+  "pl": "Min. moc CO (obroty wentylatora)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Boiler operating hours (menu M1)",
+  "pl": "Godziny pracy kotła (menu M1)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Burner ignitions (menu M1)",
+  "pl": "Zapłony palnika (menu M1)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "t2 · DHW thermostat (flow for the cylinder)",
+  "pl": "t2 · Termostat CWU (zasilanie zasobnika)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "P6 · Pump operation",
+  "pl": "P6 · Praca pompy",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Remote protocol",
+  "pl": "Protokół zdalnego sterowania",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Service reminder",
+  "pl": "Przypomnienie o przeglądzie",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Service done",
+  "pl": "Przegląd wykonany",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Boiler service due",
+  "pl": "Przegląd kotła",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Tuesday",
+  "pl": "Monday",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Wednesday",
+  "pl": "Tuesday",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Thursday",
+  "pl": "Wednesday",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Friday",
+  "pl": "Thursday",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Saturday",
+  "pl": "Friday",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Sunday",
+  "pl": "Saturday",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "CH calendar – {0}",
+  "pl": "Kalendarz CO – {0}",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW calendar – {0}",
+  "pl": "Kalendarz CWU – {0}",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Calendar {0} range {1} from",
+  "pl": "Kalendarz {0} zakres {1} od",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Calendar {0} range {1} to",
+  "pl": "Kalendarz {0} zakres {1} do",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW max. temperature",
+  "pl": "Maks. temperatura CWU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW min. temperature",
+  "pl": "Min. temperatura CWU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Pump CH",
+  "pl": "Pompa CO",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Pump DHW",
+  "pl": "Pompa CWU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Flue gas temperature",
+  "pl": "Temperatura spalin",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Ionisation current",
+  "pl": "Prąd jonizacji",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heat pump active",
+  "pl": "Pompa ciepła aktywna",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Request type",
+  "pl": "Rodzaj żądania",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Temperature after the separator (HVDT)",
+  "pl": "Temperatura za sprzęgłem (HVDT)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW inlet temperature",
+  "pl": "Temperatura wody zimnej CWU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Burner hours DHW",
+  "pl": "Godziny palnika CWU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Burner hours CH",
+  "pl": "Godziny palnika CO",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Fault (resettable)",
+  "pl": "Usterka (kasowalna)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Fault (not resettable)",
+  "pl": "Usterka (niekasowalna)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Special function active",
+  "pl": "Funkcja specjalna aktywna",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Calculated flow temperature",
+  "pl": "Obliczona temperatura zasilania",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Modbus slave address",
+  "pl": "Adres Modbus kotła",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Cooling max. temperature",
+  "pl": "Maks. temperatura chłodzenia",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Cooling min. temperature",
+  "pl": "Min. temperatura chłodzenia",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Boiler model and interface",
+  "pl": "Model kotła i interfejs",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Model kotła / interfejs",
+  "pl": "Boiler model and interface",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Model kotła ⁄ interfejs",
+  "pl": "Boiler model / interface",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Boiler model ⁄ interface",
+  "pl": "Model kotła ⁄ interfejs",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Bus map: undescribed registers",
+  "pl": "Mapa magistrali: nieopisane rejestry",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Report bus map",
+  "pl": "Zgłoś mapę magistrali",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Scan registers",
+  "pl": "Skanuj rejestry",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Bus map: scan",
+  "pl": "Mapa magistrali: skan",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Delta T (flow − return)",
+  "pl": "Delta T (zasilanie − powrót)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Mean loop temperature",
+  "pl": "Średnia obiegu",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Flow deviation from the setpoint",
+  "pl": "Odchyłka zasilania od nastawy",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Average burn per start (lifetime)",
+  "pl": "Średnie palenie na start (od początku)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Starts per burner hour (lifetime)",
+  "pl": "Starty na godzinę palnika (od początku)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Pressure drop in 24 h",
+  "pl": "Spadek ciśnienia w 24 h",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Condensing operation",
+  "pl": "Praca kondensacyjna",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Possible leak (pressure drop)",
+  "pl": "Możliwy wyciek (spadek ciśnienia)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Gas today (est.)",
+  "pl": "Gaz dziś (szac.)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Gas heating today",
+  "pl": "Gaz CO dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Gas DHW today",
+  "pl": "Gaz CWU dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Gas counter (est.)",
+  "pl": "Licznik gazu (szac.)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heat today (est.)",
+  "pl": "Ciepło dziś (szac.)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Condensing today (share)",
+  "pl": "Kondensacja dziś (udział)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "At min. modulation today",
+  "pl": "Na min. modulacji dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Average modulation today",
+  "pl": "Średnia modulacja dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Average burn today",
+  "pl": "Średnie palenie dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW draws today",
+  "pl": "Pobory CWU dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Last DHW draw",
+  "pl": "Ostatni pobór CWU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Hot water today",
+  "pl": "Ciepła woda dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW heat today",
+  "pl": "Ciepło CWU dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Deviation from the calculated flow",
+  "pl": "Odchyłka od obliczonej temperatury",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Average cold water temperature",
+  "pl": "Średnia temp. wody zimnej",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW share of the burner hours",
+  "pl": "Udział CWU w godzinach palnika",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Ionisation current (average)",
+  "pl": "Prąd jonizacji (średnia)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Zone 1 heating and cooling",
+  "pl": "Strefa 1 grzanie i chłodzenie",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Running mode",
+  "pl": "Bieżący tryb",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Water inlet temperature",
+  "pl": "Temperatura wody na wlocie",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW tank temperature",
+  "pl": "Temperatura zasobnika CWU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "COP now",
+  "pl": "COP teraz",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heating power",
+  "pl": "Moc grzewcza",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Moc cieplna",
+  "pl": "Heating power",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Backup heater IBH1",
+  "pl": "Grzałka IBH1",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Tank heater TBH",
+  "pl": "Grzałka zasobnika TBH",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Electric energy",
+  "pl": "Energia elektryczna",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heat energy",
+  "pl": "Energia cieplna",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Discharge temperature",
+  "pl": "Temperatura tłoczenia",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Outdoor coil temperature (T3)",
+  "pl": "Temperatura wymiennika zewn. (T3)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Target compressor frequency",
+  "pl": "Docelowa częstotliwość sprężarki",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Expansion valve",
+  "pl": "Zawór rozprężny",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Refrigerant liquid temperature (T2)",
+  "pl": "Temperatura czynnika – ciecz (T2)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "COP today",
+  "pl": "COP dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Compressor runtime today",
+  "pl": "Czas pracy sprężarki dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Forced tank heater",
+  "pl": "Wymuszona grzałka zasobnika",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Forced backup heater",
+  "pl": "Wymuszona grzałka IBH",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Backup heater IBH2",
+  "pl": "Grzałka IBH2",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "SG signal",
+  "pl": "Sygnał SG",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "EVU signal",
+  "pl": "Sygnał EVU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heat energy today",
+  "pl": "Energia cieplna dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Electric energy today",
+  "pl": "Energia elektryczna dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Indoor unit software",
+  "pl": "Oprogramowanie jednostki wewn.",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Protocol version",
+  "pl": "Wersja protokołu",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heating outdoor min. (T4HMIN)",
+  "pl": "Grzanie – min. temp. zewn. (T4HMIN)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Controller software",
+  "pl": "Oprogramowanie panelu",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Total water outlet temperature (T1)",
+  "pl": "Temperatura wody całkowita (T1)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Zone 2 water temperature (T1B)",
+  "pl": "Temperatura wody strefy 2 (T1B)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Buffer tank top temperature",
+  "pl": "Temperatura bufora – góra",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Buffer tank bottom temperature",
+  "pl": "Temperatura bufora – dół",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Curve flow target zone 2",
+  "pl": "Zasilanie z krzywej strefa 2",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Suction temperature",
+  "pl": "Temperatura ssania",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Refrigerant gas temperature (T2B)",
+  "pl": "Temperatura czynnika – gaz (T2B)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Outdoor unit current",
+  "pl": "Prąd jednostki zewnętrznej",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Outdoor unit voltage",
+  "pl": "Napięcie jednostki zewnętrznej",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Inverter module temperature",
+  "pl": "Temperatura modułu inwertera",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "3-way valve SV1",
+  "pl": "Zawór 3-drogowy SV1",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Outer circulation pump",
+  "pl": "Pompa obiegu zewnętrznego",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Thermostat heating request",
+  "pl": "Termostat – żądanie grzania",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Thermostat cooling request",
+  "pl": "Termostat – żądanie chłodzenia",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heat pump heat cost",
+  "pl": "Koszt ciepła z pompy",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Last DHW cycle: source",
+  "pl": "Ostatni cykl CWU: źródło",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Last DHW cycle: duration",
+  "pl": "Ostatni cykl CWU: czas",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Last DHW cycle: electricity",
+  "pl": "Ostatni cykl CWU: prąd",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Last DHW cycle: heat (cylinder)",
+  "pl": "Ostatni cykl CWU: ciepło (zasobnik)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Last DHW cycle: heat (flow)",
+  "pl": "Ostatni cykl CWU: ciepło (przepływ)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Last DHW cycle: COP (cylinder)",
+  "pl": "Ostatni cykl CWU: COP (zasobnik)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Last DHW cycle: COP (flow)",
+  "pl": "Ostatni cykl CWU: COP (przepływ)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Last DHW cycle: cost",
+  "pl": "Ostatni cykl CWU: koszt",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW tank volume",
+  "pl": "Pojemność zasobnika CWU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heat output from the flow",
+  "pl": "Moc cieplna z przepływu",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Deviation from the curve",
+  "pl": "Odchyłka od krzywej",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Condensing temperature",
+  "pl": "Temperatura skraplania",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Evaporating temperature",
+  "pl": "Temperatura parowania",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "ODU power (U × I)",
+  "pl": "Moc jedn. zewn. (U × I)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Average compressor cycle today",
+  "pl": "Średni cykl sprężarki dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Last compressor cycle",
+  "pl": "Ostatni cykl sprężarki",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Since the last defrost",
+  "pl": "Od ostatniego odszraniania",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heating today (compressor)",
+  "pl": "Grzanie dziś (sprężarka)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW today (compressor)",
+  "pl": "CWU dziś (sprężarka)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heating electricity today",
+  "pl": "Prąd grzanie dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "DHW electricity today",
+  "pl": "Prąd CWU dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heating heat today",
+  "pl": "Ciepło grzanie dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "IBH heater today",
+  "pl": "Grzałka IBH dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "TBH heater today",
+  "pl": "Grzałka TBH dziś",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Heater electricity today (est.)",
+  "pl": "Prąd grzałek dziś (szac.)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "System COP today (with heaters)",
+  "pl": "COP systemu dziś (z grzałkami)",
+  "files": [
+   "hub.ts"
   ]
  }
 ]

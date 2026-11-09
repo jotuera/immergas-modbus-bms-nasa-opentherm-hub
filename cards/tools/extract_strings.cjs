@@ -6,7 +6,7 @@ const fs = require("fs"), path = require("path");
 const [src, out] = process.argv.slice(2);
 
 // language data, not UI texts: entity names, the state word lists, the generated dictionary
-const SKIP = new Set(["names.ts", "i18n.ts", "i18n_data.ts", "timers.ts"]);
+const SKIP = new Set(["names.ts", "esp_names.ts", "i18n.ts", "i18n_data.ts", "timers.ts"]);
 const files = [];
 (function walk(d) { for (const f of fs.readdirSync(d)) { const p = path.join(d, f); fs.statSync(p).isDirectory() ? walk(p) : p.endsWith(".ts") && !SKIP.has(f) && files.push(p); } })(src);
 
