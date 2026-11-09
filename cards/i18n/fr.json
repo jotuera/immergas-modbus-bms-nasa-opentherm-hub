@@ -1431,7 +1431,7 @@
   "P7 – remote protocol": "P7 – protocole de la commande",
   "Remote control": "Commande à distance",
   "TERA manual: P7 = 0 IMG BUS (CAR V2), 2 = third-party remote on 44 / 41 (the DHW setpoint and max. flow then stay on the boiler panel); 1 = not available. The forum said P7 = 1 – check on the boiler.": "Notice TERA : P7 = 0 IMG BUS (CAR V2), 2 = commande d'une autre marque sur 44 / 41 (la consigne ECS et le départ max. restent alors sur le panneau de la chaudière) ; 1 = non disponible. Le forum indiquait P7 = 1 – vérifiez sur la chaudière.",
-  "The S menu depends on the model: EXA 24 X – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "Le menu S dépend du modèle : EXA 24 X – vitesses du ventilateur (S0–S3), S5 / S6 départ, S7 sonde ; NIKE 24 ECO – puissance en % (S0 min., S1 max.).",
+  "The S menu depends on the model: EXA – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "Le menu S dépend du modèle : EXA – vitesses du ventilateur (S0–S3), S5 / S6 départ, S7 sonde ; NIKE 24 ECO – puissance en % (S0 min., S1 max.).",
   "pump control": "commande de la pompe",
   "remote protocol": "protocole de la commande",
   "set ON on the boiler and declare it in the Boiler parameters (offline) – the boiler keeps heating after E31": "réglez ON sur la chaudière et déclarez-le dans Paramètres de la chaudière (hors ligne) – après E31 la chaudière continue de chauffer",
@@ -2474,5 +2474,6 @@
   "Gas or electricity?": "Gaz ou électricité ?",
   "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "Le gaz est converti en chaleur utile : environ 10,6 kWh pour 1 m³.",
   "Last DHW cycle gas": "Gaz du dernier cycle ECS",
-  "Last DHW cycle cylinder rise": "Hausse du ballon au dernier cycle ECS"
+  "Last DHW cycle cylinder rise": "Hausse du ballon au dernier cycle ECS",
+  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "trop souvent – allongez t4 (temporisation des allumages chauffage) ou abaissez la courbe"
 }

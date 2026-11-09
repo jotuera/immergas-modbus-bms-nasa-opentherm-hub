@@ -1431,7 +1431,7 @@
   "P7 – remote protocol": "P7 – Fernbedienungsprotokoll",
   "Remote control": "Fernbedienung",
   "TERA manual: P7 = 0 IMG BUS (CAR V2), 2 = third-party remote on 44 / 41 (the DHW setpoint and max. flow then stay on the boiler panel); 1 = not available. The forum said P7 = 1 – check on the boiler.": "TERA-Anleitung: P7 = 0 IMG BUS (CAR V2), 2 = Fremd-Fernbedienung an 44 / 41 (WW-Sollwert und max. Vorlauf bleiben dann am Kesselpanel); 1 = nicht verfügbar. Im Forum hieß es P7 = 1 – am Kessel prüfen.",
-  "The S menu depends on the model: EXA 24 X – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "Das S-Menü hängt vom Modell ab: EXA 24 X – Gebläsedrehzahlen (S0–S3), S5 / S6 Vorlauf, S7 Fühler; NIKE 24 ECO – Leistung in % (S0 min., S1 max.).",
+  "The S menu depends on the model: EXA – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "Das S-Menü hängt vom Modell ab: EXA – Gebläsedrehzahlen (S0–S3), S5 / S6 Vorlauf, S7 Fühler; NIKE 24 ECO – Leistung in % (S0 min., S1 max.).",
   "pump control": "Pumpensteuerung",
   "remote protocol": "Fernbedienungsprotokoll",
   "set ON on the boiler and declare it in the Boiler parameters (offline) – the boiler keeps heating after E31": "am Kessel auf ON stellen und in den Kesselparametern (offline) angeben – nach E31 heizt der Kessel weiter",
@@ -2474,5 +2474,6 @@
   "Gas or electricity?": "Gas oder Strom?",
   "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "Gas wird in Nutzwärme umgerechnet: etwa 10,6 kWh aus 1 m³.",
   "Last DHW cycle gas": "Gas letzter WW-Zyklus",
-  "Last DHW cycle cylinder rise": "Speicheranstieg im letzten WW-Zyklus"
+  "Last DHW cycle cylinder rise": "Speicheranstieg im letzten WW-Zyklus",
+  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "zu oft – t4 (Heizungs-Taktsperre) verlängern oder die Kurve senken"
 }

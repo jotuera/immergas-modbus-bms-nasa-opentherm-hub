@@ -1431,7 +1431,7 @@
   "P7 – remote protocol": "P7 – protocolo del mando",
   "Remote control": "Mando a distancia",
   "TERA manual: P7 = 0 IMG BUS (CAR V2), 2 = third-party remote on 44 / 41 (the DHW setpoint and max. flow then stay on the boiler panel); 1 = not available. The forum said P7 = 1 – check on the boiler.": "Manual TERA: P7 = 0 IMG BUS (CAR V2), 2 = mando de otra marca en 44 / 41 (la consigna ACS y la impulsión máx. quedan entonces en el panel de la caldera); 1 = no disponible. En el foro se dijo P7 = 1 – compruébelo en la caldera.",
-  "The S menu depends on the model: EXA 24 X – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "El menú S depende del modelo: EXA 24 X – velocidades del ventilador (S0–S3), S5 / S6 impulsión, S7 sonda; NIKE 24 ECO – potencia en % (S0 mín., S1 máx.).",
+  "The S menu depends on the model: EXA – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "El menú S depende del modelo: EXA – velocidades del ventilador (S0–S3), S5 / S6 impulsión, S7 sonda; NIKE 24 ECO – potencia en % (S0 mín., S1 máx.).",
   "pump control": "control de la bomba",
   "remote protocol": "protocolo del mando",
   "set ON on the boiler and declare it in the Boiler parameters (offline) – the boiler keeps heating after E31": "ponga ON en la caldera y declárelo en Parámetros de la caldera (offline) – tras E31 la caldera sigue calentando",
@@ -2474,5 +2474,6 @@
   "Gas or electricity?": "¿Gas o electricidad?",
   "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "El gas se convierte en calor útil: unos 10,6 kWh por 1 m³.",
   "Last DHW cycle gas": "Gas del último ciclo de ACS",
-  "Last DHW cycle cylinder rise": "Subida del acumulador en el último ciclo ACS"
+  "Last DHW cycle cylinder rise": "Subida del acumulador en el último ciclo ACS",
+  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "demasiado a menudo – alarga t4 (temporizador de encendidos de calefacción) o baja la curva"
 }

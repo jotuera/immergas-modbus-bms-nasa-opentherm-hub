@@ -1370,14 +1370,15 @@ class ImmergasCalibrationCard extends HubCard {
 
   private otRows(): Row[] {
     const P = this.otProfile, esp = this.esp, f1 = (v: number) => this.f(v, 1, 1);
-    const names: Record<string, string> = { zeus25: "VICTRIX ZEUS 25 / EXA 28 / OMNIA", tera: "VICTRIX TERA V2 / V3", classic: "VICTRIX EXA 24 X / NIKE 24 ECO",
+    const names: Record<string, string> = { zeus25: "VICTRIX ZEUS 25 / OMNIA / OMNIA V2", tera: "VICTRIX TERA V2 / V3", hybrid: "VICTRIX HYBRID / HYBRID PLUS", classic: "VICTRIX EXA 24 X / 28 / 32, NIKE 24 ECO",
       superior: "VICTRIX ZEUS Superior", hercules: "HERCULES Condensing", generic: this.t("ogólny (OpenTherm)", "generic (OpenTherm)") };
-    const gt = P === "zeus25" || P === "tera", sup = P === "superior" || P === "hercules";
-    const cMax: Record<string, string> = { zeus25: "t1", tera: "t1", classic: "S6", superior: "P66/B", hercules: "P66/B", generic: "" };
+    const gt = P === "zeus25", tg = P === "tera" || P === "hybrid", sup = P === "superior" || P === "hercules";
+    const cMax: Record<string, string> = { zeus25: "t1", tera: "t1", hybrid: "t1", classic: "S6", superior: "P66/B", hercules: "P66/B", generic: "" };
     const out: (Row | null)[] = [];
     // --- cycling: starts per hour, short burns, average burn; the anti-cycling parameter of the menu family ---
     const sh = this.n("ot_burn_h"), st = this.n("ot_burn_today"), avg = this.n("oa_burn_avg"), mm = this.n("oa_minmod_share");
     const cycRec: [string, string] = gt ? ["za często – wydłuż t5 (blokada zapłonu CO) albo obniż krzywą", "too often – lengthen t5 (CH ignitions timer) or lower the curve"]
+      : tg ? ["za często – wydłuż t4 (blokada zapłonu CO) albo obniż krzywą", "too often – lengthen t4 (CH ignitions timer) or lower the curve"]
       : sup ? ["za często – obniż krzywą P66 / maks. moc CO (M3) albo nastawę CO", "too often – lower the P66 curve / CH max. output (M3) or the CH setpoint"]
       : P === "classic" ? ["za często – obniż maks. moc CO (menu P) albo krzywą", "too often – lower the CH max. output (menu P) or the curve"]
       : esp ? ["za często – obniż maks. modulację huba albo krzywą", "too often – lower the hub max. modulation or the curve"]

@@ -1431,7 +1431,7 @@
   "P7 – remote protocol": "P7 – protokol dálkového ovládání",
   "Remote control": "Dálkové ovládání",
   "TERA manual: P7 = 0 IMG BUS (CAR V2), 2 = third-party remote on 44 / 41 (the DHW setpoint and max. flow then stay on the boiler panel); 1 = not available. The forum said P7 = 1 – check on the boiler.": "Návod TERA: P7 = 0 IMG BUS (CAR V2), 2 = ovladač jiné firmy na 44 / 41 (požadovaná TUV a max. výstup pak zůstávají na panelu kotle); 1 = nedostupné. Na fóru se psalo P7 = 1 – ověřte na kotli.",
-  "The S menu depends on the model: EXA 24 X – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "Menu S závisí na modelu: EXA 24 X – otáčky ventilátoru (S0–S3), S5 / S6 výstup, S7 čidlo; NIKE 24 ECO – výkon v % (S0 min., S1 max.).",
+  "The S menu depends on the model: EXA – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "Menu S závisí na modelu: EXA – otáčky ventilátoru (S0–S3), S5 / S6 výstup, S7 čidlo; NIKE 24 ECO – výkon v % (S0 min., S1 max.).",
   "pump control": "řízení čerpadla",
   "remote protocol": "protokol dálkového ovládání",
   "set ON on the boiler and declare it in the Boiler parameters (offline) – the boiler keeps heating after E31": "nastavte ON na kotli a zadejte v Parametrech kotle (offline) – po E31 kotel dál topí",
@@ -2474,5 +2474,6 @@
   "Gas or electricity?": "Plyn, nebo elektřina?",
   "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "Plyn je přepočten na užitečné teplo: asi 10,6 kWh z 1 m³.",
   "Last DHW cycle gas": "Plyn posledního cyklu TUV",
-  "Last DHW cycle cylinder rise": "Nárůst zásobníku v posledním cyklu TUV"
+  "Last DHW cycle cylinder rise": "Nárůst zásobníku v posledním cyklu TUV",
+  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "příliš často – prodlužte t4 (časovač zapalování ÚT) nebo snižte křivku"
 }

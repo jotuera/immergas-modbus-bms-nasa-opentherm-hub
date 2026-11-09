@@ -6,7 +6,7 @@ import { HubCard, html, css, nothing, c, register, Prof, PROFS, CardTheme, store
 import { Key } from "../names";
 
 // the ESP hub selects carry keys as options (no HA translation): their labels, PL / EN
-const ESP_OPTS: Record<string, Record<string, [string, string]>> = {"ot_t2": {"0": ["0: nastawa CWU + 25 °C", "0: DHW setpoint + 25 °C"], "1": ["1: wg mocy kotła", "1: by the boiler output"], "2": ["2: 1,1 × nastawa CWU + 6 °C", "2: 1.1 × DHW setpoint + 6 °C"], "3": ["3: 85 °C", "3: 85 °C"]}, "ot_p6": {"intermittent": ["Przerywana (wg termostatu)", "Intermittent (by the thermostat)"], "continuous": ["Ciągła", "Continuous"], "flow_probe": ["Wg termostatu i sondy zasilania", "By the thermostat and the flow probe"]}, "ot_menu_profile": {"zeus25": ["VICTRIX ZEUS 25 / EXA 28 / OMNIA (menu G / P / t / A)", "VICTRIX ZEUS 25 / EXA 28 / OMNIA (menu G / P / t / A)"], "tera": ["VICTRIX TERA V2 / V3 (menu P / t / A / S)", "VICTRIX TERA V2 / V3 (menu P / t / A / S)"], "classic": ["VICTRIX EXA 24 X / NIKE 24 ECO (menu S / P / t)", "VICTRIX EXA 24 X / NIKE 24 ECO (menu S / P / t)"], "superior": ["VICTRIX ZEUS Superior 26 / 32 (menu M1 / M3 / M5)", "VICTRIX ZEUS Superior 26 / 32 (menu M1 / M3 / M5)"], "hercules": ["HERCULES Condensing / Solar 26 (menu M1 / M3 / M5)", "HERCULES Condensing / Solar 26 (menu M1 / M3 / M5)"], "generic": ["Inny / ogólny", "Other / generic"]}, "ot_sup_pump_speed": {"auto": ["AUTO (ΔT)", "AUTO (ΔT)"]}, "ot_sup_dhw_restart": {"3": ["3 °C poniżej", "3 °C below"], "5": ["5 °C poniżej (solar)", "5 °C below (solar)"], "10": ["10 °C poniżej (solar)", "10 °C below (solar)"]}, "ot_remote_protocol": {"img_bus": ["IMG BUS (CAR V2)", "IMG BUS (CAR V2)"], "commercial": ["Pilot innej firmy (OpenTherm)", "Third-party remote (OpenTherm)"]}, "ot_her_pump": {"auto": ["AUTO (ΔT)", "AUTO (ΔT)"], "fix": ["FIX (stała prędkość)", "FIX (constant speed)"]}, "ot_ch_no_remote": {"off": ["Wyłączone", "Off"], "on": ["Włączone", "On"]}, "ot_maint": {"off": ["Wyłączone", "Off"], "6": ["co 6 miesięcy", "every 6 months"], "12": ["co 12 miesięcy", "every 12 months"], "18": ["co 18 miesięcy", "every 18 months"], "24": ["co 24 miesiące", "every 24 months"]}, "ot_leg": {"off": ["Wyłączona", "Off"], "weekly": ["Co tydzień (pon. 02:00)", "Weekly (Mon 02:00)"], "daily": ["Codziennie 02:00", "Daily 02:00"]}, "gb_model": {"superior": ["VICTRIX ZEUS Superior 25 / 30 / 35", "VICTRIX ZEUS Superior 25 / 30 / 35"], "extra": ["VICTRIX EXTRA / EXTRA PLUS", "VICTRIX EXTRA / EXTRA PLUS"], "pro": ["VICTRIX PRO V2 EU", "VICTRIX PRO V2 EU"], "mtop": ["MAGIS M TOP (pompa ciepła)", "MAGIS M TOP (heat pump)"], "iu23": ["Kocioł IMG-BUS + interfejs IU23", "IMG-BUS boiler + IU23 interface"], "other": ["Inny", "Other"]}, "ot_eco_action": {"reduce_flow": ["Obniż zasilanie", "Lower the flow"], "no_request": ["Bez żądania grzania (CO stoi)", "No heat request (CH stands)"], "zone_off": ["Wyłącz strefę 1", "Switch zone 1 off"]}};
+const ESP_OPTS: Record<string, Record<string, [string, string]>> = {"ot_t2": {"0": ["0: nastawa CWU + 25 °C", "0: DHW setpoint + 25 °C"], "1": ["1: wg mocy kotła", "1: by the boiler output"], "2": ["2: 1,1 × nastawa CWU + 6 °C", "2: 1.1 × DHW setpoint + 6 °C"], "3": ["3: 85 °C", "3: 85 °C"]}, "ot_p6": {"intermittent": ["Przerywana (wg termostatu)", "Intermittent (by the thermostat)"], "continuous": ["Ciągła", "Continuous"], "flow_probe": ["Wg termostatu i sondy zasilania", "By the thermostat and the flow probe"]}, "ot_menu_profile": {"zeus25": ["VICTRIX ZEUS 25 / OMNIA / OMNIA V2 (menu G / P / t / A)", "VICTRIX ZEUS 25 / OMNIA / OMNIA V2 (menu G / P / t / A)"], "tera": ["VICTRIX TERA V2 / V3 (menu P / t / A / S)", "VICTRIX TERA V2 / V3 (menu P / t / A / S)"], "classic": ["VICTRIX EXA 24 X / 28 / 32, NIKE 24 ECO (menu S / P / t)", "VICTRIX EXA 24 X / 28 / 32, NIKE 24 ECO (menu S / P / t)"], "superior": ["VICTRIX ZEUS Superior 26 / 32 (menu M1 / M3 / M5)", "VICTRIX ZEUS Superior 26 / 32 (menu M1 / M3 / M5)"], "hercules": ["HERCULES Condensing / Solar 26 (menu M1 / M3 / M5)", "HERCULES Condensing / Solar 26 (menu M1 / M3 / M5)"], "hybrid": ["VICTRIX HYBRID / HYBRID PLUS (menu P / t / A / S)", "VICTRIX HYBRID / HYBRID PLUS (menu P / t / A / S)"], "generic": ["Inny / ogólny", "Other / generic"]}, "ot_sup_pump_speed": {"auto": ["AUTO (ΔT)", "AUTO (ΔT)"]}, "ot_sup_dhw_restart": {"3": ["3 °C poniżej", "3 °C below"], "5": ["5 °C poniżej (solar)", "5 °C below (solar)"], "10": ["10 °C poniżej (solar)", "10 °C below (solar)"]}, "ot_remote_protocol": {"img_bus": ["IMG BUS (CAR V2)", "IMG BUS (CAR V2)"], "commercial": ["Pilot innej firmy (OpenTherm)", "Third-party remote (OpenTherm)"]}, "ot_her_pump": {"auto": ["AUTO (ΔT)", "AUTO (ΔT)"], "fix": ["FIX (stała prędkość)", "FIX (constant speed)"]}, "ot_ch_no_remote": {"off": ["Wyłączone", "Off"], "on": ["Włączone", "On"]}, "ot_maint": {"off": ["Wyłączone", "Off"], "6": ["co 6 miesięcy", "every 6 months"], "12": ["co 12 miesięcy", "every 12 months"], "18": ["co 18 miesięcy", "every 18 months"], "24": ["co 24 miesiące", "every 24 months"]}, "ot_leg": {"off": ["Wyłączona", "Off"], "weekly": ["Co tydzień (pon. 02:00)", "Weekly (Mon 02:00)"], "daily": ["Codziennie 02:00", "Daily 02:00"]}, "gb_model": {"superior": ["VICTRIX ZEUS Superior 25 / 30 / 35", "VICTRIX ZEUS Superior 25 / 30 / 35"], "extra": ["VICTRIX EXTRA / EXTRA PLUS", "VICTRIX EXTRA / EXTRA PLUS"], "pro": ["VICTRIX PRO V2 EU", "VICTRIX PRO V2 EU"], "mtop": ["MAGIS M TOP (pompa ciepła)", "MAGIS M TOP (heat pump)"], "iu23": ["Kocioł IMG-BUS + interfejs IU23", "IMG-BUS boiler + IU23 interface"], "other": ["Inny", "Other"]}, "ot_eco_action": {"reduce_flow": ["Obniż zasilanie", "Lower the flow"], "no_request": ["Bez żądania grzania (CO stoi)", "No heat request (CH stands)"], "zone_off": ["Wyłącz strefę 1", "Switch zone 1 off"]}};
 
 class ImmergasSettingsCard extends HubCard {
   private open: boolean | null = null;
@@ -138,7 +138,7 @@ class ImmergasSettingsCard extends HubCard {
   }
 
   /** OpenTherm: the boiler menu copied once from the boiler, in the codes of its menu family (from the Immergas
-   *  manuals: ZEUS 25 / EXA 28 / OMNIA, TERA, EXA 24 X / NIKE, ZEUS Superior 26/32, HERCULES) */
+   *  manuals: ZEUS 25 / OMNIA, TERA, EXA / NIKE, ZEUS Superior 26/32, HERCULES) */
   private otOffline() {
     const prof = this.otProfile, gen = prof === "generic";
     // the code of a parameter in each menu family; no entry = the family does not have it, gen = also shown
@@ -155,17 +155,17 @@ class ImmergasSettingsCard extends HubCard {
     const hint = (txt: string, col = "overlay2") => html`<div class="note" style="color:${c(col)}">${txt}</div>`;
     const guessed = !(PROFS as string[]).includes(this.s("ot_menu_profile") ?? "");
     const m = prof === "superior" || prof === "hercules", cl = prof === "classic";
-    const TIMER: Codes = { zeus25: "t5", tera: "t4", classic: "t0", superior: "P69", hercules: "P69", gen: true };
+    const TIMER: Codes = { zeus25: "t5", tera: "t4", hybrid: "t4", classic: "t0", superior: "P69", hercules: "P69", gen: true };
     const timerMax = m ? 255 : 600, tmr = TIMER[prof] ?? "";
-    const exa = cl ? " (EXA 24 X)" : "", nike = cl ? " (NIKE)" : "";
+    const exa = cl ? " (EXA)" : "", nike = cl ? " (NIKE)" : "";
     return html`
       ${this.otThermoRows()}
       <div class="grp">${this.t("Profil menu kotła", "Boiler menu profile")}</div>
       ${this.selRow(this.eid("ot_menu_profile"), this.t("Model / menu", "Model / menu"), "mdi:book-cog-outline")}
       ${guessed ? hint(this.t("profil dobrany z modelu kotła – ustaw go, jeśli się nie zgadza", "profile guessed from the boiler model – set it if it does not match")) : nothing}
       <div class="grp">${m ? this.t("Zasilanie i krzywa (M5 · P66)", "Flow and curve (M5 · P66)") : this.t("Zasilanie CO", "CH flow")}</div>
-      ${r("ot_t0", "mdi:thermometer-low", { zeus25: "t0", tera: "t0", classic: "S5", superior: "P66/A", hercules: "P66/A", gen: true }, this.t("min. temperatura zasilania CO", "CH min. flow temperature") + exa)}
-      ${r("ot_t1", "mdi:thermometer-high", { zeus25: "t1", tera: "t1", classic: "S6", superior: "P66/B", hercules: "P66/B", gen: true }, this.t("maks. temperatura zasilania CO", "CH max. flow temperature") + exa)}
+      ${r("ot_t0", "mdi:thermometer-low", { zeus25: "t0", tera: "t0", hybrid: "t0", classic: "S5", superior: "P66/A", hercules: "P66/A", gen: true }, this.t("min. temperatura zasilania CO", "CH min. flow temperature") + exa)}
+      ${r("ot_t1", "mdi:thermometer-high", { zeus25: "t1", tera: "t1", hybrid: "t1", classic: "S6", superior: "P66/B", hercules: "P66/B", gen: true }, this.t("maks. temperatura zasilania CO", "CH max. flow temperature") + exa)}
       ${r("ot_sup_out_min", "mdi:snowflake-thermometer", { superior: "P66/C", hercules: "P66/C" }, this.t("temp. zewnętrzna przy maks. zasilaniu", "outdoor temp. at max. flow"))}
       ${r("ot_sup_out_max", "mdi:sun-thermometer", { superior: "P66/D", hercules: "P66/D" }, this.t("temp. zewnętrzna przy min. zasilaniu", "outdoor temp. at min. flow"))}
       ${ch?.min !== undefined && ch?.max !== undefined ? hint(this.t(`kocioł podaje zakres CO ${this.f(ch.min, 0)}–${this.f(ch.max, 0)} °C (Data-ID 49)`,
@@ -175,32 +175,32 @@ class ImmergasSettingsCard extends HubCard {
       ${sh > 6 ? hint(this.t(`taktowanie: ${this.f(sh, 0)} startów w ostatniej godzinie`, `short cycling: ${this.f(sh, 0)} starts in the last hour`)
         + (isNaN(t5) || t5 < (m ? 200 : 300) ? (gen ? this.t(" – wydłuż na kotle blokadę ponownego zapłonu", " – lengthen the ignitions timer on the boiler")
           : this.t(` – wydłuż ${tmr} na kotle (np. ${m ? "200–255" : "300–600"} s)`, ` – lengthen ${tmr} on the boiler (e.g. ${m ? "200–255" : "300–600"} s)`)) : ""), "peach") : nothing}
-      ${r("ot_t6", "mdi:chart-line-variant", { zeus25: "t6", tera: "t5", classic: "t1", superior: "P70", hercules: "P70", gen: true }, this.t("rampa mocy CO", "CH ramp timer"))}
-      ${r("ot_t7", "mdi:timer-play-outline", { zeus25: "t7", tera: "t6", classic: "t2", superior: "P68", hercules: "P68", gen: true }, this.t("opóźnienie zapłonu CO", "CH ignition delay"))}
-      ${r("ot_t4", "mdi:timer-sand", { zeus25: "t4", tera: "t3" }, this.t("czekanie po CWU przed CO", "wait after DHW before CH"))}
+      ${r("ot_t6", "mdi:chart-line-variant", { zeus25: "t6", tera: "t5", hybrid: "t5", classic: "t1", superior: "P70", hercules: "P70", gen: true }, this.t("rampa mocy CO", "CH ramp timer"))}
+      ${r("ot_t7", "mdi:timer-play-outline", { zeus25: "t7", tera: "t6", hybrid: "t6", classic: "t2", superior: "P68", hercules: "P68", gen: true }, this.t("opóźnienie zapłonu CO", "CH ignition delay"))}
+      ${r("ot_t4", "mdi:timer-sand", { zeus25: "t4", tera: "t3", hybrid: "t3" }, this.t("czekanie po CWU przed CO", "wait after DHW before CH"))}
       ${sel("ot_t2", "mdi:water-thermometer", { zeus25: "t2" }, this.t("zasilanie przy grzaniu zasobnika", "flow while heating the cylinder"))}
       ${sel("ot_sup_dhw_restart", "mdi:water-thermometer", { superior: "P71", hercules: "P71" }, this.t("start CWU poniżej nastawy", "DHW restart below the setpoint"))}
       ${prof === "hercules" ? hint(this.t("HERCULES: P71.1 = 3 °C, P71.2 = 5 °C (solar)", "HERCULES: P71.1 = 3 °C, P71.2 = 5 °C (solar)")) : nothing}
       <div class="grp">${m || cl ? this.t("Moc (obroty wentylatora / %)", "Output (fan speed / %)") : this.t("Moc (menu P)", "Output (menu P)")}</div>
-      ${r("ot_p2", "mdi:fire", { zeus25: "P2", tera: "P2", classic: "S1", gen: true }, this.t("maks. moc CO", "CH max. output") + nike)}
+      ${r("ot_p2", "mdi:fire", { zeus25: "P2", tera: "P2", hybrid: "P2", classic: "S1", gen: true }, this.t("maks. moc CO", "CH max. output") + nike)}
       ${tsp12 !== undefined && prof === "zeus25" ? hint(this.t(`parametr kotła 12 ze skanu = ${tsp12} (najpewniej P2)`, `boiler parameter 12 from the scan = ${tsp12} (probably P2)`)) : nothing}
-      ${r("ot_p1", "mdi:fire-circle", { zeus25: "P1", tera: "P1", classic: "S0", gen: true }, this.t("min. moc", "min. output") + nike)}
+      ${r("ot_p1", "mdi:fire-circle", { zeus25: "P1", tera: "P1", hybrid: "P1", classic: "S0", gen: true }, this.t("min. moc", "min. output") + nike)}
       ${!isNaN(mm) ? hint(this.t(`kocioł podaje min. modulację ${this.f(mm, 0)} % (Data-ID 15)`, `the boiler reports ${this.f(mm, 0)} % min. modulation (Data-ID 15)`)) : nothing}
-      ${r("ot_p0", "mdi:water-boiler", { zeus25: "P0", tera: "P0", gen: true }, this.t("maks. moc CWU", "DHW max. output"))}
+      ${r("ot_p0", "mdi:water-boiler", { zeus25: "P0", tera: "P0", hybrid: "P0", gen: true }, this.t("maks. moc CWU", "DHW max. output"))}
       ${r("ot_sup_ch_max_rpm", "mdi:fan-plus", { superior: "P64", hercules: "P64", classic: "S3" }, this.t("maks. moc CO", "CH max. output") + exa)}
       ${r("ot_sup_ch_min_rpm", "mdi:fan-minus", { superior: "P65", hercules: "P65", classic: "S2" }, this.t("min. moc CO", "CH min. output") + exa)}
       ${r("ot_sup_dhw_max_rpm", "mdi:fan-chevron-up", { superior: "P57", hercules: "P62", classic: "S1" }, this.t("maks. moc CWU", "DHW max. output") + exa)}
       ${r("ot_sup_dhw_min_rpm", "mdi:fan-chevron-down", { superior: "P62", hercules: "P63", classic: "S0" }, this.t("min. moc CWU", "DHW min. output") + exa)}
-      ${cl ? hint(this.t("Menu S zależy od modelu: EXA 24 X – obroty wentylatora (S0–S3), S5 / S6 zasilanie, S7 sonda; NIKE 24 ECO – moc w % (S0 min., S1 maks.).",
-        "The S menu depends on the model: EXA 24 X – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).")) : nothing}
+      ${cl ? hint(this.t("Menu S zależy od modelu: EXA – obroty wentylatora (S0–S3), S5 / S6 zasilanie, S7 sonda; NIKE 24 ECO – moc w % (S0 min., S1 maks.).",
+        "The S menu depends on the model: EXA – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).")) : nothing}
       <div class="grp">${this.t("Pompa i sonda", "Pump and probe")}</div>
-      ${sel("ot_p6", "mdi:pump", { zeus25: "P6", tera: "P4", classic: "P2", superior: "P67", hercules: "P67", gen: true }, this.t("praca pompy", "pump operation"))}
+      ${sel("ot_p6", "mdi:pump", { zeus25: "P6", tera: "P4", hybrid: "P4", classic: "P2", superior: "P67", hercules: "P67", gen: true }, this.t("praca pompy", "pump operation"))}
       ${sel("ot_sup_pump_speed", "mdi:pump", { superior: "P55" }, this.t("prędkość pompy", "pump speed"))}
       ${sel("ot_her_pump", "mdi:pump", { hercules: "P57" }, this.t("sterowanie pompą", "pump control"))}
-      ${r("ot_a3", "mdi:pump", { zeus25: "A3", tera: "A1", gen: true }, this.t("maks. prędkość pompy", "pump max. speed"))}
-      ${r("ot_a4", "mdi:pump-off", { zeus25: "A4", tera: "A2", gen: true }, this.t("min. prędkość pompy", "pump min. speed"))}
-      ${r("ot_a5", "mdi:delta", { zeus25: "A5", tera: "A3", superior: "P55", hercules: "P57", gen: true }, this.t("ΔT pompy (0 = proporcjonalny, 5–25 K)", "pump ΔT (0 = proportional head, 5–25 K)"))}
-      ${r("ot_p7", "mdi:thermometer-plus", { zeus25: "P7", tera: "P5", classic: "S7", superior: "P76", hercules: "P76", gen: true }, this.t("korekta sondy zewnętrznej", "outdoor probe correction") + exa)}
+      ${r("ot_a3", "mdi:pump", { zeus25: "A3", tera: "A1", hybrid: "A1", gen: true }, this.t("maks. prędkość pompy", "pump max. speed"))}
+      ${r("ot_a4", "mdi:pump-off", { zeus25: "A4", tera: "A2", hybrid: "A2", gen: true }, this.t("min. prędkość pompy", "pump min. speed"))}
+      ${r("ot_a5", "mdi:delta", { zeus25: "A5", tera: "A3", hybrid: "A3", superior: "P55", hercules: "P57", gen: true }, this.t("ΔT pompy (0 = proporcjonalny, 5–25 K)", "pump ΔT (0 = proportional head, 5–25 K)"))}
+      ${r("ot_p7", "mdi:thermometer-plus", { zeus25: "P7", tera: "P5", hybrid: "P5", classic: "S7", superior: "P76", hercules: "P76", gen: true }, this.t("korekta sondy zewnętrznej", "outdoor probe correction") + exa)}
       ${prof === "tera" || prof === "hercules" ? html`<div class="grp">${this.t("Zdalne sterowanie", "Remote control")}</div>` : nothing}
       ${sel("ot_remote_protocol", "mdi:remote", { tera: "P7" }, this.t("protokół zdalnego sterowania", "remote protocol"))}
       ${prof === "tera" ? hint(this.t("Instrukcja TERA: P7 = 0 IMG BUS (CAR V2), 2 = pilot innej firmy na 44 / 41 (nastawa CWU i maks. zasilanie zostają wtedy na panelu kotła); 1 = niedostępne. Na forum podawano P7 = 1 – sprawdź na kotle.",

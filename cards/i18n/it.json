@@ -1431,7 +1431,7 @@
   "P7 – remote protocol": "P7 – protocollo comando remoto",
   "Remote control": "Comando remoto",
   "TERA manual: P7 = 0 IMG BUS (CAR V2), 2 = third-party remote on 44 / 41 (the DHW setpoint and max. flow then stay on the boiler panel); 1 = not available. The forum said P7 = 1 – check on the boiler.": "Manuale TERA: P7 = 0 IMG BUS (CAR V2), 2 = comando di altra marca su 44 / 41 (setpoint ACS e mandata max. restano sul pannello della caldaia); 1 = non disponibile. Sul forum si diceva P7 = 1 – verifica sulla caldaia.",
-  "The S menu depends on the model: EXA 24 X – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "Il menu S dipende dal modello: EXA 24 X – giri ventilatore (S0–S3), S5 / S6 mandata, S7 sonda; NIKE 24 ECO – potenza in % (S0 min., S1 max.).",
+  "The S menu depends on the model: EXA – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "Il menu S dipende dal modello: EXA – giri ventilatore (S0–S3), S5 / S6 mandata, S7 sonda; NIKE 24 ECO – potenza in % (S0 min., S1 max.).",
   "pump control": "controllo pompa",
   "remote protocol": "protocollo comando remoto",
   "set ON on the boiler and declare it in the Boiler parameters (offline) – the boiler keeps heating after E31": "imposta ON sulla caldaia e dichiaralo in Parametri caldaia (offline) – dopo E31 la caldaia continua a riscaldare",
@@ -2474,5 +2474,6 @@
   "Gas or electricity?": "Gas o elettricità?",
   "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "Il gas è convertito in calore utile: circa 10,6 kWh da 1 m³.",
   "Last DHW cycle gas": "Gas ultimo ciclo ACS",
-  "Last DHW cycle cylinder rise": "Aumento bollitore nell'ultimo ciclo ACS"
+  "Last DHW cycle cylinder rise": "Aumento bollitore nell'ultimo ciclo ACS",
+  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "troppo spesso – allunga t4 (temporizzatore accensioni riscaldamento) o abbassa la curva"
 }

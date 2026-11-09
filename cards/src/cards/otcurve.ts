@@ -2,7 +2,7 @@
 // The Dominus module is the OpenTherm master: with "Outdoor sensor" on it computes the CH flow from its own curve (OTC 1–9,
 // like the CAR V2), the CH offset and the min. CH temperature, up to the CH setpoint (parameter 17), and sends it to the
 // boiler every cycle. The boiler keeps that flow within its own CH min. / max. - the codes depend on the boiler menu
-// family (Boiler menu profile): t0 / t1 (ZEUS 25, OMNIA, TERA), S5 / S6 (EXA 24 X), P66/A / P66/B (ZEUS Superior,
+// family (Boiler menu profile): t0 / t1 (ZEUS 25, OMNIA, TERA), S5 / S6 (EXA), P66/A / P66/B (ZEUS Superior,
 // HERCULES), Data-ID 49 (generic). ZEUS Superior / HERCULES also have their own climatic curve P66/A–D (used without a
 // remote): drawn dashed with draggable points (the values are the declared menu copy, nothing is written to the boiler).
 // The OTC shape is not published by Immergas: drawn as flow = room + offset + curve / 4 × (room − outdoor) – approximate.
@@ -87,7 +87,7 @@ class ImmergasOtCurveCard extends HubCard {
       <div class="hint">${this.t("Ta karta jest dla integracji Immergas Dominus w trybie OpenTherm (ESP OpenTherm: karta Krzywa pogodowa w hubie).",
         "This card is for the Immergas Dominus integration in the OpenTherm mode (ESP OpenTherm: the Hub weather curve card).")}</div>`;
     const prof = this.otProfile, m = prof === "superior" || prof === "hercules", gen = prof === "generic";
-    const codes: Record<string, [string, string]> = { zeus25: ["t0", "t1"], tera: ["t0", "t1"], classic: ["S5", "S6"], superior: ["P66/A", "P66/B"], hercules: ["P66/A", "P66/B"], generic: ["", ""] };
+    const codes: Record<string, [string, string]> = { zeus25: ["t0", "t1"], tera: ["t0", "t1"], hybrid: ["t0", "t1"], classic: ["S5", "S6"], superior: ["P66/A", "P66/B"], hercules: ["P66/A", "P66/B"], generic: ["", ""] };
     const [cMin, cMax] = codes[prof];
     const wx = this.on("ot_out_sensor") || !this.eid("ot_out_sensor"), col = wx ? "peach" : "overlay2";
     const out = this.n("outdoor"), flow = this.n("ot_flow"), room = this.n("zone1");
@@ -129,7 +129,7 @@ class ImmergasOtCurveCard extends HubCard {
       if (!isNaN(tgt)) g.push(svg`<circle cx=${x} cy=${this.py(tgt)} r="4.5" fill=${c("yellow")}/>`);
       if (!isNaN(flow)) g.push(svg`<circle cx=${x} cy=${this.py(flow)} r="5" fill="none" stroke=${c("red")} stroke-width="2"/>`);
     }
-    const names: Record<string, string> = { zeus25: "ZEUS 25 / OMNIA", tera: "TERA", classic: "EXA 24 X / NIKE", superior: "ZEUS Superior", hercules: "HERCULES", generic: this.t("ogólny", "generic") };
+    const names: Record<string, string> = { zeus25: "ZEUS 25 / OMNIA", tera: "TERA", hybrid: "HYBRID", classic: "EXA / NIKE", superior: "ZEUS Superior", hercules: "HERCULES", generic: this.t("ogólny", "generic") };
     const chips = Array.from({ length: 9 }, (_, i) => i + 1);
     return html`
       <div class="top">

@@ -35,6 +35,9 @@ Port: 9600 bodów, 8E1, adres slave 1.
 | **Kotły IMG-BUS przez interfejs IU23** (VICTRIX ZEUS, ZEUS SUPERIOR, EXA, TERA, OMNIA, HERCULES (MINI) CONDENSING, MAIOR TT, KW TT, ARES CONDENSING 32 …) – *hipoteza* | `gb_iu23` | IU23 (kit 3.029912) na zaciskach pilota **44 / 41** zamiast CAR V2; hub na jego RS485 A / B | nic w kotle; dipswitche IU23 = adres 21–36 (wszystkie OFF = 21); port 9600 **8N2** |
 | Pompa ciepła **MAGIS M TOP** (R290, E-BOX TOP) | `gb_mtop` | **BMS+ / BMS−** płyty E-BOX TOP (A13), terminacja przełącznikiem SW1.2 | menu P panelu: P021 = On (sterowanie), P022 = 1, P023 = 3 (9600), P024 = 1 (even / 1) – najpierw sprawdź P023 / P024, użytkownicy zastali fabrycznie 2400 bodów |
 
+Starszego VICTRIX PRO 2 ErP nie ma na tej liście: jego instrukcje nie opisują Modbusa, OpenTherm ani IMG BUS, tylko termostat
+on/off, wejście 0–10 V i magistralę kaskady.
+
 Zasady podłączenia:
 
 - **Polaryzacja:** D+ (BMS+, T+) → A, D− (BMS−, T−) → B; cisza na magistrali to zwykle zamienione przewody.

@@ -1431,7 +1431,7 @@
   "P7 – remote protocol": "P7 – távszabályzó protokoll",
   "Remote control": "Távszabályzás",
   "TERA manual: P7 = 0 IMG BUS (CAR V2), 2 = third-party remote on 44 / 41 (the DHW setpoint and max. flow then stay on the boiler panel); 1 = not available. The forum said P7 = 1 – check on the boiler.": "TERA kézikönyv: P7 = 0 IMG BUS (CAR V2), 2 = más gyártó távszabályzója a 44 / 41-en (a HMV alapjel és a max. előremenő ekkor a kazán paneljén marad); 1 = nem elérhető. A fórumon P7 = 1 szerepelt – ellenőrizze a kazánon.",
-  "The S menu depends on the model: EXA 24 X – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "Az S menü modellfüggő: EXA 24 X – ventilátor-fordulatok (S0–S3), S5 / S6 előremenő, S7 érzékelő; NIKE 24 ECO – teljesítmény %-ban (S0 min., S1 max.).",
+  "The S menu depends on the model: EXA – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "Az S menü modellfüggő: EXA – ventilátor-fordulatok (S0–S3), S5 / S6 előremenő, S7 érzékelő; NIKE 24 ECO – teljesítmény %-ban (S0 min., S1 max.).",
   "pump control": "szivattyúvezérlés",
   "remote protocol": "távszabályzó protokoll",
   "set ON on the boiler and declare it in the Boiler parameters (offline) – the boiler keeps heating after E31": "állítsa ON-ra a kazánon, és adja meg a Kazán paraméterei (offline) között – E31 után a kazán tovább fűt",
@@ -2474,5 +2474,6 @@
   "Gas or electricity?": "Gáz vagy villany?",
   "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "A gáz hasznos hővé számítva: kb. 10,6 kWh 1 m³-ből.",
   "Last DHW cycle gas": "Utolsó HMV-ciklus gázfogyasztása",
-  "Last DHW cycle cylinder rise": "Tároló emelkedése az utolsó HMV ciklusban"
+  "Last DHW cycle cylinder rise": "Tároló emelkedése az utolsó HMV ciklusban",
+  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "túl gyakori – növelje a t4-öt (fűtési újragyújtás tiltás) vagy csökkentse a görbét"
 }

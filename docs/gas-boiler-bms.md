@@ -35,6 +35,9 @@ Port: 9600 baud, 8E1, slave address 1.
 | **IMG-BUS boilers through the IU23 interface** (VICTRIX ZEUS, ZEUS SUPERIOR, EXA, TERA, OMNIA, HERCULES (MINI) CONDENSING, MAIOR TT, KW TT, ARES CONDENSING 32 …) – *hypothesis* | `gb_iu23` | IU23 (kit 3.029912) on the remote terminals **44 / 41** instead of the CAR V2; the hub on its RS485 A / B | nothing in the boiler; IU23 dip switches = address 21–36 (all OFF = 21); port 9600 **8N2** |
 | **MAGIS M TOP** heat pump (R290, E-BOX TOP) | `gb_mtop` | **BMS+ / BMS−** of the E-BOX TOP (A13), termination dip switch SW1.2 | panel menu P: P021 = On (control), P022 = 1, P023 = 3 (9600), P024 = 1 (even / 1) – check P023 / P024 first, users found 2400 baud at delivery |
 
+The older VICTRIX PRO 2 ErP is not on this list: its manuals describe no Modbus, OpenTherm or IMG BUS, only an on/off
+thermostat, a 0–10 V input and the cascade bus.
+
 Wiring rules:
 
 - **Polarity:** D+ (BMS+, T+) → A, D− (BMS−, T−) → B; a silent bus means swapped wires.

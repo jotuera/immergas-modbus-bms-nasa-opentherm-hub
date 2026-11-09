@@ -4411,6 +4411,13 @@
   ]
  },
  {
+  "en": "too often – lengthen t4 (CH ignitions timer) or lower the curve",
+  "pl": "za często – wydłuż t4 (blokada zapłonu CO) albo obniż krzywą",
+  "files": [
+   "calibration.ts"
+  ]
+ },
+ {
   "en": "too often – lower the P66 curve / CH max. output (M3) or the CH setpoint",
   "pl": "za często – obniż krzywą P66 / maks. moc CO (M3) albo nastawę CO",
   "files": [
@@ -14414,8 +14421,8 @@
   ]
  },
  {
-  "en": "The S menu depends on the model: EXA 24 X – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).",
-  "pl": "Menu S zależy od modelu: EXA 24 X – obroty wentylatora (S0–S3), S5 / S6 zasilanie, S7 sonda; NIKE 24 ECO – moc w % (S0 min., S1 maks.).",
+  "en": "The S menu depends on the model: EXA – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).",
+  "pl": "Menu S zależy od modelu: EXA – obroty wentylatora (S0–S3), S5 / S6 zasilanie, S7 sonda; NIKE 24 ECO – moc w % (S0 min., S1 maks.).",
   "files": [
    "settings.ts"
   ]

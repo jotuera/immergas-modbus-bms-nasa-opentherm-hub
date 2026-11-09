@@ -1431,7 +1431,7 @@
   "P7 – remote protocol": "P7 – bedieningsprotocol",
   "Remote control": "Bediening op afstand",
   "TERA manual: P7 = 0 IMG BUS (CAR V2), 2 = third-party remote on 44 / 41 (the DHW setpoint and max. flow then stay on the boiler panel); 1 = not available. The forum said P7 = 1 – check on the boiler.": "TERA-handleiding: P7 = 0 IMG BUS (CAR V2), 2 = bediening van een ander merk op 44 / 41 (SWW-instelwaarde en max. aanvoer blijven dan op het ketelpaneel); 1 = niet beschikbaar. Op het forum stond P7 = 1 – controleer op de ketel.",
-  "The S menu depends on the model: EXA 24 X – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "Het S-menu hangt af van het model: EXA 24 X – ventilatortoerentallen (S0–S3), S5 / S6 aanvoer, S7 voeler; NIKE 24 ECO – vermogen in % (S0 min., S1 max.).",
+  "The S menu depends on the model: EXA – fan speeds (S0–S3), S5 / S6 flow, S7 probe; NIKE 24 ECO – output in % (S0 min., S1 max.).": "Het S-menu hangt af van het model: EXA – ventilatortoerentallen (S0–S3), S5 / S6 aanvoer, S7 voeler; NIKE 24 ECO – vermogen in % (S0 min., S1 max.).",
   "pump control": "pompregeling",
   "remote protocol": "bedieningsprotocol",
   "set ON on the boiler and declare it in the Boiler parameters (offline) – the boiler keeps heating after E31": "zet ON op de ketel en geef het op in Ketelparameters (offline) – na E31 blijft de ketel verwarmen",
@@ -2474,5 +2474,6 @@
   "Gas or electricity?": "Gas of elektriciteit?",
   "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "Gas wordt omgerekend naar nuttige warmte: ongeveer 10,6 kWh uit 1 m³.",
   "Last DHW cycle gas": "Gas laatste SWW-cyclus",
-  "Last DHW cycle cylinder rise": "Stijging boiler in laatste SWW-cyclus"
+  "Last DHW cycle cylinder rise": "Stijging boiler in laatste SWW-cyclus",
+  "too often – lengthen t4 (CH ignitions timer) or lower the curve": "te vaak – verleng t4 (ontstekingstimer CV) of verlaag de stooklijn"
 }

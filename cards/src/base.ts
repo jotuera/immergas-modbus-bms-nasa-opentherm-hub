@@ -8,8 +8,8 @@ import { Key } from "./names";
 const HP_ONLY: Key[] = ["comfort_cool", "eco_cool", "dom_hum_target", "dom_r10", "dom_r11", "r12", "r13", "dom_i04", "dom_i10",
   "dom_int_ch", "dom_int_dhw", "u11", "u12", "u13"];
 
-export type Prof = "zeus25" | "tera" | "classic" | "superior" | "hercules" | "generic";
-export const PROFS: Prof[] = ["zeus25", "tera", "classic", "superior", "hercules", "generic"];
+export type Prof = "zeus25" | "tera" | "hybrid" | "classic" | "superior" | "hercules" | "generic";
+export const PROFS: Prof[] = ["zeus25", "tera", "hybrid", "classic", "superior", "hercules", "generic"];
 
 export { html, css, nothing };
 export type { TemplateResult };
@@ -277,8 +277,8 @@ export abstract class HubCard extends LitElement {
     const p = this.s("ot_menu_profile") as Prof | undefined;
     if (p && (PROFS as string[]).includes(p)) return p;
     const m = (this.s("dom_model") ?? "").toLowerCase();
-    return /hercules/.test(m) ? "hercules" : /superior/.test(m) ? "superior" : /tera/.test(m) ? "tera"
-      : /exa\s*24\s*x|nike/.test(m) ? "classic" : /zeus\s*25|exa|omnia/.test(m) ? "zeus25" : "generic";
+    return /hercules/.test(m) ? "hercules" : /superior/.test(m) ? "superior" : /tera/.test(m) ? "tera" : /victrix\s*hybrid/.test(m) ? "hybrid"
+      : /exa|nike/.test(m) ? "classic" : /zeus\s*25|omnia/.test(m) ? "zeus25" : "generic";
   }
 
   protected carReady() {
@@ -732,7 +732,7 @@ export abstract class HubCard extends LitElement {
 
 /** registers a card element + card picker entry */
 /** this bundle's version (also in package.json) */
-export const VERSION = "0.91.2";
+export const VERSION = "0.91.3";
 
 // The bundle can be loaded twice: the hub cards resource and the copy shipped with the Dominus integration, in any
 // order. A custom element can be defined only once, so every bundle (0.85.0+) queues its elements on a shared window
