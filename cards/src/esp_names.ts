@@ -2069,6 +2069,61 @@ export const ESP_LANGS: Record<string, Record<string, string[]>> = {
    "Gasprijs",
    "Preço do gás"
   ],
+  "Cena prądu": [
+   "Cena elektřiny",
+   "Strompreis",
+   "Precio de la electricidad",
+   "Prix de l'électricité",
+   "Villamos energia ára",
+   "Prezzo dell'elettricità",
+   "Elektriciteitsprijs",
+   "Preço da eletricidade",
+   "Cena elektriny"
+  ],
+  "Pojemność zasobnika": [
+   "Objem zásobníku",
+   "Speichervolumen",
+   "Volumen del acumulador",
+   "Volume du ballon",
+   "Tároló térfogata",
+   "Volume del bollitore",
+   "Boilerinhoud",
+   "Volume do depósito",
+   "Objem zásobníka"
+  ],
+  "Ostatni cykl CWU": [
+   "Poslední cyklus TUV",
+   "Letzter WW-Zyklus",
+   "Último ciclo ACS",
+   "Dernier cycle ECS",
+   "Utolsó HMV ciklus",
+   "Ultimo ciclo ACS",
+   "Laatste SWW-cyclus",
+   "Último ciclo AQS",
+   "Posledný cyklus TÚV"
+  ],
+  "Przyrost w zasobniku (ostatni cykl)": [
+   "Nárůst zásobníku v posledním cyklu TUV",
+   "Speicheranstieg im letzten WW-Zyklus",
+   "Subida del acumulador en el último ciclo ACS",
+   "Hausse du ballon au dernier cycle ECS",
+   "Tároló emelkedése az utolsó HMV ciklusban",
+   "Aumento bollitore nell'ultimo ciclo ACS",
+   "Stijging boiler in laatste SWW-cyclus",
+   "Subida do depósito no último ciclo AQS",
+   "Nárast zásobníka v poslednom cykle TÚV"
+  ],
+  "Gaz ostatniego cyklu CWU": [
+   "Plyn posledního cyklu TUV",
+   "Gas letzter WW-Zyklus",
+   "Gas del último ciclo de ACS",
+   "Gaz du dernier cycle ECS",
+   "Utolsó HMV-ciklus gázfogyasztása",
+   "Gas ultimo ciclo ACS",
+   "Gas laatste SWW-cyclus",
+   "Gás do último ciclo de AQS",
+   "Plyn posledného cyklu TÚV"
+  ],
   "Gaz dziś (szac.)": [
    "Plyn dnes (odhad)",
    "Gas heute (geschätzt)",

@@ -26,7 +26,33 @@ class ImmergasGasCard extends HubCard {
       <div class="bt" style="background:${ca(col, 0.12)}"><div style="width:${isNaN(v) ? 0 : Math.max(3, v / mx * 100)}%;background:${c(col)};box-shadow:0 0 6px ${ca(col, 0.6)}"></div></div></div>`;
   }
 
+  /** OpenTherm boiler: 1 kWh of heat from gas against an electric heater (no heat pump in this system) */
+  private otBody() {
+    const pg = this.n("oa_gas_price"), pe = this.n("ot_elec_price");
+    const kg = pg > 0 ? pg / 10.6 : NaN, kh = pe > 0 ? pe : NaN; // the same useful heat per m³ as the gas estimate
+    const opts: [string, number, string, string][] = [["gas", kg, "peach", this.t("Kocioł gazowy", "Gas boiler")], ["heater", kh, "yellow", this.t("Grzałka", "Heater")]];
+    const valid = opts.filter(([, v]) => !isNaN(v));
+    const best = valid.length === 2 ? valid.reduce((a, b) => (b[1] < a[1] ? b : a)) : null, second = best ? valid.find((o) => o !== best)! : null;
+    const vc = best ? best[2] : "overlay1", sav = best && second && second[1] > 0 ? Math.round((second[1] - best[1]) / second[1] * 100) : null;
+    const mx = Math.max(...valid.map(([, v]) => v), 0.01);
+    return html`
+      <div class="top">
+        <div class="tl"><ha-icon icon="mdi:scale-balance"></ha-icon><span class="ttl">${this.t("Gaz czy prąd?", "Gas or electricity?")}</span></div>
+        <div class="tabs"><div class="gear ${this.showSet ? "on" : ""}" title=${this.t("Ceny", "Prices")} @click=${() => { this.showSet = !this.showSet; this.requestUpdate(); }}><ha-icon icon="mdi:cog-outline"></ha-icon></div></div></div>
+      <div class="verdict" style=${box(vc, !!best)}>
+        <ha-icon icon=${best ? (best[0] === "gas" ? "mdi:fire" : "mdi:heating-coil") : "mdi:help-circle-outline"} style="color:${c(vc)}"></ha-icon>
+        <div class="cx"><div class="vt" style="color:${c(vc)}">${best ? this.t("Najtaniej: ", "Cheapest: ") + best[3].toLowerCase() : this.t("Brak danych", "No data")}</div>
+          <div class="vs">${sav !== null && second ? this.t(`${sav}% taniej niż ${second[3].toLowerCase()}`, `${sav}% cheaper than ${second[3].toLowerCase()}`) : this.t("porównanie kosztu 1 kWh ciepła", "cost of 1 kWh of heat compared")}</div></div></div>
+      ${this.bar("oa_gas_price", "mdi:fire", "peach", this.t("Ciepło z gazu", "Heat from gas"), kg, mx, best?.[0] === "gas")}
+      ${this.bar("ot_elec_price", "mdi:heating-coil", "yellow", this.t("Ciepło z grzałki", "Heat from heater"), kh, mx, best?.[0] === "heater", this.t("prąd 1:1", "electricity 1:1"))}
+      ${this.showSet ? html`<div class="setp">
+        ${this.numRow("ot_elec_price", "mdi:flash", this.t("Cena prądu", "Electricity price"), 3)}
+        ${this.numRow("oa_gas_price", "mdi:fire", this.t("Cena gazu", "Gas price"), 2)}</div>` : nothing}
+      <div class="note">${this.t("Gaz przeliczany na ciepło użyteczne: około 10,6 kWh z 1 m³.", "Gas is converted to useful heat: about 10.6 kWh from 1 m³.")}</div>`;
+  }
+
   protected body() {
+    if (this.ot) return this.otBody();
     const combo = this.combo, run = this.n("hz") > 0;
     const pe = this.n("price_elec"), eff = this.config.heater_efficiency ?? 1;
     const kp = this.n("hp_cost"), kg = combo ? this.n("gas_cost") : NaN, kh = isNaN(pe) ? NaN : pe / eff;
@@ -70,6 +96,7 @@ class ImmergasGasCard extends HubCard {
   }
 
   static styles = [HubCard.styles, css`
+    .note { font-size: 10.5px; opacity: var(--ih-o6, .6); margin-top: 8px; line-height: 1.35; }
     .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
     .tl { display: flex; align-items: center; gap: 8px; min-width: 0; }
     .tl ha-icon { --mdc-icon-size: 18px; opacity: .55; }

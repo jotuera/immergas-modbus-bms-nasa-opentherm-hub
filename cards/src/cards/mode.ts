@@ -378,13 +378,18 @@ class ImmergasModeCard extends HubCard {
     const tchip = (opt: string | undefined, lbl: string, v: string | null, col = "lavender", faint = false) => html`<div class="tc" style="background:${ca(col, 0.08)};border:1px ${faint ? "dashed" : "solid"} ${ca(col, 0.22)}${faint ? ";opacity:.5" : ""}"
       @click=${(e: Event) => { e.stopPropagation(); if (opt && this.hass.states[opt]) this.dispatchEvent(new CustomEvent("hass-more-info", { detail: { entityId: opt }, bubbles: true, composed: true })); }}>
       <span class="tt">${v ?? "–"}</span><span class="tl">${lbl}</span></div>`;
+    // hub: "U11 set on the boiler" is the copy the cards use (the buses cannot switch U11): two taps, it changes nothing on the boiler
+    const u11Set = this.eid("u11_set") ? this.on("u11_set") : null, u11Conf = this.isArmed("tg_u11s");
     const night = this.dominus ? this.declaredNight(tchip, ns, ne, inWin) : html`<div class="night" style=${box(nc, nOn)} @click=${() => this.moreInfo("u11")}>
       <ha-icon icon=${nOn ? "mdi:weather-night" : "mdi:moon-waning-crescent"}
         style="color:${c(nOn ? "lavender" : "overlay2")};${nOn ? `filter:drop-shadow(0 0 5px ${c("lavender")})` : ""}"></ha-icon>
       <div class="cx"><div class="nt">${this.t("Tryb nocny", "Night mode")} <span style="font-size:9.5px;opacity:.5">U11</span></div>
-        <div class="ns" style="color:${c(nc)}">${nBad ? this.t("brak odczytu", "no reading") : nOn ? this.t("aktywny · cichsza praca", "active · quieter operation") : this.t("nieaktywny", "inactive")}${!isNaN(npct) && npct > 0 ? ` · ${Math.round(npct)} %` : ""}</div></div>
+        <div class="ns" style="color:${c(nc)}">${u11Conf ? this.t("dotknij ponownie, aby potwierdzić", "tap again to confirm") : u11Set === false && !nOn ? this.t("nieustawiona na piecu", "not set on the boiler") : nBad ? this.t("brak odczytu", "no reading") : nOn ? this.t("aktywny · cichsza praca", "active · quieter operation") : this.t("nieaktywny", "inactive")}${!isNaN(npct) && npct > 0 ? ` · ${Math.round(npct)} %` : ""}</div></div>
       ${ns || ne ? html`<div class="tcs">${tchip(this.opt("night_start"), "START · U12", ns)}<span style="opacity:.4">–</span>${tchip(this.opt("night_stop"), "STOP · U13", ne)}</div>`
         : !isNaN(npct) ? html`<div class="np" style="color:${c(npct > 0 ? "lavender" : "overlay2")}">${npct > 0 ? Math.round(npct) + " %" : this.t("bez limitu", "no limit")}</div>` : nothing}
+      ${u11Set === null ? nothing : html`<div class="tgl" style="flex:none;align-self:center;background:${u11Set ? ca("lavender", 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${u11Conf ? `;outline:2px solid ${c("lavender")}` : ""}"
+        @click=${(e: Event) => { e.stopPropagation(); this.confirm("tg_u11s", () => this.call("switch", u11Set ? "turn_off" : "turn_on", "u11_set")); }}>
+        <div class="kn" style="left:${u11Set ? 23 : 3}px;background:${u11Set ? c("lavender") : c("overlay1")}"></div></div>`}
     </div>${hint}`;
 
     const wg = this.on("force_boiler"), wgBad = this.bad("force_boiler");

@@ -2464,5 +2464,15 @@
   "Light": "Világos",
   "Dark": "Sötét",
   "Saved in this browser. The page background changes after a reload.": "Ebben a böngészőben mentve. Az oldal háttere újratöltés után változik.",
-  "target ": "cél "
+  "target ": "cél ",
+  "draw": "vételezés",
+  "Temperature rise": "Hőmérséklet-emelkedés",
+  "Gas": "Gáz",
+  "DHW gas cost": "HMV gázköltség",
+  "Gas is estimated from the burner power, heat from the cylinder capacity and the temperature rise.": "A gáz az égő teljesítményéből becsült, a hő a tároló térfogatából és a hőmérséklet-emelkedésből.",
+  "No cylinder: the DHW gas of the whole day, heat from the DHW flow. If you have a cylinder, enter its capacity.": "Tároló nélkül: az egész napi HMV-gáz, a hő a HMV-áramlásból. Ha van tárolója, adja meg a térfogatát.",
+  "Gas or electricity?": "Gáz vagy villany?",
+  "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "A gáz hasznos hővé számítva: kb. 10,6 kWh 1 m³-ből.",
+  "Last DHW cycle gas": "Utolsó HMV-ciklus gázfogyasztása",
+  "Last DHW cycle cylinder rise": "Tároló emelkedése az utolsó HMV ciklusban"
 }

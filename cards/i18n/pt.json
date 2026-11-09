@@ -2464,5 +2464,15 @@
   "Light": "Claro",
   "Dark": "Escuro",
   "Saved in this browser. The page background changes after a reload.": "Guardado neste navegador. O fundo da página muda ao recarregar.",
-  "target ": "alvo "
+  "target ": "alvo ",
+  "draw": "consumo",
+  "Temperature rise": "Aumento de temperatura",
+  "Gas": "Gás",
+  "DHW gas cost": "Custo do gás AQS",
+  "Gas is estimated from the burner power, heat from the cylinder capacity and the temperature rise.": "O gás é estimado a partir da potência do queimador; o calor, da capacidade do depósito e do aumento de temperatura.",
+  "No cylinder: the DHW gas of the whole day, heat from the DHW flow. If you have a cylinder, enter its capacity.": "Sem depósito: gás de AQS de todo o dia, calor a partir do caudal de AQS. Se tiver depósito, indique a sua capacidade.",
+  "Gas or electricity?": "Gás ou eletricidade?",
+  "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "O gás é convertido em calor útil: cerca de 10,6 kWh por 1 m³.",
+  "Last DHW cycle gas": "Gás do último ciclo de AQS",
+  "Last DHW cycle cylinder rise": "Subida do depósito no último ciclo AQS"
 }

@@ -2464,5 +2464,15 @@
   "Light": "Licht",
   "Dark": "Donker",
   "Saved in this browser. The page background changes after a reload.": "Opgeslagen in deze browser. De pagina-achtergrond verandert na herladen.",
-  "target ": "doel "
+  "target ": "doel ",
+  "draw": "tapbeurt",
+  "Temperature rise": "Temperatuurstijging",
+  "Gas": "Gas",
+  "DHW gas cost": "Gaskosten SWW",
+  "Gas is estimated from the burner power, heat from the cylinder capacity and the temperature rise.": "Gas wordt geschat uit het branderevermogen, warmte uit de boilerinhoud en de temperatuurstijging.",
+  "No cylinder: the DHW gas of the whole day, heat from the DHW flow. If you have a cylinder, enter its capacity.": "Zonder boiler: het SWW-gas van de hele dag, warmte uit het SWW-debiet. Hebt u een boiler, vul dan de inhoud in.",
+  "Gas or electricity?": "Gas of elektriciteit?",
+  "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "Gas wordt omgerekend naar nuttige warmte: ongeveer 10,6 kWh uit 1 m³.",
+  "Last DHW cycle gas": "Gas laatste SWW-cyclus",
+  "Last DHW cycle cylinder rise": "Stijging boiler in laatste SWW-cyclus"
 }

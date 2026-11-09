@@ -17,7 +17,39 @@ class ImmergasDhwCard extends HubCard {
     return m ? /combo|\(mc/.test(m) : true;
   }
 
+  /** OpenTherm boiler: the last cylinder cycle, or the draws of today on a boiler without a cylinder */
+  private otBody() {
+    const pg = this.n("oa_gas_price"), pe = this.n("ot_elec_price"), vol = this.n("ot_tank_vol"), running = this.on("dom_dhw_request");
+    const cyl = vol > 0, tank = this.n("tank"), rise = this.n("oa_dhw_cycle_rise"), mins = this.n("oa_dhw_cycle_last");
+    const heat = cyl ? (rise > 0 ? vol * rise * 1.163 / 1000 : NaN) : this.n("oa_dhw_heat");
+    const gas = cyl ? this.n("ot_cyc_gas") : this.n("oa_gas_dhw_today");
+    const cost = gas >= 0 && pg > 0 ? gas * pg : NaN, alt = heat > 0 && pe > 0 ? heat * pe : NaN;
+    const cheaper = isNaN(cost) || isNaN(alt) || Math.abs(cost - alt) < 0.005 ? null : cost < alt;
+    return html`
+      ${this.head("mdi:water-boiler", cyl ? this.t("Ostatni cykl CWU", "Last DHW cycle") : this.t("Ciepła woda dziś", "Hot water today"),
+        running ? html`<span style="color:${c("yellow")};font-weight:800">${this.t("● trwa grzanie", "● heating now")}</span>` : undefined)}
+      <div class="top" style=${box("peach", true)}>
+        <ha-icon icon="mdi:fire" style="color:${c("peach")}"></ha-icon>
+        <div class="cx"><div class="st" style="color:${c("peach")}">${this.t("Kocioł gazowy", "Gas boiler")}</div>
+          <div class="ss">${cyl ? html`${isNaN(mins) ? this.t("Brak cyklu", "No cycle yet") : this.f(mins, 0) + " min"} · ${this.t("zasobnik teraz", "cylinder now")} ${this.f(tank, 1, 1)} °C`
+            : html`${this.f(this.n("oa_dhw_litres"), 0)} L · ${this.f(this.n("oa_draws_today"), 0)} × ${this.t("pobór", "draw")}`}</div></div></div>
+      <div class="row">
+        ${cyl ? this.chip("oa_dhw_cycle_rise", "mdi:thermometer-chevron-up", "sky", this.t("Przyrost temperatury", "Temperature rise"), this.f(rise, 1, 1) + " K") : nothing}
+        ${this.chip(cyl ? "oa_dhw_cycle_rise" : "oa_dhw_heat", "mdi:water-thermometer", "blue", this.t("Ciepło", "Heat"), this.f(heat, 2, 2) + " kWh")}
+        ${this.chip(cyl ? "ot_cyc_gas" : "oa_gas_dhw_today", "mdi:meter-gas", "peach", this.t("Gaz", "Gas"), this.f(gas, 2, 2) + " m³")}
+      </div>
+      <div class="cost" style=${box(cheaper === null ? "overlay1" : cheaper ? "green" : "peach", false)}>
+        <div class="cx"><div class="lbl">${cyl ? this.t("Koszt cyklu", "Cycle cost") : this.t("Koszt gazu CWU", "DHW gas cost")}</div><div class="val">${this.f(cost, 2, 2)} ${this.currency}</div></div>
+        <div class="cx"><div class="lbl">${this.t("To samo z grzałki", "Same heat from the heater")}</div><div class="val">${this.f(alt, 2, 2)} ${this.currency}</div></div>
+        ${cheaper === null ? nothing : html`<div class="vd" style="color:${c(cheaper ? "green" : "peach")}">${cheaper ? this.t("gaz taniej", "gas cheaper") : this.t("grzałka taniej", "heater cheaper")}</div>`}
+      </div>
+      ${this.numRow("ot_tank_vol", "mdi:water-boiler", this.t("Pojemność zasobnika CWU", "DHW cylinder capacity"), 0)}
+      <div class="note">${cyl ? this.t("Gaz szacowany z mocy palnika, ciepło z pojemności zasobnika i przyrostu temperatury.", "Gas is estimated from the burner power, heat from the cylinder capacity and the temperature rise.")
+        : this.t("Bez zasobnika: gaz CWU z całego dnia, ciepło z przepływu CWU. Jeśli masz zasobnik, podaj jego pojemność.", "No cylinder: the DHW gas of the whole day, heat from the DHW flow. If you have a cylinder, enter its capacity.")}</div>`;
+  }
+
   protected body() {
+    if (this.ot) return this.otBody();
     const combo = this.combo;
     const src = this.s("dhw_src") ?? "";
     // MAGIS M (mt_costs): "Heat pump" / "Heat pump + TBH heater" / "TBH heater"
@@ -30,7 +62,8 @@ class ImmergasDhwCard extends HubCard {
     const cg = combo ? this.n("dhw_cost_gas") : heatTank > 0 && pe > 0 ? heatTank * pe : NaN;
     const running = this.mtx ? /^(cwu|dhw)$/i.test(this.s("state") ?? "") || this.on("dhw_heater") : isDhw(this.s("state"));
     const tank = this.n("tank"), set = this.n("dhw_active_set");
-    const cheaper = !isNaN(cost) && !isNaN(cg) ? (cost <= cg) : null;
+    // no comparison for a cycle heated by the gas boiler, or when the two costs are the same
+    const cheaper = !isNaN(cost) && !isNaN(cg) && sk !== "boiler" && Math.abs(cost - cg) >= 0.005 ? cost < cg : null;
     const tab = (id: string, lbl: string) => html`<div class="tab" style=${(id === "combo") === combo ? `background:${ca("teal", 0.24)};border-color:${ca("teal", 0.6)}` : ""}
       @click=${(e: Event) => { e.stopPropagation(); this.variant = id; this.requestUpdate(); }}>${lbl}</div>`;
     const big = (k: any, lbl: string, v: number, col: string) => html`<div class="big" style=${box(col, false)} @click=${() => this.moreInfo(k)}>

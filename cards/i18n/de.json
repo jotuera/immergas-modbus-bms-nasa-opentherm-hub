@@ -2464,5 +2464,15 @@
   "Light": "Hell",
   "Dark": "Dunkel",
   "Saved in this browser. The page background changes after a reload.": "In diesem Browser gespeichert. Der Seitenhintergrund ändert sich nach dem Neuladen.",
-  "target ": "Ziel "
+  "target ": "Ziel ",
+  "draw": "Zapfung",
+  "Temperature rise": "Temperaturanstieg",
+  "Gas": "Gas",
+  "DHW gas cost": "WW-Gaskosten",
+  "Gas is estimated from the burner power, heat from the cylinder capacity and the temperature rise.": "Gas wird aus der Brennerleistung geschätzt, Wärme aus Speichervolumen und Temperaturanstieg.",
+  "No cylinder: the DHW gas of the whole day, heat from the DHW flow. If you have a cylinder, enter its capacity.": "Ohne Speicher: WW-Gas des ganzen Tages, Wärme aus dem WW-Durchfluss. Wenn Sie einen Speicher haben, geben Sie sein Volumen ein.",
+  "Gas or electricity?": "Gas oder Strom?",
+  "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "Gas wird in Nutzwärme umgerechnet: etwa 10,6 kWh aus 1 m³.",
+  "Last DHW cycle gas": "Gas letzter WW-Zyklus",
+  "Last DHW cycle cylinder rise": "Speicheranstieg im letzten WW-Zyklus"
 }

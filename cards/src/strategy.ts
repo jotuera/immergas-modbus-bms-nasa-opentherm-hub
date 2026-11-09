@@ -52,24 +52,30 @@ class ImmergasDominusStrategy {
     // without the ones that have nothing to show there (schedules, curve, statistics, settings)
     const ot = otEntities(hass);
     if (config.opentherm === true || (config.opentherm !== false && ot.ot_mode && !ot.fault_code)) return otDashboard(config, t);
+    const online = () => card("immergas-settings-card", { part: "online", ...(config.settings ?? {}) });
+    const offline = () => card("immergas-settings-card", { part: "offline", ...(config.settings ?? {}) });
+    const wide = [{ condition: "screen", media_query: "(min-width: 768px)" }], narrow = [{ condition: "screen", media_query: "(max-width: 767px)" }];
     return {
       title: config.title ?? "Immergas Dominus",
       views: [
         {
           title: t("Kocioł", "Boiler"), path: "dominus", icon: "mdi:water-boiler", type: "sections", max_columns: 3, ...neonBg(config),
           sections: [
-            // diagram + charts (2 columns) | now + setpoints; then curve | mode + connectivity | schedule + settings
-            { type: "grid", column_span: 2, cards: [card("immergas-diagram-card", { stats: false, ...(config.diagram ?? {}) }), card("immergas-charts-card", config.charts ?? {})] },
+            // diagram + charts + connectivity (2 columns) | now + setpoints; then curve | mode | schedule
+            { type: "grid", column_span: 2, cards: [card("immergas-diagram-card", { stats: false, ...(config.diagram ?? {}) }), card("immergas-charts-card", config.charts ?? {}),
+              card("immergas-links-card", { four_in_row: true, ...(config.links ?? {}) })] },
             { type: "grid", cards: [card("immergas-now-card", config.now ?? {}), card("immergas-setpoints-card", config.setpoints ?? {})] },
             { type: "grid", cards: [card("immergas-curve-card", config.curve ?? {})] },
-            { type: "grid", cards: [card("immergas-mode-card", config.mode ?? {}), card("immergas-links-card")] },
-            { type: "grid", cards: [card("immergas-schedule-card", config.schedule ?? {}),
-              card("immergas-settings-card", { part: "online", ...(config.settings ?? {}) }),
-              card("immergas-settings-card", { part: "offline", ...(config.settings ?? {}) })] },
+            { type: "grid", cards: [card("immergas-mode-card", config.mode ?? {})] },
+            { type: "grid", cards: [card("immergas-schedule-card", config.schedule ?? {})] },
             // Dominus 1.6.14: today's analysis (room comfort, building, phases, DHW use, weather, link, zones)
             { type: "grid", column_span: 3, cards: [card("immergas-day-card", config.day ?? {})] },
             { type: "grid", column_span: 3, cards: [card("immergas-calibration-card", config.calibration ?? {})] },
             { type: "grid", column_span: 3, cards: [card("immergas-automations-card", config.automations ?? {})] },
+            // online settings and boiler parameters: 50 % each, one under the other on a phone
+            { type: "grid", column_span: 3, cards: [
+              { type: "horizontal-stack", grid_options: { columns: "full" }, visibility: wide, cards: [online(), offline()] },
+              { ...online(), visibility: narrow }, { ...offline(), visibility: narrow }] },
           ],
         },
       ],
@@ -118,6 +124,10 @@ function otDashboard(config: any, t: (a: string, b: string) => string) {
         // calibration from the Today analysis and the boiler menu profile
         { type: "grid", column_span: 3, cards: [card("immergas-calibration-card", config.calibration ?? {})] },
         { type: "grid", column_span: 3, cards: [card("immergas-automations-card", config.automations ?? {})] },
+        // gas or electricity and the last DHW cycle: 50 % each, one under the other on a phone
+        { type: "grid", column_span: 3, cards: [
+          { type: "horizontal-stack", grid_options: { columns: "full" }, visibility: wide, cards: [card("immergas-gas-card", config.gas ?? {}), card("immergas-dhw-card", config.dhw ?? {})] },
+          { ...card("immergas-gas-card", config.gas ?? {}), visibility: narrow }, { ...card("immergas-dhw-card", config.dhw ?? {}), visibility: narrow }] },
         // online settings and boiler parameters: 50 % each, one under the other on a phone
         { type: "grid", column_span: 3, cards: [
           { type: "horizontal-stack", grid_options: { columns: "full" }, visibility: wide, cards: [online(), offline()] },

@@ -5957,7 +5957,8 @@
   "en": "Heat",
   "pl": "Ciepło",
   "files": [
-   "charts.ts"
+   "charts.ts",
+   "dhw.ts"
   ]
  },
  {
@@ -7383,7 +7384,8 @@
   "en": "Cylinder volume",
   "pl": "Pojemność zasobnika",
   "files": [
-   "circuits.ts"
+   "circuits.ts",
+   "hub.ts"
   ]
  },
  {
@@ -7613,7 +7615,8 @@
   "pl": "Ostatni cykl CWU",
   "files": [
    "circuits.ts",
-   "dhw.ts"
+   "dhw.ts",
+   "hub.ts"
   ]
  },
  {
@@ -8322,10 +8325,28 @@
   ]
  },
  {
+  "en": "Hot water today",
+  "pl": "Ciepła woda dziś",
+  "files": [
+   "dhw.ts",
+   "hub.ts"
+  ]
+ },
+ {
   "en": "● heating now",
   "pl": "● trwa grzanie",
   "files": [
    "dhw.ts"
+  ]
+ },
+ {
+  "en": "Gas boiler",
+  "pl": "Kocioł gazowy",
+  "files": [
+   "dhw.ts",
+   "diagram.ts",
+   "gas.ts",
+   "now.ts"
   ]
  },
  {
@@ -8336,15 +8357,93 @@
   ]
  },
  {
-  "en": "electricity",
-  "pl": "prądu",
+  "en": "cylinder now",
+  "pl": "zasobnik teraz",
   "files": [
    "dhw.ts"
   ]
  },
  {
-  "en": "cylinder now",
-  "pl": "zasobnik teraz",
+  "en": "draw",
+  "pl": "pobór",
+  "files": [
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "Temperature rise",
+  "pl": "Przyrost temperatury",
+  "files": [
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "Gas",
+  "pl": "Gaz",
+  "files": [
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "Cycle cost",
+  "pl": "Koszt cyklu",
+  "files": [
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "DHW gas cost",
+  "pl": "Koszt gazu CWU",
+  "files": [
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "Same heat from the heater",
+  "pl": "To samo z grzałki",
+  "files": [
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "gas cheaper",
+  "pl": "gaz taniej",
+  "files": [
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "heater cheaper",
+  "pl": "grzałka taniej",
+  "files": [
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "DHW cylinder capacity",
+  "pl": "Pojemność zasobnika CWU",
+  "files": [
+   "dhw.ts",
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Gas is estimated from the burner power, heat from the cylinder capacity and the temperature rise.",
+  "pl": "Gaz szacowany z mocy palnika, ciepło z pojemności zasobnika i przyrostu temperatury.",
+  "files": [
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "No cylinder: the DHW gas of the whole day, heat from the DHW flow. If you have a cylinder, enter its capacity.",
+  "pl": "Bez zasobnika: gaz CWU z całego dnia, ciepło z przepływu CWU. Jeśli masz zasobnik, podaj jego pojemność.",
+  "files": [
+   "dhw.ts"
+  ]
+ },
+ {
+  "en": "electricity",
+  "pl": "prądu",
   "files": [
    "dhw.ts"
   ]
@@ -8378,13 +8477,6 @@
   ]
  },
  {
-  "en": "Cycle cost",
-  "pl": "Koszt cyklu",
-  "files": [
-   "dhw.ts"
-  ]
- },
- {
   "en": "Same heat from gas",
   "pl": "To samo z gazu",
   "files": [
@@ -8392,29 +8484,8 @@
   ]
  },
  {
-  "en": "Same heat from the heater",
-  "pl": "To samo z grzałki",
-  "files": [
-   "dhw.ts"
-  ]
- },
- {
   "en": "heat pump cheaper",
   "pl": "pompa taniej",
-  "files": [
-   "dhw.ts"
-  ]
- },
- {
-  "en": "gas cheaper",
-  "pl": "gaz taniej",
-  "files": [
-   "dhw.ts"
-  ]
- },
- {
-  "en": "heater cheaper",
-  "pl": "grzałka taniej",
   "files": [
    "dhw.ts"
   ]
@@ -8565,15 +8636,6 @@
   "pl": "alarmy: brak",
   "files": [
    "diagram.ts"
-  ]
- },
- {
-  "en": "Gas boiler",
-  "pl": "Kocioł gazowy",
-  "files": [
-   "diagram.ts",
-   "gas.ts",
-   "now.ts"
   ]
  },
  {
@@ -8801,29 +8863,8 @@
   ]
  },
  {
-  "en": "last while running",
-  "pl": "ostatnio z pracy",
-  "files": [
-   "gas.ts"
-  ]
- },
- {
-  "en": "waiting for the compressor",
-  "pl": "czeka na pracę sprężarki",
-  "files": [
-   "gas.ts"
-  ]
- },
- {
-  "en": "Heat pump, gas or heater?",
-  "pl": "Pompa, gaz czy grzałka?",
-  "files": [
-   "gas.ts"
-  ]
- },
- {
-  "en": "Heat pump or heater?",
-  "pl": "Pompa czy grzałka?",
+  "en": "Gas or electricity?",
+  "pl": "Gaz czy prąd?",
   "files": [
    "gas.ts"
   ]
@@ -8865,20 +8906,6 @@
   ]
  },
  {
-  "en": " (last)",
-  "pl": " (ostatni)",
-  "files": [
-   "gas.ts"
-  ]
- },
- {
-  "en": "Heat from heat pump",
-  "pl": "Ciepło z pompy",
-  "files": [
-   "gas.ts"
-  ]
- },
- {
   "en": "Heat from heater",
   "pl": "Ciepło z grzałki",
   "files": [
@@ -8888,6 +8915,64 @@
  {
   "en": "electricity 1:1",
   "pl": "prąd 1:1",
+  "files": [
+   "gas.ts"
+  ]
+ },
+ {
+  "en": "Electricity price",
+  "pl": "Cena prądu",
+  "files": [
+   "gas.ts",
+   "settings.ts",
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Gas is converted to useful heat: about 10.6 kWh from 1 m³.",
+  "pl": "Gaz przeliczany na ciepło użyteczne: około 10,6 kWh z 1 m³.",
+  "files": [
+   "gas.ts"
+  ]
+ },
+ {
+  "en": "last while running",
+  "pl": "ostatnio z pracy",
+  "files": [
+   "gas.ts"
+  ]
+ },
+ {
+  "en": "waiting for the compressor",
+  "pl": "czeka na pracę sprężarki",
+  "files": [
+   "gas.ts"
+  ]
+ },
+ {
+  "en": "Heat pump, gas or heater?",
+  "pl": "Pompa, gaz czy grzałka?",
+  "files": [
+   "gas.ts"
+  ]
+ },
+ {
+  "en": "Heat pump or heater?",
+  "pl": "Pompa czy grzałka?",
+  "files": [
+   "gas.ts"
+  ]
+ },
+ {
+  "en": " (last)",
+  "pl": " (ostatni)",
+  "files": [
+   "gas.ts"
+  ]
+ },
+ {
+  "en": "Heat from heat pump",
+  "pl": "Ciepło z pompy",
   "files": [
    "gas.ts"
   ]
@@ -8911,15 +8996,6 @@
   "pl": "więcej ciepła z 1 kWh prądu niż grzałka",
   "files": [
    "gas.ts"
-  ]
- },
- {
-  "en": "Electricity price",
-  "pl": "Cena prądu",
-  "files": [
-   "gas.ts",
-   "settings.ts",
-   "hub.ts"
   ]
  },
  {
@@ -15448,13 +15524,6 @@
   ]
  },
  {
-  "en": "DHW cylinder capacity",
-  "pl": "Pojemność zasobnika CWU",
-  "files": [
-   "settings.ts"
-  ]
- },
- {
   "en": "Gas estimate",
   "pl": "Szacowanie gazu",
   "files": [
@@ -16316,6 +16385,20 @@
   ]
  },
  {
+  "en": "Last DHW cycle gas",
+  "pl": "Gaz ostatniego cyklu CWU",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
+  "en": "Last DHW cycle cylinder rise",
+  "pl": "Przyrost w zasobniku (ostatni cykl)",
+  "files": [
+   "hub.ts"
+  ]
+ },
+ {
   "en": "Delta T (flow − return)",
   "pl": "Delta T (zasilanie − powrót)",
   "files": [
@@ -16444,13 +16527,6 @@
  {
   "en": "Last DHW draw",
   "pl": "Ostatni pobór CWU",
-  "files": [
-   "hub.ts"
-  ]
- },
- {
-  "en": "Hot water today",
-  "pl": "Ciepła woda dziś",
   "files": [
    "hub.ts"
   ]

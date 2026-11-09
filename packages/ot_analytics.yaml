@@ -40,6 +40,14 @@ globals:
   - { id: ot_an_fl_off_ms, type: uint32_t, initial_value: "0" }
   - { id: ot_an_draw_was, type: bool, initial_value: "false" }
   - { id: ot_an_draw_ms, type: uint32_t, initial_value: "0" }
+  - { id: ot_an_cyc_was, type: bool, initial_value: "false" }
+  - { id: ot_an_cyc_ms, type: uint32_t, initial_value: "0" }
+  - { id: ot_an_cyc_t0, type: float, initial_value: "NAN" }
+  - { id: ot_an_cyc_tmax, type: float, initial_value: "NAN" }
+  - { id: ot_an_cyc_q, type: float, initial_value: "0" }                            # kWh of the running DHW cycle
+  - { id: ot_an_cyc_last, type: float, restore_value: true, initial_value: "NAN" }  # minutes
+  - { id: ot_an_cyc_rise, type: float, restore_value: true, initial_value: "NAN" }  # K
+  - { id: ot_an_cyc_gas, type: float, restore_value: true, initial_value: "NAN" }   # m³
 
 interval:
   - interval: 1s
@@ -63,7 +71,7 @@ interval:
           float p = id(ot_power).state;
           if (fl && !std::isnan(p) && p > 0) {
             float q = p / 3600.0f;
-            if (id(ot_dhw_active).state) id(ot_an_q_dhw) += q; else id(ot_an_q_ch) += q;
+            if (id(ot_dhw_active).state) { id(ot_an_q_dhw) += q; id(ot_an_cyc_q) += q; } else id(ot_an_q_ch) += q;
             id(ot_an_gas_total) += q / ${ot_gas_kwh_per_m3};
           }
           if (fl) {
@@ -72,6 +80,20 @@ interval:
             if (!std::isnan(m)) { id(ot_an_mod_sum) += m; if (m <= 2.0f) id(ot_an_minmod_s) += 1; }
             if (!std::isnan(r) && r < ${ot_dew_point}) id(ot_an_cond_s) += 1;
           }
+          // DHW cylinder cycles: the DHW active flag, the rise of the DHW temperature and the gas of the cycle
+          bool cyc = id(ot_dhw_active).state;
+          float td = id(ot_dhw_temp).state;
+          if (cyc && !id(ot_an_cyc_was)) { id(ot_an_cyc_ms) = now; id(ot_an_cyc_t0) = td; id(ot_an_cyc_tmax) = td; id(ot_an_cyc_q) = 0; }
+          if (cyc && !std::isnan(td) && (std::isnan(id(ot_an_cyc_tmax)) || td > id(ot_an_cyc_tmax))) id(ot_an_cyc_tmax) = td;
+          if (!cyc && id(ot_an_cyc_was) && id(ot_an_cyc_ms)) {
+            float mins = (now - id(ot_an_cyc_ms)) / 60000.0f;
+            if (mins >= 1.0f) {
+              id(ot_an_cyc_last) = mins;
+              id(ot_an_cyc_rise) = id(ot_an_cyc_tmax) - id(ot_an_cyc_t0);
+              id(ot_an_cyc_gas) = id(ot_an_cyc_q) / ${ot_gas_kwh_per_m3};
+            }
+          }
+          id(ot_an_cyc_was) = cyc;
           // DHW draws: the DHW flow above 1 l/min
           float w = id(ot_dhw_flow).state;
           bool draw = !std::isnan(w) && w > 1.0f;
@@ -113,6 +135,9 @@ interval:
           id(ot_draw_last).publish_state(id(ot_an_draw_last));
           id(ot_dhw_litres).publish_state(id(ot_an_litres));
           id(ot_dhw_heat).publish_state(id(ot_an_q_draw));
+          id(ot_dhw_cycle_last).publish_state(id(ot_an_cyc_last));
+          id(ot_dhw_cycle_rise).publish_state(id(ot_an_cyc_rise));
+          id(ot_dhw_cycle_gas).publish_state(id(ot_an_cyc_gas));
 
 number:
   - platform: template
@@ -128,6 +153,32 @@ number:
     step: 0.01
     mode: box
     unit_of_measurement: "${ot_currency}/m³"
+  - platform: template
+    name: "${n_ot_elec_price}"
+    id: ot_elec_price
+    icon: mdi:flash
+    entity_category: config
+    optimistic: true
+    restore_value: true
+    initial_value: 1.0
+    min_value: 0
+    max_value: 20
+    step: 0.001
+    mode: box
+    unit_of_measurement: "${ot_currency}/kWh"
+  - platform: template
+    name: "${n_ot_tank_volume}"
+    id: ot_tank_volume
+    icon: mdi:water-boiler
+    entity_category: config
+    optimistic: true
+    restore_value: true
+    initial_value: 0
+    min_value: 0
+    max_value: 1000
+    step: 1
+    mode: box
+    unit_of_measurement: "L"
 
 sensor:
   - { platform: template, name: "${n_ot_gas_today}", id: ot_gas_today, icon: "mdi:meter-gas", unit_of_measurement: "m³", device_class: gas, accuracy_decimals: 2 }
@@ -146,4 +197,7 @@ sensor:
   - { platform: template, name: "${n_ot_draws_today}", id: ot_draws_today, icon: "mdi:water-pump", state_class: measurement, accuracy_decimals: 0 }
   - { platform: template, name: "${n_ot_draw_last}", id: ot_draw_last, icon: "mdi:timer-outline", unit_of_measurement: "min", accuracy_decimals: 1 }
   - { platform: template, name: "${n_ot_dhw_litres}", id: ot_dhw_litres, icon: "mdi:water", unit_of_measurement: "L", device_class: water, accuracy_decimals: 0 }
+  - { platform: template, name: "${n_ot_dhw_cycle_last}", id: ot_dhw_cycle_last, icon: "mdi:timer-outline", unit_of_measurement: "min", accuracy_decimals: 0 }
+  - { platform: template, name: "${n_ot_dhw_cycle_rise}", id: ot_dhw_cycle_rise, icon: "mdi:thermometer-chevron-up", unit_of_measurement: "K", accuracy_decimals: 1 }
+  - { platform: template, name: "${n_ot_dhw_cycle_gas}", id: ot_dhw_cycle_gas, icon: "mdi:meter-gas", unit_of_measurement: "m³", accuracy_decimals: 3 }
   - { platform: template, name: "${n_ot_dhw_heat}", id: ot_dhw_heat, icon: "mdi:water-thermometer", unit_of_measurement: "kWh", device_class: energy, accuracy_decimals: 2 }

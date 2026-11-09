@@ -2464,5 +2464,15 @@
   "Light": "Chiaro",
   "Dark": "Scuro",
   "Saved in this browser. The page background changes after a reload.": "Salvato in questo browser. Lo sfondo della pagina cambia dopo il ricaricamento.",
-  "target ": "obiettivo "
+  "target ": "obiettivo ",
+  "draw": "prelievo",
+  "Temperature rise": "Aumento di temperatura",
+  "Gas": "Gas",
+  "DHW gas cost": "Costo gas ACS",
+  "Gas is estimated from the burner power, heat from the cylinder capacity and the temperature rise.": "Il gas è stimato dalla potenza del bruciatore, il calore dalla capacità del bollitore e dall'aumento di temperatura.",
+  "No cylinder: the DHW gas of the whole day, heat from the DHW flow. If you have a cylinder, enter its capacity.": "Senza bollitore: gas ACS di tutta la giornata, calore dalla portata ACS. Se hai un bollitore, inserisci la sua capacità.",
+  "Gas or electricity?": "Gas o elettricità?",
+  "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "Il gas è convertito in calore utile: circa 10,6 kWh da 1 m³.",
+  "Last DHW cycle gas": "Gas ultimo ciclo ACS",
+  "Last DHW cycle cylinder rise": "Aumento bollitore nell'ultimo ciclo ACS"
 }

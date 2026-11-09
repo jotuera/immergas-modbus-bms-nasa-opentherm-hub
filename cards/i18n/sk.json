@@ -2464,5 +2464,15 @@
   "Light": "Svetlý",
   "Dark": "Tmavý",
   "Saved in this browser. The page background changes after a reload.": "Uložené v tomto prehliadači. Pozadie stránky sa zmení po obnovení.",
-  "target ": "cieľ "
+  "target ": "cieľ ",
+  "draw": "odber",
+  "Temperature rise": "Nárast teploty",
+  "Gas": "Plyn",
+  "DHW gas cost": "Náklady na plyn TÚV",
+  "Gas is estimated from the burner power, heat from the cylinder capacity and the temperature rise.": "Plyn je odhadovaný z výkonu horáka, teplo z objemu zásobníka a nárastu teploty.",
+  "No cylinder: the DHW gas of the whole day, heat from the DHW flow. If you have a cylinder, enter its capacity.": "Bez zásobníka: plyn na TÚV za celý deň, teplo z prietoku TÚV. Ak máte zásobník, zadajte jeho objem.",
+  "Gas or electricity?": "Plyn, alebo elektrina?",
+  "Gas is converted to useful heat: about 10.6 kWh from 1 m³.": "Plyn je prepočítaný na užitočné teplo: asi 10,6 kWh z 1 m³.",
+  "Last DHW cycle gas": "Plyn posledného cyklu TÚV",
+  "Last DHW cycle cylinder rise": "Nárast zásobníka v poslednom cykle TÚV"
 }
