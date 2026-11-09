@@ -22,10 +22,17 @@ type Row = {
 };
 
 const H = 3600e3;
+const stStart = (x: any): number => (typeof x.start === "number" ? x.start : Date.parse(x.start));
+/** hours of [a, b) that have a row in every listed statistic. A statistic with a longer history (merged, imported)
+ *  must not be divided by the shorter ones; a statistic with no rows at all is ignored */
+const commonHours = (r: any, ids: string[], a: number, b: number): Set<number> => {
+  const sets = ids.filter((id) => r[id]?.length).map((id) => new Set<number>(r[id].map(stStart).filter((t: number) => t >= a && t < b)));
+  return new Set<number>(sets.length ? [...sets[0]].filter((t) => sets.every((x) => x.has(t))) : []);
+};
 /** totals of one comparison period from the hourly long-term statistics */
-type Period = { h: number; hdd: number; elec: number; gas: number; heat: number; starts: number; run: number; out: number };
+type Period = { from: number; h: number; hdd: number; elec: number; gas: number; heat: number; starts: number; run: number; out: number };
 /** totals of one comparison period for Immergas Dominus (+ optional energy meters from the card options) */
-type DomPeriod = { h: number; hdd: number; out: number; chH: number; starts: number; dhw: number; dev: number; elec: number; gas: number };
+type DomPeriod = { from: number; h: number; hdd: number; out: number; chH: number; starts: number; dhw: number; dev: number; elec: number; gas: number };
 const GROUPS: [string, string, string][] = [
   ["cyc", "Taktowanie", "Cycling"], ["use", "Sposób pracy", "How it runs"], ["ch", "Ogrzewanie i krzywa", "Heating and curve"],
   ["dhw", "Ciepła woda", "Hot water"], ["pump", "Pompa obiegowa", "Circulation pump"], ["int", "Współpraca z kotłem", "Boiler integration"],
@@ -111,11 +118,10 @@ class ImmergasCalibrationCard extends HubCard {
       const r = await this.hass.callWS({ type: "recorder/statistics_during_period", start_time: new Date(t0).toISOString(), end_time: new Date(now).toISOString(),
         statistic_ids: ids, period: "hour", types: ["change", "mean"], units: {} });
       const per = (a: number, b: number): Period => {
-        const p: Period = { h: 0, hdd: 0, elec: 0, gas: 0, heat: 0, starts: 0, run: 0, out: NaN };
-        const sum = (k: Key) => (r[this.eid(k) ?? ""] ?? []).filter((x: any) => { const t = typeof x.start === "number" ? x.start : Date.parse(x.start); return t >= a && t < b; })
-          .reduce((acc: number, x: any) => acc + (x.change ?? 0), 0);
-        const outs = (r[this.eid("outdoor") ?? ""] ?? []).filter((x: any) => { const t = typeof x.start === "number" ? x.start : Date.parse(x.start); return t >= a && t < b && x.mean !== null; });
-        p.h = outs.length || (b - a) / H;
+        const hours = commonHours(r, ids, a, b), inPeriod = (x: any) => hours.has(stStart(x));
+        const p: Period = { from: hours.size ? Math.min(...hours) : a, h: hours.size, hdd: 0, elec: 0, gas: 0, heat: 0, starts: 0, run: 0, out: NaN };
+        const sum = (k: Key) => (r[this.eid(k) ?? ""] ?? []).filter(inPeriod).reduce((acc: number, x: any) => acc + (x.change ?? 0), 0);
+        const outs = (r[this.eid("outdoor") ?? ""] ?? []).filter((x: any) => inPeriod(x) && x.mean !== null);
         p.hdd = outs.reduce((acc: number, x: any) => acc + Math.max(0, 18 - x.mean) / 24, 0);
         p.out = outs.length ? outs.reduce((acc: number, x: any) => acc + x.mean, 0) / outs.length : NaN;
         p.elec = sum("elec_total"); p.gas = sum("gas_total"); p.heat = sum("heat_total"); p.starts = sum("starts"); p.run = sum("run_total");
@@ -166,12 +172,16 @@ class ImmergasCalibrationCard extends HubCard {
       const r = await this.hass.callWS({ type: "recorder/statistics_during_period", start_time: new Date(t0).toISOString(), end_time: new Date(now).toISOString(),
         statistic_ids: ids, period: "hour", types: ["change", "mean"], units: {} });
       const per = (a: number, b: number): DomPeriod => {
-        const pts = (id?: string) => (r[id ?? ""] ?? []).filter((x: any) => { const t = typeof x.start === "number" ? x.start : Date.parse(x.start); return t >= a && t < b; });
+        // the outdoor mean counts only where it exists at all in this period: before 1.5.4 Dominus kept no outdoor statistics
+        const outId = this.eid("outdoor"), hasOut = !!outId && (r[outId] ?? []).some((x: any) => stStart(x) >= a && stStart(x) < b);
+        const need = [this.eid("dom_ch_time_today"), this.eid("dom_starts_today"), ...extra, ...(hasOut ? [outId] : [])].filter(Boolean) as string[];
+        const hours = commonHours(r, need, a, b);
+        const pts = (id?: string) => (r[id ?? ""] ?? []).filter((x: any) => hours.has(stStart(x)));
         const sum = (id?: string) => pts(id).reduce((acc: number, x: any) => acc + Math.max(0, x.change ?? 0), 0);
         const means = (id?: string) => pts(id).filter((x: any) => x.mean !== null && x.mean !== undefined).map((x: any) => x.mean as number);
         const outs = means(this.eid("outdoor")), devs = means(this.eid("dom_room_dev"));
         return {
-          h: outs.length || (b - a) / H, out: outs.length ? outs.reduce((x, y) => x + y, 0) / outs.length : NaN,
+          from: hours.size ? Math.min(...hours) : a, h: hours.size, out: outs.length ? outs.reduce((x, y) => x + y, 0) / outs.length : NaN,
           // degree days from the outdoor mean; Dominus before 1.5.4 kept no outdoor statistics - then its own counter
           hdd: outs.length ? outs.reduce((acc, m) => acc + Math.max(0, 18 - m) / 24, 0) : sum(this.eid("dom_dd_today")),
           chH: sum(this.eid("dom_ch_time_today")), starts: sum(this.eid("dom_starts_today")), dhw: sum(this.eid("dom_dhw_cycles")),
@@ -233,7 +243,7 @@ class ImmergasCalibrationCard extends HubCard {
         "weighted: heating hours/degree day 40 %, room deviation 30 %, starts/day 20 %, run length 10 %")}</div></div>
       <div class="cell rec" style="background:${ca(col(total), 0.18)};border-color:${ca(col(total), 0.6)}"><div class="v" style="font-size:18px;color:${c(col(total))}">${sgn(total)}</div>
         ${enough ? nothing : html`<div class="why">${this.t("wstępnie – mało danych", "preliminary – little data")}</div>`}</div>
-      <div class="effn">${this.t("Przed", "Before")}: ${day(e.t0)} – ${day(e.split)} (${this.f(e.before.h / 24, 1, 1)} ${this.t("dnia", "days")}, ${this.f(e.before.out, 1, 1)} °C,
+      <div class="effn">${this.t("Przed", "Before")}: ${day(e.before.from)} – ${day(e.split)} (${this.f(e.before.h / 24, 1, 1)} ${this.t("dnia", "days")}, ${this.f(e.before.out, 1, 1)} °C,
         ${this.f(e.before.hdd, 1, 1)} ${this.t("stopniodni", "degree days")}) · ${this.t("Po", "After")}: ${this.t("od", "since")} ${day(e.split)} (${this.f(hrs, 0)} h, ${this.f(e.after.out, 1, 1)} °C,
         ${this.f(e.after.hdd, 1, 1)} ${this.t("stopniodni", "degree days")}).
         ${!isNaN(this.since()) ? "" : this.t("Bez daty zmiany (opcja optimized_since): ostatnie 7 dni wobec poprzednich 7.", "Without a change date (option optimized_since): the last 7 days against the 7 before.")}
@@ -296,7 +306,7 @@ class ImmergasCalibrationCard extends HubCard {
         "weighted: cost/degree day 30 %, heat kWh cost 20 %, COP 20 %, starts/h 20 %, cycle length 10 %")}</div></div>
       <div class="cell rec" style="background:${ca(col(total), 0.18)};border-color:${ca(col(total), 0.6)}"><div class="v" style="font-size:18px;color:${c(col(total))}">${sgn(total)}</div>
         ${enough ? nothing : html`<div class="why">${this.t("wstępnie – mało danych", "preliminary – little data")}</div>`}</div>
-      <div class="effn">${this.t("Przed", "Before")}: ${day(e.t0)} – ${day(e.split)} (${this.f(e.before.h / 24, 1, 1)} ${this.t("dnia", "days")}, ${this.f(e.before.out, 1, 1)} °C,
+      <div class="effn">${this.t("Przed", "Before")}: ${day(e.before.from)} – ${day(e.split)} (${this.f(e.before.h / 24, 1, 1)} ${this.t("dnia", "days")}, ${this.f(e.before.out, 1, 1)} °C,
         ${this.f(e.before.hdd, 1, 1)} ${this.t("stopniodni", "degree days")}) · ${this.t("Po", "After")}: ${this.t("od", "since")} ${day(e.split)} (${this.f(hrs, 0)} h, ${this.f(e.after.out, 1, 1)} °C,
         ${this.f(e.after.hdd, 1, 1)} ${this.t("stopniodni", "degree days")}).
         ${!isNaN(this.since()) ? "" : this.t("Bez daty „Porównanie od” w hubie: ostatnie 7 dni wobec poprzednich 7.", "Without the hub's “Compare from” date: the last 7 days against the 7 before.")}
