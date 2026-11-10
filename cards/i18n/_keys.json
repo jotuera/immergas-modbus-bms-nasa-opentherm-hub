@@ -14358,6 +14358,13 @@
   ]
  },
  {
+  "en": "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C",
+  "pl": "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (start −2 °C, stop +1 °C) – wybierz 3 °C",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
   "en": "HERCULES: P71.1 = 3 °C, P71.2 = 5 °C (solar)",
   "pl": "HERCULES: P71.1 = 3 °C, P71.2 = 5 °C (solar)",
   "files": [

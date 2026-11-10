@@ -20,8 +20,8 @@ dashboard.
 | **Modbus D+/D-** (piec ↔ Dominus / panel strefy) | MAGIS PRO V2, MAGIS COMBO V2 | emuluje panel strefy 1 albo Dominusa: tryb, strefy, nastawy, programy czasowe, błędy | stabilny | [MAGIS PRO / COMBO V2](docs/magis-pro-combo-v2.pl.md#dd--port-a--piec--dominus--panel-strefy) |
 | **Modbus BMS T-/T+** | MAGIS PRO V2, MAGIS COMBO V2 | master Modbus: parametry instalatora, stan systemu, szacowanie gazu, sterowanie źródłem ciepła | stabilny | [MAGIS PRO / COMBO V2](docs/magis-pro-combo-v2.pl.md#t-t-port-c--modbus-bms) |
 | **Samsung NASA F1/F2** (jednostka wewnętrzna ↔ zewnętrzna) | MAGIS PRO V2, MAGIS COMBO V2 (Samsung EHS) | słucha wszystkiego, zapisuje krótką białą listę: sprężarka, obieg chłodniczy, odszranianie, FSV, tryb wyjazdowy | stabilny | [MAGIS PRO / COMBO V2](docs/magis-pro-combo-v2.pl.md#f1f2-port-b--samsung-nasa-jednostka-wewnętrzna--zewnętrzna) |
-| **IMG-Bus OpenTherm** (zaciski 41 / 44) | VICTRIX ZEUS, EXA, TERA, OMNIA, HERCULES Condensing … | **master** zamiast CAR V2 / Dominusa albo **bramka** między pilotem a kotłem | eksperymentalny | [Kotły OpenTherm](docs/opentherm-hub.pl.md) |
-| **BMS generatora** (Modbus RTU) | kotły gazowe VICTRIX ZEUS Superior 25–35, EXTRA, PRO V2; pompa ciepła MAGIS M TOP; kotły IMG-BUS (ZEUS, EXA, TERA, OMNIA, HERCULES …) przez interfejs Immergas IU23 (hipoteza) | master Modbus: żądanie grzania, nastawy zasilania i CWU, temperatury, błędy | eksperymentalny | [Kotły gazowe po Modbus BMS](docs/gas-boiler-bms.pl.md) |
+| **IMG-Bus OpenTherm** (zaciski 41 / 44) | VICTRIX ZEUS, EXA, TERA, OMNIA, MAIOR TT, HERCULES Condensing … | **master** zamiast CAR V2 / Dominusa albo **bramka** między pilotem a kotłem | eksperymentalny | [Kotły OpenTherm](docs/opentherm-hub.pl.md) |
+| **BMS generatora** (Modbus RTU) | kotły gazowe VICTRIX ZEUS Superior 25–35, EXTRA, PRO V2; pompa ciepła MAGIS M TOP; kotły IMG-BUS (ZEUS, EXA, TERA, OMNIA, MAIOR TT, HERCULES …) przez interfejs Immergas IU23 (hipoteza) | master Modbus: żądanie grzania, nastawy zasilania i CWU, temperatury, błędy | eksperymentalny | [Kotły gazowe po Modbus BMS](docs/gas-boiler-bms.pl.md) |
 | **Modbus Midea M-Thermal** (H1 / H2) | MAGIS M (R32) | master Modbus: wł. / wył., tryb, nastawy, krzywe, sprężarka, energia, COP | eksperymentalny | [Pompy ciepła MAGIS M](docs/magis-m-midea.pl.md) |
 | **Samsung NASA F1/F2 + OpenTherm + Modbus strefowy** | TRIO HYDRO ELECTRIC / HYBRID 5 – 12 (jednostka zewnętrzna UE HYDRO HP, kocioł VICTRIX TERA 24 PLUS) | kolejny hub na tych samych pakietach: jednostka zewnętrzna po F1/F2, kocioł przez bramkę OpenTherm | konfiguracja gotowa, niesprawdzona – szukamy testerów | [TRIO HYDRO](docs/trio-hydro.pl.md) |
 | **Modbus / OpenTherm po TCP** (moduł Wi-Fi Immergas Dominus) | urządzenia z modułem Dominus: MAGIS PRO / COMBO V2 (Modbus), kotły OpenTherm (VICTRIX ZEUS, TERA …) | bez ESP: integracja Home Assistant (HACS) rozmawia z Dominusem po lokalnym TCP – bez chmury, bez MQTT | stabilny | [Immergas Dominus](https://github.com/jotuera/immergas-dominus) |
@@ -43,7 +43,7 @@ i koszt 1 kWh ciepła z każdego źródła.
 
 - pompa ciepła **MAGIS PRO V2 / COMBO V2** (jednostka zewnętrzna Samsung) → [MAGIS PRO / COMBO V2](docs/magis-pro-combo-v2.pl.md)
   – jeden hub na wszystkich trzech magistralach, przetestowany i kompletny zestaw;
-- **kocioł z CAR V2 / Super Amico albo z Dominusem OpenTherm** → [Kotły OpenTherm](docs/opentherm-hub.pl.md) –
+- **kocioł z CAR V2 / Super Amico albo z Dominusem OpenTherm** (VICTRIX ZEUS, EXA, TERA, OMNIA, MAIOR TT …) → [Kotły OpenTherm](docs/opentherm-hub.pl.md) –
   AtomS3 Lite + ATOMIC ToUnit Base z płytką DIYLess Master OpenTherm Shield; jeśli pilot ma zostać, zamiast niej
   ATOMIC PortABC i płytka Slave;
 - **kocioł gazowy nowej platformy** (ZEUS Superior 25–35, HERCULES 25 / 35, EXTRA) albo **MAGIS M TOP** bez

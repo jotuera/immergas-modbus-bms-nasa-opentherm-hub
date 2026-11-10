@@ -1370,10 +1370,10 @@ class ImmergasCalibrationCard extends HubCard {
 
   private otRows(): Row[] {
     const P = this.otProfile, esp = this.esp, f1 = (v: number) => this.f(v, 1, 1);
-    const names: Record<string, string> = { zeus25: "VICTRIX ZEUS 25 / OMNIA / OMNIA V2 / TT / Maior TT", tera: "VICTRIX TERA V2 / V3", hybrid: "VICTRIX HYBRID / HYBRID PLUS", classic: "VICTRIX EXA 24 X / 28 / 32, NIKE 24 ECO",
+    const names: Record<string, string> = { zeus25: "VICTRIX ZEUS 25 / OMNIA / OMNIA V2 / TT", maior: "VICTRIX MAIOR TT", tera: "VICTRIX TERA V2 / V3", hybrid: "VICTRIX HYBRID / HYBRID PLUS", classic: "VICTRIX EXA 24 X / 28 / 32, NIKE 24 ECO",
       superior: "VICTRIX ZEUS Superior", hercules: "HERCULES Condensing", generic: this.t("ogólny (OpenTherm)", "generic (OpenTherm)") };
-    const gt = P === "zeus25", tg = P === "tera" || P === "hybrid", sup = P === "superior" || P === "hercules";
-    const cMax: Record<string, string> = { zeus25: "t1", tera: "t1", hybrid: "t1", classic: "S6", superior: "P66/B", hercules: "P66/B", generic: "" };
+    const gt = P === "zeus25" || P === "maior", tg = P === "tera" || P === "hybrid", sup = P === "superior" || P === "hercules";
+    const cMax: Record<string, string> = { zeus25: "t1", maior: "t1", tera: "t1", hybrid: "t1", classic: "S6", superior: "P66/B", hercules: "P66/B", generic: "" };
     const out: (Row | null)[] = [];
     // --- cycling: starts per hour, short burns, average burn; the anti-cycling parameter of the menu family ---
     const sh = this.n("ot_burn_h"), st = this.n("ot_burn_today"), avg = this.n("oa_burn_avg"), mm = this.n("oa_minmod_share");

@@ -2476,5 +2476,6 @@
   "Last DHW cycle gas": "Gas letzter WW-Zyklus",
   "Last DHW cycle cylinder rise": "Speicheranstieg im letzten WW-Zyklus",
   "too often – lengthen t4 (CH ignitions timer) or lower the curve": "zu oft – t4 (Heizungs-Taktsperre) verlängern oder die Kurve senken",
-  "module OTC setpoint": "OTC-Sollwert des Moduls"
+  "module OTC setpoint": "OTC-Sollwert des Moduls",
+  "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C": "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (Solar), 2 → 10 °C (Solar); t2 = 1 (ein −2 °C, aus +1 °C) – 3 °C wählen"
 }

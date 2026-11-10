@@ -87,7 +87,7 @@ class ImmergasOtCurveCard extends HubCard {
       <div class="hint">${this.t("Ta karta jest dla integracji Immergas Dominus w trybie OpenTherm (ESP OpenTherm: karta Krzywa pogodowa w hubie).",
         "This card is for the Immergas Dominus integration in the OpenTherm mode (ESP OpenTherm: the Hub weather curve card).")}</div>`;
     const prof = this.otProfile, m = prof === "superior" || prof === "hercules", gen = prof === "generic";
-    const codes: Record<string, [string, string]> = { zeus25: ["t0", "t1"], tera: ["t0", "t1"], hybrid: ["t0", "t1"], classic: ["S5", "S6"], superior: ["P66/A", "P66/B"], hercules: ["P66/A", "P66/B"], generic: ["", ""] };
+    const codes: Record<string, [string, string]> = { zeus25: ["t0", "t1"], maior: ["t0", "t1"], tera: ["t0", "t1"], hybrid: ["t0", "t1"], classic: ["S5", "S6"], superior: ["P66/A", "P66/B"], hercules: ["P66/A", "P66/B"], generic: ["", ""] };
     const [cMin, cMax] = codes[prof];
     const wx = this.on("ot_out_sensor") || !this.eid("ot_out_sensor"), col = wx ? "peach" : "overlay2";
     const out = this.n("outdoor"), flow = this.n("ot_flow"), room = this.n("zone1");
@@ -129,7 +129,7 @@ class ImmergasOtCurveCard extends HubCard {
       if (!isNaN(tgt)) g.push(svg`<circle cx=${x} cy=${this.py(tgt)} r="4.5" fill=${c("yellow")}/>`);
       if (!isNaN(flow)) g.push(svg`<circle cx=${x} cy=${this.py(flow)} r="5" fill="none" stroke=${c("red")} stroke-width="2"/>`);
     }
-    const names: Record<string, string> = { zeus25: "ZEUS 25 / OMNIA", tera: "TERA", hybrid: "HYBRID", classic: "EXA / NIKE", superior: "ZEUS Superior", hercules: "HERCULES", generic: this.t("ogólny", "generic") };
+    const names: Record<string, string> = { zeus25: "ZEUS 25 / OMNIA", maior: "MAIOR TT", tera: "TERA", hybrid: "HYBRID", classic: "EXA / NIKE", superior: "ZEUS Superior", hercules: "HERCULES", generic: this.t("ogólny", "generic") };
     const chips = Array.from({ length: 9 }, (_, i) => i + 1);
     return html`
       <div class="top">

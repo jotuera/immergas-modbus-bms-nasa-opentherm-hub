@@ -29,7 +29,7 @@ number:
   - { platform: template, name: "${n_ot_sup_ignitions}", id: ot_sup_ignitions, icon: "mdi:fire-circle", min_value: 0, max_value: 5000000, step: 1, initial_value: 0, restore_value: true, optimistic: true, mode: box, entity_category: config }
 
 select:
-  - { platform: template, name: "${n_ot_menu_profile}", id: ot_menu_profile, icon: "mdi:book-cog-outline", options: ["zeus25", "tera", "hybrid", "classic", "superior", "hercules", "generic"], initial_option: "generic", restore_value: true, optimistic: true, entity_category: config }
+  - { platform: template, name: "${n_ot_menu_profile}", id: ot_menu_profile, icon: "mdi:book-cog-outline", options: ["zeus25", "maior", "tera", "hybrid", "classic", "superior", "hercules", "generic"], initial_option: "generic", restore_value: true, optimistic: true, entity_category: config }
   - { platform: template, name: "${n_ot_t2}", id: ot_t2, icon: "mdi:water-thermometer", options: ["0", "1", "2", "3"], initial_option: "1", restore_value: true, optimistic: true, entity_category: config }
   - { platform: template, name: "${n_ot_p6}", id: ot_p6, icon: "mdi:pump", options: ["intermittent", "continuous", "flow_probe"], initial_option: "intermittent", restore_value: true, optimistic: true, entity_category: config }
   - { platform: template, name: "${n_ot_sup_pump_speed}", id: ot_sup_pump_speed, icon: "mdi:pump", options: ["1", "2", "3", "auto"], initial_option: "auto", restore_value: true, optimistic: true, entity_category: config }

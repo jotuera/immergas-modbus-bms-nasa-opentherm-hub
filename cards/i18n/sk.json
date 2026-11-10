@@ -2476,5 +2476,6 @@
   "Last DHW cycle gas": "Plyn posledného cyklu TÚV",
   "Last DHW cycle cylinder rise": "Nárast zásobníka v poslednom cykle TÚV",
   "too often – lengthen t4 (CH ignitions timer) or lower the curve": "príliš často – predĺžte t4 (blokovanie zapálenia ÚK) alebo znížte krivku",
-  "module OTC setpoint": "nastavenie OTC modulu"
+  "module OTC setpoint": "nastavenie OTC modulu",
+  "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C": "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solár), 2 → 10 °C (solár); t2 = 1 (zap. −2 °C, vyp. +1 °C) – zvoľte 3 °C"
 }

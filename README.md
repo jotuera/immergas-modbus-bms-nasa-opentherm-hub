@@ -19,8 +19,8 @@ OpenTherm – and brings them to Home Assistant, with a set of Lovelace cards th
 | **Modbus D+/D-** (boiler ↔ Dominus / zone panel) | MAGIS PRO V2, MAGIS COMBO V2 | emulates the zone 1 panel or the Dominus: mode, zones, setpoints, time programs, faults | stable | [MAGIS PRO / COMBO V2](docs/magis-pro-combo-v2.md#dd--port-a--boiler--dominus--zone-panel) |
 | **BMS Modbus T-/T+** | MAGIS PRO V2, MAGIS COMBO V2 | Modbus master: installer parameters, system state, gas estimate, heat-source control | stable | [MAGIS PRO / COMBO V2](docs/magis-pro-combo-v2.md#t-t-port-c--bms-modbus) |
 | **Samsung NASA F1/F2** (indoor ↔ outdoor unit) | MAGIS PRO V2, MAGIS COMBO V2 (Samsung EHS) | listens to everything, writes a short whitelist: compressor, refrigerant circuit, defrost, FSV, outing mode | stable | [MAGIS PRO / COMBO V2](docs/magis-pro-combo-v2.md#f1f2-port-b--samsung-nasa-indoor--outdoor-unit) |
-| **IMG-Bus OpenTherm** (terminals 41 / 44) | VICTRIX ZEUS, EXA, TERA, OMNIA, HERCULES Condensing … | **master** instead of the CAR V2 / Dominus, or **gateway** between the room unit and the boiler | experimental | [OpenTherm boilers](docs/opentherm-hub.md) |
-| **Generator BMS** (Modbus RTU) | gas boilers VICTRIX ZEUS Superior 25–35, EXTRA, PRO V2; MAGIS M TOP heat pump; IMG-BUS boilers (ZEUS, EXA, TERA, OMNIA, HERCULES …) through the Immergas IU23 interface (hypothesis) | Modbus master: heat request, flow and DHW setpoints, temperatures, faults | experimental | [Gas boilers over Modbus BMS](docs/gas-boiler-bms.md) |
+| **IMG-Bus OpenTherm** (terminals 41 / 44) | VICTRIX ZEUS, EXA, TERA, OMNIA, MAIOR TT, HERCULES Condensing … | **master** instead of the CAR V2 / Dominus, or **gateway** between the room unit and the boiler | experimental | [OpenTherm boilers](docs/opentherm-hub.md) |
+| **Generator BMS** (Modbus RTU) | gas boilers VICTRIX ZEUS Superior 25–35, EXTRA, PRO V2; MAGIS M TOP heat pump; IMG-BUS boilers (ZEUS, EXA, TERA, OMNIA, MAIOR TT, HERCULES …) through the Immergas IU23 interface (hypothesis) | Modbus master: heat request, flow and DHW setpoints, temperatures, faults | experimental | [Gas boilers over Modbus BMS](docs/gas-boiler-bms.md) |
 | **Midea M-Thermal Modbus** (H1 / H2) | MAGIS M (R32) | Modbus master: on / off, mode, setpoints, curves, compressor, energy, COP | experimental | [MAGIS M heat pumps](docs/magis-m-midea.md) |
 | **Samsung NASA F1/F2 + OpenTherm + zone Modbus** | TRIO HYDRO ELECTRIC / HYBRID 5 – 12 (UE HYDRO HP outdoor unit, VICTRIX TERA 24 PLUS boiler) | another hub on the same packages: outdoor unit over F1/F2, the boiler through an OpenTherm gateway | configuration ready, untested – testers wanted | [TRIO HYDRO](docs/trio-hydro.md) |
 | **Modbus / OpenTherm over TCP** (Immergas Dominus Wi-Fi module) | units with the Dominus module: MAGIS PRO / COMBO V2 (Modbus), OpenTherm boilers (VICTRIX ZEUS, TERA …) | no ESP: a Home Assistant integration (HACS) talks to the Dominus over local TCP – no cloud, no MQTT | stable | [Immergas Dominus](https://github.com/jotuera/immergas-dominus) |
@@ -42,7 +42,7 @@ cycle and the cost of 1 kWh of heat from each source.
 
 - a **MAGIS PRO V2 / COMBO V2** heat pump (Samsung outdoor unit) → [MAGIS PRO / COMBO V2](docs/magis-pro-combo-v2.md)
   – one hub on all three buses, the tested and complete setup;
-- a **boiler with a CAR V2 / Super Amico or an OpenTherm Dominus** → [OpenTherm boilers](docs/opentherm-hub.md) –
+- a **boiler with a CAR V2 / Super Amico or an OpenTherm Dominus** (VICTRIX ZEUS, EXA, TERA, OMNIA, MAIOR TT …) → [OpenTherm boilers](docs/opentherm-hub.md) –
   an AtomS3 Lite + ATOMIC ToUnit Base with the DIYLess Master OpenTherm Shield; to keep the room unit an ATOMIC PortABC
   and the Slave shield instead;
 - a **new-platform gas boiler** (ZEUS Superior 25–35, HERCULES 25 / 35, EXTRA) or a **MAGIS M TOP** without a

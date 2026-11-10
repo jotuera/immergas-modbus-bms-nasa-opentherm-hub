@@ -2476,5 +2476,6 @@
   "Last DHW cycle gas": "Gás do último ciclo de AQS",
   "Last DHW cycle cylinder rise": "Subida do depósito no último ciclo AQS",
   "too often – lengthen t4 (CH ignitions timer) or lower the curve": "demasiado frequente – aumente t4 (temporizador de ignições do aquecimento) ou baixe a curva",
-  "module OTC setpoint": "setpoint OTC do módulo"
+  "module OTC setpoint": "setpoint OTC do módulo",
+  "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C": "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (lig. −2 °C, desl. +1 °C) – escolha 3 °C"
 }
