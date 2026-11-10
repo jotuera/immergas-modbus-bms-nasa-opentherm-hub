@@ -7,6 +7,7 @@ in your device YAML, which package versions it brings.
 
 | Release | Date | Highlights |
 |---|---|---|
+| [v1.11.6](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.6) | 2026-11-10 | OpenTherm (ZEUS Superior / HERCULES): the target calculated from P66 is rounded like the boiler does it (outdoor to a whole degree, the result in whole degrees) |
 | [v1.11.5](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.5) | 2026-11-10 | Hub dashboard: Water circuit and Refrigerant circuit cards span the full width |
 | [v1.11.4](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.4) | 2026-11-10 | Diagram: the note box wraps its text onto two lines and no longer covers the heating pipe |
 | [v1.11.3](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.3) | 2026-11-10 | 23 more boiler fault descriptions in 11 languages; module OTC setpoint on the weather curve card |

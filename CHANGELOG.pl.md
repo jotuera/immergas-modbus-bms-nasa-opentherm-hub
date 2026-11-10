@@ -7,6 +7,7 @@ urządzenia i jakie wersje pakietów wnosi.
 
 | Wydanie | Data | Najważniejsze |
 |---|---|---|
+| [v1.11.6](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.6) | 2026-11-10 | OpenTherm (ZEUS Superior / HERCULES): cel wyliczany z P66 zaokrąglany jak w kotle (temp. zewnętrzna do pełnego stopnia, wynik w pełnych stopniach) |
 | [v1.11.5](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.5) | 2026-11-10 | Tablica huba: karty Obieg wodny i Obieg chłodniczy na całą szerokość |
 | [v1.11.4](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.4) | 2026-11-10 | Schemat: kafel podpowiedzi zawija tekst do dwóch wierszy i nie zasłania już rury ogrzewania |
 | [v1.11.3](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.3) | 2026-11-10 | 23 kolejne opisy błędów kotła w 11 językach; nastawa OTC modułu na karcie krzywej pogodowej |

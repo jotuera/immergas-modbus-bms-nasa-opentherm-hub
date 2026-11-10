@@ -119,15 +119,16 @@ export abstract class HubCard extends LitElement {
     for (const k of SHARED_OPTS) if (this.config[k]) shared[k] = this.config[k];
   }
   /** the flow the boiler's own climatic curve asks for at the current outdoor temperature (ZEUS Superior / HERCULES, the
-   *  P66/A-D copy from Boiler parameters): a straight line (C, B) - (D, A), limited by the module setpoint. NaN when a
+   *  P66/A-D copy from Boiler parameters): a straight line (C, B) - (D, A), limited by the module setpoint. Like the boiler (rozsap, ZEUS Superior 26: 5.7 °C outdoor -> CH SET 29 °C), the
+   *  outdoor temperature is rounded to a whole degree and the result cut to whole degrees. NaN when a
    *  point is missing or the module's own weather regulation is on (then the module curve decides). Calculated, not read. */
   protected p66Target(): number {
     const p = this.s("ot_menu_profile");
     if ((p !== "superior" && p !== "hercules") || this.on("ot_out_sensor") || !this.eid("ot_out_sensor")) return NaN;
-    const a = this.n("ot_t0"), b = this.n("ot_t1"), cold = this.n("ot_sup_out_min"), warm = this.n("ot_sup_out_max"), o = this.n("outdoor");
+    const a = this.n("ot_t0"), b = this.n("ot_t1"), cold = this.n("ot_sup_out_min"), warm = this.n("ot_sup_out_max"), o = Math.round(this.n("outdoor"));
     if ([a, b, cold, warm, o].some(isNaN) || cold >= warm) return NaN;
     const t = o <= cold ? b : o >= warm ? a : b + (a - b) * (o - cold) / (warm - cold), lim = this.n("ot_ch_set");
-    return isNaN(lim) ? t : Math.min(t, lim);
+    return Math.floor(isNaN(lim) ? t : Math.min(t, lim));
   }
   /** card option, falling back to the same option set on another card of the dashboard, then to the hub entity */
   protected opt(k: string): string | undefined { return this.config[k] ?? shared[k] ?? (HUB_OPTS[k] ? this.eid(HUB_OPTS[k]) : undefined); }
@@ -732,7 +733,7 @@ export abstract class HubCard extends LitElement {
 
 /** registers a card element + card picker entry */
 /** this bundle's version (also in package.json) */
-export const VERSION = "0.91.7";
+export const VERSION = "0.91.8";
 
 // The bundle can be loaded twice: the hub cards resource and the copy shipped with the Dominus integration, in any
 // order. A custom element can be defined only once, so every bundle (0.85.0+) queues its elements on a shared window
