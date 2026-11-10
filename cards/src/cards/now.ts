@@ -172,8 +172,17 @@ class ImmergasNowCard extends HubCard {
 
     // 5) last 6 h as a strip: shows the on/off rhythm of the compressor and the boiler
     const w0 = now - WIN, win = st.filter((g) => g.t1 > w0).map((g) => ({ ...g, t0: Math.max(g.t0, w0) }));
-    const runs = win.filter((g) => !isIdle(g.s) && g.t0 > w0), pauses = win.filter((g, i) => isIdle(g.s) && g.t0 > w0 && i < win.length - 1);
-    const mr = median(runs.filter((g) => g !== win[win.length - 1]).map((g) => g.t1 - g.t0)), mp = median(pauses.map((g) => g.t1 - g.t0));
+    // compressor runs: working segments (CH, DHW, defrost) joined across a stop shorter than 150 s - the valve reversal
+    // before and after a defrost is not a new start
+    const blocks: { t0: number; t1: number }[] = [];
+    for (const g of win) {
+      if (isIdle(g.s)) continue;
+      const b = blocks[blocks.length - 1];
+      if (b && g.t0 - b.t1 < 150e3) b.t1 = g.t1; else blocks.push({ t0: g.t0, t1: g.t1 });
+    }
+    const running = win.length > 0 && !isIdle(win[win.length - 1].s);
+    const runs = blocks.filter((b) => b.t0 > w0), pauses = blocks.slice(1).map((b, i) => b.t0 - blocks[i].t1).filter((p, i) => blocks[i].t1 > w0);
+    const mr = median((running ? runs.slice(0, -1) : runs).map((b) => b.t1 - b.t0)), mp = median(pauses);
     const stats = [runs.length + this.t(" startów", " starts"), mr > 0 ? this.t("praca ~", "on ~") + dur(mr) : "", mp > 0 ? this.t("przerwa ~", "off ~") + dur(mp) : ""].filter(Boolean).join(" · ");
     const pct = (t: number) => (t - w0) / WIN * 100;
     const strip = html`<div class="sh"><span class="tbl">${this.t("Ostatnie 6 h", "Last 6 h")}</span><span class="tbs">${stats}</span></div>

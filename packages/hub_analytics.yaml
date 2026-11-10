@@ -4,7 +4,8 @@
 #   A comfort of Zone 1 - time in comfort (room within the band around the target), too cold / too warm, room min / max,
 #     mean deviation;
 #   B cycling - compressor starts in the last hour, mean / last cycle, last pause, short cycles, CH / DHW starts, short
-#     boiler burns and the last burn;
+#     boiler burns and the last burn; a compressor stop shorter than hub_an_brief_stop_s (the 4-way valve reversal before
+#     and after a defrost) does not end the cycle, so a defrost is not counted as two starts and a short cycle;
 #   C building - room heating / cooling rate (at least 30 min of one zone state), heat loss coefficient (cooling rate
 #     / (room - outdoor)), suggested U03 curve offset change from the mean room deviation of the last 3-5 heating
 #     days (only a hint, nothing is written);
@@ -26,6 +27,8 @@ substitutions:
   hub_an_comfort_band: "0.5"
   # a compressor run shorter than this counts as a short cycle, minutes
   hub_an_short_cycle_min: "10"
+  # a compressor stop shorter than this does not end the cycle (the valve reversal around a defrost: 20-70 s), seconds
+  hub_an_brief_stop_s: "150"
   # a boiler burn shorter than this counts as a short burn, minutes
   hub_an_short_burn_min: "5"
   # degree-day base temperature, °C
@@ -51,6 +54,8 @@ globals:
   - { id: hub_ag_hp_on_ms, type: uint32_t, initial_value: "0" }
   - { id: hub_ag_hp_off_ms, type: uint32_t, initial_value: "0" }
   - { id: hub_ag_hp_dhw_run, type: bool, initial_value: "false" }
+  - { id: hub_ag_hp_pend, type: bool, initial_value: "false" }
+  - { id: hub_ag_hp_pend_ms, type: uint32_t, initial_value: "0" }
   - { id: hub_ag_hp_start_ms, type: "std::vector<uint32_t>" }
   - { id: hub_ag_cyc_n, type: int, restore_value: true, initial_value: "0" }
   - { id: hub_ag_cyc_s, type: float, restore_value: true, initial_value: "0" }
@@ -180,22 +185,35 @@ interval:
             if (std::isnan(id(hub_ag_room_max)) || room > id(hub_ag_room_max)) id(hub_ag_room_max) = room;
           }
 
-          // B: compressor and boiler cycles
-          if (hp && !id(hub_ag_hp_was)) {
-            id(hub_ag_hp_start_ms).push_back(now);
-            if (id(hub_ag_hp_off_ms)) id(hub_ag_pause_last) = (now - id(hub_ag_hp_off_ms)) / 60000.0f;
-            id(hub_ag_hp_on_ms) = now;
-            id(hub_ag_hp_dhw_run) = false;
-          }
-          if (hp && dhw_any) id(hub_ag_hp_dhw_run) = true;
-          if (!hp && id(hub_ag_hp_was) && id(hub_ag_hp_on_ms)) {
-            float len = (now - id(hub_ag_hp_on_ms)) / 60000.0f;
+          // B: compressor and boiler cycles. A stop is held as pending: a restart within hub_an_brief_stop_s (the valve
+          // reversal before and after a defrost) continues the same cycle, only a longer stop ends it (at the stop time).
+          auto cyc_end = [&](uint32_t off) {
+            float len = (off - id(hub_ag_hp_on_ms)) / 60000.0f;
             id(hub_ag_cyc_last) = len;
             id(hub_ag_cyc_n)++;
             id(hub_ag_cyc_s) += len * 60.0f;
             if (len < ${hub_an_short_cycle_min}) id(hub_ag_short_n)++;
             if (id(hub_ag_hp_dhw_run)) id(hub_ag_st_dhw)++; else id(hub_ag_st_ch)++;
-            id(hub_ag_hp_off_ms) = now;
+            id(hub_ag_hp_off_ms) = off;
+            id(hub_ag_hp_pend) = false;
+          };
+          const uint32_t brief = ${hub_an_brief_stop_s} * 1000UL;
+          if (!hp && id(hub_ag_hp_pend) && now - id(hub_ag_hp_pend_ms) >= brief) cyc_end(id(hub_ag_hp_pend_ms));
+          if (hp && !id(hub_ag_hp_was)) {
+            if (id(hub_ag_hp_pend) && now - id(hub_ag_hp_pend_ms) < brief) {
+              id(hub_ag_hp_pend) = false;  // defrost reversal: the same cycle goes on
+            } else {
+              if (id(hub_ag_hp_pend)) cyc_end(id(hub_ag_hp_pend_ms));
+              id(hub_ag_hp_start_ms).push_back(now);
+              if (id(hub_ag_hp_off_ms)) id(hub_ag_pause_last) = (now - id(hub_ag_hp_off_ms)) / 60000.0f;
+              id(hub_ag_hp_on_ms) = now;
+              id(hub_ag_hp_dhw_run) = false;
+            }
+          }
+          if (hp && dhw_any) id(hub_ag_hp_dhw_run) = true;
+          if (!hp && id(hub_ag_hp_was) && id(hub_ag_hp_on_ms)) {
+            id(hub_ag_hp_pend) = true;
+            id(hub_ag_hp_pend_ms) = now;
           }
           id(hub_ag_hp_was) = hp;
           if (bn && !id(hub_ag_bn_was)) id(hub_ag_bn_on_ms) = now;
