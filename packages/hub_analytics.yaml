@@ -5,7 +5,8 @@
 #     mean deviation;
 #   B cycling - compressor starts in the last hour, mean / last cycle, last pause, short cycles, CH / DHW starts, short
 #     boiler burns and the last burn; a compressor stop shorter than hub_an_brief_stop_s (the 4-way valve reversal before
-#     and after a defrost) does not end the cycle, so a defrost is not counted as two starts and a short cycle;
+#     and after a defrost) does not end the cycle, so a defrost is not counted as two starts and a short cycle; after a
+#     boot a compressor / burner already running is not counted as a start;
 #   C building - room heating / cooling rate (at least 30 min of one zone state), heat loss coefficient (cooling rate
 #     / (room - outdoor)), suggested U03 curve offset change from the mean room deviation of the last 3-5 heating
 #     days (only a hint, nothing is written);
@@ -55,6 +56,7 @@ globals:
   - { id: hub_ag_hp_off_ms, type: uint32_t, initial_value: "0" }
   - { id: hub_ag_hp_dhw_run, type: bool, initial_value: "false" }
   - { id: hub_ag_hp_pend, type: bool, initial_value: "false" }
+  - { id: hub_ag_hp_init, type: bool, initial_value: "false" }
   - { id: hub_ag_hp_pend_ms, type: uint32_t, initial_value: "0" }
   - { id: hub_ag_hp_start_ms, type: "std::vector<uint32_t>" }
   - { id: hub_ag_cyc_n, type: int, restore_value: true, initial_value: "0" }
@@ -188,6 +190,8 @@ interval:
           // B: compressor and boiler cycles. A stop is held as pending: a restart within hub_an_brief_stop_s (the valve
           // reversal before and after a defrost) continues the same cycle, only a longer stop ends it (at the stop time).
           auto cyc_end = [&](uint32_t off) {
+            id(hub_ag_hp_pend) = false;
+            if (!id(hub_ag_hp_on_ms)) { id(hub_ag_hp_off_ms) = off; return; }  // running since before the boot: length unknown
             float len = (off - id(hub_ag_hp_on_ms)) / 60000.0f;
             id(hub_ag_cyc_last) = len;
             id(hub_ag_cyc_n)++;
@@ -198,31 +202,42 @@ interval:
             id(hub_ag_hp_pend) = false;
           };
           const uint32_t brief = ${hub_an_brief_stop_s} * 1000UL;
-          if (!hp && id(hub_ag_hp_pend) && now - id(hub_ag_hp_pend_ms) >= brief) cyc_end(id(hub_ag_hp_pend_ms));
-          if (hp && !id(hub_ag_hp_was)) {
-            if (id(hub_ag_hp_pend) && now - id(hub_ag_hp_pend_ms) < brief) {
-              id(hub_ag_hp_pend) = false;  // defrost reversal: the same cycle goes on
-            } else {
-              if (id(hub_ag_hp_pend)) cyc_end(id(hub_ag_hp_pend_ms));
-              id(hub_ag_hp_start_ms).push_back(now);
-              if (id(hub_ag_hp_off_ms)) id(hub_ag_pause_last) = (now - id(hub_ag_hp_off_ms)) / 60000.0f;
-              id(hub_ag_hp_on_ms) = now;
-              id(hub_ag_hp_dhw_run) = false;
+          // after a boot the hub does not know how long the compressor / burner have been running: the first reading of
+          // both buses only takes their state (a compressor already running is not a new start), counting starts from the
+          // next change
+          if (!id(hub_ag_hp_init)) {
+            if (!std::isnan(hz) && d99 >= 0) {
+              id(hub_ag_hp_was) = hp; id(hub_ag_hp_on_ms) = 0;
+              id(hub_ag_bn_was) = bn; id(hub_ag_bn_on_ms) = 0;
+              id(hub_ag_hp_init) = true;
             }
+          } else {
+            if (!hp && id(hub_ag_hp_pend) && now - id(hub_ag_hp_pend_ms) >= brief) cyc_end(id(hub_ag_hp_pend_ms));
+            if (hp && !id(hub_ag_hp_was)) {
+              if (id(hub_ag_hp_pend) && now - id(hub_ag_hp_pend_ms) < brief) {
+                id(hub_ag_hp_pend) = false;  // defrost reversal: the same cycle goes on
+              } else {
+                if (id(hub_ag_hp_pend)) cyc_end(id(hub_ag_hp_pend_ms));
+                id(hub_ag_hp_start_ms).push_back(now);
+                if (id(hub_ag_hp_off_ms)) id(hub_ag_pause_last) = (now - id(hub_ag_hp_off_ms)) / 60000.0f;
+                id(hub_ag_hp_on_ms) = now;
+                id(hub_ag_hp_dhw_run) = false;
+              }
+            }
+            if (hp && dhw_any) id(hub_ag_hp_dhw_run) = true;
+            if (!hp && id(hub_ag_hp_was)) {
+              id(hub_ag_hp_pend) = true;
+              id(hub_ag_hp_pend_ms) = now;
+            }
+            id(hub_ag_hp_was) = hp;
+            if (bn && !id(hub_ag_bn_was)) id(hub_ag_bn_on_ms) = now;
+            if (!bn && id(hub_ag_bn_was) && id(hub_ag_bn_on_ms)) {
+              float len = (now - id(hub_ag_bn_on_ms)) / 60000.0f;
+              id(hub_ag_bn_last) = len;
+              if (len < ${hub_an_short_burn_min}) id(hub_ag_bn_short)++;
+            }
+            id(hub_ag_bn_was) = bn;
           }
-          if (hp && dhw_any) id(hub_ag_hp_dhw_run) = true;
-          if (!hp && id(hub_ag_hp_was) && id(hub_ag_hp_on_ms)) {
-            id(hub_ag_hp_pend) = true;
-            id(hub_ag_hp_pend_ms) = now;
-          }
-          id(hub_ag_hp_was) = hp;
-          if (bn && !id(hub_ag_bn_was)) id(hub_ag_bn_on_ms) = now;
-          if (!bn && id(hub_ag_bn_was) && id(hub_ag_bn_on_ms)) {
-            float len = (now - id(hub_ag_bn_on_ms)) / 60000.0f;
-            id(hub_ag_bn_last) = len;
-            if (len < ${hub_an_short_burn_min}) id(hub_ag_bn_short)++;
-          }
-          id(hub_ag_bn_was) = bn;
           if (hp) id(hub_ag_hp_run_s) += dt;
           if ((hp || bn) && !dhw_any) id(hub_ag_ch_on_s) += dt;
 

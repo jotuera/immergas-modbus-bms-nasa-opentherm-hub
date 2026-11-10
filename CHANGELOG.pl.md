@@ -7,6 +7,7 @@ urządzenia i jakie wersje pakietów wnosi.
 
 | Wydanie | Data | Najważniejsze |
 |---|---|---|
+| [v1.11.8](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.8) | 2026-11-10 | Statystyki taktowania: po restarcie huba pracująca już sprężarka / palnik nie liczy się jako start |
 | [v1.11.7](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.7) | 2026-11-10 | Statystyki taktowania: odszranianie nie liczy się już jako dwa starty sprężarki i krótki cykl (postój poniżej 150 s nie kończy cyklu) |
 | [v1.11.6](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.6) | 2026-11-10 | OpenTherm (ZEUS Superior / HERCULES): cel wyliczany z P66 zaokrąglany jak w kotle (temp. zewnętrzna do pełnego stopnia, wynik w pełnych stopniach) |
 | [v1.11.5](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.5) | 2026-11-10 | Tablica huba: karty Obieg wodny i Obieg chłodniczy na całą szerokość |
