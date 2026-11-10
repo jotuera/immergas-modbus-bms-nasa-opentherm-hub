@@ -38,8 +38,7 @@ class ImmergasDiagramCard extends HubCard {
 
   /** one key message in the free top-left corner: active fault > compressor capacity limit > top Calibration
    *  recommendation (from the Calibration card on the same dashboard) > all fine */
-  private note(): SVGTemplateResult {
-    const cut = (t: string, n: number) => t.length > n ? t.slice(0, n - 1) + "…" : t;
+  private note(w = 600): SVGTemplateResult {
     let col = "green", icon = "✓", title = "", sub = "", open: () => void = () => undefined;
     const faultOn = this.on("fault_any") || this.on("err_active");
     const cap = this.n("cap_limit"), rec = hubNote.rec && Date.now() - hubNote.rec.at < 3600e3 ? hubNote.rec : undefined;
@@ -62,11 +61,14 @@ class ImmergasDiagramCard extends HubCard {
       sub = cop > 0 ? this.t("COP dziś ", "COP today ") + this.f(cop, 1, 1) : "";
       open = this.tap("cop_today");
     }
+    // the texts wrap inside the box (HTML in a foreignObject): a long title takes two lines, the reason the rest
+    const long = title.length > 44;
     return svg`<g @click=${open} class="hit">
-      <rect x="16" y="40" width="600" height="92" rx="14" fill=${ca(col, 0.1)} stroke=${ca(col, 0.55)} stroke-width="1.5"/>
+      <rect x="16" y="40" width=${w} height="92" rx="14" fill=${ca(col, 0.1)} stroke=${ca(col, 0.55)} stroke-width="1.5"/>
       ${this.label(40, 96, icon, col, 26, "middle", 800)}
-      ${this.label(64, 80, cut(title, 58), col, 16, "start", 800)}
-      ${sub ? this.label(64, 108, cut(sub, 86), "", 11.5, "start", 600) : nothing}</g>`;
+      <foreignObject x="60" y="44" width=${w - 52} height="84"><div xmlns="http://www.w3.org/1999/xhtml" class="nt">
+        <div class="ntt" style="color:${c(col)}">${title}</div>
+        <div class="nts" style="display:${sub ? "-webkit-box" : "none"};-webkit-line-clamp:${long ? 1 : 2}">${sub}</div></div></foreignObject></g>`;
   }
   private dhwAt = 0;
   private chFlow = NaN;
@@ -100,7 +102,8 @@ class ImmergasDiagramCard extends HubCard {
     const z1 = this.n("zone1"), zs = this.n("zone1_set"), tank = this.n("tank"), ds = this.n("dhw_set");
     const tankFill = isNaN(tank) ? 0 : Math.max(0, Math.min(1, (tank - 20) / 45)), tankCol = tank >= 45 ? "peach" : tank >= 35 ? "yellow" : "sky";
     const flame = err ? "red" : dw ? "yellow" : heat ? "peach" : "overlay1";
-    const g: unknown[] = [this.note()];
+    // the box ends before the heating pipe that rises at x = 600
+    const g: unknown[] = [this.note(568)];
     // declared boiler values (Dominus 1.5.0) - each hint only when its values are set
     const p07 = this.isSet("dom_p07") ? this.n("dom_p07") : 0, t02 = this.n("dom_t02"), i10 = this.n("dom_i10");
     const intOn = this.on("dom_int_ch") && !isNaN(i10);
@@ -351,6 +354,11 @@ class ImmergasDiagramCard extends HubCard {
     /* rotate around the local origin (the hub), not the centre of the blades bounding box */
     .fan { transform-box: view-box; transform-origin: 0 0; }
     .hit { cursor: pointer; }
+    .nt { height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 3px; overflow: hidden;
+      font-family: var(--paper-font-body1_-_font-family, inherit); color: var(--primary-text-color); }
+    .ntt { font-size: 23px; font-weight: 800; line-height: 1.12; display: -webkit-box; -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
+    .nts { font-size: 16.5px; font-weight: 600; line-height: 1.2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
     .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 6px; }
     .st { cursor: pointer; padding: 7px 10px; border-radius: 12px; min-width: 0; background: rgba(var(--ih-ov-rgb), .035); border: 1px solid rgba(var(--ih-ov-rgb), .08); }
     .st.wide { grid-column: span 2; }
