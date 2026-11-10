@@ -7,6 +7,7 @@ in your device YAML, which package versions it brings.
 
 | Release | Date | Highlights |
 |---|---|---|
+| [v1.11.5](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.5) | 2026-11-10 | Hub dashboard: Water circuit and Refrigerant circuit cards span the full width |
 | [v1.11.4](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.4) | 2026-11-10 | Diagram: the note box wraps its text onto two lines and no longer covers the heating pipe |
 | [v1.11.3](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.3) | 2026-11-10 | 23 more boiler fault descriptions in 11 languages; module OTC setpoint on the weather curve card |
 | [v1.11.2](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.2) | 2026-11-09 | VICTRIX TT and Maior TT added to the ZEUS 25 / OMNIA boiler menu profile |
