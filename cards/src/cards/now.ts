@@ -1,12 +1,11 @@
 // "Teraz / Now": fault and defrost banners, the unit hero (mode, Hz, flow/return, COP) and four tiles.
 import { Key } from "../names";
-import { HubCard, html, css, nothing, c, ca, box, register } from "../base";
+import { HubCard, html, css, nothing, c, ca, box, register, noFault } from "../base";
 import { Seg, Pt, BAD, segments, typical, median, isIdle, isDhw, isCool, isDefrost, phaseCol, phaseIcon, dur, clock, nextAt, points, dhwPeriods, dhwHeatingNow } from "./timers";
 
 const H = 3600e3, WIN = 6 * H, LEG_T = 60;
 const tempCol = (v: number) => isNaN(v) ? "overlay1" : v < 0 ? "sapphire" : v < 10 ? "sky" : v < 18 ? "teal" : v < 24 ? "green" : v < 28 ? "yellow" : v < 32 ? "peach" : "red";
 const copCol = (v: number) => isNaN(v) || v <= 0 ? "overlay1" : v < 2.5 ? "red" : v < 3.5 ? "peach" : v < 4.5 ? "yellow" : "green";
-const NO_ERR = ["Brak błędów", "No error", "No Error", "No faults", "OK", "unavailable", "unknown", ""];
 
 class ImmergasNowCard extends HubCard {
   private hist: { at: number; st: Seg[]; nt: Seg[]; leg: number[] } | null = null;
@@ -341,11 +340,11 @@ class ImmergasNowCard extends HubCard {
         bad ? "–" : on ? this.s("fault_text") ?? "–" : this.t("brak aktywnych błędów", "no active faults"), on);
     }
     const code = this.s("err_code") ?? "", desc = this.s("err_desc") ?? "", ff = this.s("ff_err") ?? "";
-    const boiler = this.on("err_active") || (!!code && !NO_ERR.includes(code) && parseFloat(code) !== 0 && !/^(brak|none|no )/i.test(code));
-    const odu = !NO_ERR.includes(ff);
+    const boiler = this.on("err_active") || (!!code && !noFault(code) && parseFloat(code) !== 0 && !/^(brak|none|no )/i.test(code));
+    const odu = !noFault(ff);
     const bad = this.bad("err_desc") && this.bad("ff_err");
     const txt = bad ? "–" : !boiler && !odu ? this.t("brak aktywnych błędów", "no active faults")
-      : [boiler ? [code, desc].filter((x) => x && !NO_ERR.includes(x)).join(" · ") : "", odu ? this.t("jedn. zewn.: ", "outdoor unit: ") + ff : ""].filter(Boolean).join(" | ");
+      : [boiler ? [code, desc].filter((x) => x && !noFault(x)).join(" · ") : "", odu ? this.t("jedn. zewn.: ", "outdoor unit: ") + ff : ""].filter(Boolean).join(" | ");
     const col = bad ? "overlay1" : boiler || odu ? "red" : "green";
     return this.chip(boiler || !odu ? "err_desc" : "ff_err", boiler || odu ? "mdi:alert-octagon" : "mdi:check-circle-outline", col,
       this.t("Aktywny błąd", "Active fault"), txt, boiler || odu);
@@ -470,7 +469,8 @@ class ImmergasNowCard extends HubCard {
     const hz = this.n("hz"), run = hz > 0;
     const defrost = this.on("defrost");
     const ffErr = this.s("ff_err") ?? "";
-    const err = this.on("err_active") || !NO_ERR.includes(ffErr) || this.on("fault_any");
+    // the hub's fault_any decides by the fault codes; the F1/F2 text only on older hubs without it
+    const err = this.on("err_active") || this.on("fault_any") || (!this.eid("fault_any") && !noFault(ffErr));
     const dhw = this.on("tt_dhw") || isDhw(this.s("state"));
     const cool = this.on("tt_cool");
     const gas = this.on("boiler_running");
@@ -497,7 +497,7 @@ class ImmergasNowCard extends HubCard {
     const ci = this.n("cop"), cd = this.n("cop_today");
     const now = run && ci > 0, cn = now ? ci : NaN;
 
-    const errText = (this.on("fault_any") ? this.s("fault_text") : "") || [this.s("err_desc"), ffErr].filter((x) => x && !NO_ERR.includes(x)).join(" · ") || this.t("sprawdź diagnostykę", "check diagnostics");
+    const errText = (this.on("fault_any") ? this.s("fault_text") : "") || [this.s("err_desc"), ffErr].filter((x) => x && !noFault(x)).join(" · ") || this.t("sprawdź diagnostykę", "check diagnostics");
     const banner = (icon: string, colr: string, title: string, text: string, k: any) => html`
       <div class="banner" style=${box(colr, true)} @click=${() => this.moreInfo(k)}>
         <ha-icon icon=${icon} style="color:${c(colr)}"></ha-icon>

@@ -7,6 +7,7 @@ in your device YAML, which package versions it brings.
 
 | Release | Date | Highlights |
 |---|---|---|
+| [v1.11.10](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.10) | 2026-11-12 | Now card: no false *Heat pump fault* banner when the entities are in a language other than English or Polish |
 | [v1.11.9](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.9) | 2026-11-10 | VICTRIX MAIOR TT: own boiler menu profile (no t3 / t4, t2 = DHW thermostat) and listed in the README |
 | [v1.11.8](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.8) | 2026-11-10 | Cycling statistics: after a reboot of the hub a compressor / burner already running is not counted as a start |
 | [v1.11.7](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.7) | 2026-11-10 | Cycling statistics: a defrost no longer counts as two compressor starts and a short cycle (stops under 150 s continue the cycle) |

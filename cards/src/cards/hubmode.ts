@@ -5,7 +5,7 @@
 //        max. modulation (14); gateway: who sets the flags (room unit or the hub with "Override CH and DHW enable").
 // The entities are found by their names in the packages (any name prefix, PL / EN), no hub device needed.
 // Options: family: gb | ot (default: the first one found); entities: {key: entity_id} overrides.
-import { HubCard, html, css, nothing, c, ca, box, register } from "../base";
+import { HubCard, html, css, nothing, c, ca, box, register, noFault } from "../base";
 import { findPkg, setNumber, setSwitch } from "../hubpkg";
 
 type K = "mode" | "ch_en" | "dhw_en" | "ch" | "dhw" | "flame" | "req" | "power" | "max_ch" | "max_mod" | "room" | "ov_flags" | "standalone" | "fault";
@@ -126,7 +126,7 @@ class ImmergasHubModeCard extends HubCard {
         ${this.ctl("max_ch", this.t("Maks. nastawa CO", "Max. CH setpoint"), ot ? "Data-ID 57" : "", "red")}
         ${this.ctl("max_mod", this.t("Maks. modulacja", "Max. modulation"), "Data-ID 14", "mauve")}
         ${this.ctl("power", this.t("Górny limit mocy", "Upper power limit"), "BMS 513", "mauve")}</div>` : nothing}
-      ${!ot && this.st("fault") && !/^(Brak|No fault)/i.test(this.st("fault") ?? "") ? html`<div class="hint" @click=${() => this.more("fault")}>${this.st("fault")}</div>` : nothing}`;
+      ${!ot && this.st("fault") && !noFault(this.st("fault")) ? html`<div class="hint" @click=${() => this.more("fault")}>${this.st("fault")}</div>` : nothing}`;
   }
 
   render() {

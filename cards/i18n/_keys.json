@@ -11431,27 +11431,6 @@
   ]
  },
  {
-  "en": "No error",
-  "pl": "Brak błędów",
-  "files": [
-   "now.ts"
-  ]
- },
- {
-  "en": "No Error",
-  "pl": "No error",
-  "files": [
-   "now.ts"
-  ]
- },
- {
-  "en": "No faults",
-  "pl": "No Error",
-  "files": [
-   "now.ts"
-  ]
- },
- {
   "en": "Loading cycle history…",
   "pl": "Wczytuję historię cykli…",
   "files": [

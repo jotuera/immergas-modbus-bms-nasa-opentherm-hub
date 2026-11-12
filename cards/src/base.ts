@@ -60,6 +60,11 @@ function lightSurface(el: HTMLElement, hass: any): boolean {
  *  diagram); `rec.ok` = nothing to change */
 export const hubNote: { rec?: { text: string; reason: string; ok: boolean; entity?: string; at: number } } = {};
 
+/** "no fault" texts the hub's fault entities send, in all their languages (D+/D- and T-/T+ fault descriptions,
+ *  F1/F2 system error, gb_ / mt_ fault, hub fault summary). Lower case; a text not listed counts as a fault. */
+const NO_FAULT = new Set(("|" + "0|ok|unavailable|unknown|none|no faults|no fault|no error|brak błędów|brak błędu|brak usterki|nessuna anomalia|nessun errore|žádné poruchy|bez poruch|bez poruchy|bez chyby|žiadne poruchy|bez porúch|bez chýb|nincs hiba|keine störungen|keine störung|kein fehler|aucune anomalie|aucun défaut|aucune erreur|sin anomalías|sin averías|sin avería|sin errores|geen storingen|geen storing|geen fout|sem anomalias|sem avarias|sem avaria|sem erros").split("|"));
+export const noFault = (s: string | undefined | null) => NO_FAULT.has((s ?? "").trim().toLowerCase());
+
 /** color var */
 export const c = (n: string) => `var(--ih-${n})`;
 /** translucent color; on a light card the tint is paler (--ih-tint) so that coloured text stays readable on it */
@@ -733,7 +738,7 @@ export abstract class HubCard extends LitElement {
 
 /** registers a card element + card picker entry */
 /** this bundle's version (also in package.json) */
-export const VERSION = "0.92.0";
+export const VERSION = "0.92.1";
 
 // The bundle can be loaded twice: the hub cards resource and the copy shipped with the Dominus integration, in any
 // order. A custom element can be defined only once, so every bundle (0.85.0+) queues its elements on a shared window
