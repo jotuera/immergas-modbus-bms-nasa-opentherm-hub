@@ -56,7 +56,8 @@ A03 / A04 and P15 once from the boiler menu (Boiler parameters offline card); th
 Calibration card judges it against the readings from D+/D- and F1/F2, and anti-legionella P15 comes back as a
 "set on the boiler" switch like U11. Without the copies the Curve card explains it and shows the live D04.
 The same card has *Assumed flow (instead of D14)*: without T-/T+ there is no flow rate, so heat output, COP and heat
-cost stay empty until you enter your installation's flow.
+cost stay empty until you enter your installation's flow. *Assumed flow DHW* is used while D09 says DHW (the
+cylinder circuit usually has a different flow); empty = the first value for both.
 `bms: false` / `bms: true` under `strategy:` forces it either way.
 
 **Without a hub – Immergas Dominus:** with only the [Immergas Dominus](https://github.com/jotuera/immergas-dominus)

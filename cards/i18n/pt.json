@@ -2496,5 +2496,7 @@
   "Zone 1 · R04 / R05 (copy from the boiler) · U03 (D+/D-)": "Zona 1 · R04 / R05 (cópia da caldeira) · U03 (D+/D-)",
   "Zone 1 · R13 / R12 (copy from the boiler)": "Zona 1 · R13 / R12 (cópia da caldeira)",
   "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).": "Sem T-/T+ não há caudal D14, por isso a potência térmica, o COP e o custo do calor ficam vazios. Introduza o caudal da sua instalação – o hub usa-o em vez de D14 (aproximação, a bomba modula entre A03 e A04).",
-  "Assumed flow (instead of D14)": "Caudal assumido (em vez de D14)"
+  "Assumed flow (instead of D14)": "Caudal assumido (em vez de D14)",
+  "During DHW (D09) the hub takes the DHW flow – the cylinder circuit usually has a different resistance. Empty = the value above for both.": "Durante AQS (D09) o hub usa o caudal AQS – o circuito do depósito tem normalmente outra resistência. Vazio = o valor acima para ambos.",
+  "Assumed flow DHW (instead of D14)": "Caudal assumido AQS (em vez de D14)"
 }

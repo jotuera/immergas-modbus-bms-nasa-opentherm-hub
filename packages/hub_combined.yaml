@@ -81,16 +81,23 @@ globals:
     type: float
     restore_value: true
     initial_value: "NAN"
+  - id: hub_flow_assumed_dhw
+    type: float
+    restore_value: true
+    initial_value: "NAN"
 
-# CWU: cykl = TT D99 61 (pompą) / 62 (gazem) / 64 (grzałką) + 44/45 (koniec CWU, dobieg). Na starcie zapamiętuje
+# CWU: cykl = TT D99 61 (pompą) / 62 (gazem) / 64 (grzałką) + 44/45 (koniec CWU, dobieg); bez T-/T+ (brak D99)
+# cykl = D09 z D+/D- (zadanie CWU, 0x29 W 2001 bit 0), źródło = pompa, gdy pracuje sprężarka. Na starcie zapamiętuje
 # temperaturę zasobnika, energię pobraną łącznie (F1/F2) i energię cieplną łącznie (hub); na końcu liczy wyniki.
 # Ciepło z zasobnika = pojemność x 1,163 Wh/(l·K) x (najwyższa temperatura w cyklu - temperatura startowa).
 interval:
   - interval: 10s
     then:
       - lambda: |-
-          int d99 = (int) id(tt_system_state_raw).state;
-          bool dhw_now = (d99 == 61 || d99 == 62 || d99 == 64);
+          float d99f = id(tt_system_state_raw).state;
+          int d99 = std::isnan(d99f) ? -1 : (int) d99f;
+          bool d09 = d99 < 0 && id(dd_piec_zadanie_cwu_oczek).state;   // no T-/T+: D09 from D+/D-
+          bool dhw_now = (d99 == 61 || d99 == 62 || d99 == 64 || d09);
           bool dhw_tail = (d99 == 44 || d99 == 45);
           float t = id(dd_dhw_temp_sensor).state;
           float e = id(f1f2_energy_consumed_total).state;
@@ -109,7 +116,7 @@ interval:
             ESP_LOGI("hub_dhw", "Start cyklu CWU: D99=%d, zasobnik %.1f °C", d99, t);
           }
           if (!std::isnan(t) && (std::isnan(id(hub_dhw_tmax)) || t > id(hub_dhw_tmax))) id(hub_dhw_tmax) = t;
-          if (d99 == 61 && !std::isnan(hz) && hz > 0.0f) id(hub_dhw_used_hp) = true;
+          if ((d99 == 61 || d09) && !std::isnan(hz) && hz > 0.0f) id(hub_dhw_used_hp) = true;
           if (d99 == 62 || id(tt_gas_boiler_running).state) id(hub_dhw_used_gas) = true;
           if (dhw_now || dhw_tail) return;
           // koniec cyklu
@@ -228,7 +235,10 @@ sensor:
     update_interval: 10s
     lambda: |-
       float flow = id(tt_d14_pump_flow_rate).state;  // l/h
-      if (std::isnan(flow)) flow = id(hub_flow_assumed);   // no T-/T+: assumed flow (hub_boiler_menu)
+      if (std::isnan(flow)) {   // no T-/T+: assumed flow (hub_boiler_menu), the DHW one while D09 says DHW
+        bool dhw = std::isnan(id(tt_system_state_raw).state) && id(dd_piec_zadanie_cwu_oczek).state;
+        flow = (dhw && !std::isnan(id(hub_flow_assumed_dhw))) ? id(hub_flow_assumed_dhw) : id(hub_flow_assumed);
+      }
       float tw2  = id(dd_sniff_1e_w_21).state;       // °C, wyjście wody z PC
       float tw1  = id(dd_sniff_1e_w_20).state;       // °C, powrót wody do PC
       float hz   = id(dd_sniff_1e_i_11).state;       // Hz, sprężarka
@@ -287,7 +297,10 @@ sensor:
     lambda: |-
       if (!id(f1f2_defrost).state) return 0.0f;
       float flow = id(tt_d14_pump_flow_rate).state;  // l/h
-      if (std::isnan(flow)) flow = id(hub_flow_assumed);   // no T-/T+: assumed flow (hub_boiler_menu)
+      if (std::isnan(flow)) {   // no T-/T+: assumed flow (hub_boiler_menu), the DHW one while D09 says DHW
+        bool dhw = std::isnan(id(tt_system_state_raw).state) && id(dd_piec_zadanie_cwu_oczek).state;
+        flow = (dhw && !std::isnan(id(hub_flow_assumed_dhw))) ? id(hub_flow_assumed_dhw) : id(hub_flow_assumed);
+      }
       float tw2  = id(dd_sniff_1e_w_21).state;       // °C, wyjście wody z PC (przy odszranianiu chłodniejsze)
       float tw1  = id(dd_sniff_1e_w_20).state;       // °C, powrót wody do PC
       if (std::isnan(flow) || std::isnan(tw2) || std::isnan(tw1)) return NAN;
@@ -622,7 +635,7 @@ sensor:
 
 text_sensor:
   # Stan pracy z trzech magistral: co grzeje (pompa D71 z D+/D-, kocioł z T-/T+) i dokąd (CWU z TT D99 61/62/64,
-  # bo D22 przy CWU pompą zostaje 0; chłodzenie z F1/F2), odszranianie z F1/F2.
+  # bo D22 przy CWU pompą zostaje 0; bez T-/T+ z D09 z D+/D-; chłodzenie z F1/F2), odszranianie z F1/F2.
   - platform: template
     id: hub_operating_state
     name: "${n_hub_operating_state}"
@@ -634,8 +647,10 @@ text_sensor:
       bool hp = !std::isnan(hz) && hz > 0.0f;
       bool boiler = id(tt_gas_boiler_running).state;
       std::string what;
-      int d99 = (int) id(tt_system_state_raw).state;
-      if (d99 == 61 || d99 == 62 || d99 == 64 || id(tt_pdu_3028).state == 1.0f) what = "${t_hub_dhw}";
+      float d99f = id(tt_system_state_raw).state;
+      int d99 = std::isnan(d99f) ? -1 : (int) d99f;
+      bool d09 = d99 < 0 && id(dd_piec_zadanie_cwu_oczek).state;   // no T-/T+: D09 from D+/D-
+      if (d99 == 61 || d99 == 62 || d99 == 64 || id(tt_pdu_3028).state == 1.0f || d09) what = "${t_hub_dhw}";
       else if (id(f1f2_outdoor_operation_state).state.find("${t_hub_ff_cooling_match}") != std::string::npos) what = "${t_hub_cooling}";
       else what = "${t_hub_heating}";
       if (hp && boiler) return std::string("${t_hub_hp_boiler}: ") + what;

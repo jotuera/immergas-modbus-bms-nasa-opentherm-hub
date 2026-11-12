@@ -94,7 +94,7 @@ Sprawdzone na **trzech magistralach** (D+/D-, T-/T+, NASA) w postoju i podczas w
 | 2000 | Tryb pracy | POTWIERDZONE |
 | 2005 / 2006 | **Temperatura / wilgotność pokojowa** (jedyne wartości, które kocioł bierze z panelu do regulacji) | POTWIERDZONE |
 | 2015–2017 | Nastawa / maks. / offset | POTWIERDZONE |
-| 2095, 2290–2292 | Nastawa CWU (+ kopie) | POTWIERDZONE |
+| 2095, 2290–2292 | Nastawa CWU 2095 (D05); 2290 = CWU Komfort, 2291 = CWU Eko, 2292 = kopia 2095 – 2290 / 2291 należą do panelu | POTWIERDZONE |
 | 2103 | stałe 0 | ? |
 | **2294** | **„Programy czasowe aktywne” w panelu**: −1 = nie ustawiono, **0 = wyłączone (ręczny), 1 = auto**. Sprawdzone w obie strony; po podłączeniu panelu kocioł zapisuje 0 | POTWIERDZONE |
 | **6105** | **Ustawienie panelu „modulacja sondą pokojową”** (Serwis → Definicja strefy): −1 = nie ustawiono (świeży panel), **0 = NIE, 1 = TAK**. Po podłączeniu panelu kocioł zapisuje 0. Sprawdzone TAK → 1 i NIE → 0 | POTWIERDZONE |
@@ -106,6 +106,7 @@ Sprawdzone na **trzech magistralach** (D+/D-, T-/T+, NASA) w postoju i podczas w
 | 2410–2416 | Dzień → kalendarz — strefa 1 | POTWIERDZONE |
 | 2490–2496 | Dzień → kalendarz — CWU | POTWIERDZONE |
 | 2707 | Eko chłodzenia (kopia) | POTWIERDZONE |
+| 2295, 2701–2706, 2708, 6106 | Tylko MAGIS HERCULES PRO: ustawienia panelu, które kocioł zapisuje i odczytuje z powrotem. 2702 / 2703 i 2705 / 2706 = godzina początku / końca (0–23) okna nocnego 1 / 2; 2701, 2704, 2708 (190), 2295 (−1), 6106 (50) nierozszyfrowane | KAND. |
 | 3042 | Wersja firmware panelu (201 = 2.01) | POTWIERDZONE |
 
 **Set-flow 2217 jest czytany tylko z Dominusa (0x33)** — z panelu kocioł czyta 2214–2216 i 2218–2219, celowo pomijając 2217, więc panel (fizyczny czy emulowany) nie może sterować set-flow.

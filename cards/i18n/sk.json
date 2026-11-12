@@ -2496,5 +2496,7 @@
   "Zone 1 · R04 / R05 (copy from the boiler) · U03 (D+/D-)": "Zóna 1 · R04 / R05 (kópia z kotla) · U03 (D+/D-)",
   "Zone 1 · R13 / R12 (copy from the boiler)": "Zóna 1 · R13 / R12 (kópia z kotla)",
   "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).": "Bez T-/T+ nie je prietok D14, preto tepelný výkon, COP a cena tepla zostávajú prázdne. Zadajte prietok svojej inštalácie – hub ho použije namiesto D14 (približne, čerpadlo moduluje medzi A03 a A04).",
-  "Assumed flow (instead of D14)": "Predpokladaný prietok (namiesto D14)"
+  "Assumed flow (instead of D14)": "Predpokladaný prietok (namiesto D14)",
+  "During DHW (D09) the hub takes the DHW flow – the cylinder circuit usually has a different resistance. Empty = the value above for both.": "Pri TÚV (D09) hub použije prietok TÚV – okruh zásobníka má zvyčajne iný odpor. Prázdne = hodnota vyššie pre oba.",
+  "Assumed flow DHW (instead of D14)": "Predpokladaný prietok TÚV (namiesto D14)"
 }

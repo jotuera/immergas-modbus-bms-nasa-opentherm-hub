@@ -7,6 +7,7 @@ in your device YAML, which package versions it brings.
 
 | Release | Date | Highlights |
 |---|---|---|
+| [v1.11.15](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.15) | 2026-11-12 | Without T-/T+: DHW recognised by D09 (operating state, DHW cycles, COP DHW); separate *Assumed flow rate DHW*. Emulated zone 1 panel: DHW Comfort / Eco served separately and taken from the boiler menu, panel-only settings (HERCULES PRO night windows 2701–2708) stored; DHW Eco and D05 from 20 °C. Diagram: shared return animates during DHW |
 | [v1.11.14](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.14) | 2026-11-12 | Without T-/T+: *Assumed flow rate (instead of D14)* in `hub_boiler_menu` – heat output, COP and heat cost without the D14 flow rate |
 | [v1.11.13](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.13) | 2026-11-12 | Diagram: the DHW setpoint falls back to D05 when the active setpoint (zone panel traffic) is missing |
 | [v1.11.12](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.12) | 2026-11-12 | MAGIS without T-/T+ (e.g. HERCULES PRO): dashboard without the T-/T+ parts (option `bms`), package `hub_boiler_menu` with copies of R04 / R05 / R13 / R12, T02 / T05 / T07, A03 / A04 and P15 for the Curve, Calibration and Operating mode cards |

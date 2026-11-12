@@ -85,6 +85,7 @@ substitutions:
   n_hub_m_a04: "${hub_name_prefix} - A04 Velocidade fixa máxima (cópia)"
   n_hub_m_p15: "${hub_name_prefix} - P15 Função antilegionela (cópia)"
   n_hub_m_flow: "${hub_name_prefix} - Caudal assumido (em vez de D14)"
+  n_hub_m_flow_dhw: "${hub_name_prefix} - Caudal assumido AQS (em vez de D14)"
   n_hub_u11_set: "${hub_name_prefix} - U11 Função noturna definida na caldeira"
   t_hub_day0: "Diariamente"
   t_hub_day1: "Segunda-feira"

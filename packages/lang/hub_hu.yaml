@@ -85,6 +85,7 @@ substitutions:
   n_hub_m_a04: "${hub_name_prefix} - A04 Maximális fix fordulatszám (másolat)"
   n_hub_m_p15: "${hub_name_prefix} - P15 Legionella elleni funkció (másolat)"
   n_hub_m_flow: "${hub_name_prefix} - Feltételezett térfogatáram (D14 helyett)"
+  n_hub_m_flow_dhw: "${hub_name_prefix} - Feltételezett térfogatáram HMV (D14 helyett)"
   n_hub_u11_set: "${hub_name_prefix} - U11 Éjszakai funkció beállítva a kazánon"
   t_hub_day0: "Naponta"
   t_hub_day1: "Hétfő"

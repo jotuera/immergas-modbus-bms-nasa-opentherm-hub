@@ -523,7 +523,10 @@ class ImmergasSettingsCard extends HubCard {
           ${this.numRow("a04", "mdi:pump", this.t("A04 · maks. prędkość pompy", "A04 · max. pump speed"), 0, undefined, true)}
           ${this.eid("hub_m_flow") ? html`<div class="note">${this.t("Bez T-/T+ nie ma przepływu D14, więc moc cieplna, COP i koszt ciepła są puste. Wpisz przepływ swojej instalacji – hub użyje go zamiast D14 (w przybliżeniu, pompa moduluje między A03 a A04).",
             "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).")}</div>
-          ${this.numRow("hub_m_flow", "mdi:waves-arrow-right", this.t("Przepływ przyjęty (zamiast D14)", "Assumed flow (instead of D14)"), 0, undefined, true)}` : nothing}` : nothing}
+          ${this.numRow("hub_m_flow", "mdi:waves-arrow-right", this.t("Przepływ przyjęty (zamiast D14)", "Assumed flow (instead of D14)"), 0, undefined, true)}
+          ${this.eid("hub_m_flow_dhw") ? html`<div class="note">${this.t("Przy CWU (D09) hub bierze przepływ CWU – obieg zasobnika ma zwykle inny opór. Puste = wartość powyżej dla obu.",
+            "During DHW (D09) the hub takes the DHW flow – the cylinder circuit usually has a different resistance. Empty = the value above for both.")}</div>
+          ${this.numRow("hub_m_flow_dhw", "mdi:water-boiler", this.t("Przepływ przyjęty CWU (zamiast D14)", "Assumed flow DHW (instead of D14)"), 0, undefined, true)}` : nothing}` : nothing}` : nothing}
         ${this.eid("hub_p07") ? html`<div class="grp">${this.t("Instalacja", "Installation")}</div>
           ${this.numRow("hub_p07", "mdi:thermometer-plus", this.t("P07 · korekta sondy zewnętrznej", "P07 · outdoor probe correction"), 0)}` : nothing}
       ` : nothing}

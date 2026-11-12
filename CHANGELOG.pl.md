@@ -7,6 +7,7 @@ urządzenia i jakie wersje pakietów wnosi.
 
 | Wydanie | Data | Najważniejsze |
 |---|---|---|
+| [v1.11.15](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.15) | 2026-11-12 | Bez T-/T+: CWU rozpoznawane po D09 (stan pracy, cykle CWU, COP CWU); osobny *Przepływ przyjęty CWU*. Emulowany panel strefy 1: CWU Komfort / Eko podawane osobno i przejmowane z menu pieca, ustawienia przechowywane przez panel (okna nocne HERCULES PRO 2701–2708) zapamiętywane; CWU Eko i D05 od 20 °C. Schemat: wspólny powrót animowany przy CWU |
 | [v1.11.14](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.14) | 2026-11-12 | Bez T-/T+: *Przepływ przyjęty (zamiast D14)* w `hub_boiler_menu` – moc cieplna, COP i koszt ciepła bez przepływu D14 |
 | [v1.11.13](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.13) | 2026-11-12 | Schemat: nastawa CWU z D05, gdy brak aktywnej nastawy (ruch do panelu strefy) |
 | [v1.11.12](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.12) | 2026-11-12 | MAGIS bez T-/T+ (np. HERCULES PRO): dashboard bez części T-/T+ (opcja `bms`), pakiet `hub_boiler_menu` z kopiami R04 / R05 / R13 / R12, T02 / T05 / T07, A03 / A04 i P15 dla kart Krzywe, Kalibracja i Tryb pracy |

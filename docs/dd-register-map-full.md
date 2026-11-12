@@ -94,7 +94,7 @@ Verified on **three buses** (D+/D-, T-/T+, NASA) at standby and during a forced 
 | 2000 | Operating mode | CONFIRMED |
 | 2005 / 2006 | **Room temperature / humidity** (the only values the boiler takes from the panel for control) | CONFIRMED |
 | 2015–2017 | Setpoint / max / offset | CONFIRMED |
-| 2095, 2290–2292 | DHW setpoint (+ copies) | CONFIRMED |
+| 2095, 2290–2292 | DHW setpoint 2095 (D05); 2290 = DHW Comfort, 2291 = DHW Eco, 2292 = copy of 2095 – the panel owns 2290 / 2291 | CONFIRMED |
 | 2103 | constant 0 | ? |
 | **2294** | **Panel "time programs active"**: −1 = not set, **0 = off (manual), 1 = auto**. Verified both ways; on panel connect the boiler writes 0 | CONFIRMED |
 | **6105** | **Panel "room-probe modulation" setting** (Service → Zone definition): −1 = not set (fresh panel), **0 = NO, 1 = YES**. On panel connect the boiler writes 0. Verified YES → 1 and NO → 0 | CONFIRMED |
@@ -106,6 +106,7 @@ Verified on **three buses** (D+/D-, T-/T+, NASA) at standby and during a forced 
 | 2410–2416 | Day → calendar — Zone 1 | CONFIRMED |
 | 2490–2496 | Day → calendar — DHW | CONFIRMED |
 | 2707 | Eco cooling (copy) | CONFIRMED |
+| 2295, 2701–2706, 2708, 6106 | MAGIS HERCULES PRO only: panel settings the boiler writes and reads back. 2702 / 2703 and 2705 / 2706 = start / end hour (0–23) of night windows 1 / 2; 2701, 2704, 2708 (190), 2295 (−1), 6106 (50) not decoded | CAND. |
 | 3042 | Panel firmware version (201 = 2.01) | CONFIRMED |
 
 **Set-flow 2217 is read only from the Dominus (0x33)** — from the panel the boiler reads 2214–2216 and 2218–2219, deliberately skipping 2217, so a panel (physical or emulated) cannot control set-flow.

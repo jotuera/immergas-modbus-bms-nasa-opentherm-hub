@@ -643,6 +643,15 @@ globals:
 
   # 2300/2302/2303 look like the Dominus/Zone controller time/date.
   # 2300 zostawiamy jako surowy licznik/scheduler, bez wymuszonej interpretacji.
+  # 1.11.15: 0x29 registers the zone panel only keeps for the boiler (MAGIS HERCULES PRO: 2701 + 2702/2703 and
+  # 2705/2706 = start/end hour of the two night windows, 2704, 2708, 2295, 6106). With the panel emulated the boiler
+  # writes them to the hub and reads them back, so the hub stores them (kept across restarts) instead of answering 0.
+  # Order = EMU29_STORE_REGS in the engine; -32768 = never written (answer 0 as before).
+  - id: dd_emu29_store
+    type: std::array<int16_t, 9>
+    restore_value: yes
+    initial_value: "{-32768, -32768, -32768, -32768, -32768, -32768, -32768, -32768, -32768}"
+
   - id: dd_pdu_29_2300_raw
     type: int
     restore_value: no
@@ -897,6 +906,12 @@ interval:
           static const uint16_t REG_DHW_SETPOINT_COPY_2     = 2292;
           static const uint16_t REG_DHW_TEMP_COPY_2293      = 2293;
           static const uint16_t REG_ECO_COOL                = 2707;  // 1.2.1: really "CH min. set" (name kept for the tables)
+          // 1.11.15: registers the emulated panel stores for the boiler (dd_emu29_store, same order)
+          static const uint16_t EMU29_STORE_REGS[9] = {2295, 2701, 2702, 2703, 2704, 2705, 2706, 2708, 6106};
+          auto emu29_store_idx = [](uint16_t reg) -> int {
+            for (int i = 0; i < 9; i++) if (EMU29_STORE_REGS[i] == reg) return i;
+            return -1;
+          };
 
           static const uint16_t REG_OUTSIDE_TEMP            = 3002;
           static const uint16_t REG_ZONE1_TEMP_COPY         = 3009;
@@ -1153,8 +1168,9 @@ interval:
               case REG_ZONE1_MAX_COPY: return 300;
               case REG_ZONE1_OFFSET_COPY: return id(dd_zone1_offset_raw);
 
-              case 2290: return id(dd_cwu_setpoint_raw);
-              case REG_DHW_SETPOINT_COPY_1: return id(dd_cwu_setpoint_raw);
+              // 1.11.15: as on a physical panel - 2290 = DHW Comfort, 2291 = DHW Eco, 2292 = the manual setpoint (D05)
+              case 2290: return std::isnan(id(dd_dhw_comfort_set).state) ? id(dd_cwu_setpoint_raw) : (int) roundf(id(dd_dhw_comfort_set).state * 10.0f);
+              case REG_DHW_SETPOINT_COPY_1: return std::isnan(id(dd_dhw_eco_set).state) ? id(dd_cwu_setpoint_raw) : (int) roundf(id(dd_dhw_eco_set).state * 10.0f);
               case REG_DHW_SETPOINT_COPY_2: return id(dd_cwu_setpoint_raw);
               case REG_DHW_TEMP_COPY_2293: return id(dd_dhw_temp_raw) > 0 ? id(dd_dhw_temp_raw) : 482;
               case 2294: return (int) id(dd_sel_programy_czasowe).active_index().value_or(0);  // v1.3.0
@@ -1199,6 +1215,11 @@ interval:
               case 6105: return (int) id(dd_sel_modulacja_sonda).active_index().value_or(0);  // v1.3.0
               case 6107: return id(dd_sw_punkt_rosy).state ? 1 : 0;                           // v1.3.0
               case 6150: return 1;
+              case 2295: case 2701: case 2702: case 2703: case 2704:
+              case 2705: case 2706: case 2708: case 6106: {
+                int v = id(dd_emu29_store)[emu29_store_idx(reg)];
+                return v == -32768 ? 0 : v;
+              }
               default: return 0;
             }
           };
@@ -1997,12 +2018,14 @@ interval:
             // 1.2.1: on a PHYSICAL zone 1 panel 2290 = DHW Comfort, 2291 = DHW Eco, 2292 = the manual DHW setpoint
             // (= 2095), confirmed by changing them on the panel; the panel owns them (the Dominus returns 0 there).
             // Take Comfort / Eco into the hub's DHW Comfort / Eco numbers so they show the panel's values.
-            if (addr == 0x29 && source[0] == 'R' && !emulator_29_enabled() && (reg == 2290 || reg == REG_DHW_SETPOINT_COPY_1)) {
-              if (value >= 300 && value <= 650) {
+            // 1.11.15: with the panel emulated, a change in the boiler menu comes as a boiler write to the hub (0x29 W).
+            if (addr == 0x29 && (reg == 2290 || reg == REG_DHW_SETPOINT_COPY_1) &&
+                ((source[0] == 'R' && !emulator_29_enabled()) || (source[0] == 'W' && emulator_29_enabled()))) {
+              if (value >= 200 && value <= 650) {
                 number::Number *n = reg == 2290 ? id(dd_dhw_comfort_set) : id(dd_dhw_eco_set);
                 if (std::isnan(n->state) || fabsf(n->state - value / 10.0f) > 0.05f) {
                   n->make_call().set_value(value / 10.0f).perform();
-                  ESP_LOGW("dd_value", "PANEL-R->HA DHW %s PDU %u = %.1f", reg == 2290 ? "Comfort" : "Eco", reg, value / 10.0f);
+                  ESP_LOGW("dd_value", "%s->HA DHW %s PDU %u = %.1f", source[0] == 'W' ? "BOILER-W" : "PANEL-R", reg == 2290 ? "Comfort" : "Eco", reg, value / 10.0f);
                 }
               }
               return;
@@ -2111,6 +2134,15 @@ interval:
               // v77: 3010 = copy of Zone 1 humidity; we update the main sensor only.
               if (value > 0 && value <= 100) id(dd_sensor_zone1_humidity).publish_state(value);
               ESP_LOGI("dd_value", "%s Wilgotność Strefy 1 PDU 3010 = %d%%", source, value);
+              return;
+            }
+            if (addr == 0x29 && source[0] == 'W' && emu29_store_idx(reg) >= 0) {
+              // 1.11.15: kept for the boiler while the panel is emulated (dd_emu29_store)
+              int i = emu29_store_idx(reg);
+              if (id(dd_emu29_store)[i] != value) {
+                id(dd_emu29_store)[i] = (int16_t) value;
+                ESP_LOGW("dd_value", "0x29 W PDU %u = %d stored for the boiler (emulated panel answers it back)", reg, value);
+              }
               return;
             }
             if (addr == 0x29 && reg == 2300) {

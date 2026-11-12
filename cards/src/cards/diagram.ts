@@ -282,8 +282,9 @@ class ImmergasDiagramCard extends HubCard {
           stroke=${c(ch ? "peach" : "overlay2")} stroke-width="2.5" stroke-linecap="round" style=${ch ? `filter:drop-shadow(0 0 4px ${ca("peach", 0.7)})` : "opacity:.5"}/>
         ${this.label(856, 116, this.f(z1, 1, 1) + "°", "", 22)}
         ${this.label(856, 134, this.t("zadana ", "set ") + this.f(zs, 1, 1) + "°", "", 10, "middle", 600)}</g>`);
-    // CH return to the return bus
-    g.push(this.pipe(`M ${hasBuffer ? bufX + 29 : 856} ${hasBuffer ? 208 : 214} L ${hasBuffer ? bufX + 29 : 856} 246 L 912 246 L 912 492 L 424 492`, COLD, ch, speed));
+    // CH return down to the DHW junction (x 700); the shared section 700 -> 424 carries CH and DHW return
+    g.push(this.pipe(`M ${hasBuffer ? bufX + 29 : 856} ${hasBuffer ? 208 : 214} L ${hasBuffer ? bufX + 29 : 856} 246 L 912 246 L 912 492 L 700 492`, COLD, ch, speed));
+    g.push(this.pipe("M 700 492 L 424 492", COLD, flowing, speed));
 
     // DHW: valve -> cylinder coil -> return bus
     const cylX = 720;

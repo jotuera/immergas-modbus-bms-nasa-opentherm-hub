@@ -2496,5 +2496,7 @@
   "Zone 1 · R04 / R05 (copy from the boiler) · U03 (D+/D-)": "Zone 1 · R04 / R05 (copie de la chaudière) · U03 (D+/D-)",
   "Zone 1 · R13 / R12 (copy from the boiler)": "Zone 1 · R13 / R12 (copie de la chaudière)",
   "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).": "Sans T-/T+ il n'y a pas de débit D14 : la puissance thermique, le COP et le coût de la chaleur restent vides. Saisissez le débit de votre installation – le hub l'utilise à la place de D14 (approximation, la pompe module entre A03 et A04).",
-  "Assumed flow (instead of D14)": "Débit supposé (à la place de D14)"
+  "Assumed flow (instead of D14)": "Débit supposé (à la place de D14)",
+  "During DHW (D09) the hub takes the DHW flow – the cylinder circuit usually has a different resistance. Empty = the value above for both.": "Pendant l'ECS (D09) le hub prend le débit ECS – le circuit du ballon a souvent une autre résistance. Vide = la valeur ci-dessus pour les deux.",
+  "Assumed flow DHW (instead of D14)": "Débit supposé ECS (à la place de D14)"
 }

@@ -103,8 +103,9 @@ direction pin) substitutions and leave out `hw_atoms3_portabc.yaml`.
    *BMS connection*, add `packages/hub_boiler_menu.yaml` and copy R04 / R05 / R13 / R12, T02 / T05 / T07, A03 / A04 and P15 once from the boiler
    menu in the *Boiler parameters (offline)* card; add `variant: pro` under `strategy:` of the dashboard (the system model
    D61 comes over T-/T+). There is no flow rate D14 either: enter your installation's flow in *Assumed flow rate
-   (instead of D14)* and the hub computes heat output, COP and heat cost from it (an approximation – the pump
-   modulates between A03 and A04). Details in [cards/README.md](../cards/README.md).
+   (instead of D14)* – and, if the DHW path differs, in *Assumed flow rate DHW* – and the hub computes heat output,
+   COP and heat cost from it (an approximation – the pump modulates between A03 and A04). Without T-/T+ the hub
+   recognises DHW by D09 (DHW request) from D+/D-. Details in [cards/README.md](../cards/README.md).
 5. Flash, add the device in Home Assistant, install the cards with HACS ([cards/README.md](../cards/README.md)) and create the
    dashboard with the strategy `custom:immergas-hub` (see the [overview](../README.md#dashboard)).
 
@@ -125,8 +126,9 @@ Go step by step and check the **Connectivity** card after each one:
    (*Emulated*) and the boiler starts taking setpoints from Home Assistant. A device that already answers on that
    address blocks the emulation, so the hub never talks over a real panel.
    With the zone 1 panel emulated the hub **is** the panel: the boiler takes DHW Comfort / Eco and the DHW day → calendar
-   from the hub, so set them in the cards. The MAGIS HERCULES PRO polls a zone panel only after *Zone 1 panel* is
-   enabled in its *Plant definition* menu.
+   from the hub, so set them in the cards; a change in the boiler menu comes back to the hub. Settings the panel only
+   keeps for the boiler (on the HERCULES PRO e.g. the two night windows) the hub stores and keeps across restarts.
+   The MAGIS HERCULES PRO polls a zone panel only after *Zone 1 panel* is enabled in its *Plant definition* menu.
 3. **F1/F2 writes.** Only when the readings look right, switch on *Active ODU control* to use the outing mode and the
    compressor limit (FR). It goes off again after a restart; set `f1f2_write_arm_restore: ALWAYS_ON` to keep it on.
 4. **Boiler menu values.** Set once the values that no bus carries (night window U12 / U13, anti-legionella

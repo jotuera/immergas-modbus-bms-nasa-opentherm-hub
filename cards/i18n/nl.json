@@ -2496,5 +2496,7 @@
   "Zone 1 · R04 / R05 (copy from the boiler) · U03 (D+/D-)": "Zone 1 · R04 / R05 (kopie van de ketel) · U03 (D+/D-)",
   "Zone 1 · R13 / R12 (copy from the boiler)": "Zone 1 · R13 / R12 (kopie van de ketel)",
   "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).": "Zonder T-/T+ is er geen debiet D14, dus thermisch vermogen, COP en warmtekosten blijven leeg. Voer het debiet van uw installatie in – de hub gebruikt het in plaats van D14 (benadering, de pomp moduleert tussen A03 en A04).",
-  "Assumed flow (instead of D14)": "Aangenomen debiet (in plaats van D14)"
+  "Assumed flow (instead of D14)": "Aangenomen debiet (in plaats van D14)",
+  "During DHW (D09) the hub takes the DHW flow – the cylinder circuit usually has a different resistance. Empty = the value above for both.": "Tijdens SWW (D09) gebruikt de hub het SWW-debiet – het boilercircuit heeft meestal een andere weerstand. Leeg = de waarde hierboven voor beide.",
+  "Assumed flow DHW (instead of D14)": "Aangenomen debiet SWW (in plaats van D14)"
 }
