@@ -9,7 +9,7 @@ class ImmergasHubStrategy {
     const l = String(hass?.locale?.language ?? hass?.language ?? "en").slice(0, 2), lang = LANGS.includes(l) ? l : "en";
     const t = (a: string, b: string) => translate(lang, a, b);
     // variant: combo / pro for every card (without T-/T+ the system model D61 is missing and the cards assume a Combo)
-    const card = (type: string, extra: Record<string, unknown> = {}) => ({ type: "custom:" + type, ...themeOpt(config), ...(config.variant ? { variant: config.variant } : {}), ...extra });
+    const card = (type: string, extra: Record<string, unknown> = {}) => ({ type: "custom:" + type, ...themeOpt(config), ...(config.variant ? { variant: config.variant } : {}), ...(config.bms !== undefined ? { bms: config.bms } : {}), ...extra });
     // the Automations card only when the HA automation switches exist (or an own list is given in `automations.items`)
     const autos = !!config.automations?.items || Object.keys(hass?.states ?? {}).some((e) => e.startsWith("input_boolean.auto_pompa_"));
     return {

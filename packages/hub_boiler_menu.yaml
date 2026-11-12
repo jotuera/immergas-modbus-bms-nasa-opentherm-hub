@@ -1,0 +1,186 @@
+# IMMERGAS Modbus BMS NASA OpenTherm HUB - package "hub_boiler_menu"
+# For a MAGIS without the T-/T+ BMS bus (e.g. MAGIS HERCULES PRO, whose board has only D+/D-): the boiler menu values the
+# cards need but that only T-/T+ carries - the heating and cooling curve points R04 / R05 / R13 / R12, T02 / T05 / T07 and the
+# circulation pump A03 / A04, and whether P15 anti-legionella is on. Copy them once from the boiler menu (card "Boiler parameters (offline)"); they do NOT change
+# anything in the boiler. Without T-/T+ (or with the BMS connection switched off) the cards use these copies instead of the
+# T-/T+ values: the Curve card draws the curve, the Calibration card judges it against the readings from D+/D- and F1/F2.
+# A copy starts empty (unknown) and is remembered after a restart.
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+globals:
+  - id: hub_m_r04_v
+    type: float
+    restore_value: true
+    initial_value: 'NAN'
+  - id: hub_m_r05_v
+    type: float
+    restore_value: true
+    initial_value: 'NAN'
+  - id: hub_m_r13_v
+    type: float
+    restore_value: true
+    initial_value: 'NAN'
+  - id: hub_m_r12_v
+    type: float
+    restore_value: true
+    initial_value: 'NAN'
+  - id: hub_m_t02_v
+    type: float
+    restore_value: true
+    initial_value: 'NAN'
+  - id: hub_m_t05_v
+    type: float
+    restore_value: true
+    initial_value: 'NAN'
+  - id: hub_m_t07_v
+    type: float
+    restore_value: true
+    initial_value: 'NAN'
+  - id: hub_m_a03_v
+    type: float
+    restore_value: true
+    initial_value: 'NAN'
+  - id: hub_m_a04_v
+    type: float
+    restore_value: true
+    initial_value: 'NAN'
+
+# lambda + global: an empty copy is NAN = "unknown" in Home Assistant (a template number with initial_value
+# would start at min_value and look as if it had been copied)
+number:
+  - platform: template
+    id: hub_m_r04
+    name: "${n_hub_m_r04}"
+    icon: mdi:thermometer-chevron-up
+    entity_category: config
+    unit_of_measurement: "°C"
+    min_value: 25
+    max_value: 60
+    step: 1
+    mode: box
+    update_interval: 60s
+    lambda: return id(hub_m_r04_v);
+    set_action:
+      - lambda: id(hub_m_r04_v) = x; id(hub_m_r04).publish_state(x);
+  - platform: template
+    id: hub_m_r05
+    name: "${n_hub_m_r05}"
+    icon: mdi:thermometer-chevron-down
+    entity_category: config
+    unit_of_measurement: "°C"
+    min_value: 20
+    max_value: 45
+    step: 1
+    mode: box
+    update_interval: 60s
+    lambda: return id(hub_m_r05_v);
+    set_action:
+      - lambda: id(hub_m_r05_v) = x; id(hub_m_r05).publish_state(x);
+  - platform: template
+    id: hub_m_r13
+    name: "${n_hub_m_r13}"
+    icon: mdi:snowflake-thermometer
+    entity_category: config
+    unit_of_measurement: "°C"
+    min_value: 7
+    max_value: 25
+    step: 1
+    mode: box
+    update_interval: 60s
+    lambda: return id(hub_m_r13_v);
+    set_action:
+      - lambda: id(hub_m_r13_v) = x; id(hub_m_r13).publish_state(x);
+  - platform: template
+    id: hub_m_r12
+    name: "${n_hub_m_r12}"
+    icon: mdi:snowflake-thermometer
+    entity_category: config
+    unit_of_measurement: "°C"
+    min_value: 5
+    max_value: 20
+    step: 1
+    mode: box
+    update_interval: 60s
+    lambda: return id(hub_m_r12_v);
+    set_action:
+      - lambda: id(hub_m_r12_v) = x; id(hub_m_r12).publish_state(x);
+  - platform: template
+    id: hub_m_t02
+    name: "${n_hub_m_t02}"
+    icon: mdi:water-thermometer
+    entity_category: config
+    unit_of_measurement: "°C"
+    min_value: 0
+    max_value: 20
+    step: 1
+    mode: box
+    update_interval: 60s
+    lambda: return id(hub_m_t02_v);
+    set_action:
+      - lambda: id(hub_m_t02_v) = x; id(hub_m_t02).publish_state(x);
+  - platform: template
+    id: hub_m_t05
+    name: "${n_hub_m_t05}"
+    icon: mdi:timer-outline
+    entity_category: config
+    unit_of_measurement: "min"
+    min_value: 1
+    max_value: 15
+    step: 1
+    mode: box
+    update_interval: 60s
+    lambda: return id(hub_m_t05_v);
+    set_action:
+      - lambda: id(hub_m_t05_v) = x; id(hub_m_t05).publish_state(x);
+  - platform: template
+    id: hub_m_t07
+    name: "${n_hub_m_t07}"
+    icon: mdi:timer-sand
+    entity_category: config
+    unit_of_measurement: "s"
+    min_value: 0
+    max_value: 240
+    step: 10
+    mode: box
+    update_interval: 60s
+    lambda: return id(hub_m_t07_v);
+    set_action:
+      - lambda: id(hub_m_t07_v) = x; id(hub_m_t07).publish_state(x);
+  - platform: template
+    id: hub_m_a03
+    name: "${n_hub_m_a03}"
+    icon: mdi:pump
+    entity_category: config
+    unit_of_measurement: "%"
+    min_value: 30
+    max_value: 100
+    step: 1
+    mode: box
+    update_interval: 60s
+    lambda: return id(hub_m_a03_v);
+    set_action:
+      - lambda: id(hub_m_a03_v) = x; id(hub_m_a03).publish_state(x);
+  - platform: template
+    id: hub_m_a04
+    name: "${n_hub_m_a04}"
+    icon: mdi:pump
+    entity_category: config
+    unit_of_measurement: "%"
+    min_value: 50
+    max_value: 100
+    step: 1
+    mode: box
+    update_interval: 60s
+    lambda: return id(hub_m_a04_v);
+    set_action:
+      - lambda: id(hub_m_a04_v) = x; id(hub_m_a04).publish_state(x);
+
+# P15 anti-legionella: like U11 (hub_boiler_params) a reminder that it is switched on in the boiler menu
+switch:
+  - platform: template
+    id: hub_m_p15
+    name: "${n_hub_m_p15}"
+    icon: mdi:bacteria-outline
+    entity_category: config
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF

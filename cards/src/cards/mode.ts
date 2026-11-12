@@ -73,8 +73,8 @@ class ImmergasModeCard extends HubCard {
     const st = bad ? this.t("brak odczytu", "no reading") : conf ? this.t("dotknij ponownie, aby potwierdzić", "tap again to confirm")
       : unset ? this.t("nie ustawione – wpisz z pieca dzień, godzinę i czas", "not set – enter the day, time and duration from the boiler")
       : run ? this.t("dezynfekcja trwa · ", "disinfection running · ") + this.ago("dhw_active_set")
-      : on ? (this.dominus ? this.t("ustawiona na piecu", "set on the boiler") : this.t("włączona", "on")) + (nx > 0 ? this.t(" · następna ", " · next ") + when(nx) : "")
-      : this.dominus ? this.t("nieustawiona na piecu", "not set on the boiler") : this.t("wyłączona", "off");
+      : on ? (this.dominus || this.isCopy("p15") ? this.t("ustawiona na piecu", "set on the boiler") : this.t("włączona", "on")) + (nx > 0 ? this.t(" · następna ", " · next ") + when(nx) : "")
+      : this.dominus || this.isCopy("p15") ? this.t("nieustawiona na piecu", "not set on the boiler") : this.t("wyłączona", "off");
     const sgDay = String(this.attr("p17", "suggested") ?? ""), sgT = String(this.attr("p16", "suggested") ?? "").slice(0, 5);
     const sgM = /^\d\d:\d\d/.test(sgT) ? +sgT.slice(0, 2) * 60 + +sgT.slice(3, 5) : null, sgH = parseFloat(String(this.attr("p13", "suggested") ?? ""));
     const sgD = ["daily", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].indexOf(sgDay);

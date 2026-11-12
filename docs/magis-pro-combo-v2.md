@@ -97,6 +97,10 @@ direction pin) substitutions and leave out `hw_atoms3_portabc.yaml`.
    (see [First start](#first-start)).
 4. Magis Pro (no gas boiler): keep all packages. The cards read the system model (D61) and switch to the Pro view —
    no gas costs, no burner row, no boiler integration in Calibration.
+   **Without T-/T+** (e.g. MAGIS HERCULES PRO, whose board has only D+/D-): keep all packages, switch off
+   *BMS connection*, add `packages/hub_boiler_menu.yaml` and copy R04 / R05 / R13 / R12, T02 / T05 / T07, A03 / A04 and P15 once from the boiler
+   menu in the *Boiler parameters (offline)* card; add `variant: pro` under `strategy:` of the dashboard (the system model
+   D61 comes over T-/T+). Details in [cards/README.md](../cards/README.md).
 5. Flash, add the device in Home Assistant, install the cards with HACS ([cards/README.md](../cards/README.md)) and create the
    dashboard with the strategy `custom:immergas-hub` (see the [overview](../README.md#dashboard)).
 

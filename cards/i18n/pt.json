@@ -2478,5 +2478,21 @@
   "too often – lengthen t4 (CH ignitions timer) or lower the curve": "demasiado frequente – aumente t4 (temporizador de ignições do aquecimento) ou baixe a curva",
   "module OTC setpoint": "setpoint OTC do módulo",
   "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C": "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (lig. −2 °C, desl. +1 °C) – escolha 3 °C",
-  "pump running": "bomba a funcionar"
+  "pump running": "bomba a funcionar",
+  "Now from D+/D-: flow target from the curve (D04)": "Agora por D+/D-: ida calculada pela curva (D04)",
+  "Curve points R04 / R05 – no T-/T+": "Pontos da curva R04 / R05 – sem T-/T+",
+  "Curve points R13 / R12 – no T-/T+": "Pontos da curva R13 / R12 – sem T-/T+",
+  "These settings come only over the BMS bus T-/T+, which this unit does not have or which is switched off. Set the curve on the boiler panel; the Outing tab works over F1/F2.": "Estas definições chegam apenas pelo barramento BMS T-/T+, que esta unidade não tem ou que está desligado. Defina a curva no painel da caldeira; o separador Ausência funciona por F1/F2.",
+  "Without T-/T+: R04 / R05 / R13 / R12, T02 / T05 / T07 and A03 / A04 are copies from the boiler menu (Boiler parameters offline card) and the readings come from D+/D- and F1/F2. “Set” changes only the copy – enter the same value in the boiler menu.": "Sem T-/T+: R04 / R05 / R13 / R12, T02 / T05 / T07 e A03 / A04 são cópias do menu da caldeira (cartão Parâmetros da caldeira offline) e as leituras vêm de D+/D- e F1/F2. «Definir» muda só a cópia – introduza o mesmo valor no menu da caldeira.",
+  "Copy R04 / R05 / R13 / R12 from the boiler menu in the Boiler parameters (offline) card – the curve then shows here.": "Copie R04 / R05 / R13 / R12 do menu da caldeira no cartão Parâmetros da caldeira (offline) – a curva aparece então aqui.",
+  "Boiler menu – copies (no T-/T+)": "Menu da caldeira – cópias (sem T-/T+)",
+  "Without the T-/T+ bus the hub cannot read these settings – copy them from the boiler menu. The Curve and Calibration cards use them with the readings from D+/D- and F1/F2; a change here does not reach the boiler.": "Sem o barramento T-/T+ o hub não consegue ler estas definições – copie-as do menu da caldeira. Os cartões Curvas e Calibração usam-nas com as leituras de D+/D- e F1/F2; uma alteração aqui não chega à caldeira.",
+  "T02 · DHW hysteresis": "T02 · histerese AQS",
+  "T05 · CH ignition timer": "T05 · temporizador de acendimentos aquecimento",
+  "T07 · room thermostat request delay": "T07 · atraso do pedido do termostato",
+  "A03 · min. pump speed": "A03 · velocidade mín. da bomba",
+  "A04 · max. pump speed": "A04 · velocidade máx. da bomba",
+  "R01 unknown (no T-/T+) – no effect with an outdoor probe": "R01 desconhecido (sem T-/T+) – sem efeito com sonda exterior",
+  "Zone 1 · R04 / R05 (copy from the boiler) · U03 (D+/D-)": "Zona 1 · R04 / R05 (cópia da caldeira) · U03 (D+/D-)",
+  "Zone 1 · R13 / R12 (copy from the boiler)": "Zona 1 · R13 / R12 (cópia da caldeira)"
 }

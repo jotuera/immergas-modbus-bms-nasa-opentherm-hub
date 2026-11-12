@@ -2478,5 +2478,21 @@
   "too often – lengthen t4 (CH ignitions timer) or lower the curve": "túl gyakori – növelje a t4-öt (fűtési újragyújtás tiltás) vagy csökkentse a görbét",
   "module OTC setpoint": "modul OTC alapjel",
   "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C": "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (szolár), 2 → 10 °C (szolár); t2 = 1 (be −2 °C, ki +1 °C) – válassza a 3 °C-ot",
-  "pump running": "szivattyú üzemel"
+  "pump running": "szivattyú üzemel",
+  "Now from D+/D-: flow target from the curve (D04)": "Most D+/D- felől: a görbéből számolt előremenő (D04)",
+  "Curve points R04 / R05 – no T-/T+": "R04 / R05 görbepontok – nincs T-/T+",
+  "Curve points R13 / R12 – no T-/T+": "R13 / R12 görbepontok – nincs T-/T+",
+  "These settings come only over the BMS bus T-/T+, which this unit does not have or which is switched off. Set the curve on the boiler panel; the Outing tab works over F1/F2.": "Ezek a beállítások csak a T-/T+ BMS buszon jönnek, amely ennél az egységnél nincs, vagy ki van kapcsolva. A görbét a kazán paneljén állítsa be; a Távollét fül F1/F2-n keresztül működik.",
+  "Without T-/T+: R04 / R05 / R13 / R12, T02 / T05 / T07 and A03 / A04 are copies from the boiler menu (Boiler parameters offline card) and the readings come from D+/D- and F1/F2. “Set” changes only the copy – enter the same value in the boiler menu.": "T-/T+ nélkül: az R04 / R05 / R13 / R12, T02 / T05 / T07 és A03 / A04 a kazán menüjének másolatai (Kazán paraméterei offline kártya), a mért értékek a D+/D- és F1/F2 buszról jönnek. A „Beállít” csak a másolatot módosítja – ugyanezt az értéket írja be a kazán menüjében is.",
+  "Copy R04 / R05 / R13 / R12 from the boiler menu in the Boiler parameters (offline) card – the curve then shows here.": "Írja át az R04 / R05 / R13 / R12 értékeket a kazán menüjéből a Kazán paraméterei (offline) kártyán – ekkor itt megjelenik a görbe.",
+  "Boiler menu – copies (no T-/T+)": "Kazán menü – másolatok (nincs T-/T+)",
+  "Without the T-/T+ bus the hub cannot read these settings – copy them from the boiler menu. The Curve and Calibration cards use them with the readings from D+/D- and F1/F2; a change here does not reach the boiler.": "T-/T+ busz nélkül a hub nem tudja kiolvasni ezeket a beállításokat – írja át őket a kazán menüjéből. A Görbék és a Kalibrálás kártya ezekkel számol a D+/D- és F1/F2 mért értékeivel együtt; az itteni módosítás nem jut el a kazánhoz.",
+  "T02 · DHW hysteresis": "T02 · HMV hiszterézis",
+  "T05 · CH ignition timer": "T05 · fűtés begyújtási időzítő",
+  "T07 · room thermostat request delay": "T07 · termosztát igény késleltetése",
+  "A03 · min. pump speed": "A03 · szivattyú min. fordulatszám",
+  "A04 · max. pump speed": "A04 · szivattyú max. fordulatszám",
+  "R01 unknown (no T-/T+) – no effect with an outdoor probe": "R01 ismeretlen (nincs T-/T+) – külső szondával nincs hatása",
+  "Zone 1 · R04 / R05 (copy from the boiler) · U03 (D+/D-)": "1. zóna · R04 / R05 (másolat a kazánból) · U03 (D+/D-)",
+  "Zone 1 · R13 / R12 (copy from the boiler)": "1. zóna · R13 / R12 (másolat a kazánból)"
 }

@@ -49,6 +49,13 @@ strategy:
 **Magis Pro without T-/T+** (e.g. MAGIS HERCULES PRO, whose board has only D+/D-): the cards tell a Combo from a Pro by the
 system model D61, which comes over T-/T+. Without it they assume a Combo and draw the gas boiler – add `variant: pro`
 under `strategy:` (or on single cards). Without the flow rate D14 the circulator on the diagram runs while the compressor runs.
+Without T-/T+ the dashboard adapts by itself: when the hub has no T-/T+ entities or its *BMS connection* switch is off,
+the cards hide what comes only over T-/T+ (boiler integration, DHW boost, venting, the BMS and system controller
+tiles, the T-/T+ row of the bus map). With the package `hub_boiler_menu` you copy R04 / R05 / R13 / R12, T02 / T05 / T07,
+A03 / A04 and P15 once from the boiler menu (Boiler parameters offline card); the Curve card then draws the curve, the
+Calibration card judges it against the readings from D+/D- and F1/F2, and anti-legionella P15 comes back as a
+"set on the boiler" switch like U11. Without the copies the Curve card explains it and shows the live D04.
+`bms: false` / `bms: true` under `strategy:` forces it either way.
 
 **Without a hub – Immergas Dominus:** with only the [Immergas Dominus](https://github.com/jotuera/immergas-dominus)
 integration (local TCP to the Dominus Wi-Fi module) use `type: custom:immergas-dominus` – a reduced dashboard with Now,

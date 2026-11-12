@@ -49,6 +49,13 @@ strategy:
 **Magis Pro bez T-/T+** (np. MAGIS HERCULES PRO, który ma na płycie tylko D+/D-): karty odróżniają Combo od Pro po
 modelu systemu D61, który przychodzi z T-/T+. Bez niego zakładają Combo i rysują kocioł gazowy – dopisz `variant: pro`
 pod `strategy:` (albo na pojedynczych kartach). Bez przepływu D14 pompa obiegowa na schemacie pracuje razem ze sprężarką.
+Bez T-/T+ dashboard dopasowuje się sam: gdy hub nie ma encji T-/T+ albo jego przełącznik *Połączenie BMS* jest wyłączony,
+karty chowają to, co przychodzi tylko z T-/T+ (integracja kotła, wymuszenie CWU, odpowietrzanie, kafle BMS i centralki
+systemu, wiersz T-/T+ mapy magistral). Z pakietem `hub_boiler_menu` przepisujesz raz z menu pieca R04 / R05 / R13 / R12,
+T02 / T05 / T07, A03 / A04 i P15 (karta Parametry pieca offline); karta Krzywe rysuje wtedy krzywą, Kalibracja ocenia ją
+wobec odczytów z D+/D- i F1/F2, a anty-legionella P15 wraca jako przełącznik „ustawiona na piecu”, tak jak U11. Bez kopii
+karta Krzywe to wyjaśnia i pokazuje bieżące D04.
+`bms: false` / `bms: true` pod `strategy:` wymusza jedno albo drugie.
 
 **Bez huba – Immergas Dominus:** z samą integracją [Immergas Dominus](https://github.com/jotuera/immergas-dominus)
 (lokalne TCP do modułu Wi-Fi Dominus) użyj `type: custom:immergas-dominus` – okrojony dashboard z kartami Teraz,

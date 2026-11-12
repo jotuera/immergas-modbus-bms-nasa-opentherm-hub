@@ -191,7 +191,8 @@ class ImmergasDiagramCard extends HubCard {
     const st = this.s("state") ?? "";
     const dhw = this.s("d22") === "1" || isDhw(st) || this.on("tt_dhw");
     const boiler = this.config.boiler !== false && (this.on("boiler_running") || stBoiler(st));
-    const hasBoiler = this.config.boiler !== false && (!!this.eid("boiler_running") || !!this.eid("d01"));
+    // no gas boiler on a Magis Pro (system model D61 or option variant: pro)
+    const hasBoiler = this.config.boiler !== false && this.hasGas && (!!this.eid("boiler_running") || !!this.eid("d01"));
     const hasBuffer = this.config.buffer !== false;
     const ch = flowing && !dhw, dw = flowing && dhw;
     const speed = flowing && !noFlow ? Math.max(0.5, Math.min(2.5, 1500 / flow)) : 1;

@@ -2478,5 +2478,21 @@
   "too often – lengthen t4 (CH ignitions timer) or lower the curve": "příliš často – prodlužte t4 (časovač zapalování ÚT) nebo snižte křivku",
   "module OTC setpoint": "nastavení OTC modulu",
   "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C": "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (zap. −2 °C, vyp. +1 °C) – zvolte 3 °C",
-  "pump running": "čerpadlo běží"
+  "pump running": "čerpadlo běží",
+  "Now from D+/D-: flow target from the curve (D04)": "Nyní z D+/D-: výstupní teplota z křivky (D04)",
+  "Curve points R04 / R05 – no T-/T+": "Body křivky R04 / R05 – bez T-/T+",
+  "Curve points R13 / R12 – no T-/T+": "Body křivky R13 / R12 – bez T-/T+",
+  "These settings come only over the BMS bus T-/T+, which this unit does not have or which is switched off. Set the curve on the boiler panel; the Outing tab works over F1/F2.": "Tato nastavení přicházejí jen po sběrnici BMS T-/T+, kterou tato jednotka nemá nebo je vypnutá. Křivku nastavte na panelu kotle; záložka Nepřítomnost funguje přes F1/F2.",
+  "Without T-/T+: R04 / R05 / R13 / R12, T02 / T05 / T07 and A03 / A04 are copies from the boiler menu (Boiler parameters offline card) and the readings come from D+/D- and F1/F2. “Set” changes only the copy – enter the same value in the boiler menu.": "Bez T-/T+: R04 / R05 / R13 / R12, T02 / T05 / T07 a A03 / A04 jsou kopie z menu kotle (karta Parametry kotle offline) a odečty pocházejí z D+/D- a F1/F2. „Nastavit“ mění jen kopii – stejnou hodnotu zadejte v menu kotle.",
+  "Copy R04 / R05 / R13 / R12 from the boiler menu in the Boiler parameters (offline) card – the curve then shows here.": "Opište R04 / R05 / R13 / R12 z menu kotle v kartě Parametry kotle (offline) – křivka se pak zobrazí zde.",
+  "Boiler menu – copies (no T-/T+)": "Menu kotle – kopie (bez T-/T+)",
+  "Without the T-/T+ bus the hub cannot read these settings – copy them from the boiler menu. The Curve and Calibration cards use them with the readings from D+/D- and F1/F2; a change here does not reach the boiler.": "Bez sběrnice T-/T+ hub tato nastavení nepřečte – opište je z menu kotle. Karty Křivky a Kalibrace s nimi počítají spolu s odečty z D+/D- a F1/F2; změna zde se do kotle nedostane.",
+  "T02 · DHW hysteresis": "T02 · hystereze TUV",
+  "T05 · CH ignition timer": "T05 · časovač zapálení ÚT",
+  "T07 · room thermostat request delay": "T07 · zpoždění požadavku termostatu",
+  "A03 · min. pump speed": "A03 · min. otáčky čerpadla",
+  "A04 · max. pump speed": "A04 · max. otáčky čerpadla",
+  "R01 unknown (no T-/T+) – no effect with an outdoor probe": "R01 neznámé (bez T-/T+) – s venkovní sondou bez vlivu",
+  "Zone 1 · R04 / R05 (copy from the boiler) · U03 (D+/D-)": "Zóna 1 · R04 / R05 (kopie z kotle) · U03 (D+/D-)",
+  "Zone 1 · R13 / R12 (copy from the boiler)": "Zóna 1 · R13 / R12 (kopie z kotle)"
 }

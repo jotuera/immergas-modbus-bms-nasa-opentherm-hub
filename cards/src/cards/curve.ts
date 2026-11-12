@@ -101,9 +101,23 @@ class ImmergasCurveCard extends HubCard {
       <ha-icon icon=${icon} style="color:${c(col)}"></ha-icon>${lbl}</div>`;
   }
 
+  /** no T-/T+: the curve points are not readable - set on the boiler panel; the live D04 from D+/D- */
+  private noBmsCurve(heat: boolean) {
+    const d04 = this.n("d04"), out = this.n("outdoor");
+    const live = heat && d04 > 5 ? html`<div class="sd">${this.t("Teraz z D+/D-: zasilanie wyliczone z krzywej (D04)", "Now from D+/D-: flow target from the curve (D04)")}
+      <b>${this.f(d04, 1)} °C</b>${isNaN(out) ? nothing : html` · ${this.t("na zewnątrz", "outdoor")} <b>${this.f(out, 1)} °C</b>`}</div>` : nothing;
+    return html`<div class="setup"><div class="st">${heat ? this.t("Punkty krzywej R04 / R05 – brak T-/T+", "Curve points R04 / R05 – no T-/T+")
+        : this.t("Punkty krzywej R13 / R12 – brak T-/T+", "Curve points R13 / R12 – no T-/T+")}</div>
+      <div class="sd">${this.t("Te nastawy przychodzą tylko z magistrali BMS T-/T+, której ta jednostka nie ma albo jest wyłączona. Krzywą ustawia się na panelu kotła; zakładka Wyjazd działa przez F1/F2.",
+        "These settings come only over the BMS bus T-/T+, which this unit does not have or which is switched off. Set the curve on the boiler panel; the Outing tab works over F1/F2.")}
+        ${this.eid("r04") ? html`<br>${this.t("Przepisz R04 / R05 / R13 / R12 z menu pieca w karcie Parametry pieca (offline) – krzywa pojawi się tutaj.",
+          "Copy R04 / R05 / R13 / R12 from the boiler menu in the Boiler parameters (offline) card – the curve then shows here.")}` : nothing}}</div>${live}</div>`;
+  }
+
   // ---------------- tabs ----------------
   private heat() {
     this.ax = { X0: -20, X1: 30, Y0: 15, Y1: 60, xs: 5, ys: 10 };
+    if (this.noBms && !this.allSet("r04", "r05")) return this.noBmsCurve(true);
     if (this.dominus && !this.allSet("dom_r02", "dom_r03", "r04", "r05"))
       return this.domSetup([["dom_r02", "R02 · temp. zewn. przy maks. zasilaniu", "R02 · outdoor at max. flow"], ["dom_r03", "R03 · temp. zewn. przy min. zasilaniu", "R03 · outdoor at min. flow"],
         ["r04", "R04 · maks. zasilanie CO", "R04 · max. CH flow"], ["r05", "R05 · min. zasilanie CO", "R05 · min. CH flow"]], true);
@@ -149,6 +163,7 @@ class ImmergasCurveCard extends HubCard {
 
   private cool() {
     this.ax = { X0: 18, X1: 42, Y0: 5, Y1: 25, xs: 3, ys: 5 };
+    if (this.noBms && !this.allSet("r12", "r13")) return this.noBmsCurve(false);
     if (this.dominus && !this.allSet("dom_r10", "dom_r11", "r12", "r13"))
       return this.domSetup([["dom_r10", "R10 · temp. zewn. przy min. zasilaniu", "R10 · outdoor at min. flow"], ["dom_r11", "R11 · temp. zewn. przy maks. zasilaniu", "R11 · outdoor at max. flow"],
         ["r12", "R12 · min. zasilanie chłodzenia", "R12 · min. cooling flow"], ["r13", "R13 · maks. zasilanie chłodzenia", "R13 · max. cooling flow"]], false);
@@ -282,9 +297,9 @@ class ImmergasCurveCard extends HubCard {
         base === "heat" ? this.t("Krzywa · wyjazd · grzanie", "Curve · outing · heating") : this.t("Krzywa · wyjazd · chłodzenie", "Curve · outing · cooling"),
         this.t("nastawy wyjazdowe F1/F2 (FSV 5011–5019)", "F1/F2 outing setpoints (FSV 5011–5019)") + (act ? this.t(" · tryb wyjazdowy AKTYWNY", " · outing mode ACTIVE") : "")]
       : base === "heat" ? ["mdi:chart-bell-curve-cumulative", "peach", this.t("Krzywa grzewcza", "Heating curve"), this.dominus
-          ? this.t("Strefa 1 · R02–R05 (kopia z pieca) · U03", "Zone 1 · R02–R05 (copy from the boiler) · U03") : this.t("Strefa 1 · R04 / R05 (T-/T+) · U03 (D+/D-)", "Zone 1 · R04 / R05 (T-/T+) · U03 (D+/D-)")]
+          ? this.t("Strefa 1 · R02–R05 (kopia z pieca) · U03", "Zone 1 · R02–R05 (copy from the boiler) · U03") : this.noBms ? this.t("Strefa 1 · R04 / R05 (kopia z pieca) · U03 (D+/D-)", "Zone 1 · R04 / R05 (copy from the boiler) · U03 (D+/D-)") : this.t("Strefa 1 · R04 / R05 (T-/T+) · U03 (D+/D-)", "Zone 1 · R04 / R05 (T-/T+) · U03 (D+/D-)")]
       : ["mdi:snowflake-thermometer", "sky", this.t("Krzywa chłodzenia", "Cooling curve"), this.dominus
-          ? this.t("Strefa 1 · R10–R13 (kopia z pieca)", "Zone 1 · R10–R13 (copy from the boiler)") : this.t("Strefa 1 · R13 / R12 (T-/T+)", "Zone 1 · R13 / R12 (T-/T+)")];
+          ? this.t("Strefa 1 · R10–R13 (kopia z pieca)", "Zone 1 · R10–R13 (copy from the boiler)") : this.noBms ? this.t("Strefa 1 · R13 / R12 (kopia z pieca)", "Zone 1 · R13 / R12 (copy from the boiler)") : this.t("Strefa 1 · R13 / R12 (T-/T+)", "Zone 1 · R13 / R12 (T-/T+)")];
     return html`
       <div class="top">
         <div class="tl"><ha-icon icon=${head[0]} style="color:${c(head[1])}"></ha-icon><div><div class="ttl">${head[2]}</div><div class="tsub" style=${act && out ? `color:${c("teal")};opacity:.9` : ""}>${head[3]}</div></div></div>

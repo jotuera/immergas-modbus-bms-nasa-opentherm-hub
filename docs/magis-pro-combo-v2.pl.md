@@ -96,6 +96,10 @@ transceiverze z pinem kierunku) i pomiń `hw_atoms3_portabc.yaml`.
    F1/F2 (zobacz [Pierwsze uruchomienie](#pierwsze-uruchomienie)).
 4. Magis Pro (bez kotła gazowego): zostaw wszystkie pakiety. Karty czytają model systemu (D61) i przechodzą na widok
    Pro: bez kosztów gazu, bez wiersza palnika, bez integracji z kotłem w Kalibracji.
+   **Bez T-/T+** (np. MAGIS HERCULES PRO, który ma na płycie tylko D+/D-): zostaw wszystkie pakiety, wyłącz
+   *Połączenie BMS*, dodaj `packages/hub_boiler_menu.yaml` i przepisz raz z menu pieca R04 / R05 / R13 / R12, T02 / T05 / T07, A03 / A04 i P15 w karcie
+   *Parametry pieca (offline)*; dopisz `variant: pro` pod `strategy:` dashboardu (model systemu D61 przychodzi z T-/T+).
+   Szczegóły w [cards/README.pl.md](../cards/README.pl.md).
 5. Wgraj, dodaj urządzenie w Home Assistant, zainstaluj karty przez HACS ([cards/README.pl.md](../cards/README.pl.md)) i utwórz
    dashboard strategią `custom:immergas-hub` (zobacz [przegląd](../README.pl.md#dashboard)).
 

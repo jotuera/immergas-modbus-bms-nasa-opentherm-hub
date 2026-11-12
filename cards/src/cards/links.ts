@@ -21,7 +21,7 @@ class ImmergasLinksCard extends HubCard {
       detail: isNaN(crc) ? "" : this.t("błędy CRC: ", "CRC errors: ") + Math.round(crc) });
 
     const bmsOn = !this.eid("tt_bms") || this.on("tt_bms"), ttOk = !this.bad("d99_raw");
-    if (this.eid("tt_bms") || this.eid("d99_raw")) out.push({ k: this.eid("tt_bms") ? "tt_bms" : "d99_raw", icon: "mdi:lan-connect", name: ["BMS", "BMS"], bus: "T-/T+",
+    if (!this.noBms && (this.eid("tt_bms") || this.eid("d99_raw"))) out.push({ k: this.eid("tt_bms") ? "tt_bms" : "d99_raw", icon: "mdi:lan-connect", name: ["BMS", "BMS"], bus: "T-/T+",
       st: !bmsOn ? "off" : ttOk ? "ok" : "bad",
       detail: !bmsOn ? this.t("odpytywanie wyłączone", "polling off") : ttOk ? this.t("piec odpowiada (slave 11)", "the boiler answers (slave 11)")
         + (this.s("dd_fw") && !this.bad("dd_fw") ? this.t(" · oprogramowanie ", " · firmware ") + this.s("dd_fw") : "") : this.t("piec nie odpowiada", "the boiler does not answer") });
@@ -49,7 +49,7 @@ class ImmergasLinksCard extends HubCard {
 
     // system controller (e.g. a System Manager kit) = the BMS master on T-/T+; with the hub polling the bus, the hub
     // takes that role - a second master on the same bus would collide with it
-    if (this.eid("tt_bms") || this.eid("d99_raw")) out.push({ k: this.eid("tt_bms") ? "tt_bms" : "d99_raw", icon: "mdi:server-network", name: ["Centralka systemu", "System controller"],
+    if (!this.noBms && (this.eid("tt_bms") || this.eid("d99_raw"))) out.push({ k: this.eid("tt_bms") ? "tt_bms" : "d99_raw", icon: "mdi:server-network", name: ["Centralka systemu", "System controller"],
       bus: this.t("T-/T+ master", "T-/T+ master"), st: !bmsOn ? "off" : ttOk ? "emu" : "bad",
       detail: bmsOn ? this.t("hub pełni rolę centralki (master BMS)", "the hub acts as the controller (BMS master)")
         : this.t("hub nie odpytuje – miejsce dla centralki", "the hub does not poll – room for a controller") });

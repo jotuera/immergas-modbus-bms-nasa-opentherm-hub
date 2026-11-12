@@ -509,6 +509,18 @@ class ImmergasSettingsCard extends HubCard {
           ${this.numRow("hub_r03", "mdi:thermometer-high", this.t("R03 · temp. zewn. przy min. zasilaniu CO", "R03 · outdoor at min. CH flow"), 0)}
           ${this.numRow("hub_r10", "mdi:thermometer-high", this.t("R10 · temp. zewn. przy min. zasilaniu chłodzenia", "R10 · outdoor at min. cooling flow"), 0)}
           ${this.numRow("hub_r11", "mdi:thermometer-low", this.t("R11 · temp. zewn. przy maks. zasilaniu chłodzenia", "R11 · outdoor at max. cooling flow"), 0)}` : nothing}
+        ${this.noBms && this.eid("r04") ? html`<div class="grp">${this.t("Menu pieca – kopie (brak T-/T+)", "Boiler menu – copies (no T-/T+)")}</div>
+          <div class="note">${this.t("Bez magistrali T-/T+ hub nie odczyta tych nastaw – przepisz je z menu pieca. Krzywe i Kalibracja liczą na nich razem z odczytami z D+/D- i F1/F2; zmiana tutaj nie trafia do pieca.",
+            "Without the T-/T+ bus the hub cannot read these settings – copy them from the boiler menu. The Curve and Calibration cards use them with the readings from D+/D- and F1/F2; a change here does not reach the boiler.")}</div>
+          ${this.numRow("r04", "mdi:thermometer-chevron-up", this.t("R04 · maks. zasilanie CO", "R04 · max. CH flow"), 0, undefined, true)}
+          ${this.numRow("r05", "mdi:thermometer-chevron-down", this.t("R05 · min. zasilanie CO", "R05 · min. CH flow"), 0, undefined, true)}
+          ${this.numRow("r13", "mdi:snowflake-thermometer", this.t("R13 · maks. zasilanie chłodzenia", "R13 · max. cooling flow"), 0, undefined, true)}
+          ${this.numRow("r12", "mdi:snowflake-thermometer", this.t("R12 · min. zasilanie chłodzenia", "R12 · min. cooling flow"), 0, undefined, true)}
+          ${this.numRow("t02", "mdi:water-thermometer", this.t("T02 · histereza CWU", "T02 · DHW hysteresis"), 0, undefined, true)}
+          ${this.numRow("t05", "mdi:timer-outline", this.t("T05 · zegar uruchamiania CO", "T05 · CH ignition timer"), 0, undefined, true)}
+          ${this.numRow("t07", "mdi:timer-sand", this.t("T07 · opóźnienie żądania z termostatu", "T07 · room thermostat request delay"), 0, undefined, true)}
+          ${this.numRow("a03", "mdi:pump", this.t("A03 · min. prędkość pompy", "A03 · min. pump speed"), 0, undefined, true)}
+          ${this.numRow("a04", "mdi:pump", this.t("A04 · maks. prędkość pompy", "A04 · max. pump speed"), 0, undefined, true)}` : nothing}
         ${this.eid("hub_p07") ? html`<div class="grp">${this.t("Instalacja", "Installation")}</div>
           ${this.numRow("hub_p07", "mdi:thermometer-plus", this.t("P07 · korekta sondy zewnętrznej", "P07 · outdoor probe correction"), 0)}` : nothing}
       ` : nothing}

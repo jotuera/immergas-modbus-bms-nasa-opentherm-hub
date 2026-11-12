@@ -79,13 +79,13 @@ web_server:
     password: !secret immergas_hub_web_password
 
 external_components:
-  - source: github://jotuera/immergas-modbus-bms-nasa-opentherm-hub@v1.11.11
+  - source: github://jotuera/immergas-modbus-bms-nasa-opentherm-hub@v1.11.12
     components: [immergas_core, immergas_climate, f1f2_nasa]
 
 packages:
   hub:
     url: https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub
-    ref: v1.11.11
+    ref: v1.11.12
     refresh: 1d
     files:
       # languages: every packages/lang/<package>_xx.yaml = cs de en es fr hu it nl pl pt sk
@@ -138,6 +138,7 @@ packages:
       # bus map report (undescribed registers of D+/D-, T-/T+ and F1/F2 as a pre-filled GitHub issue)
       - packages/hub_busmap.yaml
       - packages/hub_boiler_params.yaml
+      # - packages/hub_boiler_menu.yaml  # MAGIS without T-/T+ (e.g. HERCULES PRO): copies of R04/R05/R13/R12, T02/T05/T07, A03/A04, P15
       - packages/hw_atoms3_portabc.yaml
 
 switch:

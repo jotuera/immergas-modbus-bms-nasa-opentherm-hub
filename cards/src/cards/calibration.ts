@@ -863,7 +863,8 @@ class ImmergasCalibrationCard extends HubCard {
         rec: r01o[1] ?? this.s("r01") ?? "", reason: ["krzywa R04 / R05 działa tylko z sondą", "the R04 / R05 curve works only with a probe"] },
       { k: "set_flow", code: "", name: ["Stała temperatura zasilania strefy 1", "Zone 1 fixed flow temperature"], unit: "°C", d: 0, group: "ch",
         model: isNaN(r05) ? 30 : r05 + 5, why: ["używana bez krzywej (R01 = OFF); przy sondzie zasilanie liczy krzywa", "used without the curve (R01 = OFF); with a probe the curve sets the flow"],
-        rec: this.n("set_flow"), reason: this.s("r01") === r01o[0] ? ["R01 = OFF – ta wartość steruje zasilaniem", "R01 = OFF – this value drives the flow"] : ["z sondą bez wpływu – bez zmian", "no effect with a probe – keep"] },
+        rec: this.n("set_flow"), reason: !this.eid("r01") ? ["R01 nieznane (bez T-/T+) – przy sondzie zewnętrznej bez wpływu", "R01 unknown (no T-/T+) – no effect with an outdoor probe"]
+          : this.s("r01") === r01o[0] ? ["R01 = OFF – ta wartość steruje zasilaniem", "R01 = OFF – this value drives the flow"] : ["z sondą bez wpływu – bez zmian", "no effect with a probe – keep"] },
       { k: "comfort_heat", code: "", name: ["Komfort – grzanie", "Comfort – heating"], unit: "°C", d: 1, group: "ch",
         model: 21, why: ["temperatura komfortu w programie AUTO", "comfort temperature in the AUTO program"], rec: isNaN(ch) ? NaN : ch < 20 || ch > 22 ? 21 : ch,
         reason: [ch < 20 || ch > 22 ? "poza zakresem 20–22 °C" : "w zakresie 20–22 °C", ch < 20 || ch > 22 ? "outside 20–22 °C" : "within 20–22 °C"] },
@@ -1622,6 +1623,7 @@ class ImmergasCalibrationCard extends HubCard {
 
   protected body() {
     const mode = this.calMode, dom = mode === "dom", hub = mode === "hub";
+    const copies = hub && this.noBms;
     if (hub && (!this.hist || Date.now() - this.hist.at > 10 * 60e3)) this.load();
     if (hub && !this.effLoading && (!this.eff || Date.now() - this.eff.at > 30 * 60e3)) this.loadEff();
     if (dom && !this.effLoading && (!this.effDom || Date.now() - this.effDom.at > 30 * 60e3)) this.loadEffDom();
@@ -1645,6 +1647,8 @@ class ImmergasCalibrationCard extends HubCard {
     return html`
       ${this.head("mdi:tune-vertical-variant", this.t("Kalibracja", "Calibration"),
         nDiff ? this.t(`do zmiany: ${nDiff}`, `to change: ${nDiff}`) : this.t("wszystko zgodnie z rekomendacją", "all as recommended"))}
+      ${copies ? html`<div class="note" style="color:${c("yellow")}">${this.t("Bez T-/T+: R04 / R05 / R13 / R12, T02 / T05 / T07 i A03 / A04 to kopie z menu pieca (karta Parametry pieca offline), a odczyty pochodzą z D+/D- i F1/F2. „Ustaw” zmienia tylko kopię – tę samą wartość wpisz w menu pieca.",
+        "Without T-/T+: R04 / R05 / R13 / R12, T02 / T05 / T07 and A03 / A04 are copies from the boiler menu (Boiler parameters offline card) and the readings come from D+/D- and F1/F2. “Set” changes only the copy – enter the same value in the boiler menu.")}</div>` : nothing}
       <div class="tbl">
         <div class="th">${this.t("Parametr", "Parameter")}</div><div class="th c">${this.t("Model", "Model")}</div>
         <div class="th c">${this.t("Obecnie", "Now")}</div><div class="th c">${this.t("Rekomendacja", "Recommendation")}</div>

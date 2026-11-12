@@ -71,13 +71,16 @@ class ImmergasBusMapCard extends HubCard {
     }, 15000);
   }
 
+  /** a bus row: its map entity exists; T-/T+ not without the bus (no BMS / switched off) */
+  private shown([bus, k]: [Bus, Key, Key, string, [string, string]]) { return !!this.eid(k) && !(bus === "TT" && this.noBms); }
+
   protected body() {
     const model = this.s("hub_model") ?? "";
-    if (!BUSES.some(([, k]) => this.eid(k)))
+    if (!BUSES.some((b) => this.shown(b)))
       return html`${this.head("mdi:map-search-outline", this.t("Mapa magistral", "Bus map"))}
         <div class="hint">${this.t("Wgraj pakiet hub_busmap.yaml, żeby zbierać mapę magistral.", "Add the hub_busmap.yaml package to collect the bus map.")}</div>`;
     const open = this.open ?? !!this.config.expanded;
-    const total = BUSES.filter(([, k]) => this.eid(k)).reduce((s, [, k]) => s + (isNaN(this.n(k)) ? 0 : Math.round(this.n(k))), 0);
+    const total = BUSES.filter((b) => this.shown(b)).reduce((s, [, k]) => s + (isNaN(this.n(k)) ? 0 : Math.round(this.n(k))), 0);
     const running = Object.values(SCAN).some((sc) => sc && /%$/.test(this.s(sc[1]) ?? ""));
     return html`
       <div class="sh" @click=${() => { this.open = !open; this.requestUpdate(); }}>
@@ -90,7 +93,7 @@ class ImmergasBusMapCard extends HubCard {
         <input .value=${model} placeholder=${this.t("Model kotła i pompy (z tabliczki)", "Boiler and heat pump model (rating plate)")}
           @change=${(e: Event) => this.call("text", "set_value", "hub_model", { value: (e.target as HTMLInputElement).value.trim() })}>
       </div>` : nothing}
-      <div class="rows">${BUSES.filter(([, k]) => this.eid(k)).map(([bus, k, btn, label, sub]) => {
+      <div class="rows">${BUSES.filter((b) => this.shown(b)).map(([bus, k, btn, label, sub]) => {
         const n = this.n(k), sc = SCAN[bus], st = sc ? this.s(sc[1]) ?? "" : "", running = /%$/.test(st), tag = "scan_" + bus, armed = this.isArmed(tag);
         return html`<div class="row" style=${box(running ? "yellow" : "sky", running)}>
           <div class="cx"><div class="ln">${bus}<span class="bus">${label}</span></div>

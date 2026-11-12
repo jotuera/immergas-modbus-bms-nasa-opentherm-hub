@@ -2,7 +2,7 @@
 import { LANGS, locale, translate } from "./i18n";
 import { LitElement, html, css, nothing, unsafeCSS, TemplateResult, CSSResultGroup } from "lit";
 import { hubIndex, HubIndex } from "./hub";
-import { Key } from "./names";
+import { Key, NAMES } from "./names";
 
 /** card keys that only a heat pump has: dropped from the Dominus index when "Device type" = gas boiler */
 const HP_ONLY: Key[] = ["comfort_cool", "eco_cool", "dom_hum_target", "dom_r10", "dom_r11", "r12", "r13", "dom_i04", "dom_i10",
@@ -58,6 +58,12 @@ function lightSurface(el: HTMLElement, hass: any): boolean {
 
 /** messages one card leaves for another on the same dashboard (e.g. the top Calibration recommendation for the
  *  diagram); `rec.ok` = nothing to change */
+/** T-/T+ menu values and their declared copies in the hub (package hub_boiler_menu), used without T-/T+ */
+const MENU_COPY: Partial<Record<Key, Key>> = { r04: "hub_m_r04", r05: "hub_m_r05", r12: "hub_m_r12", r13: "hub_m_r13",
+  t02: "hub_m_t02", t05: "hub_m_t05", t07: "hub_m_t07", a03: "hub_m_a03", a04: "hub_m_a04", p15: "hub_m_p15" };
+/** starting point offered by the first tap on an empty copy (typical values for a heat pump with underfloor heating) */
+const MENU_SUGGEST: Partial<Record<Key, number>> = { r04: 35, r05: 25, r13: 22, r12: 18, t02: 5, t05: 15, t07: 0, a03: 55, a04: 100 };
+
 export const hubNote: { rec?: { text: string; reason: string; ok: boolean; entity?: string; at: number } } = {};
 
 /** "no fault" texts the hub's fault entities send, in all their languages (D+/D- and T-/T+ fault descriptions,
@@ -180,7 +186,25 @@ export abstract class HubCard extends LitElement {
   protected get loc() { return locale(this.uiLang); }
   protected t(pl: string, en: string) { return translate(this.uiLang, pl, en); }
 
-  protected eid(k: Key) { return this.idx?.ids[k]; }
+  /** Magis hub without the T-/T+ bus (e.g. MAGIS HERCULES PRO) or with the BMS connection switched off: option
+   *  `bms: false` / `true`, else the "BMS connection" switch, else whether any T-/T+ entity exists */
+  protected get noBms(): boolean {
+    const ids = this.idx?.ids;
+    if (!ids || this.dominus || this.ot || this.esp || this.gbx || this.mtx) return false;
+    if (this.config?.bms === false) return true;
+    if (this.config?.bms === true) return false;
+    return ids.tt_bms ? this.hass?.states?.[ids.tt_bms]?.state === "off" : !ids.d99_raw;
+  }
+  /** entity id of a key; without T-/T+ its entities count as missing (all but the BMS switch), so the cards hide them -
+   *  except the boiler menu values copied into the hub (package hub_boiler_menu), which stand in for them */
+  protected eid(k: Key) {
+    const ids = this.idx?.ids, id = ids?.[k];
+    if (!ids || k === "tt_bms" || NAMES[k]?.[0] !== "TT" || !this.noBms) return id;
+    const cp = MENU_COPY[k];
+    return cp ? ids[cp] : undefined;
+  }
+  /** the value of this key is a declared copy from the boiler menu (no T-/T+): changing it does not reach the boiler */
+  protected isCopy(k: Key) { return !!MENU_COPY[k] && this.noBms && !!this.idx?.ids[MENU_COPY[k]!]; }
   protected so(k: Key) { const i = this.eid(k); return i ? this.hass.states[i] : undefined; }
   protected s(k: Key): string | undefined {
     if (k === "mode" && this.esp && !this.eid("mode")) return this.espMode();
@@ -479,7 +503,7 @@ export abstract class HubCard extends LitElement {
     const so = this.so(k);
     if (!so) return nothing;
     const a = so.attributes ?? {}, v = parseFloat(so.state), step = a.step ?? 1, u = unit ?? a.unit_of_measurement ?? "";
-    const sug = parseFloat(String(a.suggested ?? "")), empty = isNaN(v) && !isNaN(sug), ro = this.otRO && !free;
+    const sug = parseFloat(String(a.suggested ?? (this.isCopy(k) ? MENU_SUGGEST[k] : "") ?? "")), empty = isNaN(v) && !isNaN(sug), ro = this.otRO && !free;
     const set = (dir: number) => {
       if (ro) return;
       // an empty declared parameter: the first tap writes the suggested value as the starting point
@@ -738,7 +762,7 @@ export abstract class HubCard extends LitElement {
 
 /** registers a card element + card picker entry */
 /** this bundle's version (also in package.json) */
-export const VERSION = "0.92.2";
+export const VERSION = "0.93.0";
 
 // The bundle can be loaded twice: the hub cards resource and the copy shipped with the Dominus integration, in any
 // order. A custom element can be defined only once, so every bundle (0.85.0+) queues its elements on a shared window
