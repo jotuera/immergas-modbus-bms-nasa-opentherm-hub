@@ -76,6 +76,11 @@ globals:
     type: float
     restore_value: true
     initial_value: "NAN"
+  # Assumed flow (l/h) used instead of D14 when T-/T+ gives none; set by the "Assumed flow" number of hub_boiler_menu
+  - id: hub_flow_assumed
+    type: float
+    restore_value: true
+    initial_value: "NAN"
 
 # CWU: cykl = TT D99 61 (pompą) / 62 (gazem) / 64 (grzałką) + 44/45 (koniec CWU, dobieg). Na starcie zapamiętuje
 # temperaturę zasobnika, energię pobraną łącznie (F1/F2) i energię cieplną łącznie (hub); na końcu liczy wyniki.
@@ -210,7 +215,7 @@ sensor:
       if (std::isnan(i) || std::isnan(u)) return NAN;
       return i * u;
 
-  # Moc cieplna: przepływ D14 (T-/T+) x ΔT na wymienniku pompy: PC D20 TW2 (wyjście) - PC D08 TW1 (powrót), D+/D-.
+  # Moc cieplna: przepływ D14 (T-/T+, bez niego przyjęty przepływ z hub_boiler_menu) x ΔT na wymienniku pompy: PC D20 TW2 (wyjście) - PC D08 TW1 (powrót), D+/D-.
   # 1 l/h x 1 K = 1,163 W. Tylko gdy sprężarka pracuje (PC D71 > 0) i odczyty są sensowne, inaczej 0 W.
   - platform: template
     id: hub_heat_power
@@ -223,6 +228,7 @@ sensor:
     update_interval: 10s
     lambda: |-
       float flow = id(tt_d14_pump_flow_rate).state;  // l/h
+      if (std::isnan(flow)) flow = id(hub_flow_assumed);   // no T-/T+: assumed flow (hub_boiler_menu)
       float tw2  = id(dd_sniff_1e_w_21).state;       // °C, wyjście wody z PC
       float tw1  = id(dd_sniff_1e_w_20).state;       // °C, powrót wody do PC
       float hz   = id(dd_sniff_1e_i_11).state;       // Hz, sprężarka
@@ -281,6 +287,7 @@ sensor:
     lambda: |-
       if (!id(f1f2_defrost).state) return 0.0f;
       float flow = id(tt_d14_pump_flow_rate).state;  // l/h
+      if (std::isnan(flow)) flow = id(hub_flow_assumed);   // no T-/T+: assumed flow (hub_boiler_menu)
       float tw2  = id(dd_sniff_1e_w_21).state;       // °C, wyjście wody z PC (przy odszranianiu chłodniejsze)
       float tw1  = id(dd_sniff_1e_w_20).state;       // °C, powrót wody do PC
       if (std::isnan(flow) || std::isnan(tw2) || std::isnan(tw1)) return NAN;

@@ -55,6 +55,8 @@ systemu, wiersz T-/T+ mapy magistral). Z pakietem `hub_boiler_menu` przepisujesz
 T02 / T05 / T07, A03 / A04 i P15 (karta Parametry pieca offline); karta Krzywe rysuje wtedy krzywą, Kalibracja ocenia ją
 wobec odczytów z D+/D- i F1/F2, a anty-legionella P15 wraca jako przełącznik „ustawiona na piecu”, tak jak U11. Bez kopii
 karta Krzywe to wyjaśnia i pokazuje bieżące D04.
+Ta sama karta ma *Przepływ przyjęty (zamiast D14)*: bez T-/T+ nie ma przepływu, więc moc cieplna, COP i koszt ciepła są
+puste, dopóki nie wpiszesz przepływu swojej instalacji.
 `bms: false` / `bms: true` pod `strategy:` wymusza jedno albo drugie.
 
 **Bez huba – Immergas Dominus:** z samą integracją [Immergas Dominus](https://github.com/jotuera/immergas-dominus)

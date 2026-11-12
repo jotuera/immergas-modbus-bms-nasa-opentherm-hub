@@ -2494,5 +2494,7 @@
   "A04 · max. pump speed": "A04 · velocità max. pompa",
   "R01 unknown (no T-/T+) – no effect with an outdoor probe": "R01 sconosciuto (senza T-/T+) – nessun effetto con sonda esterna",
   "Zone 1 · R04 / R05 (copy from the boiler) · U03 (D+/D-)": "Zona 1 · R04 / R05 (copia dalla caldaia) · U03 (D+/D-)",
-  "Zone 1 · R13 / R12 (copy from the boiler)": "Zona 1 · R13 / R12 (copia dalla caldaia)"
+  "Zone 1 · R13 / R12 (copy from the boiler)": "Zona 1 · R13 / R12 (copia dalla caldaia)",
+  "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).": "Senza T-/T+ non c'è la portata D14, quindi potenza termica, COP e costo del calore restano vuoti. Inserisci la portata del tuo impianto – l'hub la usa al posto di D14 (approssimazione, la pompa modula tra A03 e A04).",
+  "Assumed flow (instead of D14)": "Portata presunta (al posto di D14)"
 }

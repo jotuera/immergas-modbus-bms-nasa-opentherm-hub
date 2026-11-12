@@ -520,7 +520,10 @@ class ImmergasSettingsCard extends HubCard {
           ${this.numRow("t05", "mdi:timer-outline", this.t("T05 · zegar uruchamiania CO", "T05 · CH ignition timer"), 0, undefined, true)}
           ${this.numRow("t07", "mdi:timer-sand", this.t("T07 · opóźnienie żądania z termostatu", "T07 · room thermostat request delay"), 0, undefined, true)}
           ${this.numRow("a03", "mdi:pump", this.t("A03 · min. prędkość pompy", "A03 · min. pump speed"), 0, undefined, true)}
-          ${this.numRow("a04", "mdi:pump", this.t("A04 · maks. prędkość pompy", "A04 · max. pump speed"), 0, undefined, true)}` : nothing}
+          ${this.numRow("a04", "mdi:pump", this.t("A04 · maks. prędkość pompy", "A04 · max. pump speed"), 0, undefined, true)}
+          ${this.eid("hub_m_flow") ? html`<div class="note">${this.t("Bez T-/T+ nie ma przepływu D14, więc moc cieplna, COP i koszt ciepła są puste. Wpisz przepływ swojej instalacji – hub użyje go zamiast D14 (w przybliżeniu, pompa moduluje między A03 a A04).",
+            "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).")}</div>
+          ${this.numRow("hub_m_flow", "mdi:waves-arrow-right", this.t("Przepływ przyjęty (zamiast D14)", "Assumed flow (instead of D14)"), 0, undefined, true)}` : nothing}` : nothing}
         ${this.eid("hub_p07") ? html`<div class="grp">${this.t("Instalacja", "Installation")}</div>
           ${this.numRow("hub_p07", "mdi:thermometer-plus", this.t("P07 · korekta sondy zewnętrznej", "P07 · outdoor probe correction"), 0)}` : nothing}
       ` : nothing}

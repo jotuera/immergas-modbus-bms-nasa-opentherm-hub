@@ -15756,6 +15756,20 @@
   ]
  },
  {
+  "en": "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).",
+  "pl": "Bez T-/T+ nie ma przepływu D14, więc moc cieplna, COP i koszt ciepła są puste. Wpisz przepływ swojej instalacji – hub użyje go zamiast D14 (w przybliżeniu, pompa moduluje między A03 a A04).",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Assumed flow (instead of D14)",
+  "pl": "Przepływ przyjęty (zamiast D14)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
   "en": "Fault descriptions",
   "pl": "Opisy błędów",
   "files": [

@@ -2494,5 +2494,7 @@
   "A04 · max. pump speed": "A04 · max. Pumpendrehzahl",
   "R01 unknown (no T-/T+) – no effect with an outdoor probe": "R01 unbekannt (kein T-/T+) – mit Außenfühler ohne Wirkung",
   "Zone 1 · R04 / R05 (copy from the boiler) · U03 (D+/D-)": "Zone 1 · R04 / R05 (Kopie vom Kessel) · U03 (D+/D-)",
-  "Zone 1 · R13 / R12 (copy from the boiler)": "Zone 1 · R13 / R12 (Kopie vom Kessel)"
+  "Zone 1 · R13 / R12 (copy from the boiler)": "Zone 1 · R13 / R12 (Kopie vom Kessel)",
+  "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).": "Ohne T-/T+ gibt es keinen Durchfluss D14, daher bleiben Wärmeleistung, COP und Wärmekosten leer. Geben Sie den Durchfluss Ihrer Anlage ein – der Hub verwendet ihn statt D14 (Näherung, die Pumpe moduliert zwischen A03 und A04).",
+  "Assumed flow (instead of D14)": "Angenommener Durchfluss (statt D14)"
 }

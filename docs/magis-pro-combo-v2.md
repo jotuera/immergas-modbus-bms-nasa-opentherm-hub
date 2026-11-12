@@ -52,6 +52,8 @@ Also reported working by users: a **Waveshare ESP32-S3-RS485-CAN** (DIN rail) wi
   and B screw terminals of the Port A RS485 unit, together with the D+ and D- wires. Without it the hub "disappears"
   from the bus every now and then and the boiler shows **E121**.
 - 9600 8E1; the hub emulates the zone 1 panel (0x29) or the Dominus (0x33).
+- **No frames on Port A?** One MAGIS HERCULES PRO installation got D+/D- working only on the AtomS3's own Grove port
+  under the base: set `dd_uart_rx_pin: GPIO1` and `dd_uart_tx_pin: GPIO2`.
 
 ### F1/F2 (Port B) – Samsung NASA, indoor ↔ outdoor unit
 
@@ -100,7 +102,9 @@ direction pin) substitutions and leave out `hw_atoms3_portabc.yaml`.
    **Without T-/T+** (e.g. MAGIS HERCULES PRO, whose board has only D+/D-): keep all packages, switch off
    *BMS connection*, add `packages/hub_boiler_menu.yaml` and copy R04 / R05 / R13 / R12, T02 / T05 / T07, A03 / A04 and P15 once from the boiler
    menu in the *Boiler parameters (offline)* card; add `variant: pro` under `strategy:` of the dashboard (the system model
-   D61 comes over T-/T+). Details in [cards/README.md](../cards/README.md).
+   D61 comes over T-/T+). There is no flow rate D14 either: enter your installation's flow in *Assumed flow rate
+   (instead of D14)* and the hub computes heat output, COP and heat cost from it (an approximation – the pump
+   modulates between A03 and A04). Details in [cards/README.md](../cards/README.md).
 5. Flash, add the device in Home Assistant, install the cards with HACS ([cards/README.md](../cards/README.md)) and create the
    dashboard with the strategy `custom:immergas-hub` (see the [overview](../README.md#dashboard)).
 
@@ -120,6 +124,9 @@ Go step by step and check the **Connectivity** card after each one:
    connected (as on the test installation), or *Emulate Dominus* when there is none. The tile turns blue
    (*Emulated*) and the boiler starts taking setpoints from Home Assistant. A device that already answers on that
    address blocks the emulation, so the hub never talks over a real panel.
+   With the zone 1 panel emulated the hub **is** the panel: the boiler takes DHW Comfort / Eco and the DHW day → calendar
+   from the hub, so set them in the cards. The MAGIS HERCULES PRO polls a zone panel only after *Zone 1 panel* is
+   enabled in its *Plant definition* menu.
 3. **F1/F2 writes.** Only when the readings look right, switch on *Active ODU control* to use the outing mode and the
    compressor limit (FR). It goes off again after a restart; set `f1f2_write_arm_restore: ALWAYS_ON` to keep it on.
 4. **Boiler menu values.** Set once the values that no bus carries (night window U12 / U13, anti-legionella

@@ -2494,5 +2494,7 @@
   "A04 · max. pump speed": "A04 · max. otáčky čerpadla",
   "R01 unknown (no T-/T+) – no effect with an outdoor probe": "R01 neznámé (bez T-/T+) – s venkovní sondou bez vlivu",
   "Zone 1 · R04 / R05 (copy from the boiler) · U03 (D+/D-)": "Zóna 1 · R04 / R05 (kopie z kotle) · U03 (D+/D-)",
-  "Zone 1 · R13 / R12 (copy from the boiler)": "Zóna 1 · R13 / R12 (kopie z kotle)"
+  "Zone 1 · R13 / R12 (copy from the boiler)": "Zóna 1 · R13 / R12 (kopie z kotle)",
+  "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).": "Bez T-/T+ není průtok D14, takže tepelný výkon, COP a cena tepla zůstávají prázdné. Zadejte průtok své instalace – hub ho použije místo D14 (přibližně, čerpadlo moduluje mezi A03 a A04).",
+  "Assumed flow (instead of D14)": "Předpokládaný průtok (místo D14)"
 }

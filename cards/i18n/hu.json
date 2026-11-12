@@ -2494,5 +2494,7 @@
   "A04 · max. pump speed": "A04 · szivattyú max. fordulatszám",
   "R01 unknown (no T-/T+) – no effect with an outdoor probe": "R01 ismeretlen (nincs T-/T+) – külső szondával nincs hatása",
   "Zone 1 · R04 / R05 (copy from the boiler) · U03 (D+/D-)": "1. zóna · R04 / R05 (másolat a kazánból) · U03 (D+/D-)",
-  "Zone 1 · R13 / R12 (copy from the boiler)": "1. zóna · R13 / R12 (másolat a kazánból)"
+  "Zone 1 · R13 / R12 (copy from the boiler)": "1. zóna · R13 / R12 (másolat a kazánból)",
+  "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).": "T-/T+ nélkül nincs D14 térfogatáram, így a hőteljesítmény, a COP és a hőköltség üres marad. Adja meg a rendszer térfogatáramát – a hub ezt használja a D14 helyett (közelítés, a szivattyú A03 és A04 között modulál).",
+  "Assumed flow (instead of D14)": "Feltételezett térfogatáram (D14 helyett)"
 }

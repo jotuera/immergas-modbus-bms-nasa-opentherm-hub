@@ -52,6 +52,8 @@ Użytkownicy zgłaszają też działanie na **Waveshare ESP32-S3-RS485-CAN** (na
   w zaciski A i B modułu RS485 portu A, razem z przewodami D+ i D-. Bez niego hub co jakiś czas „znika” z magistrali,
   a kocioł pokazuje **E121**.
 - 9600 8E1; hub emuluje panel strefy 1 (0x29) albo Dominusa (0x33).
+- **Brak ramek na porcie A?** Na jednej instalacji MAGIS HERCULES PRO D+/D- ruszyło dopiero na własnym porcie Grove
+  AtomS3 pod podstawką: ustaw `dd_uart_rx_pin: GPIO1` i `dd_uart_tx_pin: GPIO2`.
 
 ### F1/F2 (port B) – Samsung NASA, jednostka wewnętrzna ↔ zewnętrzna
 
@@ -99,6 +101,8 @@ transceiverze z pinem kierunku) i pomiń `hw_atoms3_portabc.yaml`.
    **Bez T-/T+** (np. MAGIS HERCULES PRO, który ma na płycie tylko D+/D-): zostaw wszystkie pakiety, wyłącz
    *Połączenie BMS*, dodaj `packages/hub_boiler_menu.yaml` i przepisz raz z menu pieca R04 / R05 / R13 / R12, T02 / T05 / T07, A03 / A04 i P15 w karcie
    *Parametry pieca (offline)*; dopisz `variant: pro` pod `strategy:` dashboardu (model systemu D61 przychodzi z T-/T+).
+   Nie ma też przepływu D14: wpisz przepływ swojej instalacji w *Przepływ przyjęty (zamiast D14)*, a hub policzy z niego
+   moc cieplną, COP i koszt ciepła (w przybliżeniu – pompa moduluje między A03 a A04).
    Szczegóły w [cards/README.pl.md](../cards/README.pl.md).
 5. Wgraj, dodaj urządzenie w Home Assistant, zainstaluj karty przez HACS ([cards/README.pl.md](../cards/README.pl.md)) i utwórz
    dashboard strategią `custom:immergas-hub` (zobacz [przegląd](../README.pl.md#dashboard)).
@@ -120,6 +124,9 @@ Idź krok po kroku i po każdym kroku sprawdź kartę **Łączność**:
    Dominus (jak na instalacji testowej), albo *Emuluj Dominus*, gdy go nie ma. Kafelek zmieni się na niebieski
    (*Emulacja*), a piec zacznie brać nastawy z Home Assistanta. Urządzenie, które już odpowiada pod tym adresem, blokuje
    emulację, więc hub nigdy nie zagłuszy prawdziwego panelu.
+   Przy emulowanym panelu strefy 1 hub **jest** panelem: piec bierze od niego CWU Komfort / Eko i przypisanie dni do
+   kalendarza CWU, więc ustaw je w kartach. MAGIS HERCULES PRO odpytuje panel strefy dopiero po włączeniu *Panelu
+   strefy 1* w menu *Definicja instalacji*.
 3. **Zapis na F1/F2.** Dopiero gdy odczyty wyglądają dobrze, włącz *Aktywne sterowanie ODU*, żeby używać trybu
    wyjazdowego i ograniczenia sprężarki (FR). Po restarcie wyłącza się znowu; ustaw `f1f2_write_arm_restore: ALWAYS_ON`,
    żeby został włączony.
