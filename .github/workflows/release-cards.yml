@@ -1,0 +1,29 @@
+name: Attach cards bundle to releases
+
+# The Home Assistant Marketplace (and HACS) installs the dashboard card from the
+# release assets, so every release carries cards/dist/immergas-hub-cards.js.
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  attach-cards:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the release tag
+        uses: actions/checkout@v4
+
+      - name: Upload immergas-hub-cards.js
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.release.tag_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          test -s cards/dist/immergas-hub-cards.js
+          gh release upload "$TAG" cards/dist/immergas-hub-cards.js --repo "$REPO" --clobber
+          echo "immergas-hub-cards.js attached to $TAG."

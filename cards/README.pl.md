@@ -87,12 +87,13 @@ kolory (akcenty Catppuccin Mocha Neon). Ustawienie *Motyw kart* (Ustawienia onli
 Mocha Neon w tej przeglądarce; opcja `theme: auto | light | dark | neon` ustawia go dla karty lub strategii dashboardu.
 Mocha Neon jest wbudowany w karty, więc nie wymaga motywu w Home Assistant. Na jasnej karcie te same kolory są automatycznie przyciemniane, żeby tekst był czytelny na białym tle.
 
-## Instalacja przez HACS (zalecana)
+## Instalacja przez Marketplace / HACS (zalecana)
 
-1. HACS → ⋮ → **Niestandardowe repozytoria** → repozytorium `https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub`,
-   typ **Dashboard** → Dodaj.
-2. Znajdź w HACS **Immergas Hub cards**, otwórz i naciśnij **Pobierz**. HACS sam doda zasób dashboardu i będzie
-   pokazywał nowe wydania jako aktualizacje.
+1. Home Assistant 2026.11 lub nowszy: Ustawienia → **Marketplace** → ⋮ → **Dodaj z linku** → `jotuera/immergas-modbus-bms-nasa-opentherm-hub`;
+   jeśli zapyta o typ, wybierz **Dashboard**. Starszy Home Assistant z HACS: HACS → ⋮ → **Niestandardowe repozytoria** →
+   repozytorium `https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub`, typ **Dashboard** → Dodaj.
+2. Znajdź **Immergas Hub cards**, otwórz i zainstaluj (**Pobierz**). Plik karty pochodzi z plików wydania; zasób
+   dodaje się sam, a nowe wydania pojawiają się jako aktualizacje.
 3. Odśwież przeglądarkę. Karty są w **Dodaj kartę → Niestandardowe: Immergas – …**.
 
 ## Instalacja (ręczna)
