@@ -46,6 +46,10 @@ strategy:
   type: custom:immergas-hub
 ```
 
+**Magis Pro bez T-/T+** (np. MAGIS HERCULES PRO, który ma na płycie tylko D+/D-): karty odróżniają Combo od Pro po
+modelu systemu D61, który przychodzi z T-/T+. Bez niego zakładają Combo i rysują kocioł gazowy – dopisz `variant: pro`
+pod `strategy:` (albo na pojedynczych kartach). Bez przepływu D14 pompa obiegowa na schemacie pracuje razem ze sprężarką.
+
 **Bez huba – Immergas Dominus:** z samą integracją [Immergas Dominus](https://github.com/jotuera/immergas-dominus)
 (lokalne TCP do modułu Wi-Fi Dominus) użyj `type: custom:immergas-dominus` – okrojony dashboard z kartami Teraz,
 Nastawy, Tryb pracy, Harmonogram i Łączność. Integracja ma te karty w sobie; karty znajdują jej encje po kluczach (bez

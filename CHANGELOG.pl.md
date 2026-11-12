@@ -7,6 +7,7 @@ urządzenia i jakie wersje pakietów wnosi.
 
 | Wydanie | Data | Najważniejsze |
 |---|---|---|
+| [v1.11.11](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.11) | 2026-11-12 | Bez magistrali T-/T+ (np. MAGIS HERCULES PRO): pompa obiegowa na schemacie idzie za sprężarką, a opcja strategii `variant: pro` ukrywa kocioł gazowy |
 | [v1.11.10](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.10) | 2026-11-12 | Karta Teraz: bez fałszywego banera *Błąd pompy ciepła*, gdy encje są w innym języku niż polski i angielski |
 | [v1.11.9](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.9) | 2026-11-10 | VICTRIX MAIOR TT: własny profil menu kotła (bez t3 / t4, t2 = termostat CWU) i wpis w README |
 | [v1.11.8](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.8) | 2026-11-10 | Statystyki taktowania: po restarcie huba pracująca już sprężarka / palnik nie liczy się jako start |

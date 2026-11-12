@@ -2477,5 +2477,6 @@
   "Last DHW cycle cylinder rise": "Tároló emelkedése az utolsó HMV ciklusban",
   "too often – lengthen t4 (CH ignitions timer) or lower the curve": "túl gyakori – növelje a t4-öt (fűtési újragyújtás tiltás) vagy csökkentse a görbét",
   "module OTC setpoint": "modul OTC alapjel",
-  "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C": "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (szolár), 2 → 10 °C (szolár); t2 = 1 (be −2 °C, ki +1 °C) – válassza a 3 °C-ot"
+  "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C": "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (szolár), 2 → 10 °C (szolár); t2 = 1 (be −2 °C, ki +1 °C) – válassza a 3 °C-ot",
+  "pump running": "szivattyú üzemel"
 }

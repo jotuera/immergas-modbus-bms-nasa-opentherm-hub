@@ -183,7 +183,10 @@ class ImmergasDiagramCard extends HubCard {
 
   protected body() {
     if (this.dominus) return this.domBody();
-    const hz = this.n("hz"), run = hz > 0, flow = this.n("d14"), flowing = flow > 50;
+    const hz = this.n("hz"), run = hz > 0, flow = this.n("d14");
+    // no D14 (no T-/T+ bus, e.g. MAGIS HERCULES PRO): water flows while the compressor runs (D71) or the F1/F2 pump
+    // reports running (0x4089 - not sent by every indoor board)
+    const noFlow = isNaN(flow), flowing = noFlow ? run || this.on("f_pump") : flow > 50;
     const defrost = this.on("defrost"), night = this.on("u11");
     const st = this.s("state") ?? "";
     const dhw = this.s("d22") === "1" || isDhw(st) || this.on("tt_dhw");
@@ -191,7 +194,7 @@ class ImmergasDiagramCard extends HubCard {
     const hasBoiler = this.config.boiler !== false && (!!this.eid("boiler_running") || !!this.eid("d01"));
     const hasBuffer = this.config.buffer !== false;
     const ch = flowing && !dhw, dw = flowing && dhw;
-    const speed = flowing ? Math.max(0.5, Math.min(2.5, 1500 / flow)) : 1;
+    const speed = flowing && !noFlow ? Math.max(0.5, Math.min(2.5, 1500 / flow)) : 1;
     const fan = this.n("fan_real"), fanOn = fan > 0 && !defrost;
     const fanDur = fanOn ? Math.max(0.35, Math.min(3, 400 / fan)) : 0;
     const out = this.n("outdoor"), z1 = this.n("zone1"), zs = this.n("zone1_set"), tank = this.n("tank"), tankSet = this.n("dhw_active_set");
@@ -241,10 +244,10 @@ class ImmergasDiagramCard extends HubCard {
     g.push(this.pipe(`M ${pumpX + 20} ${supY} L ${valveX - 16} ${supY}`, HOT, flowing, speed));
     g.push(svg`<g @click=${this.tap("tw2")} class="hit">${this.label(400, 256, this.val("tw2", 1, " °C"), HOT, 12, "start")}</g>`);
     // circulator
-    g.push(svg`<g transform="translate(${pumpX} ${supY})" @click=${this.tap("d14")} class="hit">
+    g.push(svg`<g transform="translate(${pumpX} ${supY})" @click=${this.tap(noFlow ? "hz" : "d14")} class="hit">
         <circle r="20" class="dev" style="stroke:${c(flowing ? "sky" : "overlay1")}"/>
         <g style=${flowing ? `animation:ih-spin ${speed * 1.5}s linear infinite` : ""} class="fan"><path d="M -9 -8 L 11 0 L -9 8 Z" fill=${c(flowing ? "sky" : "overlay1")}/></g></g>
-      ${this.label(pumpX, supY + 36, flowing ? this.f(flow, 0) + " l/h" : this.t("pompa stoi", "pump stopped"), flowing ? "sky" : "overlay1", 11)}`);
+      ${this.label(pumpX, supY + 36, flowing ? (noFlow ? this.t("pompa pracuje", "pump running") : this.f(flow, 0) + " l/h") : this.t("pompa stoi", "pump stopped"), flowing ? "sky" : "overlay1", 11)}`);
     // gas boiler (Combo)
     if (hasBoiler) {
       g.push(svg`<g @click=${this.tap("boiler_running")} class="hit">

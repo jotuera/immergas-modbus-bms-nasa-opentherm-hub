@@ -2477,5 +2477,6 @@
   "Last DHW cycle cylinder rise": "Hausse du ballon au dernier cycle ECS",
   "too often – lengthen t4 (CH ignitions timer) or lower the curve": "trop souvent – allongez t4 (temporisation des allumages chauffage) ou abaissez la courbe",
   "module OTC setpoint": "consigne OTC du module",
-  "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C": "MAIOR TT : t2 = 0 → 3 °C, 3 → 5 °C (solaire), 2 → 10 °C (solaire) ; t2 = 1 (marche −2 °C, arrêt +1 °C) – choisir 3 °C"
+  "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C": "MAIOR TT : t2 = 0 → 3 °C, 3 → 5 °C (solaire), 2 → 10 °C (solaire) ; t2 = 1 (marche −2 °C, arrêt +1 °C) – choisir 3 °C",
+  "pump running": "pompe en marche"
 }

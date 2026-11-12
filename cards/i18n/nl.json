@@ -2477,5 +2477,6 @@
   "Last DHW cycle cylinder rise": "Stijging boiler in laatste SWW-cyclus",
   "too often – lengthen t4 (CH ignitions timer) or lower the curve": "te vaak – verleng t4 (ontstekingstimer CV) of verlaag de stooklijn",
   "module OTC setpoint": "OTC-instelpunt van de module",
-  "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C": "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (zon), 2 → 10 °C (zon); t2 = 1 (aan −2 °C, uit +1 °C) – kies 3 °C"
+  "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (solar), 2 → 10 °C (solar); t2 = 1 (on −2 °C, off +1 °C) – choose 3 °C": "MAIOR TT: t2 = 0 → 3 °C, 3 → 5 °C (zon), 2 → 10 °C (zon); t2 = 1 (aan −2 °C, uit +1 °C) – kies 3 °C",
+  "pump running": "pomp draait"
 }

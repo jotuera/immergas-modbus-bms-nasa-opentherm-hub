@@ -8814,6 +8814,13 @@
   ]
  },
  {
+  "en": "pump running",
+  "pl": "pompa pracuje",
+  "files": [
+   "diagram.ts"
+  ]
+ },
+ {
   "en": "pump stopped",
   "pl": "pompa stoi",
   "files": [

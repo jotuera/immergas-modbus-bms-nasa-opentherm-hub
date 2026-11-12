@@ -46,6 +46,10 @@ strategy:
   type: custom:immergas-hub
 ```
 
+**Magis Pro without T-/T+** (e.g. MAGIS HERCULES PRO, whose board has only D+/D-): the cards tell a Combo from a Pro by the
+system model D61, which comes over T-/T+. Without it they assume a Combo and draw the gas boiler – add `variant: pro`
+under `strategy:` (or on single cards). Without the flow rate D14 the circulator on the diagram runs while the compressor runs.
+
 **Without a hub – Immergas Dominus:** with only the [Immergas Dominus](https://github.com/jotuera/immergas-dominus)
 integration (local TCP to the Dominus Wi-Fi module) use `type: custom:immergas-dominus` – a reduced dashboard with Now,
 Setpoints, Operating mode, Schedule and Connectivity. The integration ships these cards itself; the cards find its
