@@ -7,6 +7,7 @@ in your device YAML, which package versions it brings.
 
 | Release | Date | Highlights |
 |---|---|---|
+| [v1.11.13](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.13) | 2026-11-12 | Diagram: the DHW setpoint falls back to D05 when the active setpoint (zone panel traffic) is missing |
 | [v1.11.12](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.12) | 2026-11-12 | MAGIS without T-/T+ (e.g. HERCULES PRO): dashboard without the T-/T+ parts (option `bms`), package `hub_boiler_menu` with copies of R04 / R05 / R13 / R12, T02 / T05 / T07, A03 / A04 and P15 for the Curve, Calibration and Operating mode cards |
 | [v1.11.11](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.11) | 2026-11-12 | Without the T-/T+ bus (e.g. MAGIS HERCULES PRO): the diagram's circulator follows the compressor, and the strategy option `variant: pro` hides the gas boiler |
 | [v1.11.10](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.10) | 2026-11-12 | Now card: no false *Heat pump fault* banner when the entities are in a language other than English or Polish |

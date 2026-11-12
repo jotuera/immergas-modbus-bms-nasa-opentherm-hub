@@ -198,7 +198,9 @@ class ImmergasDiagramCard extends HubCard {
     const speed = flowing && !noFlow ? Math.max(0.5, Math.min(2.5, 1500 / flow)) : 1;
     const fan = this.n("fan_real"), fanOn = fan > 0 && !defrost;
     const fanDur = fanOn ? Math.max(0.35, Math.min(3, 400 / fan)) : 0;
-    const out = this.n("outdoor"), z1 = this.n("zone1"), zs = this.n("zone1_set"), tank = this.n("tank"), tankSet = this.n("dhw_active_set");
+    const out = this.n("outdoor"), z1 = this.n("zone1"), zs = this.n("zone1_set"), tank = this.n("tank"), tankAct = this.n("dhw_active_set"),
+      // the active setpoint comes in the boiler -> zone panel traffic; without a panel on the bus the DHW setpoint D05
+      tankSet = isNaN(tankAct) ? this.n("dhw_set") : tankAct;
     const heat = this.n("heat_power"), elec = this.n("elec_power"), cop = this.n("cop");
     const copCol = isNaN(cop) || cop <= 0 ? "overlay1" : cop < 2.5 ? "red" : cop < 3.5 ? "peach" : cop < 4.5 ? "yellow" : "green";
     const tankFill = isNaN(tank) ? 0 : Math.max(0, Math.min(1, (tank - 20) / 45));
