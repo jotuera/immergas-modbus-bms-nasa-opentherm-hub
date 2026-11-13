@@ -5,8 +5,17 @@
 # the max. power (513). There is no burner: the flame sensor of gb_status is removed.
 # Wiring: BMS+ / BMS- of the E-BOX TOP (A13), termination with dip switch SW1.2; do not touch the internal D+ / D- bus
 # (Nexis, Gateway). Panel menu General / Advanced / P: P021 = On (generator control; Off = read only), P022 = address 1,
-# P023 = 3 (9600), P024 = 1 (even, 1 stop) - users found P023 = 1 (2400) and P024 = 3 at delivery, check them first.
+# P023 = 3 (9600), P024 = 2 (no parity, 1 stop) - users found P023 = 1 (2400) and P024 = 3 at delivery, check them first.
+# Frame: 8N1, NOT the 8E1 of the gas boilers - the E-BOX TOP is an A13 board like the MAGIS PRO / COMBO, whose T- / T+
+# BMS runs without parity (8N2); a user got no answer at all with 8E1 (E144 = no valid frame for 30 s).
 # Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+
+# no parity, 1 stop bit (P024 = 2). P024 = 6 (no parity, 2 stop) also takes our 8N1 frames; the hub receives with
+# 1 stop bit either way (2 stop bits on the ESP32-S3 corrupt the replies, seen on the MAGIS T- / T+ bus).
+uart:
+  - id: !extend gb_uart
+    parity: NONE
+    stop_bits: 1
 
 globals:
   # parts of the request word written to 512 by gb_core: low byte 0x55 heating / 0xAA cooling, high byte bit0 CH

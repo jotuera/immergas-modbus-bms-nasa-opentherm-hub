@@ -33,7 +33,7 @@ Port: 9600 baud, 8E1, slave address 1.
 | VICTRIX EXTRA (28 / 32, 12 / 24 / 35 PLUS) | `gb_extra` | D+ / D−, X40 stays | P.18 = 2 (BMS), P.11 = 1 (code 69) |
 | VICTRIX PRO V2 EU (and its simple cascade) | `gb_pro` | **T+ / T−** of terminal block A38, X40 removed | nothing to switch on (code 123 only for the port) |
 | **IMG-BUS boilers through the IU23 interface** (VICTRIX ZEUS, ZEUS SUPERIOR, EXA, TERA, OMNIA, HERCULES (MINI) CONDENSING, MAIOR TT, KW TT, ARES CONDENSING 32 …) – *hypothesis* | `gb_iu23` | IU23 (kit 3.029912) on the remote terminals **44 / 41** instead of the CAR V2; the hub on its RS485 A / B | nothing in the boiler; IU23 dip switches = address 21–36 (all OFF = 21); port 9600 **8N2** |
-| **MAGIS M TOP** heat pump (R290, E-BOX TOP) | `gb_mtop` | **BMS+ / BMS−** of the E-BOX TOP (A13), termination dip switch SW1.2 | panel menu P: P021 = On (control), P022 = 1, P023 = 3 (9600), P024 = 1 (even / 1) – check P023 / P024 first, users found 2400 baud at delivery |
+| **MAGIS M TOP** heat pump (R290, E-BOX TOP) | `gb_mtop` | **BMS+ / BMS−** of the E-BOX TOP (A13), termination dip switch SW1.2 | panel menu P: P021 = On (control), P022 = 1, P023 = 3 (9600), P024 = 2 (**no parity** / 1) – check P023 / P024 first, users found 2400 baud at delivery |
 
 The older VICTRIX PRO 2 ErP is not on this list: its manuals describe no Modbus, OpenTherm or IMG BUS, only an on/off
 thermostat, a 0–10 V input and the cascade bus.
@@ -45,7 +45,9 @@ Wiring rules:
   the boiler; MAGIS M TOP – dip switch SW1.2 of the E-BOX TOP.
 - **No Dominus** on the same bus: *Modbus / Type* is Dominus **or** BMS.
 
-Factory port: **9600 baud, 8E1, slave address 1** on all of them. PRO V2 EU: 120 Ω termination with the TRD – T− bridge
+Factory port: **9600 baud, 8E1, slave address 1** on the gas boilers. MAGIS M TOP: 9600 **8N1** (P024 = 2) – the E-BOX TOP is an
+A13 board like the MAGIS PRO / COMBO, whose BMS runs without parity; `gb_mtop` sets 8N1 by itself (with 8E1 the unit
+did not answer at all; 8N1 still to be confirmed on a unit). PRO V2 EU: 120 Ω termination with the TRD – T− bridge
 and, when the master has no pull-ups, the TR+ – T+ and TR− – T− bridges.
 
 <img src="images/en/gas-boiler-bms-wiring.svg" alt="Wiring of the hub to the BMS port of the boiler" width="100%">
@@ -56,7 +58,7 @@ and, when the master has no pull-ups, the TR+ – T+ and TR− – T− bridges.
 > ([open on GitHub](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-gas-bms.yaml) · [download (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-gas-bms.yaml))
 
 **In the boiler menu first** switch the Modbus port to BMS (SUPERIOR: MENU / Service / Modbus, Type = Bms, code 1122;
-EXTRA: P.18 = 2 and P.11 = 1, code 69; MAGIS M TOP: P021 = On, P023 = 3, P024 = 1) and disconnect the Dominus if there
+EXTRA: P.18 = 2 and P.11 = 1, code 69; MAGIS M TOP: P021 = On, P023 = 3, P024 = 2) and disconnect the Dominus if there
 is one. **Heating** then needs the *Heat request (CH)* switch on – drive it from a room thermostat automation.
 
 1. **Copy the configuration.** Save [`immergas-gas-bms.yaml`](../examples/immergas-gas-bms.yaml) into your ESPHome folder (in Home Assistant:

@@ -1,6 +1,6 @@
 # Immergas gas boiler (Modbus BMS) - example configuration
 # One AtomS3 Lite + 1x M5Stack Isolated RS485 Unit in its Grove port (no PortABC needed), the hub is the Modbus master and the
-# boiler a slave (address 1, 9600 8E1). For VICTRIX SUPERIOR 2021 / ZEUS Superior 25-35, VICTRIX EXTRA and VICTRIX
+# boiler a slave (address 1, 9600 8E1; MAGIS M TOP 8N1 - gb_mtop sets it). For VICTRIX SUPERIOR 2021 / ZEUS Superior 25-35, VICTRIX EXTRA and VICTRIX
 # PRO V2 EU - keep ONE model package below. In the BMS mode the boiler has no Dominus, CAR, room thermostat or zone
 # panel: Home Assistant (or gb_curve) gives the heat request and the flow setpoint.
 #   SUPERIOR / EXTRA: RS485 A/B -> boiler D+ / D-  (jumper X40 stays; EXTRA: P.18 = 2, P.11 = 1)

@@ -33,7 +33,7 @@ Port: 9600 bodów, 8E1, adres slave 1.
 | VICTRIX EXTRA (28 / 32, 12 / 24 / 35 PLUS) | `gb_extra` | D+ / D−, X40 zostaje | P.18 = 2 (BMS), P.11 = 1 (kod 69) |
 | VICTRIX PRO V2 EU (także prosta kaskada) | `gb_pro` | **T+ / T−** listwy A38, X40 zdjęta | nic nie trzeba włączać (kod 123 tylko dla parametrów portu) |
 | **Kotły IMG-BUS przez interfejs IU23** (VICTRIX ZEUS, ZEUS SUPERIOR, EXA, TERA, OMNIA, HERCULES (MINI) CONDENSING, MAIOR TT, KW TT, ARES CONDENSING 32 …) – *hipoteza* | `gb_iu23` | IU23 (kit 3.029912) na zaciskach pilota **44 / 41** zamiast CAR V2; hub na jego RS485 A / B | nic w kotle; dipswitche IU23 = adres 21–36 (wszystkie OFF = 21); port 9600 **8N2** |
-| Pompa ciepła **MAGIS M TOP** (R290, E-BOX TOP) | `gb_mtop` | **BMS+ / BMS−** płyty E-BOX TOP (A13), terminacja przełącznikiem SW1.2 | menu P panelu: P021 = On (sterowanie), P022 = 1, P023 = 3 (9600), P024 = 1 (even / 1) – najpierw sprawdź P023 / P024, użytkownicy zastali fabrycznie 2400 bodów |
+| Pompa ciepła **MAGIS M TOP** (R290, E-BOX TOP) | `gb_mtop` | **BMS+ / BMS−** płyty E-BOX TOP (A13), terminacja przełącznikiem SW1.2 | menu P panelu: P021 = On (sterowanie), P022 = 1, P023 = 3 (9600), P024 = 2 (**bez parzystości** / 1) – najpierw sprawdź P023 / P024, użytkownicy zastali fabrycznie 2400 bodów |
 
 Starszego VICTRIX PRO 2 ErP nie ma na tej liście: jego instrukcje nie opisują Modbusa, OpenTherm ani IMG BUS, tylko termostat
 on/off, wejście 0–10 V i magistralę kaskady.
@@ -45,7 +45,9 @@ Zasady podłączenia:
   MAGIS M TOP – przełącznik SW1.2 płyty E-BOX TOP.
 - **Bez Dominusa** na tej samej magistrali: *Modbus / Typ* to Dominus **albo** BMS.
 
-Port fabrycznie: **9600 bodów, 8E1, adres slave 1** we wszystkich. PRO V2 EU: terminacja 120 Ω mostkiem TRD – T−,
+Port fabrycznie: **9600 bodów, 8E1, adres slave 1** w kotłach gazowych. MAGIS M TOP: 9600 **8N1** (P024 = 2) – E-BOX TOP to
+płyta A13 jak w MAGIS PRO / COMBO, których BMS działa bez parzystości; `gb_mtop` sam ustawia 8N1 (przy 8E1 pompa
+w ogóle nie odpowiadała; 8N1 do potwierdzenia na urządzeniu). PRO V2 EU: terminacja 120 Ω mostkiem TRD – T−,
 a gdy master nie ma rezystorów podciągających – mostki TR+ – T+ i TR− – T−.
 
 <img src="images/gas-boiler-bms-wiring.svg" alt="Podłączenie huba do portu BMS kotła" width="100%">
@@ -56,7 +58,7 @@ a gdy master nie ma rezystorów podciągających – mostki TR+ – T+ i TR− �
 > ([otwórz na GitHubie](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/blob/main/examples/immergas-gas-bms.yaml) · [pobierz (raw)](https://raw.githubusercontent.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/main/examples/immergas-gas-bms.yaml))
 
 **Najpierw w menu kotła** przełącz port Modbus na BMS (SUPERIOR: MENU / Serwis / Modbus, Typ = Bms, kod 1122; EXTRA:
-P.18 = 2 i P.11 = 1, kod 69; MAGIS M TOP: P021 = On, P023 = 3, P024 = 1) i odłącz Dominusa, jeśli jest. **Grzanie**
+P.18 = 2 i P.11 = 1, kod 69; MAGIS M TOP: P021 = On, P023 = 3, P024 = 2) i odłącz Dominusa, jeśli jest. **Grzanie**
 wymaga potem włączonego przełącznika *Żądanie grzania (CO)* – steruj nim automatyzacją termostatu pokojowego.
 
 1. **Skopiuj konfigurację.** Zapisz [`immergas-gas-bms.yaml`](../examples/immergas-gas-bms.yaml) w folderze ESPHome (w Home Assistant: *ESPHome →
