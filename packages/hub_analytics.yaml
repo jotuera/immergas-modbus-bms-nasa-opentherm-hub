@@ -157,7 +157,9 @@ interval:
           bool bn = gm != 0;
           float d99f = id(tt_system_state_raw).state;
           int d99 = std::isnan(d99f) ? -1 : (int) d99f;
-          bool dhw = d99 == 61 || d99 == 62 || d99 == 64;
+          bool d09 = d99 < 0 && id(dd_piec_zadanie_cwu_oczek).state;   // no T-/T+: D09 from D+/D-
+          bool heater = id(hub_dhw_heater_on).state;                    // DHW electric heater (assumed, hub_combined)
+          bool dhw = d09 || heater || d99 == 61 || d99 == 62 || d99 == 64;
           bool dhw_any = dhw || d99 == 44 || d99 == 45;
           bool df = id(f1f2_defrost).state;
           float room = id(dd_zone1_temp_sensor).state, tgt = id(dd_zone1_setpoint_number).state;
@@ -206,7 +208,7 @@ interval:
           // both buses only takes their state (a compressor already running is not a new start), counting starts from the
           // next change
           if (!id(hub_ag_hp_init)) {
-            if (!std::isnan(hz) && d99 >= 0) {
+            if (!std::isnan(hz) && (d99 >= 0 || now > 120000UL)) {   // T-/T+ state, or 2 min without T-/T+
               id(hub_ag_hp_was) = hp; id(hub_ag_hp_on_ms) = 0;
               id(hub_ag_bn_was) = bn; id(hub_ag_bn_on_ms) = 0;
               id(hub_ag_hp_init) = true;
@@ -299,6 +301,9 @@ interval:
           float pe = id(hub_elec_power_bus).state, pq = id(hub_heat_power).state, pd = id(hub_defrost_heat_power).state;
           if (!std::isnan(pe) && pe > 0) { if (dhw_any) id(hub_ag_e_dhw) += pe * dt / 3.6e6f; else id(hub_ag_e_ch) += pe * dt / 3.6e6f; }
           if (!std::isnan(pq) && pq > 0) { if (dhw_any) id(hub_ag_q_dhw) += pq * dt / 3.6e6f; else id(hub_ag_q_ch) += pq * dt / 3.6e6f; }
+          // DHW electric heater (not on any bus): the assumed power counts as DHW electricity and heat at COP 1
+          float kwh_h = id(hub_dhw_heater_on).state ? id(hub_dhw_heater_kw) * dt / 3600.0f : 0.0f;
+          if (kwh_h > 0) { id(hub_ag_e_dhw) += kwh_h; id(hub_ag_q_dhw) += kwh_h; }
           if (!std::isnan(pd) && pd > 0) id(hub_ag_q_def) += pd * dt / 3.6e6f;
           double g = id(tt_gas_total_m3);
           if (id(hub_ag_gas_prev) >= 0.0 && g >= id(hub_ag_gas_prev)) {

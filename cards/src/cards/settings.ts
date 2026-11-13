@@ -526,7 +526,10 @@ class ImmergasSettingsCard extends HubCard {
           ${this.numRow("hub_m_flow", "mdi:waves-arrow-right", this.t("Przepływ przyjęty (zamiast D14)", "Assumed flow (instead of D14)"), 0, undefined, true)}
           ${this.eid("hub_m_flow_dhw") ? html`<div class="note">${this.t("Przy CWU (D09) hub bierze przepływ CWU – obieg zasobnika ma zwykle inny opór. Puste = wartość powyżej dla obu.",
             "During DHW (D09) the hub takes the DHW flow – the cylinder circuit usually has a different resistance. Empty = the value above for both.")}</div>
-          ${this.numRow("hub_m_flow_dhw", "mdi:water-boiler", this.t("Przepływ przyjęty CWU (zamiast D14)", "Assumed flow DHW (instead of D14)"), 0, undefined, true)}` : nothing}` : nothing}` : nothing}
+          ${this.numRow("hub_m_flow_dhw", "mdi:water-boiler", this.t("Przepływ przyjęty CWU (zamiast D14)", "Assumed flow DHW (instead of D14)"), 0, undefined, true)}` : nothing}` : nothing}
+          ${this.eid("hub_m_dhw_heater") ? html`<div class="note">${this.t("Grzałki CWU nie widać na żadnej magistrali. Wpisz łączną moc zamontowanych grzałek (0 = brak) – przy D09, stojącej sprężarce i zasobniku poniżej nastawy hub pokaże stan „Grzałka: CWU” i doliczy tę moc do prądu i ciepła CWU (COP 1).",
+            "The DHW electric heater is on no bus. Enter the total power of the heaters fitted (0 = none) – with D09 on, the compressor stopped and the cylinder below the setpoint the hub shows “Electric heater: DHW” and adds this power to the DHW electricity and heat (COP 1).")}</div>
+          ${this.numRow("hub_m_dhw_heater", "mdi:heating-coil", this.t("Moc grzałki CWU (przyjęta)", "Assumed DHW heater power"), 1, undefined, true)}` : nothing}` : nothing}
         ${this.eid("hub_p07") ? html`<div class="grp">${this.t("Instalacja", "Installation")}</div>
           ${this.numRow("hub_p07", "mdi:thermometer-plus", this.t("P07 · korekta sondy zewnętrznej", "P07 · outdoor probe correction"), 0)}` : nothing}
       ` : nothing}

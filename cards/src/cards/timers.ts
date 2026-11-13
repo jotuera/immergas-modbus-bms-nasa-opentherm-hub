@@ -11,6 +11,9 @@ const HPB = W(["Pompa + kocioł", "Heat pump + boiler", "TČ + kotel", "TČ + ko
   "BC + caldeira", "PAC + chaudière", "HSZ + kazán", "PdC + caldaia"]);
 const BOIL = W(["Kocioł gazowy", "Gas boiler", "Plynový kotel", "Plynový kotol", "Gaskessel", "Gasketel", "Caldera de gas",
   "Caldeira a gás", "Chaudière gaz", "Gázkazán", "Caldaia a gas"]);
+// 1.11.16: DHW electric heater (assumed or T-/T+ D99 64), alone or with the heat pump
+const HEATER = W(["Grzałka", "Electric heater", "Topná tyč", "Heizstab", "Resistencia", "Résistance", "Fűtőbetét", "Resistenza", "Elektrisch element", "Resistência", "Ohrievač"]);
+const HPH = W(["Pompa + grzałka", "Heat pump + heater", "TČ + topná tyč", "WP + Heizstab", "BC + resistencia", "PAC + résistance", "HSZ + fűtőbetét", "PdC + resistenza", "WP + element", "BC + resistência", "TČ + ohrievač"]);
 const DHW = W(["CWU", "DHW", "TUV", "TÚV", "WW", "ACS", "AQS", "ECS", "HMV", "SWW"]);
 const COOL = W(["chłodzenie", "cooling", "chlazení", "chladenie", "Kühlen", "refrigeración", "arrefecimento", "refroidissement",
   "hűtés", "raffrescamento", "koelen"]);
@@ -25,12 +28,12 @@ const NODATA = W(["Brak danych", "No data", "Žádná data", "Žiadne dáta", "K
 const MODE_COOL = W(["Chłodzenie", "Cooling", "Chlazení", "Chladenie", "Kühlen", "Refrigeración", "Arrefecimento",
   "Rafraîchissement", "Hűtés", "Raffrescamento", "Koelen"]);
 
-export type Src = "hp" | "hpb" | "boiler" | "idle" | "defrost" | "";
+export type Src = "hp" | "hpb" | "boiler" | "heater" | "hph" | "idle" | "defrost" | "";
 export type What = "dhw" | "cool" | "heat" | "";
 /** hub operating state -> source (heat pump / heat pump + boiler / boiler / idle / defrost) and what it serves */
 export const parseState = (s?: string | null): { src: Src; what: What } => {
   const t = (s ?? "").trim().toLowerCase(), i = t.indexOf(": "), a = i >= 0 ? t.slice(0, i) : t, b = i >= 0 ? t.slice(i + 2) : "";
-  const src: Src = HP.has(a) ? "hp" : HPB.has(a) ? "hpb" : BOIL.has(a) ? "boiler" : IDLE.has(a) ? "idle" : DEFROST.has(a) ? "defrost" : "";
+  const src: Src = HP.has(a) ? "hp" : HPB.has(a) ? "hpb" : BOIL.has(a) ? "boiler" : HEATER.has(a) ? "heater" : HPH.has(a) ? "hph" : IDLE.has(a) ? "idle" : DEFROST.has(a) ? "defrost" : "";
   const what: What = DHW.has(b) ? "dhw" : COOL.has(b) ? "cool" : HEAT.has(b) ? "heat" : "";
   return { src, what };
 };

@@ -53,7 +53,7 @@ class ImmergasDhwCard extends HubCard {
     const combo = this.combo;
     const src = this.s("dhw_src") ?? "";
     // MAGIS M (mt_costs): "Heat pump" / "Heat pump + TBH heater" / "TBH heater"
-    const sk = this.mtx ? (/\+/.test(src) ? "hpb" : /tbh/i.test(src) ? "heater" : src ? "hp" : "") : srcKind(src);
+    const sk = this.mtx ? (/\+/.test(src) ? "hpb" : /tbh/i.test(src) ? "heater" : src ? "hp" : "") : srcKind(src).replace("hph", "hpb");
     const sc = this.bad("dhw_src") ? "overlay1" : sk === "hpb" ? "yellow" : sk === "boiler" ? "peach" : sk === "hp" ? "teal" : sk === "heater" ? "red" : "overlay2";
     const si = sk === "hpb" ? "mdi:heat-pump-outline" : sk === "boiler" ? "mdi:fire" : sk === "heater" ? "mdi:heating-coil" : "mdi:heat-pump";
     const ct = this.n("dhw_cop_tank"), cf = this.n("dhw_cop_flow"), cost = this.n("dhw_cost");

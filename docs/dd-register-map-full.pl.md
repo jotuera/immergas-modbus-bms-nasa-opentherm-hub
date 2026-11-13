@@ -106,7 +106,7 @@ Sprawdzone na **trzech magistralach** (D+/D-, T-/T+, NASA) w postoju i podczas w
 | 2410–2416 | Dzień → kalendarz — strefa 1 | POTWIERDZONE |
 | 2490–2496 | Dzień → kalendarz — CWU | POTWIERDZONE |
 | 2707 | Eko chłodzenia (kopia) | POTWIERDZONE |
-| 2295, 2701–2706, 2708, 6106 | Tylko MAGIS HERCULES PRO: ustawienia panelu, które kocioł zapisuje i odczytuje z powrotem. 2702 / 2703 i 2705 / 2706 = godzina początku / końca (0–23) okna nocnego 1 / 2; 2701, 2704, 2708 (190), 2295 (−1), 6106 (50) nierozszyfrowane | KAND. |
+| 2295, 2701–2706, 2708, 6106 | Tylko MAGIS HERCULES PRO: ustawienia panelu, które kocioł zapisuje i odczytuje z powrotem. **Okno nocne: 2701 = włączone (1) / wyłączone (0), 2702 / 2703 = godzina początku / końca (0–23)** – godziny zostają po wyłączeniu; hub: *Okno nocne włączone / start / koniec (piec)*. 2704 / 2705 / 2706 najpewniej drugie okno w tej samej postaci; 2708 (190), 2295 (−1), 6106 (50) nierozszyfrowane | 2701–2703 POTWIERDZONE, reszta KAND. |
 | 3042 | Wersja firmware panelu (201 = 2.01) | POTWIERDZONE |
 
 **Set-flow 2217 jest czytany tylko z Dominusa (0x33)** — z panelu kocioł czyta 2214–2216 i 2218–2219, celowo pomijając 2217, więc panel (fizyczny czy emulowany) nie może sterować set-flow.

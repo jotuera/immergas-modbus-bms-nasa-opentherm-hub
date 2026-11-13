@@ -70,7 +70,7 @@ globals:
   - id: hub_dhw_last_source
     type: int
     restore_value: true
-    initial_value: "0"    # 0 brak, 1 pompa, 2 gaz, 3 pompa + gaz
+    initial_value: "0"    # 0 brak, 1 pompa, 2 gaz, 3 pompa + gaz, 4 grzałka, 5 pompa + grzałka
   # Ostatni koszt ciepła z pompy z czasu pracy sprężarki (zł/kWh), pokazywany też w postoju.
   - id: hub_hp_heat_cost_last
     type: float
@@ -85,6 +85,22 @@ globals:
     type: float
     restore_value: true
     initial_value: "NAN"
+  # DHW electric heater: total installed power (kW, 0 = not fitted), set by the number of hub_boiler_menu. It is on no
+  # bus: with D09 on, the compressor and the boiler off for 90 s and the cylinder below the setpoint the hub takes it as
+  # heating (T-/T+: D99 = 64) and counts this power as DHW electricity and heat at COP 1.
+  - id: hub_dhw_heater_kw
+    type: float
+    restore_value: true
+    initial_value: "0"
+  - id: hub_dhw_hp_last_ms     # last time the compressor ran (for the 90 s delay of the heater detection)
+    type: uint32_t
+    initial_value: "0"
+  - id: hub_dhw_used_heater
+    type: bool
+    initial_value: "false"
+  - id: hub_dhw_heater_kwh     # heater energy in the current DHW cycle
+    type: float
+    initial_value: "0"
 
 # CWU: cykl = TT D99 61 (pompą) / 62 (gazem) / 64 (grzałką) + 44/45 (koniec CWU, dobieg); bez T-/T+ (brak D99)
 # cykl = D09 z D+/D- (zadanie CWU, 0x29 W 2001 bit 0), źródło = pompa, gdy pracuje sprężarka. Na starcie zapamiętuje
@@ -113,11 +129,17 @@ interval:
             id(hub_dhw_start_ms) = millis();
             id(hub_dhw_used_hp) = false;
             id(hub_dhw_used_gas) = false;
+            id(hub_dhw_used_heater) = false;
+            id(hub_dhw_heater_kwh) = 0.0f;
             ESP_LOGI("hub_dhw", "Start cyklu CWU: D99=%d, zasobnik %.1f °C", d99, t);
           }
           if (!std::isnan(t) && (std::isnan(id(hub_dhw_tmax)) || t > id(hub_dhw_tmax))) id(hub_dhw_tmax) = t;
           if ((d99 == 61 || d09) && !std::isnan(hz) && hz > 0.0f) id(hub_dhw_used_hp) = true;
           if (d99 == 62 || id(tt_gas_boiler_running).state) id(hub_dhw_used_gas) = true;
+          if (id(hub_dhw_heater_on).state) {
+            id(hub_dhw_used_heater) = true;
+            id(hub_dhw_heater_kwh) += id(hub_dhw_heater_kw) * 10.0f / 3600.0f;
+          }
           if (dhw_now || dhw_tail) return;
           // koniec cyklu
           id(hub_dhw_active) = false;
@@ -125,9 +147,17 @@ interval:
           id(hub_dhw_last_minutes) = (millis() - id(hub_dhw_start_ms)) / 60000.0f;
           id(hub_dhw_last_elec) = (std::isnan(e) || std::isnan(id(hub_dhw_e0))) ? NAN : e - id(hub_dhw_e0);
           id(hub_dhw_last_heat_flow) = (std::isnan(q) || std::isnan(id(hub_dhw_q0))) ? NAN : q - id(hub_dhw_q0);
+          float kh = id(hub_dhw_heater_kwh);   // electric heater: electricity = heat (COP 1), not on F1/F2
+          if (kh > 0.0f) {
+            id(hub_dhw_last_elec) = (std::isnan(id(hub_dhw_last_elec)) ? 0.0f : id(hub_dhw_last_elec)) + kh;
+            id(hub_dhw_last_heat_flow) = (std::isnan(id(hub_dhw_last_heat_flow)) ? 0.0f : id(hub_dhw_last_heat_flow)) + kh;
+          }
           float dtt = id(hub_dhw_tmax) - id(hub_dhw_t0);
           id(hub_dhw_last_heat_tank) = (std::isnan(dtt) || std::isnan(vol) || dtt < 0.0f) ? NAN : vol * 1.163f * dtt / 1000.0f;
-          id(hub_dhw_last_source) = id(hub_dhw_used_hp) ? (id(hub_dhw_used_gas) ? 3 : 1) : (id(hub_dhw_used_gas) ? 2 : 0);
+          // 0 none, 1 heat pump, 2 gas, 3 heat pump + gas, 4 electric heater, 5 heat pump + electric heater
+          if (id(hub_dhw_used_gas)) id(hub_dhw_last_source) = id(hub_dhw_used_hp) ? 3 : 2;
+          else if (id(hub_dhw_used_heater)) id(hub_dhw_last_source) = id(hub_dhw_used_hp) ? 5 : 4;
+          else id(hub_dhw_last_source) = id(hub_dhw_used_hp) ? 1 : 0;
           ESP_LOGI("hub_dhw", "Koniec cyklu CWU: %.0f min, zasobnik %.1f -> %.1f °C, prąd %.2f kWh, ciepło %.2f (zasobnik) / %.2f (przepływ) kWh, źródło %d",
                    id(hub_dhw_last_minutes), id(hub_dhw_t0), id(hub_dhw_tmax), id(hub_dhw_last_elec),
                    id(hub_dhw_last_heat_tank), id(hub_dhw_last_heat_flow), id(hub_dhw_last_source));
@@ -169,6 +199,29 @@ binary_sensor:
       return id(tt_gas_mode) != 0;
     on_press:
       - lambda: id(hub_burner_starts_today) += 1;
+
+  # DHW electric heater heating (assumed): it is on no bus. T-/T+: D99 = 64. Without T-/T+: D09 on, the compressor and
+  # the gas boiler off for 90 s and the cylinder 0.5 K below the higher of D05 / DHW Comfort. Only with a heater power
+  # set (hub_boiler_menu, > 0 kW) - the cylinder below the setpoint alone would also match a pause between cycles.
+  - platform: template
+    id: hub_dhw_heater_on
+    name: "${n_hub_dhw_heater_on}"
+    icon: mdi:heating-coil
+    lambda: |-
+      float hz = id(dd_sniff_1e_i_11).state;
+      uint32_t now = millis();
+      if (!std::isnan(hz) && hz > 0.0f) id(hub_dhw_hp_last_ms) = now;
+      float kw = id(hub_dhw_heater_kw);
+      if (std::isnan(kw) || kw <= 0.0f) return false;
+      float d99f = id(tt_system_state_raw).state;
+      if (!std::isnan(d99f)) return (int) d99f == 64;
+      if (!id(dd_piec_zadanie_cwu_oczek).state || id(tt_gas_boiler_running).state) return false;
+      if (!std::isnan(hz) && hz > 0.0f) return false;
+      if (now - id(hub_dhw_hp_last_ms) < 90000UL) return false;
+      float t = id(dd_dhw_temp_sensor).state;
+      float set = id(dd_cwu_setpoint_number).state, cf = id(dd_dhw_comfort_set).state;
+      if (std::isnan(set) || (!std::isnan(cf) && cf > set)) set = cf;
+      return !std::isnan(t) && !std::isnan(set) && t < set - 0.5f;
 
   # Pompa tańsza od gazu: koszt 1 kWh ciepła z pompy (przy obecnym COP) niższy niż z kotła gazowego.
   - platform: template
@@ -400,7 +453,7 @@ sensor:
     accuracy_decimals: 2
     update_interval: 60s
     lambda: |-
-      if (id(hub_dhw_last_source) == 2) return NAN;   // kocioł: przepływ liczy tylko ciepło z pompy
+      if (id(hub_dhw_last_source) == 2) return NAN;   // kocioł: przepływ liczy tylko ciepło z pompy (+ grzałka)
       return id(hub_dhw_last_heat_flow);
   - platform: template
     id: hub_dhw_last_cop_tank
@@ -411,7 +464,8 @@ sensor:
     update_interval: 60s
     lambda: |-
       float q = id(hub_dhw_last_heat_tank), e = id(hub_dhw_last_elec);
-      if (id(hub_dhw_last_source) != 1 || std::isnan(q) || std::isnan(e) || e < 0.1f) return NAN;
+      int src = id(hub_dhw_last_source);
+      if ((src != 1 && src != 5) || std::isnan(q) || std::isnan(e) || e < 0.1f) return NAN;
       return q / e;
   - platform: template
     id: hub_dhw_last_cop_flow
@@ -422,7 +476,8 @@ sensor:
     update_interval: 60s
     lambda: |-
       float q = id(hub_dhw_last_heat_flow), e = id(hub_dhw_last_elec);
-      if (id(hub_dhw_last_source) != 1 || std::isnan(q) || std::isnan(e) || e < 0.1f) return NAN;
+      int src = id(hub_dhw_last_source);
+      if ((src != 1 && src != 5) || std::isnan(q) || std::isnan(e) || e < 0.1f) return NAN;
       return q / e;
   - platform: template
     id: hub_dhw_last_minutes_sensor
@@ -444,7 +499,7 @@ sensor:
     update_interval: 60s
     lambda: |-
       int src = id(hub_dhw_last_source);
-      if (src == 1) return id(hub_dhw_last_elec) * id(hub_price_electricity).state;
+      if (src == 1 || src == 4 || src == 5) return id(hub_dhw_last_elec) * id(hub_price_electricity).state;
       if (src == 2) return id(hub_dhw_last_heat_tank) / ${hub_gas_heat_kwh_per_m3} * id(hub_price_gas).state;
       return NAN;
   # To samo ciepło (zasobnik) z kotła gazowego - porównanie z kosztem cyklu z pompy.
@@ -653,6 +708,9 @@ text_sensor:
       if (d99 == 61 || d99 == 62 || d99 == 64 || id(tt_pdu_3028).state == 1.0f || d09) what = "${t_hub_dhw}";
       else if (id(f1f2_outdoor_operation_state).state.find("${t_hub_ff_cooling_match}") != std::string::npos) what = "${t_hub_cooling}";
       else what = "${t_hub_heating}";
+      bool heater = id(hub_dhw_heater_on).state || d99 == 64;   // DHW electric heater (T-/T+ D99 64 or assumed)
+      if (heater && !hp && !boiler) return std::string("${t_hub_heater}: ${t_hub_dhw}");
+      if (heater && hp && !boiler) return std::string("${t_hub_hp_heater}: ${t_hub_dhw}");
       if (hp && boiler) return std::string("${t_hub_hp_boiler}: ") + what;
       if (hp) return std::string("${t_hub_hp}: ") + what;
       if (boiler) return std::string("${t_hub_boiler}: ") + what;
@@ -667,6 +725,8 @@ text_sensor:
         case 1: return std::string("${t_hub_hp}");
         case 2: return std::string("${t_hub_boiler}");
         case 3: return std::string("${t_hub_hp_boiler}");
+        case 4: return std::string("${t_hub_heater}");
+        case 5: return std::string("${t_hub_hp_heater}");
         default: return std::string("${t_hub_no_data}");
       }
 

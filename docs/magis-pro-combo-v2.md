@@ -105,7 +105,8 @@ direction pin) substitutions and leave out `hw_atoms3_portabc.yaml`.
    D61 comes over T-/T+). There is no flow rate D14 either: enter your installation's flow in *Assumed flow rate
    (instead of D14)* – and, if the DHW path differs, in *Assumed flow rate DHW* – and the hub computes heat output,
    COP and heat cost from it (an approximation – the pump modulates between A03 and A04). Without T-/T+ the hub
-   recognises DHW by D09 (DHW request) from D+/D-. Details in [cards/README.md](../cards/README.md).
+   recognises DHW by D09 (DHW request) from D+/D-. With a DHW electric heater enter its total power in *Assumed DHW
+   heater power* – it is on no bus, the hub then counts it in DHW states and energy. Details in [cards/README.md](../cards/README.md).
 5. Flash, add the device in Home Assistant, install the cards with HACS ([cards/README.md](../cards/README.md)) and create the
    dashboard with the strategy `custom:immergas-hub` (see the [overview](../README.md#dashboard)).
 

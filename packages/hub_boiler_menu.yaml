@@ -207,6 +207,23 @@ number:
     lambda: return id(hub_flow_assumed_dhw);
     set_action:
       - lambda: id(hub_flow_assumed_dhw) = x; id(hub_m_flow_dhw).publish_state(x);
+  # 1.11.16: total installed power of the DHW electric heater(s) (HERCULES PRO: DHW EH 1-3, e.g. 2.3 / 4.6 / 6.9 kW);
+  # 0 = none. It is on no bus: hub_combined takes it as heating with D09 on, the compressor and the boiler off and the
+  # cylinder below the setpoint, and counts it as DHW electricity and heat at COP 1 (global hub_dhw_heater_kw).
+  - platform: template
+    id: hub_m_dhw_heater
+    name: "${n_hub_m_dhw_heater}"
+    icon: mdi:heating-coil
+    entity_category: config
+    unit_of_measurement: "kW"
+    min_value: 0
+    max_value: 9
+    step: 0.1
+    mode: box
+    update_interval: 60s
+    lambda: return id(hub_dhw_heater_kw);
+    set_action:
+      - lambda: id(hub_dhw_heater_kw) = x; id(hub_m_dhw_heater).publish_state(x);
 
 # P15 anti-legionella: like U11 (hub_boiler_params) a reminder that it is switched on in the boiler menu
 switch:
@@ -217,3 +234,38 @@ switch:
     entity_category: config
     optimistic: true
     restore_mode: RESTORE_DEFAULT_OFF
+
+# 1.11.16: the night window the boiler keeps in the zone 1 panel (0x29 W 2701 on / 2702 start hour / 2703 end hour,
+# HERCULES PRO), known only while the hub emulates the panel (dd_emu29_store of dd_engine; empty until the boiler writes
+# it). Without T-/T+ it is the only source of the boiler's night window: the Mode card shows it in the Night mode tile.
+binary_sensor:
+  - platform: template
+    id: hub_m_night_on
+    name: "${n_hub_m_night_on}"
+    icon: mdi:weather-night
+    lambda: |-
+      int v = id(dd_emu29_store)[1];   // 2701
+      if (v == -32768) return {};
+      return v != 0;
+
+text_sensor:
+  - platform: template
+    id: hub_m_night_from
+    name: "${n_hub_m_night_from}"
+    icon: mdi:clock-start
+    update_interval: 60s
+    lambda: |-
+      int v = id(dd_emu29_store)[2];   // 2702 (hour)
+      if (v < 0 || v > 23) return {};
+      char b[8]; snprintf(b, sizeof(b), "%02d:00", v);
+      return std::string(b);
+  - platform: template
+    id: hub_m_night_to
+    name: "${n_hub_m_night_to}"
+    icon: mdi:clock-end
+    update_interval: 60s
+    lambda: |-
+      int v = id(dd_emu29_store)[3];   // 2703 (hour)
+      if (v < 0 || v > 23) return {};
+      char b[8]; snprintf(b, sizeof(b), "%02d:00", v);
+      return std::string(b);

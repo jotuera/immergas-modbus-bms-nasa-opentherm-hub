@@ -368,10 +368,12 @@ class ImmergasModeCard extends HubCard {
     // U12/U13 (window of the night function) are not on any bus: card options night_start / night_stop take an entity
     // (e.g. input_datetime) or a literal "21:00" - shown as a reminder and checked against the actual U11 state.
     const hm = (m: number | null) => (m === null ? null : String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"));
-    const a0 = this.timeOpt("night_start"), a1 = this.timeOpt("night_stop"), ns = hm(a0), ne = hm(a1);
+    // 1.11.16: without the options, the night window the boiler keeps in the emulated zone 1 panel (2701-2703)
+    const bt = (k: Key) => { const v = String(this.s(k) ?? ""); return /^\d\d?:\d\d/.test(v) ? +v.split(":")[0] * 60 + +v.split(":")[1].slice(0, 2) : null; };
+    const a0 = this.timeOpt("night_start") ?? bt("hub_m_night_from"), a1 = this.timeOpt("night_stop") ?? bt("hub_m_night_to"), ns = hm(a0), ne = hm(a1);
     const now = new Date(), nm = now.getHours() * 60 + now.getMinutes();
     const inWin = a0 === null || a1 === null ? null : a0 <= a1 ? nm >= a0 && nm < a1 : nm >= a0 || nm < a1;
-    const hint = this.dominus || nBad || inWin === null || inWin === nOn ? nothing : html`<div class="hint">${nOn
+    const hint = this.dominus || nBad || inWin === null || inWin === nOn || this.s("hub_m_night_on") === "off" ? nothing : html`<div class="hint">${nOn
       ? this.t("aktywny poza wpisanymi godzinami – sprawdź U12/U13 na piecu", "active outside the entered hours – check U12/U13 on the boiler")
       : this.t("we wpisanych godzinach, ale nieaktywny – sprawdź U11 na piecu", "inside the entered hours but inactive – check U11 on the boiler")}</div>`;
     // faint = an empty declared value (Dominus): the suggested value as a placeholder, the dialog sets the real one
@@ -379,15 +381,16 @@ class ImmergasModeCard extends HubCard {
       @click=${(e: Event) => { e.stopPropagation(); if (opt && this.hass.states[opt]) this.dispatchEvent(new CustomEvent("hass-more-info", { detail: { entityId: opt }, bubbles: true, composed: true })); }}>
       <span class="tt">${v ?? "–"}</span><span class="tl">${lbl}</span></div>`;
     // hub: "U11 set on the boiler" is the copy the cards use (the buses cannot switch U11): two taps, it changes nothing on the boiler
-    const u11Set = this.eid("u11_set") ? this.on("u11_set") : null, u11Conf = this.isArmed("tg_u11s");
+    const bNight = this.isSet("hub_m_night_on") ? this.on("hub_m_night_on") : null;   // read from the boiler (2701)
+    const u11Set = bNight ?? (this.eid("u11_set") ? this.on("u11_set") : null), u11Conf = this.isArmed("tg_u11s");
     const night = this.dominus ? this.declaredNight(tchip, ns, ne, inWin) : html`<div class="night" style=${box(nc, nOn)} @click=${() => this.moreInfo("u11")}>
       <ha-icon icon=${nOn ? "mdi:weather-night" : "mdi:moon-waning-crescent"}
         style="color:${c(nOn ? "lavender" : "overlay2")};${nOn ? `filter:drop-shadow(0 0 5px ${c("lavender")})` : ""}"></ha-icon>
       <div class="cx"><div class="nt">${this.t("Tryb nocny", "Night mode")} <span style="font-size:9.5px;opacity:.5">U11</span></div>
         <div class="ns" style="color:${c(nc)}">${u11Conf ? this.t("dotknij ponownie, aby potwierdzić", "tap again to confirm") : u11Set === false && !nOn ? this.t("nieustawiona na piecu", "not set on the boiler") : nBad ? this.t("brak odczytu", "no reading") : nOn ? this.t("aktywny · cichsza praca", "active · quieter operation") : this.t("nieaktywny", "inactive")}${!isNaN(npct) && npct > 0 ? ` · ${Math.round(npct)} %` : ""}</div></div>
-      ${ns || ne ? html`<div class="tcs">${tchip(this.opt("night_start"), "START · U12", ns)}<span style="opacity:.4">–</span>${tchip(this.opt("night_stop"), "STOP · U13", ne)}</div>`
+      ${ns || ne ? html`<div class="tcs">${tchip(this.opt("night_start") ?? this.eid("hub_m_night_from"), "START · U12", ns)}<span style="opacity:.4">–</span>${tchip(this.opt("night_stop") ?? this.eid("hub_m_night_to"), "STOP · U13", ne)}</div>`
         : !isNaN(npct) ? html`<div class="np" style="color:${c(npct > 0 ? "lavender" : "overlay2")}">${npct > 0 ? Math.round(npct) + " %" : this.t("bez limitu", "no limit")}</div>` : nothing}
-      ${u11Set === null ? nothing : html`<div class="tgl" style="flex:none;align-self:center;background:${u11Set ? ca("lavender", 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${u11Conf ? `;outline:2px solid ${c("lavender")}` : ""}"
+      ${u11Set === null || bNight !== null ? nothing : html`<div class="tgl" style="flex:none;align-self:center;background:${u11Set ? ca("lavender", 0.35) : "rgba(var(--ih-ov-rgb), .08)"}${u11Conf ? `;outline:2px solid ${c("lavender")}` : ""}"
         @click=${(e: Event) => { e.stopPropagation(); this.confirm("tg_u11s", () => this.call("switch", u11Set ? "turn_off" : "turn_on", "u11_set")); }}>
         <div class="kn" style="left:${u11Set ? 23 : 3}px;background:${u11Set ? c("lavender") : c("overlay1")}"></div></div>`}
     </div>${hint}`;

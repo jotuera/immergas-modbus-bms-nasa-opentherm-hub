@@ -106,7 +106,7 @@ Verified on **three buses** (D+/D-, T-/T+, NASA) at standby and during a forced 
 | 2410–2416 | Day → calendar — Zone 1 | CONFIRMED |
 | 2490–2496 | Day → calendar — DHW | CONFIRMED |
 | 2707 | Eco cooling (copy) | CONFIRMED |
-| 2295, 2701–2706, 2708, 6106 | MAGIS HERCULES PRO only: panel settings the boiler writes and reads back. 2702 / 2703 and 2705 / 2706 = start / end hour (0–23) of night windows 1 / 2; 2701, 2704, 2708 (190), 2295 (−1), 6106 (50) not decoded | CAND. |
+| 2295, 2701–2706, 2708, 6106 | MAGIS HERCULES PRO only: panel settings the boiler writes and reads back. **Night window: 2701 = on (1) / off (0), 2702 / 2703 = start / end hour (0–23)** – the times stay when it is off; hub: *Night window on / start / end (boiler)*. 2704 / 2705 / 2706 most likely a second window of the same form; 2708 (190), 2295 (−1), 6106 (50) not decoded | 2701–2703 CONFIRMED, rest CAND. |
 | 3042 | Panel firmware version (201 = 2.01) | CONFIRMED |
 
 **Set-flow 2217 is read only from the Dominus (0x33)** — from the panel the boiler reads 2214–2216 and 2218–2219, deliberately skipping 2217, so a panel (physical or emulated) cannot control set-flow.

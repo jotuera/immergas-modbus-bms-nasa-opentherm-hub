@@ -490,7 +490,7 @@ class ImmergasNowCard extends HubCard {
     if (!isNaN(pw)) sub.push(run && hp > 0 ? `${Math.round(Math.max(0, pw))} W → ${this.f(hp / 1000, 1, 1)} kW ${this.t("ciepła", "heat")}` : Math.round(Math.max(0, pw)) + " W");
     const fan = this.n("fan_real");
     if (fan > 0) sub.push(this.t("wentylator ", "fan ") + Math.round(fan) + this.t(" obr/min", " rpm"));
-    if (this.on("backup_heater") || this.on("dhw_heater")) sub.push(this.t("⚡ grzałka", "⚡ heater"));
+    if (this.on("backup_heater") || this.on("dhw_heater") || this.on("hub_dhw_heater_on")) sub.push(this.t("⚡ grzałka", "⚡ heater"));
     if (gas && !run) sub.push(this.t("🔥 kocioł gazowy", "🔥 gas boiler"));
 
     const o = this.n("tw2"), r = this.n("tw1");

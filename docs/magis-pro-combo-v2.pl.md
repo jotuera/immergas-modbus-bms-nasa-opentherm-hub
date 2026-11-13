@@ -103,7 +103,9 @@ transceiverze z pinem kierunku) i pomiń `hw_atoms3_portabc.yaml`.
    *Parametry pieca (offline)*; dopisz `variant: pro` pod `strategy:` dashboardu (model systemu D61 przychodzi z T-/T+).
    Nie ma też przepływu D14: wpisz przepływ swojej instalacji w *Przepływ przyjęty (zamiast D14)* – a jeśli obieg CWU
    ma inny, także w *Przepływ przyjęty CWU* – a hub policzy z niego moc cieplną, COP i koszt ciepła (w przybliżeniu –
-   pompa moduluje między A03 a A04). Bez T-/T+ hub rozpoznaje CWU po D09 (żądanie CWU) z D+/D-.
+   pompa moduluje między A03 a A04). Bez T-/T+ hub rozpoznaje CWU po D09 (żądanie CWU) z D+/D-. Przy grzałce
+   elektrycznej CWU wpisz jej łączną moc w *Moc grzałki CWU (przyjęta)* – nie ma jej na żadnej magistrali, hub
+   uwzględni ją wtedy w stanach i energii CWU.
    Szczegóły w [cards/README.pl.md](../cards/README.pl.md).
 5. Wgraj, dodaj urządzenie w Home Assistant, zainstaluj karty przez HACS ([cards/README.pl.md](../cards/README.pl.md)) i utwórz
    dashboard strategią `custom:immergas-hub` (zobacz [przegląd](../README.pl.md#dashboard)).

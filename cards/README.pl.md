@@ -57,7 +57,11 @@ wobec odczytów z D+/D- i F1/F2, a anty-legionella P15 wraca jako przełącznik 
 karta Krzywe to wyjaśnia i pokazuje bieżące D04.
 Ta sama karta ma *Przepływ przyjęty (zamiast D14)*: bez T-/T+ nie ma przepływu, więc moc cieplna, COP i koszt ciepła są
 puste, dopóki nie wpiszesz przepływu swojej instalacji. *Przepływ przyjęty CWU* hub bierze, gdy D09 zgłasza CWU (obieg
-zasobnika ma zwykle inny przepływ); puste = pierwsza wartość dla obu.
+zasobnika ma zwykle inny przepływ); puste = pierwsza wartość dla obu. *Moc grzałki CWU (przyjęta)* (suma zamontowanych
+grzałek CWU, 0 = brak): grzałki nie ma na żadnej magistrali, więc przy D09, stojącej sprężarce i zasobniku poniżej
+nastawy hub pokazuje *Grzałka: CWU* i liczy tę moc jako prąd i ciepło CWU (COP 1). Okno nocne, które kocioł trzyma
+w emulowanym panelu strefy 1 (HERCULES PRO, 2701–2703), pokazuje kafelek Tryb nocny w karcie Tryb. Karta Krzywe
+dopasowuje oś temperatury do krzywej.
 `bms: false` / `bms: true` pod `strategy:` wymusza jedno albo drugie.
 
 **Bez huba – Immergas Dominus:** z samą integracją [Immergas Dominus](https://github.com/jotuera/immergas-dominus)

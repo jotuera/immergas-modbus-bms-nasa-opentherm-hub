@@ -57,7 +57,11 @@ Calibration card judges it against the readings from D+/D- and F1/F2, and anti-l
 "set on the boiler" switch like U11. Without the copies the Curve card explains it and shows the live D04.
 The same card has *Assumed flow (instead of D14)*: without T-/T+ there is no flow rate, so heat output, COP and heat
 cost stay empty until you enter your installation's flow. *Assumed flow DHW* is used while D09 says DHW (the
-cylinder circuit usually has a different flow); empty = the first value for both.
+cylinder circuit usually has a different flow); empty = the first value for both. *Assumed DHW heater power* (total of
+the DHW electric heaters fitted, 0 = none): the heater is on no bus, so with D09 on, the compressor stopped and the
+cylinder below the setpoint the hub shows *Electric heater: DHW* and counts this power as DHW electricity and heat
+(COP 1). The night window the boiler keeps in the emulated zone 1 panel (HERCULES PRO, 2701–2703) shows in the Night
+mode tile of the Mode card. The Curve card fits its temperature axis to the curve.
 `bms: false` / `bms: true` under `strategy:` forces it either way.
 
 **Without a hub – Immergas Dominus:** with only the [Immergas Dominus](https://github.com/jotuera/immergas-dominus)

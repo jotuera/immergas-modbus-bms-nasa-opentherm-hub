@@ -7,6 +7,7 @@ in your device YAML, which package versions it brings.
 
 | Release | Date | Highlights |
 |---|---|---|
+| [v1.11.16](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.16) | 2026-11-13 | Without T-/T+: daily CH / DHW energy split and the cycle statistics now use D09. *Assumed DHW heater power*: the DHW electric heater shows as *Electric heater: DHW* and counts in DHW energy (COP 1). HERCULES PRO night window (2701–2703) as entities and in the Night mode tile. Curve card: temperature axis fits the curve. MAGIS M TOP BMS: 8N1 |
 | [v1.11.15](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.15) | 2026-11-12 | Without T-/T+: DHW recognised by D09 (operating state, DHW cycles, COP DHW); separate *Assumed flow rate DHW*. Emulated zone 1 panel: DHW Comfort / Eco served separately and taken from the boiler menu, panel-only settings (HERCULES PRO night windows 2701–2708) stored; DHW Eco and D05 from 20 °C. Diagram: shared return animates during DHW |
 | [v1.11.14](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.14) | 2026-11-12 | Without T-/T+: *Assumed flow rate (instead of D14)* in `hub_boiler_menu` – heat output, COP and heat cost without the D14 flow rate |
 | [v1.11.13](https://github.com/jotuera/immergas-modbus-bms-nasa-opentherm-hub/releases/tag/v1.11.13) | 2026-11-12 | Diagram: the DHW setpoint falls back to D05 when the active setpoint (zone panel traffic) is missing |

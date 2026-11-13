@@ -15770,6 +15770,34 @@
   ]
  },
  {
+  "en": "During DHW (D09) the hub takes the DHW flow – the cylinder circuit usually has a different resistance. Empty = the value above for both.",
+  "pl": "Przy CWU (D09) hub bierze przepływ CWU – obieg zasobnika ma zwykle inny opór. Puste = wartość powyżej dla obu.",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Assumed flow DHW (instead of D14)",
+  "pl": "Przepływ przyjęty CWU (zamiast D14)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "The DHW electric heater is on no bus. Enter the total power of the heaters fitted (0 = none) – with D09 on, the compressor stopped and the cylinder below the setpoint the hub shows “Electric heater: DHW” and adds this power to the DHW electricity and heat (COP 1).",
+  "pl": "Grzałki CWU nie widać na żadnej magistrali. Wpisz łączną moc zamontowanych grzałek (0 = brak) – przy D09, stojącej sprężarce i zasobniku poniżej nastawy hub pokaże stan „Grzałka: CWU” i doliczy tę moc do prądu i ciepła CWU (COP 1).",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
+  "en": "Assumed DHW heater power",
+  "pl": "Moc grzałki CWU (przyjęta)",
+  "files": [
+   "settings.ts"
+  ]
+ },
+ {
   "en": "Fault descriptions",
   "pl": "Opisy błędów",
   "files": [

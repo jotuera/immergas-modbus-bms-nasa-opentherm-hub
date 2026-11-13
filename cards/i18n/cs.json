@@ -2498,5 +2498,7 @@
   "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).": "Bez T-/T+ není průtok D14, takže tepelný výkon, COP a cena tepla zůstávají prázdné. Zadejte průtok své instalace – hub ho použije místo D14 (přibližně, čerpadlo moduluje mezi A03 a A04).",
   "Assumed flow (instead of D14)": "Předpokládaný průtok (místo D14)",
   "During DHW (D09) the hub takes the DHW flow – the cylinder circuit usually has a different resistance. Empty = the value above for both.": "Při TUV (D09) hub použije průtok TUV – okruh zásobníku má obvykle jiný odpor. Prázdné = hodnota výše pro oba.",
-  "Assumed flow DHW (instead of D14)": "Předpokládaný průtok TUV (místo D14)"
+  "Assumed flow DHW (instead of D14)": "Předpokládaný průtok TUV (místo D14)",
+  "The DHW electric heater is on no bus. Enter the total power of the heaters fitted (0 = none) – with D09 on, the compressor stopped and the cylinder below the setpoint the hub shows “Electric heater: DHW” and adds this power to the DHW electricity and heat (COP 1).": "Topná tyč TUV není na žádné sběrnici. Zadejte celkový výkon instalovaných topných tyčí (0 = žádná) – při D09, stojícím kompresoru a zásobníku pod nastavenou teplotou hub ukáže „Topná tyč: TUV“ a připočte tento výkon k elektřině a teplu TUV (COP 1).",
+  "Assumed DHW heater power": "Předpokládaný výkon topné tyče TUV"
 }

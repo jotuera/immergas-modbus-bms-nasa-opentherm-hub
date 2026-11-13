@@ -2498,5 +2498,7 @@
   "Without T-/T+ there is no D14 flow rate, so heat output, COP and heat cost stay empty. Enter your installation's flow – the hub uses it instead of D14 (an approximation, the pump modulates between A03 and A04).": "T-/T+ nélkül nincs D14 térfogatáram, így a hőteljesítmény, a COP és a hőköltség üres marad. Adja meg a rendszer térfogatáramát – a hub ezt használja a D14 helyett (közelítés, a szivattyú A03 és A04 között modulál).",
   "Assumed flow (instead of D14)": "Feltételezett térfogatáram (D14 helyett)",
   "During DHW (D09) the hub takes the DHW flow – the cylinder circuit usually has a different resistance. Empty = the value above for both.": "HMV közben (D09) a hub a HMV térfogatáramot használja – a tároló köre általában más ellenállású. Üres = a fenti érték mindkettőre.",
-  "Assumed flow DHW (instead of D14)": "Feltételezett térfogatáram HMV (D14 helyett)"
+  "Assumed flow DHW (instead of D14)": "Feltételezett térfogatáram HMV (D14 helyett)",
+  "The DHW electric heater is on no bus. Enter the total power of the heaters fitted (0 = none) – with D09 on, the compressor stopped and the cylinder below the setpoint the hub shows “Electric heater: DHW” and adds this power to the DHW electricity and heat (COP 1).": "A HMV fűtőbetét egyik buszon sincs rajta. Add meg a beépített fűtőbetétek összteljesítményét (0 = nincs) – D09 mellett, álló kompresszornál és az alapérték alatti tárolónál a hub „Fűtőbetét: HMV” állapotot mutat, és ezt a teljesítményt a HMV áramhoz és hőhöz adja (COP 1).",
+  "Assumed DHW heater power": "Feltételezett HMV fűtőbetét teljesítmény"
 }
