@@ -1,0 +1,232 @@
+# Immergas hub - package "hub_recirc"
+# "Recirculation boost" for a MAGIS HERCULES PRO (and any Magis whose recirculation program lives in the boiler):
+#  - the recirculation program (day -> Cal. 1..4) is boiler-internal: changing it on the panel produces no
+#    register on D+/D- (verified with the bus sniffer), so the hub cannot read or set it - the user declares
+#    the calendar in the select below (Card: Schedule -> Recirculation, manual, must match the boiler menu);
+#  - the calendar BANDS (Cal. 1-4, registers 2310-2347) ARE on the bus and the boiler re-reads them every few
+#    seconds, so a temporary band starts the recirculation;
+#  - the M4 recirculation pump and the B32 probe are on no bus: there is no feedback, the button only triggers.
+#
+# A boost adds one temporary range "now -> now + N min" (15-minute steps) to the declared calendar and removes
+# it when it ends (also after a reboot, the state is kept in flash). Pressing the button again while the boost
+# runs cancels it at once - the same restore, so the calendar gets its old range back immediately.
+# Rules:
+#  - a band already covering "now" -> nothing to do
+#  - the range goes to its chronological place: the free range at that position, else the band that already
+#    started (the boiler normalises a block whose ranges are not in ascending order!)
+#  - only that one range is touched and its old values are restored afterwards
+#
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through `packages:`.
+# Needs packages/dd_schedules.yaml (the Cal. 1-4 bands) and a time source (dd_ha_time from dd_core).
+globals:
+  - id: rc_saved_cal
+    type: int
+    restore_value: true
+    initial_value: "-1"
+  - id: rc_saved_slot
+    type: int
+    restore_value: true
+    initial_value: "-1"
+  - id: rc_saved_on
+    type: int
+    restore_value: true
+    initial_value: "0"
+  - id: rc_saved_off
+    type: int
+    restore_value: true
+    initial_value: "0"
+  - id: rc_boost_end
+    type: uint32_t
+    restore_value: true
+    initial_value: "0"
+  - id: rc_boost_end_min
+    type: int
+    restore_value: true
+    initial_value: "0"
+  - id: rc_boost_start_min
+    type: int
+    restore_value: true
+    initial_value: "0"
+  - id: rc_cancel_flag
+    type: bool
+    initial_value: "false"
+
+select:
+  - platform: template
+    name: "${n_hub_rc_calendar}"
+    id: rc_calendar
+    icon: mdi:calendar-month
+    optimistic: true
+    restore_value: true
+    options:
+      - "Calendar 1"
+      - "Calendar 2"
+      - "Calendar 3"
+      - "Calendar 4"
+    initial_option: "Calendar 3"
+
+number:
+  - platform: template
+    name: "${n_hub_rc_minutes}"
+    id: rc_minutes
+    icon: mdi:timer-sand
+    unit_of_measurement: min
+    optimistic: true
+    restore_value: true
+    min_value: 15
+    max_value: 90
+    step: 15
+    initial_value: 15
+
+binary_sensor:
+  - platform: template
+    name: "${n_hub_rc_active}"
+    id: rc_active
+    icon: mdi:sync
+    lambda: return id(rc_saved_cal) >= 0;
+
+text_sensor:
+  - platform: template
+    name: "${n_hub_rc_info}"
+    id: rc_info
+    icon: mdi:information-outline
+    update_interval: 30s
+    lambda: |-
+      if (id(rc_saved_cal) < 0) return std::string("idle");
+      char b[64];
+      snprintf(b, sizeof(b), "Cal. %d range %d until %02d:%02d",
+               id(rc_saved_cal) + 1, id(rc_saved_slot) + 1,
+               id(rc_boost_end_min) / 60, id(rc_boost_end_min) % 60);
+      return std::string(b);
+
+button:
+  - platform: template
+    name: "${n_hub_rc_boost}"
+    id: rc_boost
+    icon: mdi:sync-circle
+    on_press:
+      - lambda: |-
+          datetime::TimeEntity *cal[4][4][2] = {
+            {{id(dd_dt_cal1_f1_on), id(dd_dt_cal1_f1_off)}, {id(dd_dt_cal1_f2_on), id(dd_dt_cal1_f2_off)},
+             {id(dd_dt_cal1_f3_on), id(dd_dt_cal1_f3_off)}, {id(dd_dt_cal1_f4_on), id(dd_dt_cal1_f4_off)}},
+            {{id(dd_dt_cal2_f1_on), id(dd_dt_cal2_f1_off)}, {id(dd_dt_cal2_f2_on), id(dd_dt_cal2_f2_off)},
+             {id(dd_dt_cal2_f3_on), id(dd_dt_cal2_f3_off)}, {id(dd_dt_cal2_f4_on), id(dd_dt_cal2_f4_off)}},
+            {{id(dd_dt_cal3_f1_on), id(dd_dt_cal3_f1_off)}, {id(dd_dt_cal3_f2_on), id(dd_dt_cal3_f2_off)},
+             {id(dd_dt_cal3_f3_on), id(dd_dt_cal3_f3_off)}, {id(dd_dt_cal3_f4_on), id(dd_dt_cal3_f4_off)}},
+            {{id(dd_dt_cal4_f1_on), id(dd_dt_cal4_f1_off)}, {id(dd_dt_cal4_f2_on), id(dd_dt_cal4_f2_off)},
+             {id(dd_dt_cal4_f3_on), id(dd_dt_cal4_f3_off)}, {id(dd_dt_cal4_f4_on), id(dd_dt_cal4_f4_off)}}
+          };
+          auto now = id(dd_ha_time).now();
+          if (!now.is_valid()) { ESP_LOGW("rc", "no time yet (HA time not synced)"); return; }
+          if (id(rc_saved_cal) >= 0) {
+            // while a boost runs the same button cancels it: restore the replaced band now
+            ESP_LOGW("rc", "boost cancel requested");
+            id(rc_cancel_flag) = true;
+            id(rc_restore)->execute();
+            return;
+          }
+          int dur = (int) roundf(id(rc_minutes).state);
+          dur = (dur / 15) * 15;
+          if (dur < 15) dur = 15;
+          int c = (int) id(rc_calendar).active_index().value_or(2);
+          if (c < 0 || c > 3) c = 2;
+          int m = now.hour * 60 + now.minute;
+          auto rd = [&](int slot, bool off) -> int {
+            return off ? cal[c][slot][1]->hour * 60 + cal[c][slot][1]->minute
+                       : cal[c][slot][0]->hour * 60 + cal[c][slot][0]->minute;
+          };
+          auto wr = [&](int slot, bool off, int mins) {
+            cal[c][slot][off ? 1 : 0]->make_call().set_time(mins / 60, mins % 60, 0).perform();
+          };
+          // already inside one of this calendar's ranges?
+          for (int f = 0; f < 4; f++) {
+            int a = rd(f, false), br = rd(f, true);
+            if (a == br) continue;
+            int b = (br == 0) ? 1440 : br;
+            if (a < b ? (m >= a && m < b) : (m >= a || m < b)) {
+              ESP_LOGW("rc", "already active in calendar %d", c + 1);
+              return;
+            }
+          }
+          // The boiler normalises a block whose ranges are not in ascending order (it replaces
+          // such a range with the end of the previous one), so the boost must go to its
+          // chronological place: the free slot at that position, else the band that already
+          // started (its window has passed - nothing was active, checked above).
+          int k = 0;
+          for (int f = 0; f < 4; f++) {
+            int a = rd(f, false), b = rd(f, true);
+            if (a != b && a <= m) k++;
+          }
+          // the boiler menu / the card only use 15-minute steps: snap the band to quarter hours -
+          // the start floors (starts immediately) and the end rounds up, so the boost always lasts
+          // at least <duration> minutes
+          m = (m / 15) * 15;
+          int endm = ((now.hour * 60 + now.minute + dur + 14) / 15) * 15;
+          if (endm <= m) endm += 15;
+          endm %= 1440;
+          int remain = (endm - m + 1440) % 1440;
+          if (remain == 0) remain = 1440;
+          int slot = (k < 4 && rd(k, false) == rd(k, true)) ? k : (k > 0 ? k - 1 : 0);
+          int a0 = rd(slot, false), b0 = rd(slot, true);
+          id(rc_saved_cal) = c;
+          id(rc_saved_slot) = slot;
+          id(rc_saved_on) = a0;
+          id(rc_saved_off) = b0;
+          int e = endm;
+          wr(slot, false, m);
+          wr(slot, true, e);
+          id(rc_boost_end) = (uint32_t) now.timestamp + (uint32_t) remain * 60;
+          id(rc_boost_end_min) = e;
+          id(rc_boost_start_min) = m;
+          id(rc_active).publish_state(true);
+          char info[64];
+          snprintf(info, sizeof(info), "Cal. %d range %d until %02d:%02d",
+                   c + 1, slot + 1, e / 60, e % 60);
+          id(rc_info).publish_state(info);
+          ESP_LOGW("rc", "boost: cal %d range %d %02d:%02d-%02d:%02d (was %02d:%02d-%02d:%02d), %d min",
+                   c + 1, slot + 1, m / 60, m % 60, e / 60, e % 60,
+                   a0 / 60, a0 % 60, b0 / 60, b0 % 60, remain);
+
+script:
+  # put the range the boost replaced back (end of the boost, or the button pressed again = cancel)
+  - id: rc_restore
+    mode: restart
+    then:
+      - lambda: |-
+          if (id(rc_saved_cal) < 0) return;
+          datetime::TimeEntity *cal[4][4][2] = {
+            {{id(dd_dt_cal1_f1_on), id(dd_dt_cal1_f1_off)}, {id(dd_dt_cal1_f2_on), id(dd_dt_cal1_f2_off)},
+             {id(dd_dt_cal1_f3_on), id(dd_dt_cal1_f3_off)}, {id(dd_dt_cal1_f4_on), id(dd_dt_cal1_f4_off)}},
+            {{id(dd_dt_cal2_f1_on), id(dd_dt_cal2_f1_off)}, {id(dd_dt_cal2_f2_on), id(dd_dt_cal2_f2_off)},
+             {id(dd_dt_cal2_f3_on), id(dd_dt_cal2_f3_off)}, {id(dd_dt_cal2_f4_on), id(dd_dt_cal2_f4_off)}},
+            {{id(dd_dt_cal3_f1_on), id(dd_dt_cal3_f1_off)}, {id(dd_dt_cal3_f2_on), id(dd_dt_cal3_f2_off)},
+             {id(dd_dt_cal3_f3_on), id(dd_dt_cal3_f3_off)}, {id(dd_dt_cal3_f4_on), id(dd_dt_cal3_f4_off)}},
+            {{id(dd_dt_cal4_f1_on), id(dd_dt_cal4_f1_off)}, {id(dd_dt_cal4_f2_on), id(dd_dt_cal4_f2_off)},
+             {id(dd_dt_cal4_f3_on), id(dd_dt_cal4_f3_off)}, {id(dd_dt_cal4_f4_on), id(dd_dt_cal4_f4_off)}}
+          };
+          int c = id(rc_saved_cal), s = id(rc_saved_slot);
+          int a = id(rc_saved_on), b = id(rc_saved_off);
+          cal[c][s][0]->make_call().set_time(a / 60, a % 60, 0).perform();
+          cal[c][s][1]->make_call().set_time(b / 60, b % 60, 0).perform();
+          ESP_LOGW("rc", "boost %s: cal %d range %d restored to %02d:%02d-%02d:%02d",
+                   id(rc_cancel_flag) ? "cancelled" : "finished",
+                   c + 1, s + 1, a / 60, a % 60, b / 60, b % 60);
+          id(rc_cancel_flag) = false;
+          id(rc_saved_cal) = -1;
+          id(rc_saved_slot) = -1;
+          id(rc_boost_end) = 0;
+          id(rc_active).publish_state(false);
+          id(rc_info).publish_state("idle");
+
+interval:
+  - interval: 20s
+    then:
+      - lambda: |-
+          if (id(rc_saved_cal) < 0) return;
+          auto now = id(dd_ha_time).now();
+          if (!now.is_valid()) return;
+          int nowm = now.hour * 60 + now.minute;
+          int sm = id(rc_boost_start_min), em = id(rc_boost_end_min);
+          bool in_band = sm <= em ? (nowm >= sm && nowm < em) : (nowm >= sm || nowm < em);
+          if (in_band) return;
+          id(rc_restore)->execute();

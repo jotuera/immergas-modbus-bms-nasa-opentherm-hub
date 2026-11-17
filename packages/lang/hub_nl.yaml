@@ -122,3 +122,11 @@ substitutions:
   n_hub_fault_text: "${hub_name_prefix} - Actieve storing (omschrijving)"
   t_hub_no_faults: "Geen storingen"
   t_hub_fault_odu: "Buitenunit"
+
+  # recirculation boost (hub_recirc)
+  n_hub_rc_calendar: "${hub_name_prefix} - Recirculation calendar"
+  n_hub_rc_minutes: "${hub_name_prefix} - Recirculation boost minutes"
+  n_hub_rc_boost: "${hub_name_prefix} - Recirculation boost"
+  n_hub_rc_active: "${hub_name_prefix} - Recirculation boost active"
+  n_hub_rc_info: "${hub_name_prefix} - Recirculation boost info"
+

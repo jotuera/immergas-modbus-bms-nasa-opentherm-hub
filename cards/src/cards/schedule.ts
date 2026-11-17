@@ -47,6 +47,10 @@ class ImmergasScheduleCard extends HubCard {
     const opt = opts[opts[0]?.startsWith("(") ? n : n - 1];
     if (opt) this.call("select", "select_option", this.sel(d), { option: opt });
   }
+  // the boiler does not report which calendar drives the recirculation - the user declares it here
+  private setRecirc(n: number) {
+    this.call("select", "select_option", "rc_cal", { option: `Calendar ${n}` });
+  }
   private bump(cal: number, z: number, x: "on" | "off", d: number) {
     const k = this.tk(cal, z, x), cur = this.tmin(cal, z, x);
     if (cur == null) return;
@@ -83,41 +87,50 @@ class ImmergasScheduleCard extends HubCard {
     return html`<div class="axis">${[0, 6, 12, 18, 24].map((t) => html`<span style="left:${t / 0.24}%;transform:translateX(${t === 0 ? 0 : t === 24 ? -100 : -50}%)">${t}:00</span>`)}</div>`;
   }
 
-  // --- layout "calendars" (Dominus) ---
-  private calendars(ks: number[], today: number, nowM: number) {
+  // --- layout "calendars" (Dominus / CH / DHW); `sel` + `lock` = the recirculation tab:
+  //     the calendar the boiler uses for recirculation is highlighted, the day chips are disabled
+  //     (that mapping is boiler-internal) and tapping a calendar header selects it as the one
+  private calendars(ks: number[], today: number, nowM: number, sel?: number, lock?: boolean) {
     const names = dayNames(this.loc), activeCal = ks[today];
     return html`<div class="cals">${[1, 2, 3, 4].map((cal) => {
       const col = KC[cal], days = DAYS.map((_, i) => ks[i] === cal), used = days.some((x) => x), isOpen = this.open === cal;
       const rs = this.ranges(cal);
-      const txt = rs.length ? rs.map(([a, b]) => `${hm(a)}–${hm(b)}`).join(", ") : this.t("brak zakresów", "no ranges");
-      return html`<div class="cal" style="background:${ca(col, used ? 0.08 : 0.03)};border:1px solid ${ca(col, used ? 0.3 : 0.12)}">
-        <div class="ch" @click=${() => { this.open = isOpen ? 0 : cal; this.requestUpdate(); }}>
+      const txt = rs.length ? rs.map(([a, b]) => `${hm(a)}-${hm(b)}`).join(", ") : this.t("brak zakresów", "no ranges");
+      return html`<div class="cal" style="background:${ca(col, used ? 0.08 : 0.03)};border:1px solid ${ca(col, used ? 0.3 : 0.12)}${cal === sel ? `;box-shadow:0 0 0 2px ${ca(col, 0.55)}` : ""}">
+        <div class="ch" @click=${() => {
+          if (lock) this.call("select", "select_option", "rc_cal", { option: `Calendar ${cal}` });
+          else { this.open = isOpen ? 0 : cal; this.requestUpdate(); }
+        }}>
           <span class="cn" style="color:${c(col)}">${this.t("Kalendarz", "Calendar")} ${cal}</span>
           <span class="ct">${txt}</span>
-          <ha-icon icon=${isOpen ? "mdi:chevron-up" : "mdi:pencil-outline"}></ha-icon></div>
-        ${this.bar(cal, 10, cal === activeCal ? nowM : null)}
-        <div class="days">${DAYS.map((d, i) => html`<div class="day" style=${days[i] ? `background:${ca(col, 0.28)};border-color:${ca(col, 0.7)};color:${c(col)}` : ""}
-          @click=${() => !days[i] && this.pick(d, cal)}
-          title=${days[i] ? "" : this.t(`przenieś ${names[i]} do kalendarza ${cal}`, `move ${names[i]} to calendar ${cal}`)}>
+          <ha-icon icon=${isOpen ? "mdi:chevron-up" : "mdi:pencil-outline"}
+            @click=${(e: Event) => { e.stopPropagation(); this.open = isOpen ? 0 : cal; this.requestUpdate(); }}></ha-icon></div>
+        ${this.bar(cal, 10, (lock ? cal === sel : cal === activeCal) ? nowM : null)}
+        <div class="days">${DAYS.map((d, i) => html`<div class="day" style=${days[i] ? `background:${ca(col, 0.28)};border-color:${ca(col, 0.7)};color:${c(col)}` : lock ? "opacity:.45" : ""}
+          @click=${() => { if (!lock && !days[i]) this.pick(d, cal); }}
+          title=${lock ? this.t("przypisanie dni recyrkulacji ustawia się w menu pieca", "the recirculation day assignment is set in the boiler menu")
+            : days[i] ? "" : this.t(`przenieś ${names[i]} do kalendarza ${cal}`, `move ${names[i]} to calendar ${cal}`)}>
           ${names[i]}${i === today ? html`<span class="td"></span>` : nothing}</div>`)}</div>
         ${isOpen ? this.rangeEditor(cal) : nothing}</div>`;
     })}</div>${this.axis()}`;
   }
 
-  // --- layout "week" ---
-  private week(ks: number[], today: number, nowM: number) {
+  // --- layout "week"; `recirc` = recirculation tab: the picks choose the one calendar the boiler
+  //     uses for recirculation instead of a day assignment (that mapping is boiler-internal)
+  private week(ks: number[], today: number, nowM: number, recirc?: boolean) {
     const names = dayNames(this.loc), kAll = ks.every((x) => x === ks[0]) ? ks[0] : 0, cal = this.edit || ks[today] || 1;
+    const pick = (d: string, n: number) => recirc ? this.setRecirc(n) : this.pick(d, n);
     return html`
       ${DAYS.map((d, i) => html`<div class="wr">
         <div class="dl" style=${i === today ? `color:${c("mauve")}` : "opacity:.75"}>${names[i]}</div>
         ${this.bar(ks[i], i === today ? 14 : 10, i === today ? nowM : null)}
-        <div class="picks">${[1, 2, 3, 4].map((n) => this.pk(n, n === ks[i], () => n !== ks[i] && this.pick(d, n)))}</div></div>`)}
+        <div class="picks">${[1, 2, 3, 4].map((n) => this.pk(n, n === ks[i], () => n !== ks[i] && pick(d, n)))}</div></div>`)}
       <div class="wax">${this.axis()}</div>
-      <div class="allr"><span class="al">${this.t("Wszystkie dni", "All days")} <span style="opacity:.5">(${this.t("2× dotknij", "tap twice")})</span></span>
+      <div class="allr"><span class="al">${recirc ? this.t("Kalendarz recyrkulacji", "Recirculation calendar") : this.t("Wszystkie dni", "All days")} <span style="opacity:.5">(${recirc ? this.t("wybór", "selection") : this.t("2× dotknij", "tap twice")})</span></span>
         <div class="picks">${[1, 2, 3, 4].map((n) => {
           const tag = "all" + n, armed = this.isArmed(tag);
           return html`<div class="pk big" style=${n === kAll ? `background:${ca(KC[n], 0.3)};border:1px solid ${ca(KC[n], 0.8)};color:${c(KC[n])}` : armed ? `outline:2px solid ${c(KC[n])}` : ""}
-            @click=${() => n !== kAll && this.confirm(tag, () => this.pick("all", n))}>${armed ? "✓?" : n}</div>`;
+            @click=${() => recirc ? pick("all", n) : n !== kAll && this.confirm(tag, () => this.pick("all", n))}>${armed ? "✓?" : n}</div>`;
         })}</div></div>
       <div class="ed" style="background:${ca(KC[cal], 0.06)};border:1px solid ${ca(KC[cal], 0.22)}">
         <div class="eh"><span>${this.t("Edycja kalendarza", "Edit calendar")}</span>
@@ -130,13 +143,19 @@ class ImmergasScheduleCard extends HubCard {
     const now = new Date(), nowM = now.getHours() * 60 + now.getMinutes(), today = (now.getDay() + 6) % 7;
     const ks = DAYS.map((d) => this.kOf(d)), activeCal = ks[today];
     const active = activeCal > 0 && this.ranges(activeCal).some(([a, b]) => nowM >= a && nowM < b);
-    const view = this.view || this.config.layout || "calendars", cwu = this.cwu;
+    const view = this.view || this.config.layout || "calendars";
+    const rc = !!this.eid("rc_cal");
+    const curTab = this.tabT || (this.config.target === "cwu" ? "cwu" : "co");
+    const cwu = curTab === "cwu", recircTab = curTab === "recirc";
     const tab = (id: string, icon: string, lbl: string, col: string) => {
-      const on = (id === "cwu") === cwu;
+      const on = id === curTab;
       return html`<div class="tab" style=${on ? `background:${ca(col, 0.24)};border-color:${ca(col, 0.6)}` : ""}
         @click=${() => { this.tabT = id; this.open = 0; this.edit = 0; this.requestUpdate(); }}><ha-icon icon=${icon} style="color:${c(col)}"></ha-icon>${lbl}</div>`;
     };
-    const stateTxt = cwu ? (active ? this.t("teraz w harmonogramie", "now in schedule") : this.t("teraz poza harmonogramem (Eko)", "now outside schedule (Eco)"))
+    const rcSelTxt = this.so("rc_cal")?.state ?? "";
+    const rcCal = parseInt(rcSelTxt.replace(/[^0-9]/g, ""), 10) || 0;
+    const stateTxt = recircTab ? (this.on("rc_on") ? (this.s("rc_info") ?? "") : this.t("boost nieaktywny", "boost idle"))
+      : cwu ? (active ? this.t("teraz w harmonogramie", "now in schedule") : this.t("teraz poza harmonogramem (Eko)", "now outside schedule (Eco)"))
       : (this.txt("zone1_phase") ?? "");
     // DHW: Comfort / Eco from the DD entities (DD >= 2.4.0), else the single D05 setpoint
     const ddDhw = !!this.eid("dhw_comfort_dd") && !!this.eid("dhw_eco_dd");
@@ -152,14 +171,15 @@ class ImmergasScheduleCard extends HubCard {
         <div class="tabs">
           ${tab("co", "mdi:radiator", this.t("CO · Strefa 1", "CH · Zone 1"), "peach")}
           ${tab("cwu", "mdi:water-boiler", this.t("CWU", "DHW"), "sky")}
-          <div class="vt" title=${view === "week" ? this.t("widok kalendarzy", "calendar view") : this.t("widok tygodnia", "week view")}
+          ${rc ? tab("recirc", "mdi:sync", this.t("Recyrkulacja", "Recirculation"), "teal") : nothing}
+          ${html`<div class="vt" title=${view === "week" ? this.t("widok kalendarzy", "calendar view") : this.t("widok tygodnia", "week view")}
             @click=${() => { this.view = view === "week" ? "calendars" : "week"; this.requestUpdate(); }}>
-            <ha-icon icon=${view === "week" ? "mdi:view-agenda-outline" : "mdi:calendar-week"}></ha-icon></div></div></div>
-      <div class="st" style="color:${c(active ? "green" : "overlay2")}">${stateTxt}</div>
+            <ha-icon icon=${view === "week" ? "mdi:view-agenda-outline" : "mdi:calendar-week"}></ha-icon></div>`}</div></div>
+      <div class="st" style="color:${c((recircTab ? this.on("rc_on") : active) ? "green" : "overlay2")}">${stateTxt}</div>
       ${this.dominus && !this.eid("k1z1on") ? html`<div class="note" style="color:${c("yellow")}">${this.t(
         "Godziny kalendarzy są ukryte: włącz urządzenie „Heating schedule” integracji Immergas Dominus (Ustawienia → Urządzenia).",
         "Calendar hours are hidden: enable the “Heating schedule” device of the Immergas Dominus integration (Settings → Devices).")}</div>` : nothing}
-      ${this.progLock()}<div class=${this.otRO ? "locked" : ""}>
+      ${recircTab ? html`${view === "week" ? this.week(new Array(7).fill(rcCal || 1), today, nowM, true) : this.calendars(ks, today, nowM, rcCal, true)}${this.recircBody()}` : html`${this.progLock()}<div class=${this.otRO ? "locked" : ""}>
       ${view === "week" ? this.week(ks, today, nowM) : this.calendars(ks, today, nowM)}
       <div class="row">${sets.map(([k, icon, lbl]) => {
         const v = this.n(k as Key), a = this.so(k as Key)?.attributes ?? {}, step = a.step ?? 0.5;
@@ -182,7 +202,35 @@ class ImmergasScheduleCard extends HubCard {
         ? this.t("Wybierz kalendarz dla każdego dnia; zakresy edytujesz w polu poniżej. Zakresy kalendarzy są wspólne dla CO i CWU, przypisanie dni — osobne.",
           "Pick a calendar for each day; edit the ranges below. Calendar ranges are shared by CH and DHW, the day assignment is separate.")
         : this.t("Dotknij dnia, aby przenieść go do kalendarza; ołówek otwiera zakresy godzin. Zakresy kalendarzy są wspólne dla CO i CWU, dni tygodnia — osobne.",
-          "Tap a day to move it to the calendar; the pencil opens the time ranges. Calendar ranges are shared by CH and DHW, the weekdays are separate.")}</div></div>`;
+          "Tap a day to move it to the calendar; the pencil opens the time ranges. Calendar ranges are shared by CH and DHW, the weekdays are separate.")}</div></div>`}`;
+  }
+
+  /** Recirculation tab: the boiler's recirculation program (day -> calendar) is internal and not on
+   *  the bus, only the calendar bands are. A boost adds a temporary range to the calendar the user
+   *  declares as the recirculation one, and the hub removes it when the boost ends (also after a
+   *  reboot). The pump is on no bus either, so there is no feedback - the button only triggers. */
+  private recircBody() {
+    const on = this.on("rc_on");
+    const mins = this.n("rc_min"), a = this.so("rc_min")?.attributes ?? {};
+    const step = a.step ?? 15, mn = a.min ?? 15, mx = a.max ?? 90;
+    const setM = (d: number) => this.call("number", "set_value", "rc_min", { value: Math.max(mn, Math.min(mx, mins + d * step)) });
+    return html`
+      <div class="note" style="color:${c("yellow")}">${this.t(
+        "Piec nie podaje, który kalendarz obsługuje recyrkulację - dotknij nagłówka kalendarza powyżej, aby wskazać ten sam, który ustawiłeś w menu pieca (Zegar i programy → Program recyrkulacji). Zmiana na piecu wymaga zmiany także tutaj.",
+        "The boiler does not report which calendar drives the recirculation - tap a calendar header above to pick the same one you selected in the boiler menu (Clock and programs → Recirculation Program). If you change it on the boiler, change it here too.")}</div>
+      <div class="row">
+        <div class="price" style="background:${ca("teal", 0.07)};border:1px solid ${ca("teal", 0.22)}">
+          <div class="btn" @click=${() => setM(-1)}><ha-icon icon="mdi:minus"></ha-icon></div>
+          <div class="pc" @click=${() => this.moreInfo("rc_min")}><div class="lbl"><ha-icon icon="mdi:timer-sand" style="--mdc-icon-size:13px"></ha-icon> ${this.t("Czas boostu", "Boost duration")}</div><div class="pv">${this.f(mins, 0)} min</div></div>
+          <div class="btn" @click=${() => setM(1)}><ha-icon icon="mdi:plus"></ha-icon></div></div></div>
+      <div class="row">
+        <div class="rcb ${on ? "run" : ""}" style=${on ? `background:${ca("red", 0.16)};border:1px solid ${ca("red", 0.65)};color:${c("red")}` : `background:${ca("teal", 0.3)};border:1px solid ${ca("teal", 0.8)};color:${c("teal")}`}
+          @click=${() => this.call("button", "press", "rc_btn")}>
+          <ha-icon icon=${on ? "mdi:stop" : "mdi:sync"}></ha-icon>${on ? this.t("Anuluj i przywróć zakres", "Cancel and restore the band") : this.t("Recyrkulacja teraz", "Recirculation now")}</div>
+      </div>
+      <div class="note">${this.t(
+        "Program recyrkulacji (dzień → kalendarz) jest w piecu i nie ma go na magistrali - hub dokłada tylko tymczasowy zakres do wybranego kalendarza (krok 15 min) i usuwa go po czasie, także po restarcie. Ponowne naciśnięcie przycisku w trakcie boostu przywraca poprzedni zakres. Kalendarz nie może być używany przez CO / CWU. Brak potwierdzenia pracy pompy.",
+        "The recirculation program (day → calendar) lives in the boiler and is not on the bus - the hub only adds a temporary range to the selected calendar (15-minute steps) and removes it when the boost ends, also after a reboot. Pressing the button again while it runs restores the previous band. The calendar must not be used by CH / DHW. No pump feedback.")}</div>`;
   }
 
   static styles = [HubCard.styles, css`
@@ -221,6 +269,11 @@ class ImmergasScheduleCard extends HubCard {
     .pk { cursor: pointer; width: 25px; height: 22px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;
       background: rgba(var(--ih-ov-rgb), .04); border: 1px solid rgba(var(--ih-ov-rgb), .06); }
     .pk.big { height: 24px; }
+  .rcb { flex: 1 1 180px; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 7px;
+    padding: 10px 12px; border-radius: 12px; font-size: 12.5px; font-weight: 800; cursor: pointer;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rcb.run { opacity: .9; }
+  .rcb ha-icon { --mdc-icon-size: 17px; }
     .allr { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
     .al { flex: 1; font-size: 11.5px; font-weight: 800; }
     .ed { margin-top: 10px; padding: 9px 10px; border-radius: 13px; }
