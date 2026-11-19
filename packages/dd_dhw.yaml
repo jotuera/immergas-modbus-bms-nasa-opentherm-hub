@@ -132,12 +132,16 @@ globals:
     type: int
     restore_value: false
     initial_value: "0"
+  - id: dd_dhw_hold            # 1.11.21: another package owns the DHW setpoint for now (hub_legionella) - the schedule waits
+    type: bool
+    restore_value: false
+    initial_value: "false"
 
 interval:
   - interval: 30s
     then:
       - lambda: |-
-          if (!id(dd_dhw_comfort_eco).state) return;
+          if (!id(dd_dhw_comfort_eco).state || id(dd_dhw_hold)) return;
           // 1.11.18: not in the first 2 min after boot - right after a restart the clock (time zone) and the restored
           // calendars may not be final yet, and one wrong pass wrote Eco to D05 for a whole cycle (HERCULES PRO)
           if (millis() < 120000UL) return;

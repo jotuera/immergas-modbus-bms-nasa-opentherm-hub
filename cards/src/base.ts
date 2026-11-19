@@ -168,12 +168,13 @@ export abstract class HubCard extends LitElement {
   /** anti-legionella cycle running: the boiler's own flag (hub, 2090 bit 3) or, without it, P15 on and the active DHW
    *  setpoint raised to >= 60 °C (a HERCULES PRO keeps 3015 at the DHW setpoint - only the flag shows its cycle) */
   protected legRun(): boolean {
+    if (this.on("hub_lg_running")) return true;   // hub_legionella: the hub's own cycle
     if (!this.bad("dd_leg_run")) return this.on("dd_leg_run");
     const act = this.n("dhw_active_set");
     return this.on("p15") && act >= 60 && !(act <= this.n("dhw_set"));
   }
   /** entity whose last change marks the start of the running anti-legionella cycle */
-  protected legKey(): Key { return this.bad("dd_leg_run") ? "dhw_active_set" : "dd_leg_run"; }
+  protected legKey(): Key { return this.on("hub_lg_running") ? "hub_lg_running" : this.bad("dd_leg_run") ? "dhw_active_set" : "dd_leg_run"; }
   protected dayName(d: number | null) { return d === null ? "–" : d < 0 ? this.t("codziennie", "daily") : this.t(DAYS[d][1], DAYS[d][2]); }
   /** next anti-legionella start after t (needs the time option; day defaults to daily) */
   protected nextLeg(t: number): number {
@@ -792,7 +793,7 @@ export abstract class HubCard extends LitElement {
 
 /** registers a card element + card picker entry */
 /** this bundle's version (also in package.json) */
-export const VERSION = "0.93.8";
+export const VERSION = "0.93.9";
 
 // The bundle can be loaded twice: the hub cards resource and the copy shipped with the Dominus integration, in any
 // order. A custom element can be defined only once, so every bundle (0.85.0+) queues its elements on a shared window

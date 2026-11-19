@@ -2517,5 +2517,16 @@
   "Recirculation now": "Recirculación ahora",
   "The recirculation program (day → calendar) lives only in the boiler: pick the same calendar as in the boiler menu. The hub adds a range from now for the set time (15-minute steps, until midnight at most) and removes it at the end, also after a restart. The pump is on no bus – there is no confirmation that it runs.": "El programa de recirculación (día → calendario) solo está en la caldera: elija el mismo calendario que en el menú de la caldera. El hub añade un tramo desde ahora por el tiempo ajustado (pasos de 15 min, como mucho hasta medianoche) y lo quita al final, también tras un reinicio. La bomba no está en ningún bus – no hay confirmación de que funcione.",
   "● anti-legionella running": "● antilegionela en curso",
-  "🦠 anti-legionella": "🦠 antilegionela"
+  "🦠 anti-legionella": "🦠 antilegionela",
+  "Time program (zone 1 panel)": "Programa horario (panel zona 1)",
+  "last": "último",
+  "On the hub's schedule": "Según el horario del hub",
+  "a cycle every 1–4 weeks on the chosen day and time": "un ciclo cada 1–4 semanas el día y la hora elegidos",
+  "Interval": "Intervalo",
+  " wk": " sem.",
+  "Hold": "Mantener",
+  "Timeout": "Límite",
+  "⚠ The boiler's anti-legionella P15 is on – switch it off, or both cycles will run.": "⚠ La antilegionela P15 de la caldera está activada – desactívela o se ejecutarán ambos ciclos.",
+  "Disinfect now": "Desinfectar ahora",
+  "For the cycle the hub sets the time program (2294) to Manual and the DHW setpoint to the target; after the target and the hold time it hands the DHW back: the program returns to Auto (the boiler restores its own setpoint) or, if it was Manual, the previous setpoint comes back. Changing the setpoint or the program meanwhile ends the cycle. Where 2294 also drives the zones, they stay at their manual setpoint meanwhile – best at night.": "Durante el ciclo el hub pone el programa horario (2294) en Manual y la consigna de ACS en el objetivo; tras alcanzarlo y el tiempo de mantenimiento devuelve el ACS: el programa vuelve a Auto (la caldera restaura su propia consigna) o, si estaba en Manual, vuelve la consigna anterior. Cambiar la consigna o el programa mientras tanto termina el ciclo. Donde 2294 también gobierna las zonas, se quedan en su consigna manual – mejor de noche."
 }

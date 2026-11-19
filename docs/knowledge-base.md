@@ -355,7 +355,7 @@ input register (func 04).
 | 2005 / 2006 | D41 | room temperature / humidity (the only panel values used for control) | R |
 | 2010 | — | zone phase: bit2 manual, bit3 heating request, bit6 comfort, bit7 eco; 1 = venting U50 | W |
 | 2015 / 2016 / 2017 | U03 | zone 1 setpoint / max / offset | RW |
-| 2090 | — | time program state: 4 manual, 64 auto-comfort, 128 auto-eco (bit 1 masked: 66 = comfort); bit 3 = anti-legionella cycle running (74) | W |
+| 2090 | — | time program state: 4 manual, 64 auto-comfort, 128 auto-eco (bit 1 masked: 66 = comfort); bit 3 = heating towards a non-phase setpoint: anti-legionella with Comfort / Eco (74), manual setpoint with Manual (12) | W |
 | 2095 | D05 | DHW setpoint | RW |
 | 2100 / 2101 | — | fault code (0 none, e.g. 121, 142, 193) / reset | W |
 | 2210–2216 | U07 | heating and cooling Comfort/Eco, humidity | RW |

@@ -2517,5 +2517,16 @@
   "Recirculation now": "Recirculation maintenant",
   "The recirculation program (day → calendar) lives only in the boiler: pick the same calendar as in the boiler menu. The hub adds a range from now for the set time (15-minute steps, until midnight at most) and removes it at the end, also after a restart. The pump is on no bus – there is no confirmation that it runs.": "Le programme de recirculation (jour → calendrier) n'existe que dans la chaudière : choisissez le même calendrier que dans le menu de la chaudière. Le hub ajoute une plage à partir de maintenant pour la durée réglée (pas de 15 min, jusqu'à minuit au plus) et la retire à la fin, même après un redémarrage. La pompe n'est sur aucun bus – son fonctionnement n'est pas confirmé.",
   "● anti-legionella running": "● anti-légionelle en cours",
-  "🦠 anti-legionella": "🦠 anti-légionelle"
+  "🦠 anti-legionella": "🦠 anti-légionelle",
+  "Time program (zone 1 panel)": "Programme horaire (panneau zone 1)",
+  "last": "dernier",
+  "On the hub's schedule": "Selon le planning du hub",
+  "a cycle every 1–4 weeks on the chosen day and time": "un cycle toutes les 1–4 semaines au jour et à l’heure choisis",
+  "Interval": "Intervalle",
+  " wk": " sem.",
+  "Hold": "Maintien",
+  "Timeout": "Délai max",
+  "⚠ The boiler's anti-legionella P15 is on – switch it off, or both cycles will run.": "⚠ L’anti-légionelle P15 de la chaudière est activée – désactivez-la, sinon les deux cycles tourneront.",
+  "Disinfect now": "Désinfecter maintenant",
+  "For the cycle the hub sets the time program (2294) to Manual and the DHW setpoint to the target; after the target and the hold time it hands the DHW back: the program returns to Auto (the boiler restores its own setpoint) or, if it was Manual, the previous setpoint comes back. Changing the setpoint or the program meanwhile ends the cycle. Where 2294 also drives the zones, they stay at their manual setpoint meanwhile – best at night.": "Pour le cycle, le hub met le programme horaire (2294) en Manuel et la consigne ECS sur la cible ; une fois la cible atteinte et le maintien écoulé, il rend l’ECS : le programme revient en Auto (la chaudière rétablit sa propre consigne) ou, s’il était en Manuel, la consigne précédente revient. Changer la consigne ou le programme entre-temps termine le cycle. Là où 2294 pilote aussi les zones, elles restent sur leur consigne manuelle – de préférence la nuit."
 }

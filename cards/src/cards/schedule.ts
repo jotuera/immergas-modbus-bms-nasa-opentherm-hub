@@ -22,7 +22,10 @@ class ImmergasScheduleCard extends HubCard {
   private pend: Record<string, number> = {};
   private timers: Record<string, number> = {};
 
-  private get cur() { const t = this.tabT || this.config.target || "co"; return t === "rc" && !this.eid("hub_rc_run") ? "co" : t; }
+  private get cur() {
+    const t = this.tabT || this.config.target || "co";
+    return (t === "rc" && !this.eid("hub_rc_run")) || (t === "lg" && !this.eid("hub_lg_now")) ? "co" : t;
+  }
   private get cwu() { return this.cur === "cwu"; }
   private sel(d: string) { return ((this.cwu ? "cwu_" : "co_") + d) as Key; }
   private tk(cal: number, z: number, x: "on" | "off") { return `k${cal}z${z}${x}` as Key; }
@@ -155,10 +158,11 @@ class ImmergasScheduleCard extends HubCard {
           ${tab("co", "mdi:radiator", this.t("CO · Strefa 1", "CH · Zone 1"), "peach")}
           ${tab("cwu", "mdi:water-boiler", this.t("CWU", "DHW"), "sky")}
           ${this.eid("hub_rc_run") ? tab("rc", "mdi:water-sync", this.t("Recyrkulacja", "Recirculation"), "teal") : nothing}
+          ${this.eid("hub_lg_now") ? tab("lg", "mdi:bacteria-outline", this.t("Anty-legionella", "Anti-legionella"), "red") : nothing}
           <div class="vt" title=${view === "week" ? this.t("widok kalendarzy", "calendar view") : this.t("widok tygodnia", "week view")}
             @click=${() => { this.view = view === "week" ? "calendars" : "week"; this.requestUpdate(); }}>
             <ha-icon icon=${view === "week" ? "mdi:view-agenda-outline" : "mdi:calendar-week"}></ha-icon></div></div></div>
-      ${this.cur === "rc" ? this.recirc(nowM) : html`<div class="st" style="color:${c(active ? "green" : "overlay2")}">${stateTxt}</div>
+      ${this.cur === "rc" ? this.recirc(nowM) : this.cur === "lg" ? this.legion() : html`<div class="st" style="color:${c(active ? "green" : "overlay2")}">${stateTxt}</div>
       ${this.dominus && !this.eid("k1z1on") ? html`<div class="note" style="color:${c("yellow")}">${this.t(
         "Godziny kalendarzy są ukryte: włącz urządzenie „Heating schedule” integracji Immergas Dominus (Ustawienia → Urządzenia).",
         "Calendar hours are hidden: enable the “Heating schedule” device of the Immergas Dominus integration (Settings → Devices).")}</div>` : nothing}
@@ -220,7 +224,48 @@ class ImmergasScheduleCard extends HubCard {
         "The recirculation program (day → calendar) lives only in the boiler: pick the same calendar as in the boiler menu. The hub adds a range from now for the set time (15-minute steps, until midnight at most) and removes it at the end, also after a restart. The pump is on no bus – there is no confirmation that it runs.")}</div>`;
   }
 
+  /** hub_legionella: the hub's own anti-legionella cycle every 1-4 weeks (schedule, target, hold, timeout, start / stop) */
+  private legion() {
+    const run = this.on("hub_lg_running"), st = this.bad("hub_lg_state") ? "" : this.s("hub_lg_state") ?? "";
+    const last = this.bad("hub_lg_last") ? "" : this.s("hub_lg_last") ?? "";
+    const idx = (k: Key) => { const o: string[] = this.attr(k, "options") ?? [], s = this.s(k); return s ? o.indexOf(s) : -1; };
+    const pick = (k: Key, i: number) => { const o: string[] = this.attr(k, "options") ?? []; if (o[i] && idx(k) !== i) this.call("select", "select_option", k, { option: o[i] }); };
+    const wd = idx("hub_lg_weekday"), ev = idx("hub_lg_every");
+    // short weekday names in the UI language (5 Jan 2026 is a Monday)
+    const dn = (i: number) => new Date(2026, 0, 5 + i).toLocaleDateString(this.loc, { weekday: "short" }).replace(".", "");
+    const chip = (sel: boolean, label: string, fn: () => void) => html`<div class="pk lgp" style=${sel ? `background:${ca("red", 0.22)};border:1px solid ${ca("red", 0.65)};color:${c("red")}` : ""} @click=${fn}>${label}</div>`;
+    const step = (k: Key, icon: string, label: string, unit: string, dec: number) => {
+      const v = this.n(k), a = this.so(k)?.attributes ?? {}, s = a.step ?? 1;
+      const set = (d: number) => !isNaN(v) && this.call("number", "set_value", k, { value: Math.max(a.min ?? -1e9, Math.min(a.max ?? 1e9, Math.round((v + d * s) * 100) / 100)) });
+      return html`<div class="price" style="background:${ca("red", 0.06)};border:1px solid ${ca("red", 0.2)}">
+        <div class="btn sm" @click=${() => set(-1)}><ha-icon icon="mdi:minus"></ha-icon></div>
+        <div class="pc" @click=${() => this.moreInfo(k)}><div class="lbl"><ha-icon icon=${icon} style="--mdc-icon-size:13px"></ha-icon> ${label}</div><div class="pv">${this.f(v, dec)} ${unit}</div></div>
+        <div class="btn sm" @click=${() => set(1)}><ha-icon icon="mdi:plus"></ha-icon></div></div>`;
+    };
+    const tm = (this.s("hub_lg_start") ?? "").slice(0, 5);
+    return html`<div class="st" style="color:${c(run ? "red" : this.on("hub_lg_enabled") ? "green" : "overlay2")}">${st}${last ? html` <span style="opacity:.6;font-weight:700">· ${this.t("ostatni", "last")}: ${last}</span>` : nothing}</div>
+      ${this.switchRow("hub_lg_enabled", "mdi:calendar-refresh", "red", this.t("Według harmonogramu huba", "On the hub's schedule"),
+        this.t("cykl co 1–4 tygodnie w wybrany dzień i godzinę", "a cycle every 1–4 weeks on the chosen day and time"))}
+      <div class="allr"><span class="al">${this.t("Co ile", "Interval")}</span>
+        <div class="picks">${[0, 1, 2, 3].map((i) => chip(i === ev, i + 1 + this.t(" tydz.", " wk"), () => pick("hub_lg_every", i)))}</div></div>
+      <div class="allr"><span class="al">${this.t("Dzień", "Day")}</span>
+        <div class="picks">${[0, 1, 2, 3, 4, 5, 6].map((i) => chip(i === wd, dn(i), () => pick("hub_lg_weekday", i)))}</div></div>
+      <div class="allr"><span class="al">${this.t("Start", "Start")}</span>
+        <div class="pk lgp" style="width:auto;padding:0 10px" @click=${() => this.moreInfo("hub_lg_start")}>${tm || "–"}</div></div>
+      <div class="row">
+        ${step("hub_lg_target", "mdi:thermometer-high", this.t("Cel", "Target"), "°C", 0)}
+        ${step("hub_lg_hold", "mdi:timer-lock-outline", this.t("Utrzymanie", "Hold"), "min", 0)}
+        ${step("hub_lg_timeout", "mdi:timer-alert-outline", this.t("Limit", "Timeout"), "h", 1)}</div>
+      ${this.on("p15") ? html`<div class="note" style="color:${c("yellow")}">${this.t("⚠ Na piecu jest włączona anty-legionella P15 – wyłącz ją, inaczej będą dwa cykle.",
+        "⚠ The boiler's anti-legionella P15 is on – switch it off, or both cycles will run.")}</div>` : nothing}
+      <div class="row"><div class="rcb" style="background:${ca("red", run ? 0.14 : 0.22)};border:1px solid ${ca("red", 0.7)};color:${c("red")}"
+        @click=${() => this.call("button", "press", "hub_lg_now")}><ha-icon icon=${run ? "mdi:stop" : "mdi:bacteria-outline"}></ha-icon>${run ? this.t("Zakończ", "Stop") : this.t("Dezynfekcja teraz", "Disinfect now")}</div></div>
+      <div class="note">${this.t("Na czas cyklu hub przełącza program czasowy (2294) na Ręczny i ustawia nastawę CWU na cel, a po dojściu do celu i czasie utrzymania oddaje CWU: program wraca na Auto (piec sam przywraca swoją nastawę) albo, gdy był Ręczny, wraca poprzednia nastawa. Zmiana nastawy lub programu w trakcie kończy cykl. Na modelach, gdzie 2294 prowadzi też strefy, stoją one w tym czasie na nastawie ręcznej – najlepiej w nocy.",
+        "For the cycle the hub sets the time program (2294) to Manual and the DHW setpoint to the target; after the target and the hold time it hands the DHW back: the program returns to Auto (the boiler restores its own setpoint) or, if it was Manual, the previous setpoint comes back. Changing the setpoint or the program meanwhile ends the cycle. Where 2294 also drives the zones, they stay at their manual setpoint meanwhile – best at night.")}</div>`;
+  }
+
   static styles = [HubCard.styles, css`
+    .lgp { width: auto; min-width: 25px; padding: 0 6px; }
     .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
     .tl { display: flex; align-items: center; gap: 8px; }
     .tl ha-icon { --mdc-icon-size: 18px; opacity: .55; }

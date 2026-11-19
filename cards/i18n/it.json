@@ -2517,5 +2517,16 @@
   "Recirculation now": "Ricircolo ora",
   "The recirculation program (day → calendar) lives only in the boiler: pick the same calendar as in the boiler menu. The hub adds a range from now for the set time (15-minute steps, until midnight at most) and removes it at the end, also after a restart. The pump is on no bus – there is no confirmation that it runs.": "Il programma ricircolo (giorno → calendario) è solo nella caldaia: scegli lo stesso calendario del menu caldaia. L'hub aggiunge una fascia da adesso per il tempo impostato (passi di 15 min, al massimo fino a mezzanotte) e la rimuove alla fine, anche dopo un riavvio. La pompa non è su alcun bus – non c'è conferma che funzioni.",
   "● anti-legionella running": "● antilegionella in corso",
-  "🦠 anti-legionella": "🦠 antilegionella"
+  "🦠 anti-legionella": "🦠 antilegionella",
+  "Time program (zone 1 panel)": "Programma orario (pannello zona 1)",
+  "last": "ultimo",
+  "On the hub's schedule": "Secondo la pianificazione dell’hub",
+  "a cycle every 1–4 weeks on the chosen day and time": "un ciclo ogni 1–4 settimane nel giorno e all’ora scelti",
+  "Interval": "Intervallo",
+  " wk": " sett.",
+  "Hold": "Mantenimento",
+  "Timeout": "Limite",
+  "⚠ The boiler's anti-legionella P15 is on – switch it off, or both cycles will run.": "⚠ L’antilegionella P15 della caldaia è attiva – disattivala, altrimenti girano entrambi i cicli.",
+  "Disinfect now": "Disinfetta ora",
+  "For the cycle the hub sets the time program (2294) to Manual and the DHW setpoint to the target; after the target and the hold time it hands the DHW back: the program returns to Auto (the boiler restores its own setpoint) or, if it was Manual, the previous setpoint comes back. Changing the setpoint or the program meanwhile ends the cycle. Where 2294 also drives the zones, they stay at their manual setpoint meanwhile – best at night.": "Per il ciclo l’hub mette il programma orario (2294) su Manuale e il setpoint ACS sull’obiettivo; raggiunto l’obiettivo e trascorso il mantenimento restituisce l’ACS: il programma torna su Auto (la caldaia ripristina il proprio setpoint) oppure, se era Manuale, torna il setpoint precedente. Cambiare il setpoint o il programma nel frattempo termina il ciclo. Dove 2294 gestisce anche le zone, restano sul loro setpoint manuale – meglio di notte."
 }

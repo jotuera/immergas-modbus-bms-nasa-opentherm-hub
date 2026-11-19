@@ -145,11 +145,11 @@ class ImmergasNowCard extends HubCard {
     // 4) anti-legionella (P15): no bus flag for a running cycle, so it is detected from the boiler raising the active
     //    DHW setpoint to >= 60 °C; otherwise: enabled since, last disinfection (cylinder >= 60 °C) and the learned interval
     //    1.11.20: with the hub's flag (2090 bit 3) the running cycle is read from the boiler - its target is not on the bus
-    if (this.on("p15") || this.on("dd_leg_run")) {
+    if (this.on("p15") || this.on("dd_leg_run") || this.on("hub_lg_running")) {
       const act = this.n("dhw_active_set"), set = this.n("dhw_set"), tank = this.n("tank"), leg = this.hist?.leg ?? [];
       if (this.legRun()) {
         const t0 = new Date(this.so(this.legKey())?.last_changed ?? now).getTime(), base = Math.min(isNaN(set) ? 45 : set, tank);
-        const tgt = act >= LEG_T && !(act <= set) ? act : NaN;
+        const tgt = this.on("hub_lg_running") ? this.n("hub_lg_target") : act >= LEG_T && !(act <= set) ? act : NaN;
         const pr = isNaN(tgt) ? 1 : Math.max(0, Math.min(1, (tank - base) / (tgt - base)));
         rows.push(this.bar("p15", "mdi:bacteria-outline", "red", this.t("Anty-legionella · dezynfekcja trwa", "Anti-legionella · disinfection running"), pr, 1,
           this.t("od ", "since ") + clock(t0, pl) + this.t(" · najpóźniej do ", " · at the latest until ") + clock(t0 + this.legHours() * 3600e3, pl) + " (P13)" + this.t(" · zasobnik ", " · cylinder ") + this.f(tank, 1, 1) + (isNaN(tgt) ? "" : " / " + this.f(tgt, 0)) + " °C",

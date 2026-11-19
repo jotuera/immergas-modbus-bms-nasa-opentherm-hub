@@ -350,7 +350,7 @@ rejestr wejściowy (func 04).
 | 2005 / 2006 | D41 | temperatura / wilgotność pokojowa (jedyne wartości z panelu do regulacji) | R |
 | 2010 | — | faza strefy: bit2 ręczny, bit3 żądanie grzania, bit6 komfort, bit7 eko; 1 = odpowietrzanie U50 | W |
 | 2015 / 2016 / 2017 | U03 | nastawa / maks. / offset strefy 1 | RW |
-| 2090 | — | stan programu czasowego: 4 ręczny, 64 auto-komfort, 128 auto-eko (bit 1 maskowany: 66 = komfort); bit 3 = trwa cykl anty-legionelli (74) | W |
+| 2090 | — | stan programu czasowego: 4 ręczny, 64 auto-komfort, 128 auto-eko (bit 1 maskowany: 66 = komfort); bit 3 = grzanie do nastawy spoza fazy: anty-legionella przy Komfort / Eko (74), nastawa ręczna przy Ręcznym (12) | W |
 | 2095 | D05 | nastawa CWU | RW |
 | 2100 / 2101 | — | kod błędu (0 brak, np. 121, 142, 193) / reset | W |
 | 2210–2216 | U07 | Comfort/Eco grzania i chłodzenia, wilgotność | RW |

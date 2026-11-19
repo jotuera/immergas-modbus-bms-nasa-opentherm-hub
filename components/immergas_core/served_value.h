@@ -120,6 +120,7 @@ inline ServedValue eco_cool{"eco cool", 50, 350};
 inline ServedValue humidity{"humidity", 0, 100};
 inline ServedValue set_flow{"set flow", 100, 900};
 inline ServedValue operating_mode{"operating mode", 0, 3};
+inline ServedValue prog_mode{"time program mode", 0, 1};
 }  // namespace served
 
 }  // namespace immergas

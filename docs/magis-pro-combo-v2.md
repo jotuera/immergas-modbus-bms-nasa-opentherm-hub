@@ -113,6 +113,14 @@ direction pin) substitutions and leave out `hw_atoms3_portabc.yaml`.
    range from now for *Recirculation time* into that calendar (15-minute steps, until midnight at most) and removes it at
    the end, also after a restart; pressed again it stops at once. The hub refuses it when the calendar drives zone 1 or
    the DHW today, and leaves a range you changed meanwhile as it is. The pump is on no bus, so there is no feedback.
+   **Anti-legionella run by the hub** (emulated zone 1 panel): add `packages/hub_legionella.yaml` and switch the boiler's P15
+   off. The hub runs the cycle every 1–4 weeks on the chosen weekday and time (*Anti-legionella - interval / weekday /
+   start time*), or at once with *Anti-legionella now*: the time program (2294) goes to Manual and the DHW setpoint to
+   *Anti-legionella - target* (55–65 °C), the cylinder is held there for *Anti-legionella - hold*, then the program
+   returns to Auto and the boiler restores its own setpoint (with a Manual program the previous setpoint is written
+   back). Changing the DHW setpoint or the program meanwhile ends the cycle; *Anti-legionella - timeout* ends it too.
+   The hub's DHW Comfort / Eco schedule waits for the cycle. Where 2294 also drives the zones, they stay at their manual
+   setpoint during the cycle – start it at night.
 5. Flash, add the device in Home Assistant, install the cards with HACS ([cards/README.md](../cards/README.md)) and create the
    dashboard with the strategy `custom:immergas-hub` (see the [overview](../README.md#dashboard)).
 

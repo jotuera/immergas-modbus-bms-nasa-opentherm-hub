@@ -2517,5 +2517,16 @@
   "Recirculation now": "Recirculação agora",
   "The recirculation program (day → calendar) lives only in the boiler: pick the same calendar as in the boiler menu. The hub adds a range from now for the set time (15-minute steps, until midnight at most) and removes it at the end, also after a restart. The pump is on no bus – there is no confirmation that it runs.": "O programa de recirculação (dia → calendário) existe só na caldeira: escolha o mesmo calendário que no menu da caldeira. O hub adiciona um intervalo a partir de agora pelo tempo definido (passos de 15 min, no máximo até à meia-noite) e remove-o no fim, também após um reinício. A bomba não está em nenhum barramento – não há confirmação de que funciona.",
   "● anti-legionella running": "● antilegionela em curso",
-  "🦠 anti-legionella": "🦠 antilegionela"
+  "🦠 anti-legionella": "🦠 antilegionela",
+  "Time program (zone 1 panel)": "Programa horário (painel zona 1)",
+  "last": "último",
+  "On the hub's schedule": "Segundo o horário do hub",
+  "a cycle every 1–4 weeks on the chosen day and time": "um ciclo a cada 1–4 semanas no dia e hora escolhidos",
+  "Interval": "Intervalo",
+  " wk": " sem.",
+  "Hold": "Manter",
+  "Timeout": "Limite",
+  "⚠ The boiler's anti-legionella P15 is on – switch it off, or both cycles will run.": "⚠ A antilegionela P15 da caldeira está ligada – desligue-a, senão correm os dois ciclos.",
+  "Disinfect now": "Desinfetar agora",
+  "For the cycle the hub sets the time program (2294) to Manual and the DHW setpoint to the target; after the target and the hold time it hands the DHW back: the program returns to Auto (the boiler restores its own setpoint) or, if it was Manual, the previous setpoint comes back. Changing the setpoint or the program meanwhile ends the cycle. Where 2294 also drives the zones, they stay at their manual setpoint meanwhile – best at night.": "Durante o ciclo o hub põe o programa horário (2294) em Manual e o setpoint de AQS no alvo; atingido o alvo e o tempo de manutenção, devolve as AQS: o programa volta a Auto (a caldeira repõe o seu setpoint) ou, se estava em Manual, volta o setpoint anterior. Mudar o setpoint ou o programa entretanto termina o ciclo. Onde 2294 também comanda as zonas, ficam no seu setpoint manual – de preferência à noite."
 }

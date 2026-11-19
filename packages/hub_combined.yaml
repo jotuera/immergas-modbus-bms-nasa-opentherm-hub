@@ -252,9 +252,10 @@ binary_sensor:
       // (the heat pump at its limit) - the valve switch and the compressor start alone take about 2 min
       if (!id(hub_dhw_active)) return false;
       if (id(hub_dhw_used_hp) ? now - id(hub_dhw_hp_last_ms) < 90000UL : now - id(hub_dhw_start_ms) < 300000UL) return false;
-      // 1.11.20: the boiler's anti-legionella cycle (2090 bit 3) heats above every setpoint on the bus (65 °C on a
-      // HERCULES PRO, 3015 stays at the DHW setpoint) - with the compressor stopped the heater runs until the bit drops
-      if (id(dd_legionella_running).state) return true;
+      // 1.11.20: 2090 bit 3 - the boiler heats towards a setpoint that is not on the bus (its anti-legionella cycle:
+      // 65 °C on a HERCULES PRO, 3015 stays at the DHW setpoint) - with the compressor stopped the heater runs until the
+      // bit drops. 1.11.21: the raw bit (also set for a manual setpoint), not the anti-legionella flag.
+      if (id(dd_dhw_override)) return true;
       float t = id(dd_dhw_temp_sensor).state;
       float set = id(dd_cwu_setpoint_number).state, cf = id(dd_dhw_comfort_set).state;
       if (std::isnan(set) || (!std::isnan(cf) && cf > set)) set = cf;

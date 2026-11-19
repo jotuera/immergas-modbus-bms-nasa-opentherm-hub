@@ -2517,5 +2517,16 @@
   "Recirculation now": "Cirkuláció most",
   "The recirculation program (day → calendar) lives only in the boiler: pick the same calendar as in the boiler menu. The hub adds a range from now for the set time (15-minute steps, until midnight at most) and removes it at the end, also after a restart. The pump is on no bus – there is no confirmation that it runs.": "A cirkulációs program (nap → naptár) csak a kazánban van: válassza ugyanazt a naptárt, mint a kazán menüjében. A hub mostantól a beállított időre hozzáad egy sávot (15 perces lépés, legfeljebb éjfélig), és a végén eltávolítja, újraindítás után is. A szivattyú nincs buszon – működése nincs visszaigazolva.",
   "● anti-legionella running": "● legionella elleni ciklus fut",
-  "🦠 anti-legionella": "🦠 legionella elleni"
+  "🦠 anti-legionella": "🦠 legionella elleni",
+  "Time program (zone 1 panel)": "Időprogram (1. zóna panel)",
+  "last": "utolsó",
+  "On the hub's schedule": "A hub ütemezése szerint",
+  "a cycle every 1–4 weeks on the chosen day and time": "ciklus 1–4 hetente a választott napon és időpontban",
+  "Interval": "Gyakoriság",
+  " wk": " hét",
+  "Hold": "Tartás",
+  "Timeout": "Időkorlát",
+  "⚠ The boiler's anti-legionella P15 is on – switch it off, or both cycles will run.": "⚠ A kazán P15 legionella elleni funkciója be van kapcsolva – kapcsolja ki, különben mindkét ciklus lefut.",
+  "Disinfect now": "Fertőtlenítés most",
+  "For the cycle the hub sets the time program (2294) to Manual and the DHW setpoint to the target; after the target and the hold time it hands the DHW back: the program returns to Auto (the boiler restores its own setpoint) or, if it was Manual, the previous setpoint comes back. Changing the setpoint or the program meanwhile ends the cycle. Where 2294 also drives the zones, they stay at their manual setpoint meanwhile – best at night.": "A ciklus idejére a hub az időprogramot (2294) Kézire, a HMV alapjelet a célra állítja; a cél elérése és a tartási idő után visszaadja a HMV-t: a program visszaáll Autóra (a kazán maga állítja vissza az alapjelét), vagy ha Kézi volt, visszakerül az előző alapjel. Az alapjel vagy a program közbeni módosítása befejezi a ciklust. Ahol a 2294 a zónákat is vezérli, azok közben a kézi alapjelükön maradnak – legjobb éjjel."
 }

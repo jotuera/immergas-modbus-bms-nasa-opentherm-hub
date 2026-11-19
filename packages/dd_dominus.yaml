@@ -143,6 +143,10 @@ select:
       - "${t_dd_tp_manual}"
       - "${t_dd_tp_auto}"
     initial_option: "${t_dd_tp_manual}"
+    # 1.11.21: a change from HA waits 15 s for the boiler to take it before the boiler's writes count again
+    set_action:
+      - lambda: |-
+          if (!id(dd_prog_from_bus)) immergas::served::prog_mode.set_from_ha(x == "${t_dd_tp_auto}" ? 1 : 0);
   # v1.3.0: 0x29 6105 - modulation with the room probe (panel Service menu -> Zone definition)
   - platform: template
     name: "${n_dd_sel_modulacja_sonda}"

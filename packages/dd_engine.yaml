@@ -654,6 +654,15 @@ globals:
     type: uint32_t
     restore_value: yes
     initial_value: '0'
+  # 1.11.21: 2090 bit 3 as sent = the boiler heats the DHW towards a setpoint that is not its program phase value
+  # (the boiler's own anti-legionella cycle, or a manual / HA setpoint); the heater heuristic uses it
+  - id: dd_dhw_override
+    type: bool
+    initial_value: 'false'
+  # 1.11.21: true while the engine adopts 2294 from the bus - the select's set_action must not treat it as an HA command
+  - id: dd_prog_from_bus
+    type: bool
+    initial_value: 'false'
 
   - id: dd_emu29_store
     type: std::array<int16_t, 9>
@@ -1819,13 +1828,17 @@ interval:
                       const char *st = nullptr;
                       if (e.map == 0) st = (value == 0) ? "RPT" : (value == 1) ? "RT" : (value == 2) ? "RP" : nullptr;
                       // 1.11.18: bit 1 is set next to the phase in auto (66 = 64 | 2 on a HERCULES PRO) - masked out
-                      // 1.11.20: bit 3 = the boiler's own anti-legionella cycle (74 = 64 | 8 | 2 on a HERCULES PRO)
+                      // bit 3 = heating towards a setpoint that is not the phase value: with the phase Comfort / Eco it is
+                      // the boiler's own anti-legionella cycle (74 = 64 | 8 | 2), with Manual a manual / HA setpoint (12 = 4 | 8)
                       else { int pv = value & ~10; st = (pv == 4) ? "${t_dd_prog_manual}" : (pv == 64) ? "${t_dd_prog_comfort}" : (pv == 128) ? "${t_dd_prog_eco}" : nullptr; }
                       char sb[64];
                       if (st == nullptr) { snprintf(sb, sizeof(sb), "Code %d", value); st = sb; }
-                      else if (e.map == 1 && (value & 8)) { snprintf(sb, sizeof(sb), "%s · ${t_dd_prog_legionella}", st); st = sb; }
+                      else if (e.map == 1 && (value & 8) && (value & ~10) != 4) { snprintf(sb, sizeof(sb), "%s · ${t_dd_prog_legionella}", st); st = sb; }
                       e.t->publish_state(st);
-                      if (e.map == 1) id(dd_legionella_running).publish_state((value & 8) != 0);
+                      if (e.map == 1) {
+                        id(dd_dhw_override) = (value & 8) != 0;
+                        id(dd_legionella_running).publish_state((value & 8) != 0 && (value & ~10) != 4);   // 1.11.21: not in Manual
+                      }
                     }
                     break;
                   }
@@ -1839,9 +1852,19 @@ interval:
                     (int) id(dd_sel_modulacja_sonda).active_index().value_or(0) != value) {
                   auto call = id(dd_sel_modulacja_sonda).make_call(); call.set_index(value); call.perform();
                 }
-                if (kind == 'R' && reg == 2294 && (value == 0 || value == 1) &&
-                    (int) id(dd_sel_programy_czasowe).active_index().value_or(0) != value) {
-                  auto call = id(dd_sel_programy_czasowe).make_call(); call.set_index(value); call.perform();
+                // 2294 time program mode: from a physical panel's reply, and (1.11.21) from the boiler's write while the
+                // zone 1 panel is emulated - the boiler menu (HERCULES PRO: DHW -> Auto / Manual) writes it to the panel,
+                // like DHW Comfort / Eco (2290 / 2291). 15 s after a change from HA only that value is taken (served_value.h).
+                if (reg == 2294 && (value == 0 || value == 1)) {
+                  int cur = (int) id(dd_sel_programy_czasowe).active_index().value_or(0);
+                  bool take = false;
+                  if (kind == 'R') take = value != cur;
+                  else if (kind == 'W' && emulator_29_enabled()) take = immergas::served::prog_mode.take_from_bus(cur, value, source, addr);
+                  if (take) {
+                    id(dd_prog_from_bus) = true;
+                    auto call = id(dd_sel_programy_czasowe).make_call(); call.set_index(value); call.perform();
+                    id(dd_prog_from_bus) = false;
+                  }
                 }
                 if (kind == 'W' && reg == 6102 && value >= 0 && value <= 2 && value != id(dd_panel_a31_raw)) {
                   id(dd_panel_a31_raw) = value;  // A31 belongs to the boiler - remember it to echo back

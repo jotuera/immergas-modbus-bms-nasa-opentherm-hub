@@ -2517,5 +2517,16 @@
   "Recirculation now": "Circulatie nu",
   "The recirculation program (day → calendar) lives only in the boiler: pick the same calendar as in the boiler menu. The hub adds a range from now for the set time (15-minute steps, until midnight at most) and removes it at the end, also after a restart. The pump is on no bus – there is no confirmation that it runs.": "Het circulatieprogramma (dag → kalender) staat alleen in de ketel: kies dezelfde kalender als in het ketelmenu. De hub voegt vanaf nu een tijdvak toe voor de ingestelde duur (stappen van 15 min, hoogstens tot middernacht) en verwijdert het aan het eind, ook na een herstart. De pomp zit op geen bus – er is geen bevestiging dat hij draait.",
   "● anti-legionella running": "● legionellapreventie actief",
-  "🦠 anti-legionella": "🦠 legionellapreventie"
+  "🦠 anti-legionella": "🦠 legionellapreventie",
+  "Time program (zone 1 panel)": "Tijdprogramma (paneel zone 1)",
+  "last": "laatste",
+  "On the hub's schedule": "Volgens het schema van de hub",
+  "a cycle every 1–4 weeks on the chosen day and time": "een cyclus elke 1–4 weken op de gekozen dag en tijd",
+  "Interval": "Interval",
+  " wk": " wk",
+  "Hold": "Vasthouden",
+  "Timeout": "Limiet",
+  "⚠ The boiler's anti-legionella P15 is on – switch it off, or both cycles will run.": "⚠ De legionellapreventie P15 van de ketel staat aan – zet hem uit, anders draaien beide cycli.",
+  "Disinfect now": "Nu desinfecteren",
+  "For the cycle the hub sets the time program (2294) to Manual and the DHW setpoint to the target; after the target and the hold time it hands the DHW back: the program returns to Auto (the boiler restores its own setpoint) or, if it was Manual, the previous setpoint comes back. Changing the setpoint or the program meanwhile ends the cycle. Where 2294 also drives the zones, they stay at their manual setpoint meanwhile – best at night.": "Voor de cyclus zet de hub het tijdprogramma (2294) op Handmatig en het SWW-setpoint op het doel; na het doel en de vasthoudtijd geeft hij het SWW terug: het programma gaat naar Auto (de ketel herstelt zelf zijn setpoint) of, als het Handmatig was, komt het vorige setpoint terug. Setpoint of programma tussentijds wijzigen beëindigt de cyclus. Waar 2294 ook de zones stuurt, blijven die op hun handmatige setpoint – het liefst 's nachts."
 }

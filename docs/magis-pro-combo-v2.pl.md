@@ -113,6 +113,14 @@ transceiverze z pinem kierunku) i pomiń `hw_atoms3_portabc.yaml`.
    dodaje do niego zakres od teraz na *Recyrkulacja - czas* (krok 15 min, najdłużej do północy) i usuwa go na końcu, także
    po restarcie; ponowne naciśnięcie kończy od razu. Hub odmawia, gdy dziś ten kalendarz prowadzi strefę 1 albo CWU,
    i zostawia zakres zmieniony w międzyczasie. Pompy nie ma na magistrali, więc nie ma potwierdzenia jej pracy.
+   **Anty-legionella prowadzona przez hub** (emulowany panel strefy 1): dodaj `packages/hub_legionella.yaml` i wyłącz P15
+   w piecu. Hub robi cykl co 1–4 tygodnie w wybrany dzień i o wybranej godzinie (*Anty-legionella - co ile / dzień /
+   godzina startu*) albo od razu przez *Anty-legionella teraz*: program czasowy (2294) idzie na Ręczny, a nastawa CWU na
+   *Anty-legionella - cel* (55–65 °C), zasobnik jest trzymany w celu przez *Anty-legionella - utrzymanie*, potem program
+   wraca na Auto, a piec sam przywraca swoją nastawę (przy programie Ręcznym hub odpisuje poprzednią nastawę). Zmiana
+   nastawy CWU albo programu w trakcie kończy cykl; kończy go też *Anty-legionella - limit czasu*. Harmonogram Komfort /
+   Eko CWU huba czeka na koniec cyklu. Tam, gdzie 2294 prowadzi też strefy, stoją one w czasie cyklu na nastawie ręcznej
+   – najlepiej w nocy.
 5. Wgraj, dodaj urządzenie w Home Assistant, zainstaluj karty przez HACS ([cards/README.pl.md](../cards/README.pl.md)) i utwórz
    dashboard strategią `custom:immergas-hub` (zobacz [przegląd](../README.pl.md#dashboard)).
 

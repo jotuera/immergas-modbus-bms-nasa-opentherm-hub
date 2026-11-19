@@ -2517,5 +2517,16 @@
   "Recirculation now": "Zirkulation jetzt",
   "The recirculation program (day → calendar) lives only in the boiler: pick the same calendar as in the boiler menu. The hub adds a range from now for the set time (15-minute steps, until midnight at most) and removes it at the end, also after a restart. The pump is on no bus – there is no confirmation that it runs.": "Das Zirkulationsprogramm (Tag → Kalender) liegt nur im Kessel: Wählen Sie denselben Kalender wie im Kesselmenü. Der Hub fügt ein Zeitfenster ab jetzt für die eingestellte Dauer hinzu (15-Minuten-Schritte, höchstens bis Mitternacht) und entfernt es am Ende, auch nach einem Neustart. Die Pumpe ist an keinem Bus – ihr Lauf wird nicht bestätigt.",
   "● anti-legionella running": "● Legionellenschutz läuft",
-  "🦠 anti-legionella": "🦠 Legionellenschutz"
+  "🦠 anti-legionella": "🦠 Legionellenschutz",
+  "Time program (zone 1 panel)": "Zeitprogramm (Bedienteil Zone 1)",
+  "last": "zuletzt",
+  "On the hub's schedule": "Nach dem Zeitplan des Hubs",
+  "a cycle every 1–4 weeks on the chosen day and time": "ein Zyklus alle 1–4 Wochen am gewählten Tag zur gewählten Zeit",
+  "Interval": "Intervall",
+  " wk": " Wo.",
+  "Hold": "Halten",
+  "Timeout": "Zeitlimit",
+  "⚠ The boiler's anti-legionella P15 is on – switch it off, or both cycles will run.": "⚠ Der Legionellenschutz P15 des Kessels ist an – schalten Sie ihn aus, sonst laufen beide Zyklen.",
+  "Disinfect now": "Jetzt desinfizieren",
+  "For the cycle the hub sets the time program (2294) to Manual and the DHW setpoint to the target; after the target and the hold time it hands the DHW back: the program returns to Auto (the boiler restores its own setpoint) or, if it was Manual, the previous setpoint comes back. Changing the setpoint or the program meanwhile ends the cycle. Where 2294 also drives the zones, they stay at their manual setpoint meanwhile – best at night.": "Für den Zyklus stellt der Hub das Zeitprogramm (2294) auf Manuell und den WW-Sollwert auf das Ziel; nach Erreichen des Ziels und der Haltezeit gibt er das WW zurück: das Programm geht auf Auto (der Kessel stellt seinen Sollwert selbst wieder her) oder, wenn es Manuell war, kommt der vorige Sollwert zurück. Eine Änderung von Sollwert oder Programm beendet den Zyklus. Wo 2294 auch die Zonen steuert, bleiben sie in der Zeit auf ihrem manuellen Sollwert – am besten nachts."
 }

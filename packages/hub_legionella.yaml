@@ -1,0 +1,357 @@
+# Immergas hub - package "hub_legionella": an anti-legionella cycle run by the hub on its own schedule (every 1-4 weeks,
+# a weekday and a time), for a MAGIS with the emulated zone 1 panel. The boiler's own P15 offers only daily or weekly.
+#
+# What the bus allows (D+/D-, emulated zone 1 panel):
+#  - 2294 = 0 (time program Manual) stops the Comfort / Eco phases, so the boiler keeps a DHW setpoint written to 2095
+#    (served by the panel) until it is changed - a phase change cannot end the cycle half way;
+#  - 2294 = 1 (Auto): the boiler applies its own phase setpoint again and writes it to 2095 itself, the hub adopts it;
+#  - the cylinder probe (D03) is the only feedback: the compressor stops at ~55 °C and the electric heater (or the gas
+#    boiler on a COMBO) does the rest.
+#
+# A cycle: the time program and the DHW setpoint are saved, 2294 goes to Manual and 2095 to the target. When the cylinder
+# reaches the target (0.5 K below it) the hub holds it for the set minutes, then hands the DHW back:
+#  - the program was Auto: only 2294 goes back to Auto - the boiler restores its own phase setpoint. The hub does not
+#    write 2095 then, or the boiler's own value would be rejected for 15 s (served_value.h) and the cycle target would
+#    stay as a temporary manual setpoint;
+#  - the program was Manual: 2294 stays Manual and the saved setpoint is written back (nothing else would restore it);
+#  - the hub's own DHW Comfort / Eco schedule (dd_dhw) is paused for the cycle and applies its phase right after.
+# The human wins: the time program set back to Auto (from HA or the boiler menu) ends the cycle at once; another DHW
+# setpoint ends it too, and the program goes back as it was without a setpoint write (in Auto the boiler treats that
+# setpoint as a manual one until its next phase). The button ends a running cycle as well. A timeout ends it too.
+# The cycle survives a restart (state in flash); without a clock for 15 min after boot a running cycle is handed back.
+#
+# Notes:
+#  - switch the boiler's P15 off when the hub runs the cycle, otherwise both run (the cards warn);
+#  - 2294 is the time program switch of the zone 1 panel: on a HERCULES PRO it only drives the DHW; where it drives
+#    the zones too, they stay at their manual setpoint during the cycle (start it at night).
+#
+# Part of jotuera/immergas-modbus-bms-nasa-opentherm-hub (PolyForm Noncommercial 1.0.0). Loaded by the main YAML through
+# `packages:`. Needs the dd_ packages (dd_core: dd_ha_time, dd_dominus: the 2294 select, dd_dhw) and the emulated zone 1
+# panel.
+
+globals:
+  - id: hub_lg_run        # a cycle is running
+    type: bool
+    restore_value: yes
+    initial_value: "false"
+  - id: hub_lg_t0         # start of the running cycle, epoch seconds
+    type: uint32_t
+    restore_value: yes
+    initial_value: "0"
+  - id: hub_lg_reached    # when the cylinder reached the target, epoch seconds (0 = not yet)
+    type: uint32_t
+    restore_value: yes
+    initial_value: "0"
+  - id: hub_lg_prev_mode  # 2294 before the cycle: 0 Manual, 1 Auto
+    type: int
+    restore_value: yes
+    initial_value: "1"
+  - id: hub_lg_prev_set   # DHW setpoint before the cycle, x10
+    type: int
+    restore_value: yes
+    initial_value: "0"
+  - id: hub_lg_set        # the cycle's target as written, x10
+    type: int
+    restore_value: yes
+    initial_value: "0"
+  - id: hub_lg_max        # highest cylinder temperature of the running cycle
+    type: float
+    restore_value: yes
+    initial_value: "0"
+  - id: hub_lg_base       # the next scheduled start is the first slot at or after this time, epoch seconds
+    type: uint32_t
+    restore_value: yes
+    initial_value: "0"
+  - id: hub_lg_last_ts    # last cycle: end, peak, minutes, result (1 done, 2 timeout, 3 cancelled, 4 no clock)
+    type: uint32_t
+    restore_value: yes
+    initial_value: "0"
+  - id: hub_lg_last_max
+    type: float
+    restore_value: yes
+    initial_value: "0"
+  - id: hub_lg_last_min
+    type: int
+    restore_value: yes
+    initial_value: "0"
+  - id: hub_lg_last_res
+    type: int
+    restore_value: yes
+    initial_value: "0"
+
+switch:
+  - platform: template
+    id: hub_lg_enabled
+    name: "${n_hub_lg_enabled}"
+    icon: mdi:bacteria-outline
+    entity_category: config
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_turn_on:
+      - lambda: id(hub_lg_base) = 0;   // schedule from now
+      - component.update: hub_lg_state
+
+select:
+  - platform: template
+    id: hub_lg_every
+    name: "${n_hub_lg_every}"
+    icon: mdi:calendar-refresh
+    entity_category: config
+    optimistic: true
+    restore_value: true
+    options: ["${t_hub_lg_w1}", "${t_hub_lg_w2}", "${t_hub_lg_w3}", "${t_hub_lg_w4}"]
+    initial_option: "${t_hub_lg_w2}"
+    on_value:
+      - component.update: hub_lg_state
+  # option index: 0-6 = Monday-Sunday
+  - platform: template
+    id: hub_lg_weekday
+    name: "${n_hub_lg_weekday}"
+    icon: mdi:calendar-week
+    entity_category: config
+    optimistic: true
+    restore_value: true
+    options: ["${t_hub_day1}", "${t_hub_day2}", "${t_hub_day3}", "${t_hub_day4}", "${t_hub_day5}", "${t_hub_day6}", "${t_hub_day7}"]
+    initial_option: "${t_hub_day7}"
+    on_value:
+      - lambda: if (!id(hub_lg_run)) id(hub_lg_base) = 0;
+      - component.update: hub_lg_state
+
+datetime:
+  - platform: template
+    id: hub_lg_start
+    name: "${n_hub_lg_start}"
+    type: time
+    icon: mdi:clock-start
+    entity_category: config
+    optimistic: true
+    restore_value: true
+    initial_value: "02:00:00"
+    on_value:
+      - lambda: if (!id(hub_lg_run)) id(hub_lg_base) = 0;
+      - component.update: hub_lg_state
+
+number:
+  - platform: template
+    id: hub_lg_target
+    name: "${n_hub_lg_target}"
+    icon: mdi:thermometer-high
+    entity_category: config
+    unit_of_measurement: "°C"
+    min_value: 55
+    max_value: 65
+    step: 1
+    mode: box
+    optimistic: true
+    restore_value: true
+    initial_value: 60
+  - platform: template
+    id: hub_lg_hold
+    name: "${n_hub_lg_hold}"
+    icon: mdi:timer-lock-outline
+    entity_category: config
+    unit_of_measurement: min
+    min_value: 0
+    max_value: 60
+    step: 5
+    mode: box
+    optimistic: true
+    restore_value: true
+    initial_value: 10
+  - platform: template
+    id: hub_lg_timeout
+    name: "${n_hub_lg_timeout}"
+    icon: mdi:timer-alert-outline
+    entity_category: config
+    unit_of_measurement: h
+    min_value: 1
+    max_value: 6
+    step: 0.5
+    mode: box
+    optimistic: true
+    restore_value: true
+    initial_value: 3
+
+binary_sensor:
+  - platform: template
+    id: hub_lg_running
+    name: "${n_hub_lg_running}"
+    icon: mdi:bacteria
+    lambda: return id(hub_lg_run);
+
+text_sensor:
+  # running: heating 46.4 / 60 °C · 12 min | holding 60.2 °C · 5 / 10 min; idle: next 2026-11-25 02:00 | off
+  - platform: template
+    id: hub_lg_state
+    name: "${n_hub_lg_state}"
+    icon: mdi:bacteria-outline
+    update_interval: 60s
+    lambda: |-
+      char b[96];
+      auto now = id(dd_ha_time).now();
+      if (id(hub_lg_run)) {
+        uint32_t n = now.is_valid() ? now.timestamp : id(hub_lg_t0);
+        int mins = n > id(hub_lg_t0) ? (int) ((n - id(hub_lg_t0)) / 60) : 0;
+        float t = id(dd_dhw_temp_sensor).state;
+        if (id(hub_lg_reached) != 0) {
+          int held = n > id(hub_lg_reached) ? (int) ((n - id(hub_lg_reached)) / 60) : 0;
+          snprintf(b, sizeof(b), "${t_hub_lg_holding} %.1f °C · %d / %d min", t, held, (int) id(hub_lg_hold).state);
+        } else {
+          snprintf(b, sizeof(b), "${t_hub_lg_heating} %.1f / %d °C · %d min", t, id(hub_lg_set) / 10, mins);
+        }
+        return std::string(b);
+      }
+      if (!id(hub_lg_enabled).state) return std::string("${t_hub_lg_off}");
+      if (!id(dd_emulate_29_diag)) return std::string("${t_hub_lg_no_panel}");
+      if (!now.is_valid()) return std::string("${t_hub_lg_off}");
+      // the next slot as the scheduler sees it
+      uint32_t base = id(hub_lg_base) > now.timestamp ? id(hub_lg_base) : now.timestamp;
+      int wd_now = (now.day_of_week + 5) % 7;   // 0 = Monday
+      uint32_t mid = now.timestamp - (now.hour * 3600 + now.minute * 60 + now.second);
+      int want = (int) id(hub_lg_weekday).active_index().value_or(6);
+      int sm = id(hub_lg_start).hour * 60 + id(hub_lg_start).minute;
+      for (int i = 0; i < 40; i++) {
+        uint32_t day = mid + (uint32_t) i * 86400u, slot = day + (uint32_t) sm * 60u;
+        if ((wd_now + i) % 7 == want && slot >= base) {
+          ESPTime::from_epoch_local(slot).strftime(b, sizeof(b), "${t_hub_lg_next} %Y-%m-%d %H:%M");
+          return std::string(b);
+        }
+      }
+      return std::string("${t_hub_lg_off}");
+  # last cycle: done · 61.8 °C · 74 min · 2026-11-11
+  - platform: template
+    id: hub_lg_last
+    name: "${n_hub_lg_last}"
+    icon: mdi:history
+    update_interval: never
+    lambda: |-
+      if (id(hub_lg_last_ts) == 0) return std::string("${t_hub_lg_none}");
+      const char *r = id(hub_lg_last_res) == 1 ? "${t_hub_lg_done}" : id(hub_lg_last_res) == 2 ? "${t_hub_lg_timedout}"
+                    : id(hub_lg_last_res) == 3 ? "${t_hub_lg_cancelled}" : "${t_hub_lg_noclock}";
+      char d[16], b[96];
+      ESPTime::from_epoch_local(id(hub_lg_last_ts)).strftime(d, sizeof(d), "%Y-%m-%d");
+      snprintf(b, sizeof(b), "%s · %.1f °C · %d min · %s", r, id(hub_lg_last_max), id(hub_lg_last_min), d);
+      return std::string(b);
+
+button:
+  # starts a cycle now (the schedule is not moved), or ends the running one
+  - platform: template
+    id: hub_lg_now
+    name: "${n_hub_lg_now}"
+    icon: mdi:play-pause
+    on_press:
+      - lambda: |-
+          if (id(hub_lg_run)) { id(hub_lg_end)->execute(3); return; }
+          id(hub_lg_begin)->execute();
+
+script:
+  - id: hub_lg_begin
+    mode: single
+    then:
+      - lambda: |-
+          auto now = id(dd_ha_time).now();
+          if (id(hub_lg_run) || !now.is_valid()) return;
+          if (!id(dd_emulate_29_diag)) {
+            ESP_LOGW("hub_lg", "anti-legionella refused: the zone 1 panel is not emulated");
+            id(hub_lg_state).publish_state("${t_hub_lg_no_panel}");
+            return;
+          }
+          int set = (int) round(id(hub_lg_target).state * 10.0f);
+          float t = id(dd_dhw_temp_sensor).state;
+          id(hub_lg_prev_mode) = (int) id(dd_sel_programy_czasowe).active_index().value_or(1);
+          id(hub_lg_prev_set) = id(dd_cwu_setpoint_raw);
+          id(hub_lg_set) = set;
+          id(hub_lg_t0) = now.timestamp;
+          id(hub_lg_reached) = 0;
+          id(hub_lg_max) = std::isnan(t) ? 0.0f : t;
+          id(hub_lg_run) = true;
+          id(dd_dhw_hold) = true;   // the hub's DHW Comfort / Eco schedule waits
+          if (id(hub_lg_prev_mode) != 0) id(dd_sel_programy_czasowe).make_call().set_index(0).perform();   // Manual
+          id(dd_cwu_setpoint_number).make_call().set_value(set / 10.0f).perform();
+          ESP_LOGW("hub_lg", "anti-legionella start: target %.0f °C, cylinder %.1f °C, program was %s, DHW setpoint was %.1f",
+                   set / 10.0f, t, id(hub_lg_prev_mode) ? "Auto" : "Manual", id(hub_lg_prev_set) / 10.0f);
+          id(hub_lg_state).update();
+
+  # hand the DHW back: 1 = done, 2 = timeout, 3 = cancelled (button), 4 = no clock; taken over by the user: 5 = another
+  # DHW setpoint (the program goes back as it was, no setpoint write), 6 = the program set to Auto (nothing to do)
+  - id: hub_lg_end
+    mode: queued
+    parameters:
+      reason: int
+    then:
+      - lambda: |-
+          if (!id(hub_lg_run)) return;
+          id(hub_lg_run) = false;
+          if (reason == 5) {
+            if (id(hub_lg_prev_mode) == 1) id(dd_sel_programy_czasowe).make_call().set_index(1).perform();
+          } else if (reason != 6) {
+            if (id(hub_lg_prev_mode) == 1) {
+              // Auto: the boiler restores its own phase setpoint - no 2095 write (see the header)
+              id(dd_sel_programy_czasowe).make_call().set_index(1).perform();
+            } else if (id(hub_lg_prev_set) >= 100) {
+              id(dd_cwu_setpoint_number).make_call().set_value(id(hub_lg_prev_set) / 10.0f).perform();
+            }
+          }
+          id(dd_dhw_hold) = false;
+          id(dd_dhw_phase_last) = -1;   // the hub's DHW schedule (when on) applies its phase at the next check
+          auto now = id(dd_ha_time).now();
+          float t = id(dd_dhw_temp_sensor).state;
+          if (!std::isnan(t) && t > id(hub_lg_max)) id(hub_lg_max) = t;
+          id(hub_lg_last_ts) = now.is_valid() ? now.timestamp : id(hub_lg_t0);
+          id(hub_lg_last_max) = id(hub_lg_max);
+          id(hub_lg_last_min) = id(hub_lg_last_ts) > id(hub_lg_t0) ? (int) ((id(hub_lg_last_ts) - id(hub_lg_t0)) / 60) : 0;
+          id(hub_lg_last_res) = reason >= 5 ? 3 : reason;
+          ESP_LOGW("hub_lg", "anti-legionella end (%d): peak %.1f °C after %d min", reason, id(hub_lg_max), id(hub_lg_last_min));
+          id(hub_lg_last).update();
+          id(hub_lg_state).update();
+
+interval:
+  - interval: 15s
+    then:
+      - lambda: |-
+          auto now = id(dd_ha_time).now();
+          if (id(hub_lg_run)) {
+            if (!now.is_valid()) {
+              if (millis() > 900000UL) id(hub_lg_end)->execute(4);   // 15 min without a clock: hand the DHW back
+              return;
+            }
+            uint32_t n = now.timestamp, age = n > id(hub_lg_t0) ? n - id(hub_lg_t0) : 0;
+            float t = id(dd_dhw_temp_sensor).state;
+            if (!std::isnan(t) && t > id(hub_lg_max)) id(hub_lg_max) = t;
+            // the human wins: 2294 back to Auto or another DHW setpoint (after 60 s, while the bus settles)
+            if (age > 60 && millis() > 60000UL) {
+              int mode = (int) id(dd_sel_programy_czasowe).active_index().value_or(0);
+              if (mode != 0 || abs(id(dd_cwu_setpoint_raw) - id(hub_lg_set)) > 2) {
+                ESP_LOGW("hub_lg", "anti-legionella taken over (program %d, DHW setpoint %.1f): ended, the change is kept",
+                         mode, id(dd_cwu_setpoint_raw) / 10.0f);
+                id(hub_lg_end)->execute(mode != 0 ? 6 : 5);
+                return;
+              }
+            }
+            if (id(hub_lg_reached) == 0 && !std::isnan(t) && t >= id(hub_lg_set) / 10.0f - 0.5f) {
+              id(hub_lg_reached) = n;
+              ESP_LOGW("hub_lg", "anti-legionella: target reached (%.1f °C), holding %d min", t, (int) id(hub_lg_hold).state);
+            }
+            if (id(hub_lg_reached) != 0 && n - id(hub_lg_reached) >= (uint32_t) (id(hub_lg_hold).state * 60.0f)) { id(hub_lg_end)->execute(1); return; }
+            if (age >= (uint32_t) (id(hub_lg_timeout).state * 3600.0f)) { id(hub_lg_end)->execute(2); return; }
+            return;
+          }
+          // schedule: the first slot (weekday + time) at or after the base; base = start of the last cycle + N weeks
+          if (!id(hub_lg_enabled).state || !now.is_valid() || millis() < 120000UL) return;
+          if (id(hub_lg_base) == 0) { id(hub_lg_base) = now.timestamp; id(hub_lg_state).update(); return; }
+          int wd_now = (now.day_of_week + 5) % 7;
+          uint32_t mid = now.timestamp - (now.hour * 3600 + now.minute * 60 + now.second);
+          int want = (int) id(hub_lg_weekday).active_index().value_or(6);
+          int sm = id(hub_lg_start).hour * 60 + id(hub_lg_start).minute;
+          // today's slot is due when it is between the base and now (within an hour - a later boot skips it)
+          uint32_t slot = mid + (uint32_t) sm * 60u;
+          if (wd_now != want || slot < id(hub_lg_base) || now.timestamp < slot) return;
+          int weeks = (int) id(hub_lg_every).active_index().value_or(1) + 1;
+          id(hub_lg_base) = slot + (uint32_t) weeks * 7u * 86400u - 43200u;   // the slot N weeks on (12 h margin for DST)
+          if (now.timestamp - slot > 3600) {
+            ESP_LOGW("hub_lg", "anti-legionella slot missed by %u min (hub off?): next in %d week(s)",
+                     (unsigned) ((now.timestamp - slot) / 60), weeks);
+            id(hub_lg_state).update();
+            return;
+          }
+          id(hub_lg_begin)->execute();

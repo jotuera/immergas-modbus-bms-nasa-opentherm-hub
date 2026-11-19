@@ -332,7 +332,7 @@ class ImmergasModeCard extends HubCard {
     const sub = bad ? this.t("brak odczytu", "no reading") : cur === "auto" ? this.t("wg harmonogramu", "by the schedule") + (ph ? this.t(" · teraz: ", " · now: ") + ph : "")
       : this.t("stała nastawa, bez harmonogramu", "fixed setpoint, no schedule");
     // OpenTherm has no zones - one CH program
-    return this.srcBlock("prog", this.ot ? this.t("Program czasowy CO", "CH time program") : this.progAuto !== null ? this.t("Program czasowy Strefy 1 (strefy + CWU)", "Zone 1 time program (zones + DHW)") : this.t("Program czasowy CO Strefy 1", "Zone 1 CH time program"), sub,
+    return this.srcBlock("prog", this.ot ? this.t("Program czasowy CO", "CH time program") : this.progAuto !== null ? this.t("Program czasowy (panel strefy 1)", "Time program (zone 1 panel)") : this.t("Program czasowy CO Strefy 1", "Zone 1 CH time program"), sub,
       [["auto", "mdi:calendar-clock", "blue", "AUTO"], ["manual", "mdi:hand-back-right-outline", "peach", "MANUAL"]], cur, set, bad);
   }
 

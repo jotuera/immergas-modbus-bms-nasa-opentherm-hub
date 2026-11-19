@@ -119,6 +119,7 @@
    "calibration.ts",
    "mode.ts",
    "now.ts",
+   "schedule.ts",
    "settings.ts",
    "hub.ts"
   ]
@@ -6033,7 +6034,8 @@
   "en": "Target",
   "pl": "Zadana",
   "files": [
-   "charts.ts"
+   "charts.ts",
+   "schedule.ts"
   ]
  },
  {
@@ -6188,7 +6190,8 @@
   "en": "Day",
   "pl": "Doba",
   "files": [
-   "charts.ts"
+   "charts.ts",
+   "schedule.ts"
   ]
  },
  {
@@ -11187,8 +11190,8 @@
   ]
  },
  {
-  "en": "Zone 1 time program (zones + DHW)",
-  "pl": "Program czasowy Strefy 1 (strefy + CWU)",
+  "en": "Time program (zone 1 panel)",
+  "pl": "Program czasowy (panel strefy 1)",
   "files": [
    "mode.ts"
   ]
@@ -13674,6 +13677,76 @@
  {
   "en": "The recirculation program (day → calendar) lives only in the boiler: pick the same calendar as in the boiler menu. The hub adds a range from now for the set time (15-minute steps, until midnight at most) and removes it at the end, also after a restart. The pump is on no bus – there is no confirmation that it runs.",
   "pl": "Program recyrkulacji (dzień → kalendarz) jest tylko w piecu: wybierz tu ten sam kalendarz co w menu pieca. Hub dodaje do niego zakres od teraz na ustawiony czas (krok 15 min, najdłużej do północy) i usuwa go na końcu, także po restarcie. Pompa nie jest na magistrali – nie ma potwierdzenia jej pracy.",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": "last",
+  "pl": "ostatni",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": "On the hub's schedule",
+  "pl": "Według harmonogramu huba",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": "a cycle every 1–4 weeks on the chosen day and time",
+  "pl": "cykl co 1–4 tygodnie w wybrany dzień i godzinę",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": "Interval",
+  "pl": "Co ile",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": " wk",
+  "pl": " tydz.",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": "Hold",
+  "pl": "Utrzymanie",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": "Timeout",
+  "pl": "Limit",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": "⚠ The boiler's anti-legionella P15 is on – switch it off, or both cycles will run.",
+  "pl": "⚠ Na piecu jest włączona anty-legionella P15 – wyłącz ją, inaczej będą dwa cykle.",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": "Disinfect now",
+  "pl": "Dezynfekcja teraz",
+  "files": [
+   "schedule.ts"
+  ]
+ },
+ {
+  "en": "For the cycle the hub sets the time program (2294) to Manual and the DHW setpoint to the target; after the target and the hold time it hands the DHW back: the program returns to Auto (the boiler restores its own setpoint) or, if it was Manual, the previous setpoint comes back. Changing the setpoint or the program meanwhile ends the cycle. Where 2294 also drives the zones, they stay at their manual setpoint meanwhile – best at night.",
+  "pl": "Na czas cyklu hub przełącza program czasowy (2294) na Ręczny i ustawia nastawę CWU na cel, a po dojściu do celu i czasie utrzymania oddaje CWU: program wraca na Auto (piec sam przywraca swoją nastawę) albo, gdy był Ręczny, wraca poprzednia nastawa. Zmiana nastawy lub programu w trakcie kończy cykl. Na modelach, gdzie 2294 prowadzi też strefy, stoją one w tym czasie na nastawie ręcznej – najlepiej w nocy.",
   "files": [
    "schedule.ts"
   ]

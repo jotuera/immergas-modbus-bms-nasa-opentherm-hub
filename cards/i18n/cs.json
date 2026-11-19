@@ -2517,5 +2517,16 @@
   "Recirculation now": "Recirkulace nyní",
   "The recirculation program (day → calendar) lives only in the boiler: pick the same calendar as in the boiler menu. The hub adds a range from now for the set time (15-minute steps, until midnight at most) and removes it at the end, also after a restart. The pump is on no bus – there is no confirmation that it runs.": "Program recirkulace (den → kalendář) je jen v kotli: zvolte stejný kalendář jako v menu kotle. Hub do něj přidá rozsah od teď na nastavenou dobu (krok 15 min, nejdéle do půlnoci) a na konci ho odebere, i po restartu. Čerpadlo není na sběrnici – jeho chod se nepotvrzuje.",
   "● anti-legionella running": "● probíhá antilegionela",
-  "🦠 anti-legionella": "🦠 antilegionela"
+  "🦠 anti-legionella": "🦠 antilegionela",
+  "Time program (zone 1 panel)": "Časový program (panel zóny 1)",
+  "last": "poslední",
+  "On the hub's schedule": "Podle plánu hubu",
+  "a cycle every 1–4 weeks on the chosen day and time": "cyklus každé 1–4 týdny ve zvolený den a čas",
+  "Interval": "Interval",
+  " wk": " týd.",
+  "Hold": "Výdrž",
+  "Timeout": "Limit",
+  "⚠ The boiler's anti-legionella P15 is on – switch it off, or both cycles will run.": "⚠ Na kotli je zapnutá antilegionela P15 – vypněte ji, jinak poběží oba cykly.",
+  "Disinfect now": "Dezinfikovat nyní",
+  "For the cycle the hub sets the time program (2294) to Manual and the DHW setpoint to the target; after the target and the hold time it hands the DHW back: the program returns to Auto (the boiler restores its own setpoint) or, if it was Manual, the previous setpoint comes back. Changing the setpoint or the program meanwhile ends the cycle. Where 2294 also drives the zones, they stay at their manual setpoint meanwhile – best at night.": "Na dobu cyklu hub přepne časový program (2294) na Ruční a nastaví teplotu TUV na cíl; po dosažení cíle a době výdrže vrátí TUV zpět: program se vrátí na Auto (kotel si sám obnoví svou teplotu), nebo pokud byl Ruční, vrátí se předchozí teplota. Změna teploty nebo programu mezitím cyklus ukončí. Kde 2294 řídí i zóny, zůstanou mezitím na ruční teplotě – nejlépe v noci."
 }
