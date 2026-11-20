@@ -245,7 +245,7 @@ class ImmergasScheduleCard extends HubCard {
     const tm = (this.s("hub_lg_start") ?? "").slice(0, 5);
     return html`<div class="st" style="color:${c(run ? "red" : this.on("hub_lg_enabled") ? "green" : "overlay2")}">${st}${last ? html` <span style="opacity:.6;font-weight:700">· ${this.t("ostatni", "last")}: ${last}</span>` : nothing}</div>
       ${this.switchRow("hub_lg_enabled", "mdi:calendar-refresh", "red", this.t("Według harmonogramu huba", "On the hub's schedule"),
-        this.t("cykl co 1–4 tygodnie w wybrany dzień i godzinę", "a cycle every 1–4 weeks on the chosen day and time"))}
+        this.t("cykl co 1–4 tygodnie w wybrany dzień i godzinę", "a cycle every 1–4 weeks on the chosen day and time"), false)}
       <div class="allr"><span class="al">${this.t("Co ile", "Interval")}</span>
         <div class="picks">${[0, 1, 2, 3].map((i) => chip(i === ev, i + 1 + this.t(" tydz.", " wk"), () => pick("hub_lg_every", i)))}</div></div>
       <div class="allr"><span class="al">${this.t("Dzień", "Day")}</span>
@@ -265,14 +265,14 @@ class ImmergasScheduleCard extends HubCard {
   }
 
   static styles = [HubCard.styles, css`
-    .lgp { width: auto; min-width: 25px; padding: 0 6px; }
+    .lgp { width: auto; min-width: 25px; padding: 0 6px; white-space: nowrap; }
     .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
     .tl { display: flex; align-items: center; gap: 8px; }
     .tl ha-icon { --mdc-icon-size: 18px; opacity: .55; }
     .ttl { font-size: 10.5px; font-weight: 800; opacity: var(--ih-o55, .55); letter-spacing: .08em; text-transform: uppercase; }
-    .tabs { display: flex; gap: 6px; align-items: center; }
+    .tabs { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
     .tab { cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 10px; font-size: 11px; font-weight: 800;
-      border: 1px solid rgba(var(--ih-ov-rgb), .08); background: rgba(var(--ih-ov-rgb), .04); }
+      border: 1px solid rgba(var(--ih-ov-rgb), .08); background: rgba(var(--ih-ov-rgb), .04); white-space: nowrap; }
     .tab ha-icon { --mdc-icon-size: 15px; }
     .vt { cursor: pointer; width: 30px; height: 28px; border-radius: 9px; display: flex; align-items: center; justify-content: center;
       border: 1px solid rgba(var(--ih-ov-rgb), .08); background: rgba(var(--ih-ov-rgb), .04); }

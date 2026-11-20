@@ -312,7 +312,8 @@ export abstract class HubCard extends LitElement {
   /** Dominus (Modbus) declared as a gas boiler - no heat pump values */
   protected get gas() { return !!this.idx?.gas; }
   /** F1/F2 write gate: locked only while the "Active ODU control" switch is exposed and off (hub v23+ keeps it armed and hidden) */
-  protected get writeLocked() { return !!this.eid("f_arm") && !this.on("f_arm"); }
+  // 0.93.10: an unavailable gate (a leftover entity of an older hub) locks nothing
+  protected get writeLocked() { return !!this.eid("f_arm") && !this.bad("f_arm") && !this.on("f_arm"); }
   /** Dominus OpenTherm "Read only (remote in charge)" is on: no control writes to the boiler */
   protected get otRO() { return this.ot && this.on("ot_ro"); }
   /** what is needed to run the boiler without the CAR V2: the Dominus regulator + the programs in Home Assistant */
@@ -556,8 +557,9 @@ export abstract class HubCard extends LitElement {
     return m < 60 ? Math.round(m) + " min" : Math.floor(m / 60) + " h " + Math.round(m % 60) + " min";
   }
 
-  protected switchRow(k: Key, icon: string, col: string, name: string, sub: string | TemplateResult) {
-    const act = this.on(k), dis = this.writeLocked || this.bad(k) || this.otRO, tag = "sw_" + k, conf = this.isArmed(tag);
+  /** gate = false: a hub setting, not a write to the heat pump - the F1/F2 write gate (f_arm) does not lock it */
+  protected switchRow(k: Key, icon: string, col: string, name: string, sub: string | TemplateResult, gate = true) {
+    const act = this.on(k), dis = (gate && this.writeLocked) || this.bad(k) || this.otRO, tag = "sw_" + k, conf = this.isArmed(tag);
     return html`<div class="sr" style=${box(col, act)}>
       <ha-icon icon=${icon} style="color:${c(act ? col : "overlay2")}"></ha-icon>
       <div class="cx" @click=${() => this.moreInfo(k)} style="cursor:pointer">
@@ -793,7 +795,7 @@ export abstract class HubCard extends LitElement {
 
 /** registers a card element + card picker entry */
 /** this bundle's version (also in package.json) */
-export const VERSION = "0.93.9";
+export const VERSION = "0.93.10";
 
 // The bundle can be loaded twice: the hub cards resource and the copy shipped with the Dominus integration, in any
 // order. A custom element can be defined only once, so every bundle (0.85.0+) queues its elements on a shared window
