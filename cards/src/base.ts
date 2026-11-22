@@ -165,13 +165,27 @@ export abstract class HubCard extends LitElement {
     const o = this.opt("legionella_hours"), v = o === undefined ? NaN : parseFloat(String(this.hass.states[o]?.state ?? o));
     return v >= 1 && v <= 24 ? v : 3;
   }
-  /** anti-legionella cycle running: the boiler's own flag (hub, 2090 bit 3) or, without it, P15 on and the active DHW
-   *  setpoint raised to >= 60 °C (a HERCULES PRO keeps 3015 at the DHW setpoint - only the flag shows its cycle) */
+  /** anti-legionella cycle running: the hub's own cycle, or the boiler's flag (2090 bit 3) with the cylinder being
+   *  pushed above the DHW setpoint - on a HERCULES PRO that bit is set for every DHW heating (and stays through a
+   *  defrost inside it), and 3015 keeps the setpoint during P15, so the temperature is the only usable signal */
   protected legRun(): boolean {
     if (this.on("hub_lg_running")) return true;   // hub_legionella: the hub's own cycle
-    if (!this.bad("dd_leg_run")) return this.on("dd_leg_run");
+    if (!this.bad("dd_leg_run") && this.on("dd_leg_run")) {
+      const set = this.n("dhw_set"), tank = this.n("tank");
+      if (isNaN(set) || isNaN(tank)) return true;   // no data: trust the boiler's flag
+      return tank > set + 0.5;
+    }
     const act = this.n("dhw_active_set");
     return this.on("p15") && act >= 60 && !(act <= this.n("dhw_set"));
+  }
+  /** the hub's operating-state text without the " · anti-legionella" suffix - 2090 bit 3 is set for every DHW heating
+   *  on a HERCULES PRO, so the suffix only stays while a real disinfection runs (see legRun) */
+  protected noSuffix(s: string): string {
+    return this.legRun() ? s : s.replace(/\s+·\s+[^·]+$/, "");
+  }
+  protected stateText(): string {
+    const s = this.s("state") ?? "";
+    return this.bad("state") ? s : this.noSuffix(s);
   }
   /** entity whose last change marks the start of the running anti-legionella cycle */
   protected legKey(): Key { return this.on("hub_lg_running") ? "hub_lg_running" : this.bad("dd_leg_run") ? "dhw_active_set" : "dd_leg_run"; }

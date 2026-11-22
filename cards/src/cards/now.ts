@@ -88,7 +88,7 @@ class ImmergasNowCard extends HubCard {
     const sub = !(typ > 0) ? this.t("za mało historii, by oszacować długość", "not enough history to estimate the length")
       : el <= typ ? (idle ? this.t("następny start ~", "next start ~") : this.t("koniec ~", "ends ~")) + clock(start + typ, pl) + this.t(" · zostało ~", " · ~") + dur(typ - el) + this.t("", " left")
       : this.t("dłużej niż zwykle o ", "longer than usual by ") + dur(el - typ);
-    rows.push(this.bar("state", phaseIcon(ph), col, idle ? this.t("Przerwa (postój)", "Pause (idle)") : ph, el, typ,
+    rows.push(this.bar("state", phaseIcon(ph), col, idle ? this.t("Przerwa (postój)", "Pause (idle)") : this.noSuffix(ph), el, typ,
       this.t("od ", "since ") + clock(start, pl) + " · " + sub));
 
     // 1b) until defrost (Samsung outdoor unit): 0x824B = seconds since the last defrost (holds at 2100 s = the 35 min
@@ -145,7 +145,9 @@ class ImmergasNowCard extends HubCard {
     // 4) anti-legionella (P15): no bus flag for a running cycle, so it is detected from the boiler raising the active
     //    DHW setpoint to >= 60 °C; otherwise: enabled since, last disinfection (cylinder >= 60 °C) and the learned interval
     //    1.11.20: with the hub's flag (2090 bit 3) the running cycle is read from the boiler - its target is not on the bus
-    if (this.on("p15") || this.on("dd_leg_run") || this.on("hub_lg_running")) {
+    //    0.93.11: bit 3 alone is not enough (it is set for every DHW heating) - the row appears only with P15 armed,
+    //    the hub cycle running or a real disinfection (legRun)
+    if (this.on("p15") || this.on("hub_lg_running") || this.legRun()) {
       const act = this.n("dhw_active_set"), set = this.n("dhw_set"), tank = this.n("tank"), leg = this.hist?.leg ?? [];
       if (this.legRun()) {
         const t0 = new Date(this.so(this.legKey())?.last_changed ?? now).getTime(), base = Math.min(isNaN(set) ? 45 : set, tank);
@@ -186,7 +188,11 @@ class ImmergasNowCard extends HubCard {
     const running = win.length > 0 && !isIdle(win[win.length - 1].s);
     const runs = blocks.filter((b) => b.t0 > w0), pauses = blocks.slice(1).map((b, i) => b.t0 - blocks[i].t1).filter((p, i) => blocks[i].t1 > w0);
     const mr = median((running ? runs.slice(0, -1) : runs).map((b) => b.t1 - b.t0)), mp = median(pauses);
-    const stats = [runs.length + this.t(" startów", " starts"), mr > 0 ? this.t("praca ~", "on ~") + dur(mr) : "", mp > 0 ? this.t("przerwa ~", "off ~") + dur(mp) : ""].filter(Boolean).join(" · ");
+    // a defrost is merged into the run it interrupts (the valve reversal is not a new heating start), but it is worth
+    // knowing how many happened - the strip draws them, the header counts them
+    const defs = win.filter((g) => parseState(g.s).src === "defrost").length;
+    const stats = [runs.length + this.t(" startów", " starts"), defs > 0 ? defs + this.t(" odszraniań", " defrosts") : "",
+      mr > 0 ? this.t("praca ~", "on ~") + dur(mr) : "", mp > 0 ? this.t("przerwa ~", "off ~") + dur(mp) : ""].filter(Boolean).join(" · ");
     const pct = (t: number) => (t - w0) / WIN * 100;
     const strip = html`<div class="sh"><span class="tbl">${this.t("Ostatnie 6 h", "Last 6 h")}</span><span class="tbs">${stats}</span></div>
       <div class="strip">${win.map((g) => html`<div class="sg" style="left:${pct(g.t0)}%;width:${Math.max(0.3, pct(g.t1) - pct(g.t0))}%;background:${isIdle(g.s) ? ca("overlay1", 0.18) : c(phaseCol(g.s))}"
@@ -376,7 +382,7 @@ class ImmergasNowCard extends HubCard {
     return html`<div class="chips2">
       <div class="span2">${this.chip("starts", "mdi:restart", stc, this.t("Sprężarka dziś", "Compressor today"), today, sts > 20)}</div>
       ${this.hasGas && this.eid("burner_starts") ? html`<div class="span2">${this.chip("burner_starts", "mdi:fire", bcol, this.t("Palnik dziś", "Burner today"), burner, this.on("boiler_running"))}</div>` : nothing}
-      <div class=${hasHp ? "" : "span2"}>${this.chip("state", "mdi:heat-pump", spc, this.t("Stan pracy (hub)", "Operating state (hub)"), spB ? "–" : sp!, !spB && spc !== "overlay2")}</div>
+      <div class=${hasHp ? "" : "span2"}>${this.chip("state", "mdi:heat-pump", spc, this.t("Stan pracy (hub)", "Operating state (hub)"), spB ? "–" : this.stateText(), !spB && spc !== "overlay2")}</div>
       ${hasHp ? this.chip("hp_excluded", wkOn ? "mdi:heat-pump-outline" : "mdi:heat-pump", wkBad ? "overlay1" : wkOn ? "red" : "green",
         this.t("Pompa ciepła", "Heat pump"), wkBad ? "–" : wkOn ? this.t("wykluczona · grzeje kocioł", "excluded · boiler heats") : this.t("dopuszczona do pracy", "allowed to run"), wkOn) : nothing}
       <div class="span2">${this.faultChip()}</div>

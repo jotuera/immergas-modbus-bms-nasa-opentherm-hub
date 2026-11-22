@@ -32,7 +32,9 @@ export type Src = "hp" | "hpb" | "boiler" | "heater" | "hph" | "idle" | "defrost
 export type What = "dhw" | "cool" | "heat" | "";
 /** hub operating state -> source (heat pump / heat pump + boiler / boiler / idle / defrost) and what it serves */
 export const parseState = (s?: string | null): { src: Src; what: What } => {
-  const t = (s ?? "").trim().toLowerCase(), i = t.indexOf(": "), a = i >= 0 ? t.slice(0, i) : t, b = i >= 0 ? t.slice(i + 2) : "";
+  const t = (s ?? "").trim().toLowerCase(), i = t.indexOf(": "), a = i >= 0 ? t.slice(0, i) : t,
+    // "Heat pump: DHW · anti-legionella" (the 2090 bit 3 suffix) -> "dhw"
+    b = (i >= 0 ? t.slice(i + 2) : "").split(" · ")[0];
   const src: Src = HP.has(a) ? "hp" : HPB.has(a) ? "hpb" : BOIL.has(a) ? "boiler" : HEATER.has(a) ? "heater" : HPH.has(a) ? "hph" : IDLE.has(a) ? "idle" : DEFROST.has(a) ? "defrost" : "";
   const what: What = DHW.has(b) ? "dhw" : COOL.has(b) ? "cool" : HEAT.has(b) ? "heat" : "";
   return { src, what };

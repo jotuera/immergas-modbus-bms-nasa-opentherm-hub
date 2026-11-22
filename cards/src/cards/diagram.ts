@@ -188,7 +188,7 @@ class ImmergasDiagramCard extends HubCard {
     // reports running (0x4089 - not sent by every indoor board)
     const noFlow = isNaN(flow), flowing = noFlow ? run || this.on("f_pump") : flow > 50;
     const defrost = this.on("defrost"), night = this.on("u11");
-    const st = this.s("state") ?? "";
+    const st = this.stateText();
     const dhw = this.s("d22") === "1" || isDhw(st) || this.on("tt_dhw");
     const boiler = this.config.boiler !== false && (this.on("boiler_running") || stBoiler(st));
     // no gas boiler on a Magis Pro (system model D61 or option variant: pro)
