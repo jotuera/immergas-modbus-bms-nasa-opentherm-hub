@@ -121,6 +121,8 @@ inline ServedValue humidity{"humidity", 0, 100};
 inline ServedValue set_flow{"set flow", 100, 900};
 inline ServedValue operating_mode{"operating mode", 0, 3};
 inline ServedValue prog_mode{"time program mode", 0, 1};
+inline ServedValue probe_mod{"room probe modulation", 0, 1};
+inline ServedValue dew_point{"dew point correction", 0, 1};
 }  // namespace served
 
 }  // namespace immergas

@@ -654,12 +654,12 @@ globals:
     type: uint32_t
     restore_value: yes
     initial_value: '0'
-  # 1.11.21: 2090 bit 3 as sent = the boiler heats the DHW towards a setpoint that is not its program phase value
-  # (the boiler's own anti-legionella cycle, or a manual / HA setpoint); the heater heuristic uses it
+  # 2090 bit 3 as sent = the boiler heats the DHW (1.11.23: every DHW cycle on a HERCULES PRO, not only anti-legionella)
   - id: dd_dhw_override
     type: bool
     initial_value: 'false'
-  # 1.11.21: true while the engine adopts 2294 from the bus - the select's set_action must not treat it as an HA command
+  # 1.11.21: true while the engine adopts 2294 (1.11.23: or 6105) from the bus - the select's set_action must not treat it
+  # as an HA command
   - id: dd_prog_from_bus
     type: bool
     initial_value: 'false'
@@ -1828,29 +1828,36 @@ interval:
                       const char *st = nullptr;
                       if (e.map == 0) st = (value == 0) ? "RPT" : (value == 1) ? "RT" : (value == 2) ? "RP" : nullptr;
                       // 1.11.18: bit 1 is set next to the phase in auto (66 = 64 | 2 on a HERCULES PRO) - masked out
-                      // bit 3 = heating towards a setpoint that is not the phase value: with the phase Comfort / Eco it is
-                      // the boiler's own anti-legionella cycle (74 = 64 | 8 | 2), with Manual a manual / HA setpoint (12 = 4 | 8)
+                      // bit 3 = the boiler heats the DHW (1.11.23: set in every DHW cycle on a HERCULES PRO, P15 or not)
                       else { int pv = value & ~10; st = (pv == 4) ? "${t_dd_prog_manual}" : (pv == 64) ? "${t_dd_prog_comfort}" : (pv == 128) ? "${t_dd_prog_eco}" : nullptr; }
                       char sb[64];
                       if (st == nullptr) { snprintf(sb, sizeof(sb), "Code %d", value); st = sb; }
-                      else if (e.map == 1 && (value & 8) && (value & ~10) != 4) { snprintf(sb, sizeof(sb), "%s · ${t_dd_prog_legionella}", st); st = sb; }
                       e.t->publish_state(st);
-                      if (e.map == 1) {
-                        id(dd_dhw_override) = (value & 8) != 0;
-                        id(dd_legionella_running).publish_state((value & 8) != 0 && (value & ~10) != 4);   // 1.11.21: not in Manual
-                      }
+                      if (e.map == 1) id(dd_dhw_override) = (value & 8) != 0;   // dd_legionella_running (dd_boiler_info) uses it
                     }
                     break;
                   }
                 }
                 // Replies of a PHYSICAL panel (READ frames come only from other devices - our own TX is not heard)
                 // -> the controls mirror the panel; -1 (not set) is ignored.
-                if (kind == 'R' && reg == 6107 && (value == 0 || value == 1) && id(dd_sw_punkt_rosy).state != (value == 1)) {
-                  id(dd_sw_punkt_rosy).publish_state(value == 1);
+                // 6107 dew point correction / 6105 room probe modulation: from a physical panel's reply, and (1.11.23) from
+                // the boiler's write while the zone 1 panel is emulated (set in the boiler menu), with the 15 s guard after
+                // a change from HA (served_value.h) - the same rule as 2294 below
+                if (reg == 6107 && (value == 0 || value == 1)) {
+                  int cur = id(dd_sw_punkt_rosy).state ? 1 : 0;
+                  bool take = kind == 'R' ? value != cur
+                            : kind == 'W' && emulator_29_enabled() && immergas::served::dew_point.take_from_bus(cur, value, source, addr);
+                  if (take) id(dd_sw_punkt_rosy).publish_state(value == 1);
                 }
-                if (kind == 'R' && reg == 6105 && (value == 0 || value == 1) &&
-                    (int) id(dd_sel_modulacja_sonda).active_index().value_or(0) != value) {
-                  auto call = id(dd_sel_modulacja_sonda).make_call(); call.set_index(value); call.perform();
+                if (reg == 6105 && (value == 0 || value == 1)) {
+                  int cur = (int) id(dd_sel_modulacja_sonda).active_index().value_or(0);
+                  bool take = kind == 'R' ? value != cur
+                            : kind == 'W' && emulator_29_enabled() && immergas::served::probe_mod.take_from_bus(cur, value, source, addr);
+                  if (take) {
+                    id(dd_prog_from_bus) = true;
+                    auto call = id(dd_sel_modulacja_sonda).make_call(); call.set_index(value); call.perform();
+                    id(dd_prog_from_bus) = false;
+                  }
                 }
                 // 2294 time program mode: from a physical panel's reply, and (1.11.21) from the boiler's write while the
                 // zone 1 panel is emulated - the boiler menu (HERCULES PRO: DHW -> Auto / Manual) writes it to the panel,

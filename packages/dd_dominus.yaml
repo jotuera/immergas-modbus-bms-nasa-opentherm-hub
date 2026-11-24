@@ -12,6 +12,11 @@ switch:
     icon: mdi:water-thermometer-outline
     optimistic: true
     restore_mode: RESTORE_DEFAULT_ON
+    # 1.11.23: a change from HA waits 15 s for the boiler to take it before the boiler's writes count again
+    turn_on_action:
+      - lambda: immergas::served::dew_point.set_from_ha(1);
+    turn_off_action:
+      - lambda: immergas::served::dew_point.set_from_ha(0);
 
 number:
   # ------------------------------------------------------------
@@ -158,6 +163,10 @@ select:
       - "${t_dd_no}"
       - "${t_dd_yes}"
     initial_option: "${t_dd_no}"
+    # 1.11.23: like 2294 - a change from HA waits 15 s for the boiler before its writes count again
+    set_action:
+      - lambda: |-
+          if (!id(dd_prog_from_bus)) immergas::served::probe_mod.set_from_ha(x == "${t_dd_yes}" ? 1 : 0);
   - platform: template
     name: "${n_dd_operating_mode_select}"
     id: dd_operating_mode_select

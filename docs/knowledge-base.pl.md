@@ -350,7 +350,7 @@ rejestr wejściowy (func 04).
 | 2005 / 2006 | D41 | temperatura / wilgotność pokojowa (jedyne wartości z panelu do regulacji) | R |
 | 2010 | — | faza strefy: bit2 ręczny, bit3 żądanie grzania, bit6 komfort, bit7 eko; 1 = odpowietrzanie U50 | W |
 | 2015 / 2016 / 2017 | U03 | nastawa / maks. / offset strefy 1 | RW |
-| 2090 | — | stan programu czasowego: 4 ręczny, 64 auto-komfort, 128 auto-eko (bit 1 maskowany: 66 = komfort); bit 3 = grzanie do nastawy spoza fazy: anty-legionella przy Komfort / Eko (74), nastawa ręczna przy Ręcznym (12) | W |
+| 2090 | — | stan programu czasowego: 4 ręczny, 64 auto-komfort, 128 auto-eko (bit 1 maskowany: 66 = komfort); bit 3 = kocioł grzeje CWU (każdy cykl CWU w HERCULES PRO, także P15) | W |
 | 2095 | D05 | nastawa CWU | RW |
 | 2100 / 2101 | — | kod błędu (0 brak, np. 121, 142, 193) / reset | W |
 | 2210–2216 | U07 | Comfort/Eco grzania i chłodzenia, wilgotność | RW |
@@ -412,10 +412,11 @@ U03 = −2 daje 23,5 → przycięte do **24,0** (R05). **U03 przesuwa krzywą 1:
 
 - Parametry integracji I01–I10, A05, A12, A18, P07–P24, T02–T23, U11 i menu serwisowe M **nie zmieniają rejestrów
   D+/D-**. Wyjątki: E193 w menu M (2001 bit2 + 2100 = 193) i 3002 po zmianie P07.
-- **Anty-legionella P15** (P13 czas, P16 godzina, P17 dzień) nie jest transmitowana. Widać tylko skutek: **bit 3
-  rejestru 2090** jest ustawiony przez cały cykl (*Cykl anty-legionella (piec)*), a w MAGIS PRO na czas cyklu rośnie
-  aktywna nastawa CWU 3015. HERCULES PRO trzyma 3015 / 2095 na nastawie CWU i grzeje zasobnik do 65 °C: sprężarka staje
-  przy ~55 °C, resztę robi grzałka, którą hub przy ustawionym bicie liczy jako energię grzałki. Emulator nie może jej przejmować jako nastawy użytkownika, bo zablokowałby
+- **Anty-legionella P15** (P13 czas, P16 godzina, P17 dzień) nie jest transmitowana. Widać tylko skutek: w MAGIS PRO
+  na czas cyklu rośnie aktywna nastawa CWU 3015. HERCULES PRO trzyma 3015 / 2095 na nastawie CWU i grzeje zasobnik do
+  65 °C: sprężarka staje przy ~55 °C, resztę robi grzałka. Bit 3 rejestru 2090 jest ustawiony w każdym cyklu CWU, więc
+  hub oznacza cykl (*Cykl anty-legionella (piec)*, energia grzałki) dopiero, gdy zasobnik jest 1 K powyżej nastawy CWU,
+  a kocioł grzeje CWU. Emulator nie może jej przejmować jako nastawy użytkownika, bo zablokowałby
   CWU na 60 °C.
 - Ustawienia lokalne panelu (temperatura przeciwzamrożeniowa, cykl antybakteryjny panelu, wyłączenie osuszania,
   minimalna nastawa chłodzenia, program urlopowy) nie trafiają na magistralę.

@@ -196,12 +196,18 @@ binary_sensor:
     name: "${n_dd_piec_blad_aktywny_2001}"
     id: dd_piec_blad_aktywny_2001
     device_class: problem
-  # 1.11.20: 0x29 W 2090 bit 3 = the boiler's own anti-legionella cycle (P15) is running: set from the start until the
-  # cylinder reaches the cycle target (65 °C on a HERCULES PRO). The setpoints 3015 / 2095 do not change meanwhile.
+  # 1.11.23: the boiler's own anti-legionella cycle (P15), as far as the bus shows it. Its target is on no register
+  # (65 °C on a HERCULES PRO while 3015 / 2095 stay at the DHW setpoint), and 2090 bit 3 is set in EVERY DHW heating -
+  # so the only fact is the boiler heating the DHW (bit 3) with the cylinder already 1 K above the DHW setpoint. It shows
+  # late (a cycle from 23 °C only once it passes the setpoint), but never in a normal DHW cycle.
   - platform: template
     name: "${n_dd_legionella_running}"
     id: dd_legionella_running
     icon: mdi:bacteria-outline
+    lambda: |-
+      if (!id(dd_dhw_override)) return false;
+      float t = id(dd_dhw_temp_sensor).state, set = id(dd_cwu_setpoint_number).state;
+      return !std::isnan(t) && !std::isnan(set) && set > 1.0f && t >= set + 1.0f;
   # v71: boiler fault flag = PDU 2100 != 0; reset available = PDU 2101 LB bit1 (per Dominus config).
   - platform: template
     name: "${n_dd_error_active}"
